@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana
+  namespace: argo
+spec:
+  project: demo
+  source:
+    chart: grafana
+    repoURL: https://grafana.github.io/helm-charts
+    # targetRevision: 6.56.5
+    helm:
+      releaseName: grafana
+      valueFiles:
+      - values/grafana-values.yml
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: grafana
