@@ -1,0 +1,13 @@
+apiVersion: v2
+name: grafana
+description: A Meta-Helm-Chart for k8s Grafana
+
+
+type: application
+version: 6.56.5
+appVersion: "9.5.2"
+
+dependencies:
+- name: grafana
+  version: 6.56.5
+  repository: https://grafana.github.io/helm-charts
