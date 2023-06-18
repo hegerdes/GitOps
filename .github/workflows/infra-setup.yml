@@ -1,0 +1,81 @@
+name: Build-and-Publish-Helm-Chart
+
+on:
+  push:
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  security-events: write
+
+jobs:
+  build-and-publish-charts:
+    runs-on: ubuntu-latest
+    environment: default
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Log in with Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          repository: hegerdes/AnsiblePlaybooks
+          path: playbooks
+          token: ${{ secrets.ORG_GITHUB_PAT }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          repository: hegerdes/inventories
+          path: inventories
+          token: ${{ secrets.ORG_GITHUB_PAT }}
+
+      - name: Install Ansible
+        working-directory: playbooks
+        run: pip install -r requirements.txt
+
+      - name: Terraform Run
+        working-directory: inventories/hetzner-test/terraform
+        continue-on-error: true
+        run: |
+          # Provison infra
+          HCLOUD_TOKEN=$(az keyvault secret show --vault-name ${{ github.repository_owner }} --name hcloud-k8s-token | jq -r .value)
+          echo "::add-mask::$HCLOUD_TOKEN"
+          echo "HCLOUD_TOKEN=$HCLOUD_TOKEN" >> "$GITHUB_ENV"
+          terraform init
+          terraform plan
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+
+      - name: Run Docker image
+        continue-on-error: true
+        uses: docker://hegerdes/playbooks:latest
+        with:
+          entrypoint: ansible-playbook
+          args: --version
+
+      - name: Ansible Run
+        continue-on-error: true
+        run: ansible-playbook -i inventories/k8s-mix/default-inventory.txt playbooks/local.yml
+
+      - name: Azure Logout
+        continue-on-error: true
+        run: |
+            az logout
+            az cache purge
+            az account clear
