@@ -47,17 +47,28 @@ jobs:
         working-directory: playbooks
         run: pip install -r requirements.txt
 
+      - name: Setting up vars
+        run: |
+          # Provison infra
+          echo "Setting up secrets and agents"
+          mkdir -p ~/.ssh
+          chmod 700 -R ~/.ssh
+          eval $(ssh-agent -s) > /dev/null
+          az keyvault secret show --vault-name ${{ github.repository_owner }} --name ssh-25519-ci-pub \
+          | jq -r .value | base64 -d > ~/.ssh/id_rsa.pub
+          az keyvault secret show --vault-name ${{ github.repository_owner }} --name ssh-25519-ci-pvt \
+          | jq -r .value | base64 -d | tr -d '\r' | ssh-add - > /dev/null
+          HCLOUD_TOKEN=$(az keyvault secret show --vault-name ${{ github.repository_owner }} --name hcloud-k8s-token | jq -r .value)
+          echo "::add-mask::$HCLOUD_TOKEN"
+          echo "HCLOUD_TOKEN=$HCLOUD_TOKEN" >> "$GITHUB_ENV"
+
       - name: Terraform Run
         working-directory: inventories/hetzner-test/terraform
         continue-on-error: true
         run: |
-          # Provison infra
-          export HCLOUD_TOKEN=$(az keyvault secret show --vault-name ${{ github.repository_owner }} --name hcloud-k8s-token | jq -r .value)
-          echo "::add-mask::$HCLOUD_TOKEN"
-          echo $HCLOUD_TOKEN
-          echo "HCLOUD_TOKEN=$HCLOUD_TOKEN" >> "$GITHUB_ENV"
           terraform init
-          terraform plan
+          terraform plan -out plan.infra
+          terraform apply -auto-approve plan.infra
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
@@ -72,7 +83,9 @@ jobs:
 
       - name: Ansible Run
         continue-on-error: true
-        run: ansible-playbook -i inventories/k8s-mix/default-inventory.txt playbooks/local.yml
+        run: |
+          ansible-inventory -i inventories/hetzner-test/hcloud.yml --graph
+          ansible-playbook -i inventories/hetzner-test/hcloud.yml playbooks/local.yml
 
       - name: Azure Logout
         continue-on-error: true
