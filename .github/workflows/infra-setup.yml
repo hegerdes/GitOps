@@ -82,18 +82,19 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
-      - name: Run Docker image
-        continue-on-error: true
-        uses: docker://hegerdes/playbooks:latest
-        with:
-          entrypoint: ansible-playbook
-          args: --version
+      # - name: Run Docker image
+      #   continue-on-error: true
+      #   uses: docker://hegerdes/playbooks:latest
+      #   with:
+      #     entrypoint: ansible-playbook
+      #     args: --version
 
       - name: Ansible Run
         continue-on-error: true
         run: |
-          ansible-inventory -i inventories/hetzner-test/hcloud.yml --graph
-          ansible-playbook -i inventories/hetzner-test/hcloud.yml playbooks/local.yml
+          printenv
+          ansible-inventory -i inventories/hetzner-test/hcloud.yml --playbook-dir playbooks --graph
+          ansible-playbook -i inventories/hetzner-test/hcloud.yml playbooks/pb_k8s.yml
 
       - name: Azure Logout
         continue-on-error: true
