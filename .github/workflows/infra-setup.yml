@@ -1,4 +1,4 @@
-name: Build-and-Publish-Helm-Chart
+name: Infra
 
 on:
   push:
@@ -92,9 +92,12 @@ jobs:
       - name: Ansible Run
         continue-on-error: true
         run: |
-          printenv
           ansible-inventory -i inventories/hetzner-test/hcloud.yml --playbook-dir playbooks --graph
-          ansible-playbook -i inventories/hetzner-test/hcloud.yml playbooks/pb_k8s.yml
+          ansible-playbook -i inventories/hetzner-test/hcloud.yml playbooks/pb_k8s.yml -vvv
+
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 15
 
       - name: Azure Logout
         continue-on-error: true
