@@ -13,6 +13,11 @@ env:
   # ANSIBLE
   ANSIBLE_HOST_KEY_CHECKING: 'false'
   ANSIBLE_FORCE_COLOR: 'true'
+  ANSIBLE_PIPELINING: 'true'
+  ANSIBLE_GATHERING: smart
+  ANSIBLE_FORKS: 12
+  ANSIBLE_STDOUT_CALLBACK: yaml
+  ANSIBLE_CALLBACKS_ENABLED: timer,profile_tasks,profile_roles
   ANSIBLE_LOOKUP_PLUGINS: '{{ ANSIBLE_HOME ~ "/plugins/lookup:/usr/share/ansible/plugins/lookup":/app/playbooks/lookup_plugins ${{ github.workspace }}/playbooks/lookup_plugins }}'
 
 jobs:
@@ -59,13 +64,10 @@ jobs:
           echo "Setting up secrets and agents"
           mkdir -p ~/.ssh
           chmod 700 -R ~/.ssh
-          eval $(ssh-agent -s) > /dev/null
           az keyvault secret show --vault-name ${{ github.repository_owner }} --name ssh-rsa-${{ github.repository_owner }}-pub \
           | jq -r .value | base64 -d > ~/.ssh/id_rsa.pub
           az keyvault secret show --vault-name ${{ github.repository_owner }} --name ssh-25519-ci-pub \
           | jq -r .value | base64 -d > ~/.ssh/cloud-test.pub
-          az keyvault secret show --vault-name ${{ github.repository_owner }} --name ssh-25519-ci-pvt \
-          | jq -r .value | base64 -d | tr -d '\r' | ssh-add - > /dev/null
           HCLOUD_TOKEN=$(az keyvault secret show --vault-name ${{ github.repository_owner }} --name hcloud-k8s-token | jq -r .value)
           echo "::add-mask::$HCLOUD_TOKEN"
           echo "HCLOUD_TOKEN=$HCLOUD_TOKEN" >> "$GITHUB_ENV"
@@ -92,8 +94,11 @@ jobs:
       - name: Ansible Run
         continue-on-error: true
         run: |
+          eval $(ssh-agent -s) > /dev/null
+          az keyvault secret show --vault-name ${{ github.repository_owner }} --name ssh-25519-ci-pvt \
+            | jq -r .value | base64 -d | tr -d '\r' | ssh-add - > /dev/null
           ansible-inventory -i inventories/hetzner-test/hcloud.yml --playbook-dir playbooks --graph
-          ansible-playbook -i inventories/hetzner-test/hcloud.yml playbooks/pb_k8s.yml -vvv
+          ansible-playbook -i inventories/hetzner-test/hcloud.yml playbooks/pb_k8s.yml -vv
 
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
