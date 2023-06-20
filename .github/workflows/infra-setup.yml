@@ -94,11 +94,12 @@ jobs:
       - name: Ansible Run
         continue-on-error: true
         run: |
+          # Run ansible
           eval $(ssh-agent -s) > /dev/null
           az keyvault secret show --vault-name ${{ github.repository_owner }} --name ssh-25519-ci-pvt \
             | jq -r .value | base64 -d | tr -d '\r' | ssh-add - > /dev/null
           ansible-inventory -i inventories/hetzner-test/hcloud.yml --playbook-dir playbooks --graph
-          ansible-playbook -i inventories/hetzner-test/hcloud.yml playbooks/pb_k8s.yml -vv
+          ansible-playbook -i inventories/hetzner-test/hcloud.yml playbooks/pb_k8s.yml
 
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
