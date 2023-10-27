@@ -76,7 +76,6 @@ jobs:
 
       - name: Terraform Run
         working-directory: inventories/hetzner-test/terraform
-        continue-on-error: true
         run: |
           terraform init
           terraform plan -out plan.infra
@@ -98,6 +97,7 @@ jobs:
         timeout-minutes: 30
         run: |
           # Run ansible
+          ansible --version
           eval $(ssh-agent -s) > /dev/null
           az keyvault secret show --vault-name ${{ github.repository_owner }} --name ssh-25519-ci-pvt \
             | jq -r .value | base64 -d | tr -d '\r' | ssh-add - > /dev/null
@@ -108,6 +108,7 @@ jobs:
 
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
+        if: failure()
         continue-on-error: true
         timeout-minutes: 15
 
