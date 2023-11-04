@@ -1,7 +1,14 @@
 name: Infra
 
 on:
+  workflow_dispatch:
+    inputs:
+      tf-extra-args:
+        type: string
+        default: ""
+        description: Extra args for terraform
   push:
+    tags: ["*"]
 
 permissions:
   contents: read
@@ -40,14 +47,14 @@ jobs:
           token: ${{ secrets.ORG_GITHUB_PAT }}
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
           cache: 'pip'
           cache-dependency-path: playbooks/requirements.txt
 
       - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
 
       - name: Log in with Azure
         uses: azure/login@v1
@@ -79,7 +86,7 @@ jobs:
         run: |
           terraform --version
           terraform init
-          terraform plan -out plan.infra
+          terraform plan -out ${{ inputs.tf-extra-args || '' }} plan.infra
           terraform apply -auto-approve plan.infra
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
