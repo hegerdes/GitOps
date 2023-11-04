@@ -28,7 +28,7 @@ env:
   ANSIBLE_LOOKUP_PLUGINS: '{{ ANSIBLE_HOME ~ "/plugins/lookup:/usr/share/ansible/plugins/lookup":/app/playbooks/lookup_plugins ${{ github.workspace }}/playbooks/lookup_plugins }}'
 
 jobs:
-  build-and-publish-charts:
+  k8s-bootstrab:
     runs-on: ubuntu-latest
     environment: default
     steps:
@@ -81,7 +81,7 @@ jobs:
           echo "::add-mask::$HCLOUD_TOKEN"
           echo "HCLOUD_TOKEN=$HCLOUD_TOKEN" >> "$GITHUB_ENV"
 
-      - name: Terraform Run
+      - name: Run Terraform
         working-directory: inventories/hetzner-test/terraform
         run: |
           terraform --version
@@ -100,8 +100,7 @@ jobs:
       #     entrypoint: ansible-playbook
       #     args: --version
 
-      - name: Ansible Run
-        continue-on-error: true
+      - name: Run Ansible
         timeout-minutes: 30
         run: |
           # Run ansible
