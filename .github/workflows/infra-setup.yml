@@ -86,7 +86,7 @@ jobs:
         run: |
           terraform --version
           terraform init
-          terraform plan -out ${{ inputs.tf-extra-args || '' }} plan.infra
+          terraform plan ${{ inputs.tf-extra-args || '' }} -out plan.infra
           terraform apply -auto-approve plan.infra
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
