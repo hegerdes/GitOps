@@ -98,6 +98,7 @@ jobs:
   k8s-bootstab:
     runs-on: ubuntu-latest
     if: ${{ success() && inputs.tf-extra-args != '-destroy' }}
+    needs: k8s-infra
     environment: default
     steps:
       - name: Checkout repository
