@@ -28,7 +28,7 @@ env:
   ANSIBLE_LOOKUP_PLUGINS: '{{ ANSIBLE_HOME ~ "/plugins/lookup:/usr/share/ansible/plugins/lookup":/app/playbooks/lookup_plugins ${{ github.workspace }}/playbooks/lookup_plugins }}'
 
 jobs:
-  k8s-bootstrab:
+  k8s-infra:
     runs-on: ubuntu-latest
     environment: default
     steps:
@@ -46,13 +46,6 @@ jobs:
           path: inventories
           token: ${{ secrets.ORG_GITHUB_PAT }}
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-          cache: 'pip'
-          cache-dependency-path: playbooks/requirements.txt
-
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
 
@@ -62,10 +55,6 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - name: Install Ansible
-        working-directory: playbooks
-        run: pip install -r requirements.txt && pip freeze
 
       - name: Setting up vars
         run: |
@@ -92,6 +81,76 @@ jobs:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: terraform-output
+          path: inventories/hetzner-test/terraform/outputs
+
+      - name: Azure Logout
+        continue-on-error: true
+        run: |
+            az logout
+            az cache purge
+            az account clear
+
+  k8s-bootstab:
+    runs-on: ubuntu-latest
+    if: ${{ success() && inputs.tf-extra-args != '-destroy' }}
+    environment: default
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          repository: hegerdes/ansible-playbooks
+          path: playbooks
+          token: ${{ secrets.ORG_GITHUB_PAT }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          repository: hegerdes/inventories
+          path: inventories
+          token: ${{ secrets.ORG_GITHUB_PAT }}
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: terraform-output
+          path: inventories/hetzner-test/terraform/outputs
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: playbooks/requirements.txt
+
+      - name: Log in with Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Install Ansible
+        working-directory: playbooks
+        run: pip install -r requirements.txt && pip freeze
+
+      - name: Setting up vars
+        run: |
+          # Provison infra
+          echo "Setting up secrets and agents"
+          mkdir -p ~/.ssh
+          chmod 700 -R ~/.ssh
+          az keyvault secret show --vault-name ${{ github.repository_owner }} --name ssh-rsa-${{ github.repository_owner }}-pub \
+          | jq -r .value | base64 -d > ~/.ssh/id_rsa.pub
+          az keyvault secret show --vault-name ${{ github.repository_owner }} --name ssh-25519-ci-pub \
+          | jq -r .value | base64 -d > ~/.ssh/cloud-test.pub
+          HCLOUD_TOKEN=$(az keyvault secret show --vault-name ${{ github.repository_owner }} --name hcloud-k8s-token | jq -r .value)
+          echo "::add-mask::$HCLOUD_TOKEN"
+          echo "HCLOUD_TOKEN=$HCLOUD_TOKEN" >> "$GITHUB_ENV"
 
       # - name: Run Docker image
       #   continue-on-error: true
