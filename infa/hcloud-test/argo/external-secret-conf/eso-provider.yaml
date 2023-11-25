@@ -1,0 +1,45 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ClusterSecretStore
+metadata:
+  name: azure-store
+spec:
+  provider:
+    # provider type: azure keyvault
+    azurekv:
+      # PublicCloud, USGovernmentCloud, ChinaCloud, GermanCloud
+      environmentType: PublicCloud
+      # azure tenant ID, see: https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-how-to-find-tenant
+      tenantId: "295b5ac3-2e4e-4ade-85d8-7dc31617bc2c"
+      # URL of your vault instance, see: https://docs.microsoft.com/en-us/azure/key-vault/general/about-keys-secrets-certificates
+      vaultUrl: "https://hegerdes.vault.azure.net"
+      authSecretRef:
+        # points to the secret that contains
+        # the azure service principal credentials
+        clientId:
+          name: aad-k8s-eso-demo-sp
+          key: clientId
+          namespace: external-secrets
+        clientSecret:
+          name: aad-k8s-eso-demo-sp
+          namespace: external-secrets
+          key: clientSecret
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: example
+  namespace: wasm
+spec:
+  refreshInterval: 1h           # rate SecretManager pulls GCPSM
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: azure-store               # name of the SecretStore (or kind specified)
+  target:
+    name: github-oauth-demo-cookie-secret  # name of the k8s Secret to be created
+    creationPolicy: Owner
+  # Data defines the connection between the Kubernetes Secret keys and the Provider data
+  data:
+    - secretKey: github-oauth-demo-cookie-secret
+      remoteRef:
+        key: github-oauth-demo-cookie-secret
+        decodingStrategy: None # can be None, Base64, Base64URL or Auto
