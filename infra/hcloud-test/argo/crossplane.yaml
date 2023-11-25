@@ -7,7 +7,7 @@ spec:
   project: default
   sources:
   - chart: crossplane
-    repoURL: https://charts.gitlab.io
+    repoURL: https://charts.crossplane.io/stable
     targetRevision: 1.15.0-rc.0
     helm:
       releaseName: crossplane
