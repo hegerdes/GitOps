@@ -21,7 +21,7 @@ spec:
     server: https://kubernetes.default.svc
     namespace: grafana
   info:
-    - name: 'Example:'
+    - name: 'Chart Info'
       value: 'https://example.com'
   syncPolicy:
     automated:
