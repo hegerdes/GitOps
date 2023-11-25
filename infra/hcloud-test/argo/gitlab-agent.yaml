@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gitlab-agent
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: gitlab-agent
+    repoURL: https://charts.gitlab.io
+    targetRevision: HEAD
+    helm:
+      releaseName: gitlab-agent
+    valuesObject:
+      kasAddress: 'wss://kas.gitlab.com'
+      secretName: gitlab-agent-token
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: gitlab-agent
+  info:
+    - name: 'Chart Info'
+      value: 'https://artifacthub.io/packages/helm/gitlab/gitlab-agent'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
