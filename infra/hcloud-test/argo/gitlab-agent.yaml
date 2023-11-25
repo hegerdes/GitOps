@@ -12,8 +12,9 @@ spec:
     helm:
       releaseName: gitlab-agent
     valuesObject:
-      kasAddress: 'wss://kas.gitlab.com'
-      secretName: gitlab-agent-token
+      config:
+        kasAddress: wss://kas.gitlab.com
+        secretName: gitlab-agent-token
   destination:
     server: "https://kubernetes.default.svc"
     namespace: gitlab-agent
