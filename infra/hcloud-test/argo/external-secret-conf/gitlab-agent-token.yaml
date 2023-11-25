@@ -20,5 +20,5 @@ spec:
   data:
     - secretKey: k8s-gitlab-agent-token-gitops
       remoteRef:
-        key: k8s-gitlab-agent-token-gitops
+        key: token
         decodingStrategy: None # can be None, Base64, Base64URL or Auto
