@@ -8,7 +8,7 @@ spec:
   sources:
   - chart: crossplane
     repoURL: https://charts.crossplane.io/stable
-    targetRevision: 1.15.0-rc.0
+    targetRevision: 1.14.3
     helm:
       releaseName: crossplane
   - repoURL: https://github.com/hegerdes/GitOps.git
