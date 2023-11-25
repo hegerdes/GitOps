@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: crossplane
+  namespace: argocd
+spec:
+  project: default
+  sources:
+  - chart: crossplane
+    repoURL: https://charts.gitlab.io
+    targetRevision: 1.21.0
+    helm:
+      releaseName: crossplane
+  - repoURL: https://github.com/hegerdes/GitOps.git
+    targetRevision: HEAD
+    path: infra/hcloud-test/crossplane
+    directory:
+      recurse: true
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: crossplane-system
+  info:
+    - name: 'Chart Info'
+      value: 'https://artifacthub.io/packages/helm/crossplane/crossplane'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
