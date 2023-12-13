@@ -13,11 +13,11 @@ spec:
     targetRevision: 1.14.3
     helm:
       releaseName: crossplane
-  # - repoURL: https://github.com/hegerdes/GitOps.git
-  #   targetRevision: HEAD
-  #   path: infra/hcloud-test/crossplane
-  #   directory:
-  #     recurse: true
+  - repoURL: https://github.com/hegerdes/GitOps.git
+    targetRevision: HEAD
+    path: infra/hcloud-test/crossplane
+    directory:
+      recurse: true
   destination:
     server: "https://kubernetes.default.svc"
     namespace: crossplane-system
@@ -25,7 +25,7 @@ spec:
     - name: 'Chart Info'
       value: 'https://artifacthub.io/packages/helm/crossplane/crossplane'
   syncPolicy:
-    preserveResourcesOnDeletion: true
+    # preserveResourcesOnDeletion: true
     automated:
       prune: true
       selfHeal: true
