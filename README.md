@@ -2,7 +2,7 @@
 
 ## Content
 This repo can contains the needed actions and resources to bootstran a kubernetes cluster.  
-To bootstrab the cluster it uses these Repos:
+To bootstrap the cluster it uses these Repos:
  * [hegerdes/ansible-playbooks](https://github.com/hegerdes/ansible-playbooks)
  * [hegerdes/inventories](https://github.com/hegerdes/inventories)
 

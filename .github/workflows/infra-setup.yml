@@ -95,7 +95,7 @@ jobs:
             az cache purge
             az account clear
 
-  k8s-bootstab:
+  k8s-bootstrap:
     runs-on: ubuntu-latest
     if: ${{ success() && inputs.tf-extra-args != '-destroy' }}
     needs: k8s-infra
