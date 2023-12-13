@@ -5,8 +5,8 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  source:
-    chart: gitlab-agent
+  sources:
+  - chart: gitlab-agent
     repoURL: https://charts.gitlab.io
     targetRevision: 1.21.0
     helm:
@@ -15,6 +15,11 @@ spec:
         config:
           kasAddress: wss://kas.gitlab.com
           secretName: gitlab-agent-token
+  - repoURL: https://github.com/hegerdes/GitOps.git
+    targetRevision: HEAD
+    path: infra/hcloud-test/argo/external-secret-conf
+    directory:
+      recurse: true
   destination:
     server: "https://kubernetes.default.svc"
     namespace: gitlab-agent
