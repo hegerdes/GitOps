@@ -17,7 +17,7 @@ spec:
           secretName: gitlab-agent-token
   - repoURL: https://github.com/hegerdes/GitOps.git
     targetRevision: HEAD
-    path: infra/hcloud-test/argo/external-secret-conf
+    path: infra/hcloud-test/cluster-critical/gitlab-agent
     directory:
       recurse: true
   destination:
