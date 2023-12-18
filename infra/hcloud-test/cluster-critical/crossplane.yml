@@ -10,9 +10,30 @@ spec:
   sources:
   - chart: crossplane
     repoURL: https://charts.crossplane.io/stable
-    targetRevision: 1.14.3
+    targetRevision: 1.14.4
     helm:
       releaseName: crossplane
+      valuesObject:
+        extraObjects:
+        - apiVersion: pkg.crossplane.io/v1
+          kind: Provider
+          metadata:
+            name: provider-family-azure
+          spec:
+            package: xpkg.upbound.io/upbound/provider-family-azure:v0.39.0
+        - apiVersion: pkg.crossplane.io/v1
+          kind: Provider
+          metadata:
+            name: provider-github
+          spec:
+            package: xpkg.upbound.io/coopnorge/provider-github:v0.3.2
+        - apiVersion: pkg.crossplane.io/v1
+          kind: Provider
+          metadata:
+            name: provider-terraform
+          spec:
+            package: xpkg.upbound.io/upbound/provider-terraform:v0.12.0
+
   - repoURL: https://github.com/hegerdes/GitOps.git
     targetRevision: HEAD
     path: infra/hcloud-test/crossplane
