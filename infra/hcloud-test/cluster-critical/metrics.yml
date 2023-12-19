@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-metrics
+  namespace: argocd
+spec:
+  project: default
+  sources:
+  - chart: metrics-server
+    repoURL: https://kubernetes-sigs.github.io/metrics-server/
+    targetRevision: 3.*
+    helm:
+      releaseName: metrics-server
+      valuesObject:
+        args:
+        - --kubelet-insecure-tls
+  - chart: kubernetes-dashboard
+    repoURL: https://kubernetes.github.io/dashboard/
+    targetRevision: 6.*
+    helm:
+      releaseName: kubernetes-dashboard
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: external-secrets
+  info:
+    - name: 'Chart Info Metrics-Server'
+      value: 'https://artifacthub.io/packages/helm/metrics-server/metrics-server'
+    - name: 'Chart Info Kubernetes-Dashboard'
+      value: 'https://artifacthub.io/packages/helm/k8s-dashboard/kubernetes-dashboard'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
