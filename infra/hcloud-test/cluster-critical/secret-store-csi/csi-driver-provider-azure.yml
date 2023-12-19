@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: csi-secrets-store-provider-azure
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: secrets-store-csi-driver
+    repoURL: https://azure.github.io/secrets-store-csi-driver-provider-azure/charts
+    targetRevision: 1.5.1
+    helm:
+      releaseName: csi-secrets-store-provider-azure
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: kube-system
+  info:
+    - name: 'Chart Info'
+      value: 'https://artifacthub.io/packages/helm/csi-secrets-store-provider-azure/csi-secrets-store-provider-azure'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
