@@ -11,6 +11,9 @@ spec:
     targetRevision: 1.5.1
     helm:
       releaseName: csi-secrets-store-provider-azure
+      valuesObject:
+        secrets-store-csi-driver:
+          install: false
   destination:
     server: "https://kubernetes.default.svc"
     namespace: kube-system
