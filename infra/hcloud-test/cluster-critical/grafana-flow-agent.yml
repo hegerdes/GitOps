@@ -16,7 +16,7 @@ spec:
           name: hetzner-test
         externalServices:
           prometheus:
-            host: "https://prometheus-prod-01-eu-west-0.grafana.net"
+            host: https://prometheus-prod-01-eu-west-0.grafana.net
             # Authenticate to Prometheus using basic authentication
             basicAuth:
               usernameKey: username
@@ -28,7 +28,7 @@ spec:
               namespace: monitoring
 
           loki:
-            host: "https://logs-prod-eu-west-0.grafana.net"
+            host: https://logs-prod-eu-west-0.grafana.net
             # Authenticate to Prometheus using basic authentication
             basicAuth:
               usernameKey: username
@@ -47,8 +47,9 @@ spec:
               username_key: username
               password_key: password
               external:
-                url: "https://prometheus-prod-01-eu-west-0.grafana.net/api/prom"
-
+                url: https://prometheus-prod-01-eu-west-0.grafana.net/api/prom
+        traces:
+          enabled: true
   - repoURL: https://github.com/hegerdes/GitOps.git
     targetRevision: HEAD
     path: infra/hcloud-test/cluster-critical/grafana-flow-agent
