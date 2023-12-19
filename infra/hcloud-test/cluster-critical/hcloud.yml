@@ -8,7 +8,7 @@ spec:
   sources:
   - chart: hcloud-cloud-controller-manager
     repoURL: https://charts.hetzner.cloud
-    targetRevision: 1.19.0
+    targetRevision: 1.*
     helm:
       releaseName: hcloud-cloud-controller-manager
       valuesObject:
@@ -17,12 +17,12 @@ spec:
           clusterCIDR: 10.244.0.0/16
   - chart: hcloud-csi
     repoURL: https://charts.hetzner.cloud
-    targetRevision: 2.6.0
+    targetRevision: 2.*
     helm:
       releaseName: hcloud-csi
   - chart: hetzner-load-balancer-exporter
     repoURL: https://wacken89.github.io/hetzner-load-balancer-prometheus-exporter
-    targetRevision: 1.2.0
+    targetRevision: 1.*
     helm:
       releaseName: hcloud-lb-exporter
       valuesObject:
@@ -36,6 +36,11 @@ spec:
               secretKeyRef:
                 key: token
                 name: hcloud
+  - repoURL: https://github.com/hegerdes/GitOps.git
+    targetRevision: HEAD
+    path: infra/hcloud-test/cluster-critical/hcloud
+    directory:
+      recurse: true
   destination:
     server: "https://kubernetes.default.svc"
     namespace: kube-system

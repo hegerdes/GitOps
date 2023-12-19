@@ -33,12 +33,8 @@ spec:
             memory: "265Mi"
             cpu: "500m"
         env:
-          - name: ARGOCD_APP_NAME
-            value: $ARGOCD_APP_NAME
-          - name: ARGOCD_APP_REVISION_SHORT
-            value: $ARGOCD_APP_REVISION_SHORT
-          - name: KUBE_VERSION
-            value: $KUBE_VERSION
+          - name: foo
+            value: bar
 
 # apiVersion: v1
 # kind: Pod
