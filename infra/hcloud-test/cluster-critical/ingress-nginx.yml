@@ -1,0 +1,63 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ingress-nginx
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: ingress-nginx
+    repoURL: https://kubernetes.github.io/ingress-nginx
+    targetRevision: 4.8.4
+    helm:
+      releaseName: ingress-nginx
+      valuesObject:
+        controller:
+          name: controller
+          kind: DaemonSet           # `DaemonSet` or `Deployment`
+          service:
+            enabled: true
+            annotations:
+              # # See https://github.com/hetznercloud/hcloud-cloud-controller-manager/blob/main/internal/annotation/load_balancer.go#L12
+              load-balancer.hetzner.cloud/name: k8s-worker-lb
+              load-balancer.hetzner.cloud/location: nbg1
+              load-balancer.hetzner.cloud/use-private-ip: "true"
+              load-balancer.hetzner.cloud/network: "my-k8s-network"
+            type: LoadBalancer
+            # type: NodePort
+            nodePorts:
+              http: 32080
+              https: 32443
+              tcp: {}
+              udp: {}
+          ingressClassResource:
+            name: nginx
+            enabled: true
+            default: true
+          config:
+            # use-proxy-protocol: true
+            use-http2: true
+            use-gzip: true
+          opentelemetry:
+            enabled: false
+          metrics:
+            enabled: true
+            service:
+              annotations:
+                prometheus.io/port: "10254"
+                prometheus.io/scrape: "true"
+        prometheus:
+          create: true
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: ingress-nginx
+  info:
+    - name: 'Chart Info'
+      value: 'https://artifacthub.io/packages/helm/ingress-nginx/ingress-nginx'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true

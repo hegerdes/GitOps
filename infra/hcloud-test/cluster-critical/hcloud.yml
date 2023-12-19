@@ -1,0 +1,55 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hcloud
+  namespace: argocd
+spec:
+  project: default
+  sources:
+  - chart: hcloud-cloud-controller-manager
+    repoURL: https://charts.hetzner.cloud
+    targetRevision: 1.19.0
+    helm:
+      releaseName: hcloud-cloud-controller-manager
+      valuesObject:
+        networking:
+          enabled: true
+          clusterCIDR: 10.244.0.0/16
+  - chart: hcloud-csi
+    repoURL: https://charts.hetzner.cloud
+    targetRevision: 2.6.0
+    helm:
+      releaseName: hcloud-csi
+  - chart: hetzner-load-balancer-exporter
+    repoURL: https://wacken89.github.io/hetzner-load-balancer-prometheus-exporter
+    targetRevision: 1.2.0
+    helm:
+      releaseName: hcloud-lb-exporter
+      valuesObject:
+        env:
+          - name: LOAD_BALANCER_IDS
+            value: "all"
+          - name: SCRAPE_INTERVAL
+            value: "30"
+          - name: ACCESS_TOKEN
+            valueFrom:
+              secretKeyRef:
+                key: token
+                name: hcloud
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: kube-system
+  info:
+    - name: 'Chart Info Hetzner-Cloud-Controller'
+      value: 'https://github.com/hetznercloud/hcloud-cloud-controller-manager'
+    - name: 'Chart Info Hetzner-CSI-Driver'
+      value: 'https://github.com/hetznercloud/csi-driver'
+    - name: 'Chart Info Hetzner-LB-Exporter'
+      value: 'https://github.com/wacken89/hetzner-load-balancer-prometheus-exporter'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
