@@ -29,3 +29,8 @@ spec:
       allowEmpty: false
     syncOptions:
       - CreateNamespace=true
+      - RespectIgnoreDifferences=true
+  ignoreDifferences:
+  - kind: MutatingWebhookConfiguration
+    jqPathExpressions:
+    - '.webhooks[].namespaceSelector'
