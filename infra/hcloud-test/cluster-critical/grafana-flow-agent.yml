@@ -49,7 +49,7 @@ spec:
               external:
                 url: https://prometheus-prod-01-eu-west-0.grafana.net/api/prom
         traces:
-          enabled: true
+          enabled: false
   - repoURL: https://github.com/hegerdes/GitOps.git
     targetRevision: HEAD
     path: infra/hcloud-test/cluster-critical/grafana-flow-agent
