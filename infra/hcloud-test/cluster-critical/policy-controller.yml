@@ -15,6 +15,9 @@ spec:
         webhook:
           namespaceSelector:
             matchExpressions:
+              - key: webhooks.knative.dev/exclude
+                operator: In
+                values: ["true"]
               - key: policy.sigstore.dev/include
                 operator: In
                 values: ["true"]
@@ -37,15 +40,15 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - RespectIgnoreDifferences=true
-  ignoreDifferences: []
-  # - kind: MutatingWebhookConfiguration
-  #   group: "*"
-  #   jqPathExpressions:
-  #   - .webhooks[].namespaceSelector.matchExpressions
-  # - kind: ValidatingWebhookConfiguration
-  #   group: "*"
-  #   jqPathExpressions:
-  #   - .webhooks[].namespaceSelector.matchExpressions
+  ignoreDifferences:
+  - kind: MutatingWebhookConfiguration
+    group: "*"
+    jqPathExpressions:
+    - .webhooks[].namespaceSelector.matchExpressions[] | select(.key == "webhooks.knative.dev/exclude")
+  - kind: ValidatingWebhookConfiguration
+    group: "*"
+    jqPathExpressions:
+    - .webhooks[].namespaceSelector.matchExpressions[] | select(.key == "webhooks.knative.dev/exclude")
   # - group: "*"
   #   kind: "*"
   #   managedFieldsManagers:
