@@ -11,6 +11,13 @@ spec:
     targetRevision: 0.*
     helm:
       releaseName: policy-controller
+      valuesObject:
+        webhook:
+          namespaceSelector:
+            matchExpressions:
+              - key: policy.sigstore.dev/include
+                operator: In
+                values: ["true"]
   - repoURL: https://github.com/hegerdes/GitOps.git
     targetRevision: HEAD
     path: infra/hcloud-test/cluster-critical/policy-controller
@@ -30,15 +37,15 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - RespectIgnoreDifferences=true
-  ignoreDifferences:
-  - kind: MutatingWebhookConfiguration
-    group: "*"
-    jqPathExpressions:
-    - .webhooks[].namespaceSelector.matchExpressions
-  - kind: ValidatingWebhookConfiguration
-    group: "*"
-    jqPathExpressions:
-    - .webhooks[].namespaceSelector.matchExpressions
+  ignoreDifferences: []
+  # - kind: MutatingWebhookConfiguration
+  #   group: "*"
+  #   jqPathExpressions:
+  #   - .webhooks[].namespaceSelector.matchExpressions
+  # - kind: ValidatingWebhookConfiguration
+  #   group: "*"
+  #   jqPathExpressions:
+  #   - .webhooks[].namespaceSelector.matchExpressions
   # - group: "*"
   #   kind: "*"
   #   managedFieldsManagers:
