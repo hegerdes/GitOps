@@ -3,8 +3,9 @@ kind: Application
 metadata:
   name: crossplane
   namespace: argocd
-  # annotations:
-  #   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "3"
 spec:
   project: default
   sources:

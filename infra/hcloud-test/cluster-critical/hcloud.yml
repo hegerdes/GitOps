@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: hcloud
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   project: default
   sources:
@@ -20,22 +22,22 @@ spec:
     targetRevision: 2.*
     helm:
       releaseName: hcloud-csi
-  # - chart: hetzner-load-balancer-exporter
-  #   repoURL: https://wacken89.github.io/hetzner-load-balancer-prometheus-exporter
-  #   targetRevision: 1.*
-  #   helm:
-  #     releaseName: hcloud-lb-exporter
-  #     valuesObject:
-  #       env:
-  #         - name: LOAD_BALANCER_IDS
-  #           value: "all"
-  #         - name: SCRAPE_INTERVAL
-  #           value: "30"
-  #         - name: ACCESS_TOKEN
-  #           valueFrom:
-  #             secretKeyRef:
-  #               key: token
-  #               name: hcloud
+  - chart: hetzner-load-balancer-exporter
+    repoURL: https://wacken89.github.io/hetzner-load-balancer-prometheus-exporter
+    targetRevision: 1.*
+    helm:
+      releaseName: hcloud-lb-exporter
+      valuesObject:
+        env:
+          - name: LOAD_BALANCER_IDS
+            value: "all"
+          - name: SCRAPE_INTERVAL
+            value: "30"
+          - name: ACCESS_TOKEN
+            valueFrom:
+              secretKeyRef:
+                key: token
+                name: hcloud
   - repoURL: https://github.com/hegerdes/GitOps.git
     targetRevision: HEAD
     path: infra/hcloud-test/cluster-critical/hcloud
