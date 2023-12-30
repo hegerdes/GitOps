@@ -1,13 +1,21 @@
-# You can override the included template(s) by including variable overrides
-# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
-# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
-# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
-# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
-# Note that environment variables can be set in several places
-# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
+
 stages:
-- test
-sast:
-  stage: test
+  - test
+  - build
+  - deploy
+
 include:
-- template: Security/SAST.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+
+azure-auth:
+  image: mcr.microsoft.com/azure-cli:latest
+  variables:
+    AZURE_CLIENT_ID: 3613e80b-bb01-4a3e-98aa-425d681d2c08
+    AZURE_TENANT_ID: 295b5ac3-2e4e-4ade-85d8-7dc31617bc2c
+  id_tokens:
+    GITLAB_OIDC_TOKEN:
+      aud: https://gitlab.com
+  script:
+    - az login --service-principal -u $AZURE_CLIENT_ID -t $AZURE_TENANT_ID --federated-token $GITLAB_OIDC_TOKEN
+    - az account show
+    - az keyvault secret show --vault-name hegerdes --name github-oauth-demo-cookie-secret
