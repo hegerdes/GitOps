@@ -9,13 +9,16 @@ include:
 
 azure-auth:
   image: mcr.microsoft.com/azure-cli:latest
+  stage: test
   variables:
-    AZURE_CLIENT_ID: 3613e80b-bb01-4a3e-98aa-425d681d2c08
-    AZURE_TENANT_ID: 295b5ac3-2e4e-4ade-85d8-7dc31617bc2c
+    AZURE_CLIENT_ID: $AAD_GITLAB_CI_CLIENT_ID
+    AZURE_TENANT_ID: $AZURE_TENANT_ID_HEGERDES
   id_tokens:
     GITLAB_OIDC_TOKEN:
       aud: https://gitlab.com
   script:
     - az login --service-principal -u $AZURE_CLIENT_ID -t $AZURE_TENANT_ID --federated-token $GITLAB_OIDC_TOKEN
     - az account show
-    - az keyvault secret show --vault-name hegerdes --name github-oauth-demo-cookie-secret
+
+sast:
+  stage: test
