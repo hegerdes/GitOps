@@ -32,8 +32,7 @@ spec:
     helm:
       releaseName: external-dns-aws
       valuesObject:
-        provider:
-          name: aws
+        provider: aws
         extraVolumes:
           - name: secrets
             secret:
