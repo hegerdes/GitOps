@@ -32,7 +32,8 @@ spec:
     helm:
       releaseName: external-dns-aws
       valuesObject:
-        provider: aws
+        provider:
+          name: aws
         extraVolumes:
           - name: secrets
             secret:
@@ -42,10 +43,10 @@ spec:
                   path: credentials
         extraVolumeMounts:
           - name: secrets
-            mountPath: /etc/kubernetes/config
+            mountPath: /etc/kubernetes/.aws
         env:
           - name: AWS_CONFIG_FILE
-            value: /etc/kubernetes/config
+            value: /etc/kubernetes/.aws/credentials
   - repoURL: https://github.com/hegerdes/GitOps.git
     targetRevision: HEAD
     path: infra/hcloud-test/cluster-critical/external-dns
