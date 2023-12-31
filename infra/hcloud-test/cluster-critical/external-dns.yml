@@ -43,6 +43,7 @@ spec:
         extraVolumeMounts:
           - name: secrets
             mountPath: /etc/kubernetes/config
+        env:
           - name: AWS_CONFIG_FILE
             value: /etc/kubernetes/config
   - repoURL: https://github.com/hegerdes/GitOps.git
