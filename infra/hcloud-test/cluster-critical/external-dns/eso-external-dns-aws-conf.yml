@@ -1,7 +1,7 @@
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: aad-sp-external-dns-azure
+  name: aad-sp-external-dns-aws
   namespace: external-dns
 spec:
   refreshInterval: 1h           # rate SecretManager pulls GCPSM
@@ -9,11 +9,11 @@ spec:
     kind: ClusterSecretStore
     name: azure-store               # name of the SecretStore (or kind specified)
   target:
-    name: external-dns-azure  # name of the k8s Secret to be created
+    name: external-dns-aws  # name of the k8s Secret to be created
     creationPolicy: Owner
   # Data defines the connection between the Kubernetes Secret keys and the Provider data
   data:
-    - secretKey: azure.json
+    - secretKey: credentials
       remoteRef:
-        key: k8s-external-dns-config-azure
+        key: k8s-external-dns-config-aws
         decodingStrategy: Auto # can be None, Base64, Base64URL or Auto

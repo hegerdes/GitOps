@@ -12,13 +12,13 @@ spec:
     repoURL: https://kubernetes-sigs.github.io/external-dns/
     targetRevision: 1.*
     helm:
-      releaseName: external-dns
+      releaseName: external-dns-azure
       valuesObject:
         provider: azure
         extraVolumes:
           - name: secrets
             secret:
-              secretName: external-dns
+              secretName: external-dns-azure
               items:
                 - key: azure.json
                   path: azure.json
@@ -26,6 +26,26 @@ spec:
           - name: secrets
             mountPath: /etc/kubernetes/azure.json
             subPath: azure.json
+  - chart: external-dns
+    repoURL: https://kubernetes-sigs.github.io/external-dns/
+    targetRevision: 1.*
+    helm:
+      releaseName: external-dns-aws
+      valuesObject:
+        provider: aws
+        extraVolumes:
+          - name: secrets
+            secret:
+              secretName: external-dns-aws
+              items:
+                - key: credentials
+                  path: credentials
+        extraVolumeMounts:
+          - name: secrets
+            mountPath: /etc/kubernetes/credentials.json
+        env:
+          - name: AWS_CONFIG_FILE
+            value: /etc/kubernetes/credentials.json
   - repoURL: https://github.com/hegerdes/GitOps.git
     targetRevision: HEAD
     path: infra/hcloud-test/cluster-critical/external-dns
@@ -35,12 +55,8 @@ spec:
     server: "https://kubernetes.default.svc"
     namespace: external-dns
   info:
-    - name: 'Chart Info Hetzner-Cloud-Controller'
-      value: 'https://github.com/hetznercloud/hcloud-cloud-controller-manager'
-    - name: 'Chart Info Hetzner-CSI-Driver'
-      value: 'https://github.com/hetznercloud/csi-driver'
-    - name: 'Chart Info Hetzner-LB-Exporter'
-      value: 'https://github.com/wacken89/hetzner-load-balancer-prometheus-exporter'
+    - name: 'Chart Info'
+      value: 'https://artifacthub.io/packages/helm/external-dns/external-dns'
   syncPolicy:
     automated:
       prune: true
