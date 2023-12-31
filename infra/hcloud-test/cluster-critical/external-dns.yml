@@ -42,10 +42,9 @@ spec:
                   path: credentials
         extraVolumeMounts:
           - name: secrets
-            mountPath: /etc/kubernetes/credentials.json
-        env:
+            mountPath: /etc/kubernetes/config
           - name: AWS_CONFIG_FILE
-            value: /etc/kubernetes/credentials.json
+            value: /etc/kubernetes/config
   - repoURL: https://github.com/hegerdes/GitOps.git
     targetRevision: HEAD
     path: infra/hcloud-test/cluster-critical/external-dns
