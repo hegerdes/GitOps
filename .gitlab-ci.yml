@@ -17,7 +17,7 @@ azure-auth:
     GITLAB_OIDC_TOKEN:
       aud: https://gitlab.com
   script:
-    - az login --service-principal -u $AZURE_CLIENT_ID -t $AZURE_TENANT_ID --federated-token $GITLAB_OIDC_TOKEN
+    - az login --service-principal -u "${AZURE_CLIENT_ID}" -t "${AZURE_TENANT_ID}" --federated-token $GITLAB_OIDC_TOKEN
     - az account show
 
 sast:
@@ -40,5 +40,9 @@ deploy:
     - kubectl config use-context "$KUBE_CONTEXT"
   script:
     - kubectl config get-contexts
-    - kubectl get pods -A
+    - kubectl get pods
     - kubectl get ns
+  environment:
+    name: $CI_COMMIT_REF_SLUG
+    action: start
+    auto_stop_in: 1 day
