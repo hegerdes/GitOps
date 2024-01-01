@@ -22,3 +22,23 @@ azure-auth:
 
 sast:
   stage: test
+
+deploy:
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: ['']
+  variables:
+    KUBE_CONTEXT: hcloud # The name to use for the new context
+    AGENT_ID: 1080383 # replace with your agent's numeric ID
+    K8S_PROXY_URL: https://kas.gitlab.com/k8s-proxy/ # For agent server (KAS) deployed in Kubernetes cluster (for gitlab.com use kas.gitlab.com); replace with your URL
+    # K8S_PROXY_URL: https://<GITLAB_DOMAIN>/-/kubernetes-agent/k8s-proxy/ # For agent server (KAS) in Omnibus
+    # ... any other variables you have configured
+  before_script:
+    - kubectl config set-credentials agent:$AGENT_ID --token="ci:${AGENT_ID}:${CI_JOB_TOKEN}"
+    - kubectl config set-cluster gitlab --server="${K8S_PROXY_URL}"
+    - kubectl config set-context "$KUBE_CONTEXT" --cluster=gitlab --user="agent:${AGENT_ID}"
+    - kubectl config use-context "$KUBE_CONTEXT"
+  script:
+    - kubectl config get-contexts
+    - kubectl get pods -A
+    - kubectl get ns
