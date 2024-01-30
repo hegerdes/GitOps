@@ -73,6 +73,7 @@ validate:
     entrypoint: ['']
   stage: validate
   script:
+    - apk add curl jq
     - kubectl config get-contexts
     - kubectl get pods
     - kubectl get ns
