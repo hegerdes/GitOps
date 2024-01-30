@@ -42,12 +42,10 @@ deploy:
     - kubectl config set-context "$KUBE_CONTEXT" --cluster=gitlab --user="agent:${AGENT_ID}"
     - kubectl config use-context "$KUBE_CONTEXT"
     - export KUBE_CONFIG_PATH=$KUBECONFIG
-  script:
-    - cd infra/gitlab-agent-tf
     - kubectl get ns
-    - terraform init
-    - terraform plan
-    - terraform apply -auto-approve
+  variables:
+    TF_ROOT: infra/gitlab-agent-tf
+  after_script:
     - kubectl get ns
   environment:
     name: $CI_COMMIT_REF_SLUG
