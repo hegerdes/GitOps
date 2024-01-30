@@ -16,6 +16,17 @@ variables:
   # K8S_PROXY_URL: https://<GITLAB_DOMAIN>/-/kubernetes-agent/k8s-proxy/ # For agent server (KAS) in Omnibus
   # ... any other variables you have configured
 
+before_script:
+  - KUBE_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
+  - curl -sL --output /usr/bin/kubectl "https://dl.k8s.io/release/${KUBE_VERSION}/bin/linux/amd64/kubectl"
+  - chmod +x /usr/bin/kubectl
+  - kubectl config set-credentials agent:$AGENT_ID --token="ci:${AGENT_ID}:${CI_JOB_TOKEN}"
+  - kubectl config set-cluster gitlab --server="${K8S_PROXY_URL}"
+  - kubectl config set-context "$KUBE_CONTEXT" --cluster=gitlab --user="agent:${AGENT_ID}"
+  - kubectl config use-context "$KUBE_CONTEXT"
+  - export KUBE_CONFIG_PATH=$KUBECONFIG
+  - kubectl get ns
+
 azure-auth:
   image: mcr.microsoft.com/azure-cli:latest
   stage: test
@@ -25,6 +36,7 @@ azure-auth:
   id_tokens:
     GITLAB_OIDC_TOKEN:
       aud: https://gitlab.com
+  before_script: []
   script:
     - az login --service-principal -u "${AZURE_CLIENT_ID}" -t "${AZURE_TENANT_ID}" --federated-token $GITLAB_OIDC_TOKEN
     - az account show
@@ -32,19 +44,19 @@ azure-auth:
 sast:
   stage: test
 
+plan:
+  extends: .terraform:build
+  stage: build
+  variables:
+    TF_ROOT: infra/gitlab-agent-tf
+    TF_AUTO_DEPLOY: "true"
+  environment:
+    name: $CI_COMMIT_REF_SLUG
+    action: prepare
+
 deploy:
   extends: .terraform:deploy
   stage: deploy
-  before_script:
-    - KUBE_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
-    - curl -sL --output /usr/bin/kubectl "https://dl.k8s.io/release/${KUBE_VERSION}/bin/linux/amd64/kubectl"
-    - chmod +x /usr/bin/kubectl
-    - kubectl config set-credentials agent:$AGENT_ID --token="ci:${AGENT_ID}:${CI_JOB_TOKEN}"
-    - kubectl config set-cluster gitlab --server="${K8S_PROXY_URL}"
-    - kubectl config set-context "$KUBE_CONTEXT" --cluster=gitlab --user="agent:${AGENT_ID}"
-    - kubectl config use-context "$KUBE_CONTEXT"
-    - export KUBE_CONFIG_PATH=$KUBECONFIG
-    - kubectl get ns
   variables:
     TF_ROOT: infra/gitlab-agent-tf
     TF_AUTO_DEPLOY: "true"
@@ -57,15 +69,9 @@ deploy:
 
 validate:
   image:
-    name: bitnami/kubectl:latest
+    name: alpine:latest
     entrypoint: ['']
   stage: validate
-  before_script:
-    - kubectl config set-credentials agent:$AGENT_ID --token="ci:${AGENT_ID}:${CI_JOB_TOKEN}"
-    - kubectl config set-cluster gitlab --server="${K8S_PROXY_URL}"
-    - kubectl config set-context "$KUBE_CONTEXT" --cluster=gitlab --user="agent:${AGENT_ID}"
-    - kubectl config use-context "$KUBE_CONTEXT"
-    - export KUBE_CONFIG_PATH=$KUBECONFIG
   script:
     - kubectl config get-contexts
     - kubectl get pods
