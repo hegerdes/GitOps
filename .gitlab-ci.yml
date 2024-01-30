@@ -38,7 +38,7 @@ deploy:
   before_script:
     - KUBE_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
     - curl -sL --output /usr/bin/kubectl "https://dl.k8s.io/release/${KUBE_VERSION}/bin/linux/amd64/kubectl"
-    - chmod +c /usr/bin/kubectl
+    - chmod +x /usr/bin/kubectl
     - kubectl config set-credentials agent:$AGENT_ID --token="ci:${AGENT_ID}:${CI_JOB_TOKEN}"
     - kubectl config set-cluster gitlab --server="${K8S_PROXY_URL}"
     - kubectl config set-context "$KUBE_CONTEXT" --cluster=gitlab --user="agent:${AGENT_ID}"
