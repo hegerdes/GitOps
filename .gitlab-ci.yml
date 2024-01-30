@@ -17,9 +17,12 @@ variables:
   # ... any other variables you have configured
 
 before_script:
-  - KUBE_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
-  - curl -sL --output /usr/bin/kubectl "https://dl.k8s.io/release/${KUBE_VERSION}/bin/linux/amd64/kubectl"
-  - chmod +x /usr/bin/kubectl
+  - |
+    if ! command -v kubectl > /dev/null; then
+      KUBE_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
+      curl -sL --output /usr/bin/kubectl "https://dl.k8s.io/release/${KUBE_VERSION}/bin/linux/amd64/kubectl"
+      chmod +x /usr/bin/kubectl
+    fi
   - kubectl config set-credentials agent:$AGENT_ID --token="ci:${AGENT_ID}:${CI_JOB_TOKEN}"
   - kubectl config set-cluster gitlab --server="${K8S_PROXY_URL}"
   - kubectl config set-context "$KUBE_CONTEXT" --cluster=gitlab --user="agent:${AGENT_ID}"
@@ -69,11 +72,10 @@ deploy:
 
 validate:
   image:
-    name: alpine:latest
+    name: bitnami/kubectl:latest
     entrypoint: ['']
   stage: validate
   script:
-    - apk add curl jq
     - kubectl config get-contexts
     - kubectl get pods
     - kubectl get ns
