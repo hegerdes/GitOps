@@ -7,6 +7,7 @@ stages:
 
 include:
   - template: Security/SAST.gitlab-ci.yml
+  - template: Terraform/Base.gitlab-ci.yml
 
 variables:
   KUBE_CONTEXT: demo # The name to use for the new context
@@ -33,6 +34,7 @@ sast:
 
 deploy:
   image: floval/terraform-kubectl
+  extends: .terraform:deploy
   stage: deploy
   before_script:
     - kubectl config set-credentials agent:$AGENT_ID --token="ci:${AGENT_ID}:${CI_JOB_TOKEN}"
