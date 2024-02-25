@@ -32,6 +32,8 @@ spec:
               https: 32443
               tcp: {}
               udp: {}
+          containerSecurityContext:
+            allowPrivilegeEscalation: true
           ingressClassResource:
             name: nginx
             enabled: true
@@ -41,7 +43,7 @@ spec:
             use-http2: true
             use-gzip: true
           opentelemetry:
-            enabled: false
+            enabled: true
           metrics:
             enabled: true
             service:
