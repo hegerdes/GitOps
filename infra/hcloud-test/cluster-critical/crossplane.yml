@@ -19,7 +19,7 @@ spec:
           packages:
           - xpkg.upbound.io/upbound/provider-family-azure:v0.39.0
           - xpkg.upbound.io/coopnorge/provider-github:v0.3.2
-          - xpkg.upbound.io/upbound/provider-terraform:v0.12.0
+          - xpkg.upbound.io/upbound/provider-terraform:v0.14.1
         extraObjects: []
         # - apiVersion: pkg.crossplane.io/v1
         #   kind: Provider

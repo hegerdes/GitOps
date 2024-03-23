@@ -8,7 +8,7 @@ on:
         default: ""
         description: Extra args for terraform
   push:
-    tags: ["*"]
+    tags: ["v*"]
 
 permissions:
   contents: read
@@ -76,11 +76,11 @@ jobs:
           terraform --version
           terraform init
           terraform plan ${{ inputs.tf-extra-args || '' }} -out plan.infra
-          terraform apply -auto-approve plan.infra
-        env:
-          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          # terraform apply -auto-approve plan.infra
+        # env:
+        #   ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        #   ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        #   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
