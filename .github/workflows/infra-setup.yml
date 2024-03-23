@@ -33,14 +33,14 @@ jobs:
     environment: default
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: hegerdes/ansible-playbooks
           path: playbooks
           token: ${{ secrets.ORG_GITHUB_PAT }}
 
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: hegerdes/inventories
           path: inventories
@@ -50,7 +50,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Log in with Azure
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -76,11 +76,7 @@ jobs:
           terraform --version
           terraform init
           terraform plan ${{ inputs.tf-extra-args || '' }} -out plan.infra
-          # terraform apply -auto-approve plan.infra
-        # env:
-        #   ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-        #   ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        #   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          terraform apply -auto-approve plan.infra
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
@@ -102,14 +98,14 @@ jobs:
     environment: default
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: hegerdes/ansible-playbooks
           path: playbooks
           token: ${{ secrets.ORG_GITHUB_PAT }}
 
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: hegerdes/inventories
           path: inventories
@@ -129,7 +125,7 @@ jobs:
           cache-dependency-path: playbooks/requirements.txt
 
       - name: Log in with Azure
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -171,7 +167,7 @@ jobs:
           echo "Will run playbook in this inventroy:"
           ansible-inventory -i inventories/hetzner-test/hcloud.yml --playbook-dir playbooks --graph
           echo "Starting playbook run..."
-          time ansible-playbook -i inventories/hetzner-test/hcloud.yml playbooks/pb_k8s.yml
+          time ansible-playbook -i inventories/hetzner-test/hcloud.yml playbooks/pb_k8s_remote.yml
 
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
