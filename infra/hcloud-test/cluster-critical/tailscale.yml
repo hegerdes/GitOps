@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tailscale
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+spec:
+  project: default
+  sources:
+  - chart: tailscale-operator
+    repoURL: tailscale/tailscale-operator
+    targetRevision: 1.*
+    helm:
+      releaseName: tailscale
+      valuesObject:
+        apiServerProxyConfig:
+          mode: "noauth" # "true", "false", "noauth"
+
+  - repoURL: https://github.com/hegerdes/GitOps.git
+    targetRevision: HEAD
+    path: infra/hcloud-test/cluster-critical/tailscale
+    directory:
+      recurse: true
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: tailscale
+  info:
+    - name: 'Chart Info'
+      value: 'https://pkgs.tailscale.com/helmcharts/index.yaml'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

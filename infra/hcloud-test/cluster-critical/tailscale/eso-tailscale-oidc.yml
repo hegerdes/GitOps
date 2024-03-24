@@ -1,0 +1,23 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: eso-tailscale-oidc
+  namespace: tailscale
+spec:
+  refreshInterval: 1h           # rate SecretManager pulls GCPSM
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: azure-store               # name of the SecretStore (or kind specified)
+  target:
+    name: operator-oauth  # name of the k8s Secret to be created
+    creationPolicy: Owner
+  # Data defines the connection between the Kubernetes Secret keys and the Provider data
+  data:
+    - secretKey: client_id
+      remoteRef:
+        key: k8s-tailscale-client-id
+        decodingStrategy: Auto # can be None, Base64, Base64URL or Auto
+    - secretKey: client_secret
+      remoteRef:
+        key: k8s-tailscale-client-secret
+        decodingStrategy: Auto # can be None, Base64, Base64URL or Auto
