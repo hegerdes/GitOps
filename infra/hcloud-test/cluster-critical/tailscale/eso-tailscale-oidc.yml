@@ -16,8 +16,8 @@ spec:
     - secretKey: client_id
       remoteRef:
         key: k8s-tailscale-client-id
-        decodingStrategy: Auto # can be None, Base64, Base64URL or Auto
+        decodingStrategy: None # can be None, Base64, Base64URL or Auto
     - secretKey: client_secret
       remoteRef:
         key: k8s-tailscale-client-secret
-        decodingStrategy: Auto # can be None, Base64, Base64URL or Auto
+        decodingStrategy: None # can be None, Base64, Base64URL or Auto
