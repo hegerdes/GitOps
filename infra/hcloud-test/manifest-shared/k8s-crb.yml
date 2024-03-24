@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  creationTimestamp: "2024-02-18T21:07:31Z"
+  name: oidc-cluster-admin
+  resourceVersion: "5204"
+  uid: 7843dfde-8f31-4b5d-ab41-43bab0fada3c
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: oidc:Henrik.Gerdes@outlook.de
+  # name: https://login.microsoftonline.com/295b5ac3-2e4e-4ade-85d8-7dc31617bc2c/v2.0#patPzTeIehmgBrSjA5Ff1zdgLCxahh-93omcwMpvaPQ
