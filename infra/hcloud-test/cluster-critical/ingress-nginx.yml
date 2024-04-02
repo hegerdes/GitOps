@@ -24,7 +24,7 @@ spec:
               load-balancer.hetzner.cloud/name: k8s-worker-lb
               load-balancer.hetzner.cloud/location: nbg1
               load-balancer.hetzner.cloud/use-private-ip: "true"
-              load-balancer.hetzner.cloud/network: "my-k8s-network"
+              load-balancer.hetzner.cloud/network: "k8s-network"
             type: LoadBalancer
             # type: NodePort
             nodePorts:
