@@ -1,4 +1,11 @@
-resource "hcloud_network" "demo" {
-  name     = "demo"
-  ip_range = "10.10.0.0/16"
+resource "hcloud_placement_group" "demo" {
+  name = random_string.random.result
+  type = "spread"
+  labels = {
+    key = "demo"
+  }
+}
+resource "random_string" "random" {
+  length  = 8
+  special = false
 }
