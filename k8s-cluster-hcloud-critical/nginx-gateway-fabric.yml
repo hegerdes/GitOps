@@ -10,7 +10,7 @@ spec:
   source:
     chart: nginx-gateway-fabric
     repoURL: ghcr.io/nginxinc/charts/nginx-gateway-fabric
-    # targetRevision: 1.*
+    targetRevision: 1.*
     helm:
       releaseName: nginx-gateway-fabric
       valuesObject:
