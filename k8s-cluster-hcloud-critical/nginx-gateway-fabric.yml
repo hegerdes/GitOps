@@ -8,6 +8,7 @@ metadata:
 spec:
   project: default
   source:
+    # Example OCI chart
     chart: nginx-gateway-fabric
     repoURL: ghcr.io/nginxinc/charts
     targetRevision: 1.*
