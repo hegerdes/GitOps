@@ -9,8 +9,8 @@ spec:
   project: default
   source:
     chart: nginx-gateway-fabric
-    repoURL: https://ghcr.io/nginxinc/charts/nginx-gateway-fabric
-    targetRevision: 1.*
+    repoURL: ghcr.io/nginxinc/charts/nginx-gateway-fabric
+    # targetRevision: 1.*
     helm:
       releaseName: nginx-gateway-fabric
       valuesObject:
