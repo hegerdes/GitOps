@@ -14,6 +14,7 @@ spec:
     helm:
       releaseName: nginx-gateway-fabric
       valuesObject:
+        replicaCount: 3
         service:
           annotations:
             # See https://github.com/hetznercloud/hcloud-cloud-controller-manager/blob/main/internal/annotation/load_balancer.go#L12
