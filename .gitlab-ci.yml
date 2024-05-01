@@ -34,7 +34,7 @@ variables:
   - TF_ROOT: infra/hcloud
     TF_STATE_NAME: hcloud
 
-azure-auth:
+AZ:auth:
   image: mcr.microsoft.com/azure-cli:latest
   stage: .pre
   before_script: []
@@ -77,7 +77,7 @@ TF:validate:
 
 TF:plan:
   extends: [.opentofu:plan]
-  needs: [azure-auth]
+  needs: [AZ:auth]
   before_script:
     - !reference [.snippets, kubectl-install]
     - !reference [.snippets, kubectl-gitlab-agent]
@@ -86,7 +86,7 @@ TF:plan:
 
 TF:apply:
   extends: [.opentofu:apply]
-  needs: [azure-auth]
+  needs: [AZ:auth, TF:plan]
   before_script:
     - !reference [.snippets, kubectl-install]
     - !reference [.snippets, kubectl-gitlab-agent]
