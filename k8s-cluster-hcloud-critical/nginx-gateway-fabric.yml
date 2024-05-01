@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx-gateway-fabric
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  project: default
+  source:
+    chart: nginx-gateway-fabric
+    repoURL: ghcr.io/nginxinc/charts
+    targetRevision: 1.*
+    helm:
+      releaseName: nginx-gateway-fabric
+      valuesObject:
+        service:
+          annotations:
+            # See https://github.com/hetznercloud/hcloud-cloud-controller-manager/blob/main/internal/annotation/load_balancer.go#L12
+            load-balancer.hetzner.cloud/name: k8s-worker-gateway-lb
+            load-balancer.hetzner.cloud/location: nbg1
+            load-balancer.hetzner.cloud/use-private-ip: "true"
+            load-balancer.hetzner.cloud/network: "k8s-network"
+          type: LoadBalancer
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: nginx-gateway-fabric
+  info:
+    - name: "Chart Info"
+      value: "https://artifacthub.io/packages/helm/nginx-gateway-fabric/nginx-gateway-fabric"
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
