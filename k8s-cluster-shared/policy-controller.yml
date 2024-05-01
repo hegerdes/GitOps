@@ -8,32 +8,32 @@ metadata:
 spec:
   project: default
   sources:
-  - chart: policy-controller
-    repoURL: https://sigstore.github.io/helm-charts
-    targetRevision: 0.*
-    helm:
-      releaseName: policy-controller
-      valuesObject:
-        webhook:
-          namespaceSelector:
-            matchExpressions:
-              - key: webhooks.knative.dev/exclude
-                operator: In
-                values: ["true"]
-              - key: policy.sigstore.dev/include
-                operator: In
-                values: ["true"]
-  - repoURL: https://github.com/hegerdes/GitOps.git
-    targetRevision: HEAD
-    path: infra/hcloud-test/cluster-critical/policy-controller
-    directory:
-      recurse: true
+    - chart: policy-controller
+      repoURL: https://sigstore.github.io/helm-charts
+      targetRevision: 0.*
+      helm:
+        releaseName: policy-controller
+        valuesObject:
+          webhook:
+            namespaceSelector:
+              matchExpressions:
+                - key: webhooks.knative.dev/exclude
+                  operator: In
+                  values: ["true"]
+                - key: policy.sigstore.dev/include
+                  operator: In
+                  values: ["true"]
+    - repoURL: https://github.com/hegerdes/GitOps.git
+      targetRevision: HEAD
+      path: k8s-cluster-shared/policy-controller
+      directory:
+        recurse: true
   destination:
     server: "https://kubernetes.default.svc"
     namespace: cosign-system
   info:
-    - name: 'Chart Info'
-      value: 'https://artifacthub.io/packages/helm/sigstore/policy-controller'
+    - name: "Chart Info"
+      value: "https://artifacthub.io/packages/helm/sigstore/policy-controller"
   syncPolicy:
     automated:
       prune: true
@@ -42,14 +42,14 @@ spec:
       - CreateNamespace=true
       - RespectIgnoreDifferences=true
   ignoreDifferences:
-  - kind: MutatingWebhookConfiguration
-    group: "*"
-    jqPathExpressions:
-    - .webhooks[].namespaceSelector.matchExpressions[] | select(.key == "webhooks.knative.dev/exclude")
-  - kind: ValidatingWebhookConfiguration
-    group: "*"
-    jqPathExpressions:
-    - .webhooks[].namespaceSelector.matchExpressions[] | select(.key == "webhooks.knative.dev/exclude")
+    - kind: MutatingWebhookConfiguration
+      group: "*"
+      jqPathExpressions:
+        - .webhooks[].namespaceSelector.matchExpressions[] | select(.key == "webhooks.knative.dev/exclude")
+    - kind: ValidatingWebhookConfiguration
+      group: "*"
+      jqPathExpressions:
+        - .webhooks[].namespaceSelector.matchExpressions[] | select(.key == "webhooks.knative.dev/exclude")
   # - group: "*"
   #   kind: "*"
   #   managedFieldsManagers:

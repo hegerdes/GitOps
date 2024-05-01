@@ -9,48 +9,48 @@ metadata:
 spec:
   project: default
   sources:
-  - chart: crossplane
-    repoURL: https://charts.crossplane.io/stable
-    targetRevision: 1.*
-    helm:
-      releaseName: crossplane
-      valuesObject:
-        provider:
-          packages:
-          - xpkg.upbound.io/upbound/provider-family-azure:v0.39.0
-          - xpkg.upbound.io/coopnorge/provider-github:v0.3.2
-          - xpkg.upbound.io/upbound/provider-terraform:v0.14.1
-        extraObjects: []
-        # - apiVersion: pkg.crossplane.io/v1
-        #   kind: Provider
-        #   metadata:
-        #     name: provider-family-azure
-        #   spec:
-        #     package: xpkg.upbound.io/upbound/provider-family-azure:v0.39.0
-        # - apiVersion: pkg.crossplane.io/v1
-        #   kind: Provider
-        #   metadata:
-        #     name: provider-github
-        #   spec:
-        #     package: xpkg.upbound.io/coopnorge/provider-github:v0.3.2
-        # - apiVersion: pkg.crossplane.io/v1
-        #   kind: Provider
-        #   metadata:
-        #     name: provider-terraform
-        #   spec:
-        #     package: xpkg.upbound.io/upbound/provider-terraform:v0.12.0
+    - chart: crossplane
+      repoURL: https://charts.crossplane.io/stable
+      targetRevision: 1.*
+      helm:
+        releaseName: crossplane
+        valuesObject:
+          provider:
+            packages:
+              - xpkg.upbound.io/upbound/provider-family-azure:v0.39.0
+              - xpkg.upbound.io/coopnorge/provider-github:v0.3.2
+              - xpkg.upbound.io/upbound/provider-terraform:v0.14.1
+          extraObjects: []
+          # - apiVersion: pkg.crossplane.io/v1
+          #   kind: Provider
+          #   metadata:
+          #     name: provider-family-azure
+          #   spec:
+          #     package: xpkg.upbound.io/upbound/provider-family-azure:v0.39.0
+          # - apiVersion: pkg.crossplane.io/v1
+          #   kind: Provider
+          #   metadata:
+          #     name: provider-github
+          #   spec:
+          #     package: xpkg.upbound.io/coopnorge/provider-github:v0.3.2
+          # - apiVersion: pkg.crossplane.io/v1
+          #   kind: Provider
+          #   metadata:
+          #     name: provider-terraform
+          #   spec:
+          #     package: xpkg.upbound.io/upbound/provider-terraform:v0.12.0
 
-  - repoURL: https://github.com/hegerdes/GitOps.git
-    targetRevision: HEAD
-    path: infra/hcloud-test/crossplane
-    directory:
-      recurse: true
+    - repoURL: https://github.com/hegerdes/GitOps.git
+      targetRevision: HEAD
+      path: k8s-cluster-shared/crossplane
+      directory:
+        recurse: true
   destination:
     server: "https://kubernetes.default.svc"
     namespace: crossplane-system
   info:
-    - name: 'Chart Info'
-      value: 'https://artifacthub.io/packages/helm/crossplane/crossplane'
+    - name: "Chart Info"
+      value: "https://artifacthub.io/packages/helm/crossplane/crossplane"
   syncPolicy:
     # preserveResourcesOnDeletion: true
     automated:

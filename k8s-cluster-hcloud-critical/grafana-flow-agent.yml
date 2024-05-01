@@ -8,63 +8,63 @@ metadata:
 spec:
   project: default
   sources:
-  - chart: k8s-monitoring
-    repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 0.*
-    helm:
-      releaseName: grafana-flow-agent
-      valuesObject:
-        cluster:
-          name: hetzner-test
-        externalServices:
-          prometheus:
-            hostKey: host
-            # host: https://prometheus-prod-01-eu-west-0.grafana.net
-            # Authenticate to Prometheus using basic authentication
-            basicAuth:
-              usernameKey: username
-              passwordKey: password
-            # Credential management
-            secret:
-              create: false
-              name: grafana-agent-prometheus-cred
-              namespace: monitoring
-
-          loki:
-            hostKey: host
-            # host: https://logs-prod-eu-west-0.grafana.net
-            # Authenticate to Prometheus using basic authentication
-            basicAuth:
-              usernameKey: username
-              passwordKey: password
-            # Credential management
-            secret:
-              create: false
-              name: grafana-agent-loki-cred
-              namespace: monitoring
-        opencost:
-          opencost:
-            exporter:
-              defaultClusterId: hetzner-test
+    - chart: k8s-monitoring
+      repoURL: https://grafana.github.io/helm-charts
+      targetRevision: 0.*
+      helm:
+        releaseName: grafana-flow-agent
+        valuesObject:
+          cluster:
+            name: hetzner-test
+          externalServices:
             prometheus:
-              secret_name: grafana-agent-prometheus-cred
-              username_key: username
-              password_key: password
-              external:
-                url: https://prometheus-prod-01-eu-west-0.grafana.net/api/prom
-        traces:
-          enabled: false
-  - repoURL: https://github.com/hegerdes/GitOps.git
-    targetRevision: HEAD
-    path: infra/hcloud-test/cluster-critical/grafana-flow-agent
-    directory:
-      recurse: true
+              hostKey: host
+              # host: https://prometheus-prod-01-eu-west-0.grafana.net
+              # Authenticate to Prometheus using basic authentication
+              basicAuth:
+                usernameKey: username
+                passwordKey: password
+              # Credential management
+              secret:
+                create: false
+                name: grafana-agent-prometheus-cred
+                namespace: monitoring
+
+            loki:
+              hostKey: host
+              # host: https://logs-prod-eu-west-0.grafana.net
+              # Authenticate to Prometheus using basic authentication
+              basicAuth:
+                usernameKey: username
+                passwordKey: password
+              # Credential management
+              secret:
+                create: false
+                name: grafana-agent-loki-cred
+                namespace: monitoring
+          opencost:
+            opencost:
+              exporter:
+                defaultClusterId: hetzner-test
+              prometheus:
+                secret_name: grafana-agent-prometheus-cred
+                username_key: username
+                password_key: password
+                external:
+                  url: https://prometheus-prod-01-eu-west-0.grafana.net/api/prom
+          traces:
+            enabled: false
+    - repoURL: https://github.com/hegerdes/GitOps.git
+      targetRevision: HEAD
+      path: k8s-cluster-hcloud-critical/grafana-flow-agent
+      directory:
+        recurse: true
   destination:
     server: "https://kubernetes.default.svc"
     namespace: monitoring
   info:
-    - name: 'Chart Info'
-      value: 'https://github.com/grafana/k8s-monitoring-helm/tree/main/charts/k8s-monitoring'
+    - name: "Chart Info"
+      value: "https://github.com/grafana/k8s-monitoring-helm/tree/main/charts/k8s-monitoring"
   syncPolicy:
     automated:
       prune: true

@@ -8,51 +8,51 @@ metadata:
 spec:
   project: default
   sources:
-  - chart: hcloud-cloud-controller-manager
-    repoURL: https://charts.hetzner.cloud
-    targetRevision: 1.*
-    helm:
-      releaseName: hcloud-cloud-controller-manager
-      valuesObject:
-        networking:
-          enabled: true
-          clusterCIDR: 10.244.0.0/16
-  - chart: hcloud-csi
-    repoURL: https://charts.hetzner.cloud
-    targetRevision: 2.*
-    helm:
-      releaseName: hcloud-csi
-  - chart: hetzner-load-balancer-exporter
-    repoURL: https://wacken89.github.io/hetzner-load-balancer-prometheus-exporter
-    targetRevision: 1.*
-    helm:
-      releaseName: hcloud-lb-exporter
-      valuesObject:
-        env:
-          - name: LOAD_BALANCER_IDS
-            value: "all"
-          - name: SCRAPE_INTERVAL
-            value: "30"
-          - name: ACCESS_TOKEN
-            valueFrom:
-              secretKeyRef:
-                key: token
-                name: hcloud
-  - repoURL: https://github.com/hegerdes/GitOps.git
-    targetRevision: HEAD
-    path: infra/hcloud-test/cluster-critical/hcloud
-    directory:
-      recurse: true
+    - chart: hcloud-cloud-controller-manager
+      repoURL: https://charts.hetzner.cloud
+      targetRevision: 1.*
+      helm:
+        releaseName: hcloud-cloud-controller-manager
+        valuesObject:
+          networking:
+            enabled: true
+            clusterCIDR: 10.244.0.0/16
+    - chart: hcloud-csi
+      repoURL: https://charts.hetzner.cloud
+      targetRevision: 2.*
+      helm:
+        releaseName: hcloud-csi
+    - chart: hetzner-load-balancer-exporter
+      repoURL: https://wacken89.github.io/hetzner-load-balancer-prometheus-exporter
+      targetRevision: 1.*
+      helm:
+        releaseName: hcloud-lb-exporter
+        valuesObject:
+          env:
+            - name: LOAD_BALANCER_IDS
+              value: "all"
+            - name: SCRAPE_INTERVAL
+              value: "30"
+            - name: ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: token
+                  name: hcloud
+    - repoURL: https://github.com/hegerdes/GitOps.git
+      targetRevision: HEAD
+      path: k8s-cluster-hcloud-critical/hcloud
+      directory:
+        recurse: true
   destination:
     server: "https://kubernetes.default.svc"
     namespace: kube-system
   info:
-    - name: 'Chart Info Hetzner-Cloud-Controller'
-      value: 'https://github.com/hetznercloud/hcloud-cloud-controller-manager'
-    - name: 'Chart Info Hetzner-CSI-Driver'
-      value: 'https://github.com/hetznercloud/csi-driver'
-    - name: 'Chart Info Hetzner-LB-Exporter'
-      value: 'https://github.com/wacken89/hetzner-load-balancer-prometheus-exporter'
+    - name: "Chart Info Hetzner-Cloud-Controller"
+      value: "https://github.com/hetznercloud/hcloud-cloud-controller-manager"
+    - name: "Chart Info Hetzner-CSI-Driver"
+      value: "https://github.com/hetznercloud/csi-driver"
+    - name: "Chart Info Hetzner-LB-Exporter"
+      value: "https://github.com/wacken89/hetzner-load-balancer-prometheus-exporter"
   syncPolicy:
     automated:
       prune: true
