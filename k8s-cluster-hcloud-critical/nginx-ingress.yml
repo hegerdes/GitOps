@@ -16,17 +16,16 @@ spec:
       valuesObject:
         controller:
           name: controller
-          kind: DaemonSet           # `DaemonSet` or `Deployment`
+          kind: DaemonSet # `DaemonSet` or `Deployment`
           service:
             enabled: true
             annotations:
-              # # See https://github.com/hetznercloud/hcloud-cloud-controller-manager/blob/main/internal/annotation/load_balancer.go#L12
-              load-balancer.hetzner.cloud/name: k8s-worker-lb
-              load-balancer.hetzner.cloud/location: nbg1
+              # See https://github.com/hetznercloud/hcloud-cloud-controller-manager/blob/main/internal/annotation/load_balancer.go#L12
+              load-balancer.hetzner.cloud/name: k8s-worker-ingress-lb
+              load-balancer.hetzner.cloud/location: fsn1
               load-balancer.hetzner.cloud/use-private-ip: "true"
               load-balancer.hetzner.cloud/network: "k8s-network"
             type: LoadBalancer
-            # type: NodePort
             nodePorts:
               http: 32080
               https: 32443
@@ -54,8 +53,8 @@ spec:
     server: "https://kubernetes.default.svc"
     namespace: ingress-nginx
   info:
-    - name: 'Chart Info'
-      value: 'https://artifacthub.io/packages/helm/ingress-nginx/ingress-nginx'
+    - name: "Chart Info"
+      value: "https://artifacthub.io/packages/helm/ingress-nginx/ingress-nginx"
   syncPolicy:
     automated:
       prune: true

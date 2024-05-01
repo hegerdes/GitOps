@@ -14,7 +14,8 @@ spec:
     helm:
       releaseName: nginx-gateway-fabric
       valuesObject:
-        replicaCount: 3
+        nginxGateway:
+          replicaCount: 6
         service:
           annotations:
             # See https://github.com/hetznercloud/hcloud-cloud-controller-manager/blob/main/internal/annotation/load_balancer.go#L12
@@ -23,6 +24,17 @@ spec:
             load-balancer.hetzner.cloud/use-private-ip: "true"
             load-balancer.hetzner.cloud/network: "k8s-network"
           type: LoadBalancer
+          ports:
+            - port: 80
+              targetPort: 80
+              protocol: TCP
+              name: http
+              nodePort: 31080
+            - port: 443
+              targetPort: 443
+              protocol: TCP
+              nodePort: 31443
+              name: https
   destination:
     server: "https://kubernetes.default.svc"
     namespace: nginx-gateway-fabric
