@@ -10,7 +10,7 @@ spec:
   sources:
     - chart: k8s-monitoring
       repoURL: https://grafana.github.io/helm-charts
-      targetRevision: 0.*
+      targetRevision: 1.*
       helm:
         releaseName: grafana-flow-agent
         valuesObject:
@@ -29,7 +29,6 @@ spec:
                 create: false
                 name: grafana-agent-prometheus-cred
                 namespace: monitoring
-
             loki:
               hostKey: host
               # host: https://logs-prod-eu-west-0.grafana.net
@@ -42,7 +41,17 @@ spec:
                 create: false
                 name: grafana-agent-loki-cred
                 namespace: monitoring
+            tempo:
+              # host: https://tempo-eu-west-0.grafana.net
+              basicAuth:
+                usernameKey: username
+                passwordKey: password
+              secret:
+                create: false
+                name: grafana-agent-tempo-cred
+                namespace: monitoring
           opencost:
+            enabled: true
             opencost:
               exporter:
                 defaultClusterId: hetzner-test
@@ -52,8 +61,20 @@ spec:
                 password_key: password
                 external:
                   url: https://prometheus-prod-01-eu-west-0.grafana.net/api/prom
+          metrics:
+            enabled: true
+            cost:
+              enabled: true
+            node-exporter:
+              enabled: true
           traces:
-            enabled: false
+            enabled: true
+          logs:
+            enabled: true
+            pod_logs:
+              enabled: true
+            cluster_events:
+              enabled: true
     - repoURL: https://github.com/hegerdes/GitOps.git
       targetRevision: HEAD
       path: k8s-cluster-hcloud-critical/grafana-flow-agent
