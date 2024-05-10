@@ -16,4 +16,4 @@ spec:
     - secretKey: apiToken
       remoteRef:
         key: cloudflare-dns-henrikgerdes-me
-        decodingStrategy: Auto # can be None, Base64, Base64URL or Auto
+        decodingStrategy: None # can be None, Base64, Base64URL or Auto
