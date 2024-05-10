@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: grafana
+  name: workload-mix
   namespace: argocd
   labels:
-    name: grafana
+    name: workload-mix
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -12,14 +12,14 @@ spec:
   source:
     repoURL: https://github.com/hegerdes/GitOps.git
     targetRevision: HEAD
-    path: infra/hcloud-test/helm-grafana
-    helm:
-      releaseName: grafana
+    path: k8s-cluster-apps/manifests
+    directory:
+      recurse: true
   destination:
     server: https://kubernetes.default.svc
-    namespace: grafana
+    namespace: wasm
   info:
-    - name: "Chart Info"
+    - name: "Example:"
       value: "https://example.com"
   syncPolicy:
     automated:
