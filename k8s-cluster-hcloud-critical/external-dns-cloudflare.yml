@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-dns-cloudflare
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  project: default
+  sources:
+    - chart: external-dns
+      repoURL: https://kubernetes-sigs.github.io/external-dns/
+      targetRevision: 1.*
+      helm:
+        releaseName: external-dns-cloudflare
+        valuesObject:
+          provider: cloudflare
+          domainFilters:
+            - henrikgerdes.me
+          env:
+            - name: CF_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: external-dns-cloudflare
+                  key: apiKey
+            - name: CF_API_EMAIL
+              value: hegerdes@outlook.de
+    - repoURL: https://github.com/hegerdes/GitOps.git
+      targetRevision: HEAD
+      path: k8s-cluster-hcloud-critical/external-dns/cloudflare
+      directory:
+        recurse: true
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: external-dns
+  info:
+    - name: "Chart Info"
+      value: "https://artifacthub.io/packages/helm/external-dns/external-dns"
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
