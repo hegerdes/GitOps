@@ -43,13 +43,13 @@ spec:
       - RespectIgnoreDifferences=true
   ignoreDifferences:
     - kind: MutatingWebhookConfiguration
-      group: "*"
+      group: "admissionregistration.k8s.io"
       jqPathExpressions:
-        - .webhooks[].namespaceSelector.matchExpressions[] | select(.key == "webhooks.knative.dev/exclude")
+        - .webhooks[].namespaceSelector
     - kind: ValidatingWebhookConfiguration
-      group: "*"
+      group: "admissionregistration.k8s.io"
       jqPathExpressions:
-        - .webhooks[].namespaceSelector.matchExpressions[] | select(.key == "webhooks.knative.dev/exclude")
+        - .webhooks[].namespaceSelector
   # - group: "*"
   #   kind: "*"
   #   managedFieldsManagers:
