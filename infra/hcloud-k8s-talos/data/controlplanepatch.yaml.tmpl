@@ -1,0 +1,26 @@
+machine:
+  kubelet:
+    nodeIP:
+      validSubnets:
+      %{ for subnet in subnets ~}
+      - ${subnet}
+      %{ endfor ~}
+
+  network:
+    extraHostEntries:
+      - ip: ${controlplane_internal_ip}
+        aliases:
+          - ${controlplane_endpoint_internal}
+
+cluster:
+  apiServer:
+    certSANs:
+      %{ for SAN in certSANs ~}
+      - ${SAN}
+      %{ endfor ~}
+
+  network:
+    cni:
+        name: none
+  proxy:
+    disabled: true

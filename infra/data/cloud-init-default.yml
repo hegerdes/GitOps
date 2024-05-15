@@ -1,0 +1,116 @@
+#cloud-config
+
+ssh_pwauth: false
+# disable_root: true
+disable_root_opts: no-port-forwarding,no-agent-forwarding,no-X11-forwarding
+
+groups:
+  - cloud
+
+users:
+  - name: bootstrap
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, cloud
+    shell: /bin/bash
+    lock_passwd: true
+    ssh_authorized_keys:
+%{ for key in ssh_key ~}
+      - ${key}
+%{ endfor ~}
+
+# ansible:
+#   package_name: ansible
+#   install_method: pip
+#   pull:
+#     url: "https://github.com/hegerdes/ansible-playbooks.git"
+#     playbook_name: pb_k8s_local.yml
+
+# Write files
+write_files:
+  # # Activate ip forward
+  # - content: |
+  #     net.ipv4.tcp_fastopen = 1
+  #     net.ipv4.ip_forward = 1
+  #     net.ipv4.conf.all.forwarding = 1
+  #     net.ipv6.conf.all.forwarding = 1
+  #     net.ipv4.conf.default.forwarding = 1
+  #     net.ipv6.conf.default.forwarding = 1
+  #     net.bridge.bridge-nf-call-iptables = 1
+  #     net.bridge.bridge-nf-call-ip6tables = 1
+  #   path: /etc/sysctl.conf
+  #   append: true
+%{ if nat_enabled && network_role == "client" }
+  - content: |
+      #!/bin/bash
+      echo "NAT Client. The time is now $(date -R)!"
+      echo "$(date -R): adding NAT ${network_role} route" >> /tmp/cloud-init-info.txt
+      echo "$(date -R): ip route add default via 10.0.0.1" >> /tmp/cloud-init-info.txt
+      ip route add default via 10.0.0.1
+
+    path: /var/lib/cloud/scripts/per-boot/nat-route.sh
+    permissions: "0755"
+%{ endif }
+
+%{ if nat_enabled && network_role == "gateway" }
+  - content: |
+      #!/bin/bash
+      echo "NAT Server. The time is now $(date -R)!"
+      echo "$(date -R): adding NAT ${network_role} route" >> /tmp/cloud-init-info.txt
+      echo "$(date -R): iptables -t nat -A POSTROUTING -s '10.0.0.0/16' -o eth0 -j MASQUERADE" >> /tmp/cloud-init-info.txt
+      iptables -t nat -A POSTROUTING -s '10.0.0.0/16' -o eth0 -j MASQUERADE
+
+    path: /var/lib/cloud/scripts/per-boot/nat-gateway.sh
+    permissions: "0755"
+%{ endif }
+
+# Install base packages
+package_update: true
+package_upgrade: true
+package_reboot_if_required: true
+packages:
+  - gnupg
+  - curl
+  - jq
+  - unzip
+  - apparmor
+  - ifupdown
+  - aptitude
+  - lsb-release
+  - ca-certificates
+  - apt-transport-https
+  - unattended-upgrades
+  - policycoreutils
+  - selinux-basics
+  - selinux-policy-default
+  - semodule-utils
+  - setools
+  - apparmor-profiles-extra
+  - auditd
+  - apt-listchanges
+  - logrotate
+  - mtr-tiny
+  - libyajl2
+  - socat
+  - wget
+  - git
+  - dbus
+  - ipvsadm
+  - open-iscsi
+
+#  To specify a different 'apt-get' command, set 'apt_get_command'.
+#  This must be a list, and the subcommand (update, upgrade) is appended to it.
+#  default is:
+#    ['apt-get', '--option=Dpkg::Options::=--force-confold',
+#     '--option=Dpkg::options::=--force-unsafe-io', '--assume-yes', '--quiet']
+apt_get_command:
+   ['apt-get', '--option=Dpkg::Options::=--force-confold',
+    '--option=Dpkg::options::=--force-unsafe-io', '--assume-yes', '--quiet', '--no-install-recommends']
+
+runcmd:
+  - echo "Cloud-Init finished" >> /tmp/cloud-init-msg.txt
+
+power_state:
+ mode: reboot
+ message: Bye Bye
+ timeout: 300
+ condition: True

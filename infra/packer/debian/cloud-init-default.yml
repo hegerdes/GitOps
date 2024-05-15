@@ -1,0 +1,41 @@
+#cloud-config
+
+ssh_pwauth: false
+disable_root_opts: no-port-forwarding,no-agent-forwarding,no-X11-forwarding
+
+# Install base packages
+package_update: true
+package_upgrade: true
+packages:
+  - gnupg
+  - curl
+  - jq
+  - unzip
+  - apparmor
+  - ifupdown
+  - aptitude
+  - lsb-release
+  - ca-certificates
+  - apt-transport-https
+  - unattended-upgrades
+  - policycoreutils
+  - selinux-basics
+  - selinux-policy-default
+  - semodule-utils
+  - setools
+  - apparmor-profiles-extra
+  - auditd
+  - apt-listchanges
+  - logrotate
+  - mtr-tiny
+  - libyajl2
+  - socat
+  - wget
+  - git
+  - dbus
+  - ipvsadm
+  - open-iscsi
+
+apt_get_command:
+   ['apt-get', '--option=Dpkg::Options::=--force-confold',
+    '--option=Dpkg::options::=--force-unsafe-io', '--assume-yes', '--quiet', '--no-install-recommends']

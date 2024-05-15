@@ -2,3 +2,6 @@
 *.terraform.lock.hcl
 *.tfstate.backup
 *.terraform
+infra/hcloud-k8s-kubeadm/backend.tf
+infra/hcloud-k8s-talos/backend.tf
+infra/hcloud-k8s-talos/out

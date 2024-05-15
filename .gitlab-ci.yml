@@ -19,7 +19,7 @@ include:
   - component: gitlab.com/components/opentofu/job-templates@main
     inputs:
       version: latest
-      opentofu_version: 1.6.1
+      opentofu_version: 1.7.1
 
 variables:
   KUBE_CONTEXT: gitlab-ci
@@ -29,9 +29,9 @@ variables:
   GL_K8S_PROXY_URL: https://kas.gitlab.com/k8s-proxy/
 
 .tf_stacks: &tf_stacks
-  - TF_ROOT: infra/k8s
+  - TF_ROOT: infra/k8s-ci-test
     TF_STATE_NAME: k8s-test
-  - TF_ROOT: infra/hcloud
+  - TF_ROOT: infra/hcloud-ci-test
     TF_STATE_NAME: hcloud
 
 AZ:auth:
