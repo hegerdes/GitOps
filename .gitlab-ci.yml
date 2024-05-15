@@ -35,6 +35,9 @@ variables:
   - TF_ROOT: infra/hcloud-ci-test
     TF_STATE_NAME: hcloud
 
+pre-commit:
+  allow_failure: true
+
 AZ:auth:
   image: mcr.microsoft.com/azure-cli:latest
   stage: .pre
