@@ -16,6 +16,7 @@ include:
     rules:
       - if: $SECRET_DETECTION_DISABLED == "true"
         when: never
+  - component: gitlab.com/hegerdes/gitlab-actions/pre-commit@main
   - component: gitlab.com/components/opentofu/job-templates@main
     inputs:
       version: latest
