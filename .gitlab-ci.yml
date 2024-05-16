@@ -37,6 +37,10 @@ variables:
 
 pre-commit:
   allow_failure: true
+  before_script:
+    - !reference [.snippets, debian_core_tools]
+    - !reference [.snippets, terraform_install]
+    - !reference [.snippets, tflint_install]
 
 AZ:auth:
   image: mcr.microsoft.com/azure-cli:latest
