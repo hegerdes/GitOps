@@ -13,9 +13,7 @@ spec:
       targetRevision: 3.*
       helm:
         releaseName: metrics-server
-        valuesObject:
-          args:
-            - --kubelet-insecure-tls
+        valuesObject: {}
     - chart: kubernetes-dashboard
       repoURL: https://kubernetes.github.io/dashboard/
       targetRevision: 7.*
