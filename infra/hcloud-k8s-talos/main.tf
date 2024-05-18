@@ -47,7 +47,7 @@ data "talos_machine_configuration" "this" {
   machine_secrets  = talos_machine_secrets.this.machine_secrets
   docs             = false
   config_patches = [
-    templatefile("${path.module}/${var.talos_conf_patch}", {
+    templatefile("${path.module}/${each.value.talos_conf_patch}", {
       certSANs = local.certSANs, subnets = local.subnets, controlplane_endpoint_internal = local.controlplane_internal_endpoint, controlplane_internal_ip = local.controlplane_internel_lb_ip
     })
   ]
