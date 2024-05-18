@@ -13,18 +13,18 @@ packer {
 
 variable "talos_version" {
   type    = string
-  default = "v1.7.1"
+  default = "v1.7.2"
 }
 variable "talos_download_base_url" {
   // Special images on https://factory.talos.dev/
   type = string
-  default = "https://github.com/siderolabs/talos/releases/download"
-  // default = "https://factory.talos.dev/image/4c88839d5043b0db26041959bfdc2111f7d4684a255ebeabbfd8c161ac33328d"
+  // default = "https://github.com/siderolabs/talos/releases/download"
+  default = "https://factory.talos.dev/image/4c88839d5043b0db26041959bfdc2111f7d4684a255ebeabbfd8c161ac33328d"
 }
 variable "talos_extentions" {
   type    = list(string)
-  // default = ["gvisor", "wasmedge"]
-  default = []
+  // default = []
+  default = ["gvisor", "wasmedge"]
 }
 
 locals {
@@ -48,7 +48,7 @@ locals {
 source "hcloud" "talos_amd64" {
   rescue          = "linux64"
   image           = "debian-12"
-  location        = "nbg1"
+  location        = "fsn1"
   server_type     = "cx11"
   ssh_username    = "root"
   snapshot_name   = local.setups.amd64.name
@@ -57,7 +57,7 @@ source "hcloud" "talos_amd64" {
 
 source "hcloud" "talos_arm64" {
   image           = "debian-12"
-  location        = "nbg1"
+  location        = "fsn1"
   rescue          = "linux64"
   server_type     = "cax11"
   ssh_username    = "root"

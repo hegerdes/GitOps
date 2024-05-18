@@ -6,7 +6,7 @@ resource "time_sleep" "wait" {
 
 resource "helm_release" "cni" {
   name       = "cilium"
-  depends_on = [time_sleep.wait]
+  depends_on = [time_sleep.wait, module.node_groups, module.loadbalancer]
 
   repository = "https://helm.cilium.io/"
   chart      = "cilium"
@@ -53,7 +53,6 @@ resource "helm_release" "cni" {
 resource "helm_release" "nginx_ingress" {
   name       = "nginx-ingress-controller"
   depends_on = [helm_release.cni]
-
 
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "nginx-ingress-controller"

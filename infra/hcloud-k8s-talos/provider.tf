@@ -43,7 +43,8 @@ provider "azurerm" {
 
 provider "helm" {
   kubernetes {
-    host = "https://${local.controlplane_public_endpoint}:6443"
+    # host = "https://${local.controlplane_public_endpoint}:6443"
+    host = "https://${module.loadbalancer.lb_ipv4}:6443"
 
     client_certificate     = base64decode(data.talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_certificate)
     client_key             = base64decode(data.talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_key)

@@ -24,3 +24,19 @@ cluster:
         name: none
   proxy:
     disabled: true
+
+  inlineManifests:
+    - name: runtimeclass-gvisor
+      contents: |-
+        apiVersion: node.k8s.io/v1
+        kind: RuntimeClass
+        metadata:
+          name: gvisor
+        handler: runsc
+    - name: runtimeclass-runc
+      contents: |-
+        apiVersion: node.k8s.io/v1
+        kind: RuntimeClass
+        metadata:
+          name: runc
+        handler: runc
