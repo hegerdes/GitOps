@@ -65,7 +65,7 @@ data "talos_client_configuration" "this" {
 # kubeconfig
 data "talos_cluster_kubeconfig" "this" {
   client_configuration = talos_machine_secrets.this.client_configuration
-  node                 = module.node_groups["talos-node-amd64"].ips[0]
+  node                 = [for pool in module.node_groups : pool.ips[0]][0]
   timeouts = {
     read = "1h"
   }
@@ -74,8 +74,9 @@ data "talos_cluster_kubeconfig" "this" {
 # bootstrap the cluster
 resource "talos_machine_bootstrap" "this" {
   client_configuration = talos_machine_secrets.this.client_configuration
-  endpoint             = module.node_groups["talos-node-amd64"].ips[0]
-  node                 = module.node_groups["talos-node-amd64"].ips[0]
+
+  endpoint = [for pool in module.node_groups : pool.ips[0]][0]
+  node     = [for pool in module.node_groups : pool.ips[0]][0]
 }
 
 # ################# Server #################
@@ -99,7 +100,7 @@ module "node_groups" {
   network_name         = each.value.network_name
   private_ip_addresses = each.value.private_ip_addresses
 
-  depends_on = [hcloud_network.k8s_network]
+  depends_on = [hcloud_network.k8s_network, hcloud_network_subnet.subnets]
 }
 
 # ################# SSH-Key #################
@@ -151,4 +152,7 @@ module "loadbalancer" {
     source_port = 6443
     target_port = 6443
   }]
+
+  depends_on = [hcloud_network.k8s_network, hcloud_network_subnet.subnets]
+
 }
