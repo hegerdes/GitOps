@@ -23,19 +23,19 @@ spec:
       labels:
         app: wasm-example
     spec:
+      runtimeClassName: crun
       containers:
-      - name: hello-wasm
-        image: docker.io/wasmedge/example-wasi-http:latest
-        #image: wasmedge/example-wasi:latest
-        #image: michaelirwin244/wasm-example
-        resources:
-          limits:
-            memory: "265Mi"
-            cpu: "500m"
-        env:
-          - name: foo
-            value: bar
-
+        - name: hello-wasm
+          image: docker.io/wasmedge/example-wasi-http:latest
+          #image: wasmedge/example-wasi:latest
+          #image: michaelirwin244/wasm-example
+          resources:
+            limits:
+              memory: "265Mi"
+              cpu: "500m"
+          env:
+            - name: foo
+              value: bar
 # apiVersion: v1
 # kind: Pod
 # metadata:
