@@ -6,18 +6,35 @@ machine:
       - ${subnet}
       %{ endfor ~}
 
+    extraConfig:
+      rotateCertificates: true
+      serverTLSBootstrap: true
+      maxPods: 220
+      protectKernelDefaults: true
+      nodeStatusMaxImages: 100
+      serializeImagePulls: false
+      maxParallelImagePulls: 8
+      failSwapOn: true
+
   network:
     extraHostEntries:
-      - ip: ${controlplane_internal_ip}
-        aliases:
-          - ${controlplane_endpoint_internal}
+    - ip: ${controlplane_internal_ip}
+      aliases:
+      - ${controlplane_endpoint_internal}
 
 cluster:
   apiServer:
     certSANs:
-      %{ for SAN in certSANs ~}
+    %{ for SAN in certSANs ~}
       - ${SAN}
-      %{ endfor ~}
+    %{ endfor ~}
+
+      # Extra arguments to supply to the API server.
+    extraArgs:
+    %{ for k, v in extraArgsApiServer ~}
+        ${k}: "${v}"
+    %{ endfor ~}
+
 
   network:
     cni:
@@ -26,13 +43,6 @@ cluster:
     disabled: true
 
   inlineManifests:
-    - name: runtimeclass-gvisor
-      contents: |-
-        apiVersion: node.k8s.io/v1
-        kind: RuntimeClass
-        metadata:
-          name: gvisor
-        handler: runsc
     - name: runtimeclass-runc
       contents: |-
         apiVersion: node.k8s.io/v1
@@ -40,3 +50,24 @@ cluster:
         metadata:
           name: runc
         handler: runc
+    - name: runtimeclass-crun
+      contents: |-
+        apiVersion: node.k8s.io/v1
+        kind: RuntimeClass
+        metadata:
+          name: crun
+        handler: crun
+    - name: runtimeclass-gvisor
+      contents: |-
+        apiVersion: node.k8s.io/v1
+        kind: RuntimeClass
+        metadata:
+          name: gvisor
+        handler: runsc
+    - name: runtimeclass-wasmedge
+      contents: |-
+        apiVersion: node.k8s.io/v1
+        kind: RuntimeClass
+        metadata:
+          name: wasmedge
+        handler: wasmedge

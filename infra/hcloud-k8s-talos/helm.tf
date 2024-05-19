@@ -49,16 +49,3 @@ resource "helm_release" "cni" {
   #   "${file("values.yaml")}"
   # ]
 }
-
-resource "helm_release" "nginx_ingress" {
-  name       = "nginx-ingress-controller"
-  depends_on = [helm_release.cni]
-
-  repository = "https://charts.bitnami.com/bitnami"
-  chart      = "nginx-ingress-controller"
-
-  set {
-    name  = "service.type"
-    value = "ClusterIP"
-  }
-}

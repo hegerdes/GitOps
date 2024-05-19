@@ -2,10 +2,13 @@
 locals {
   controlplane_internel_lb_ip    = "10.0.0.10"
   controlplane_internal_endpoint = "${local.cluster_name}-cp-internal"
-  controlplane_public_endpoint   = "k8s-${local.cluster_name}-talos.k8s.henrikgerdes.me"
-  cluster_name                   = "hcloud"
+  controlplane_public_endpoint   = var.controlplane_endpoint
+  cluster_name                   = var.cluster_name
   ssh_keys                       = flatten([for pool in var.node_pools : [for key in pool.ssh_key_paths : file(key)]])
   subnets                        = [for index in range(length(var.node_pools) + 1) : "10.0.${index}.0/24"]
+
+  cloudflare_dns = var.dns_record.create && var.dns_record.provider == "cloudflare" ? { a = module.loadbalancer.lb_ipv4, aaaa = module.loadbalancer.lb_ipv6 } : {}
+  aws_route53    = var.dns_record.create && var.dns_record.provider == "aws" ? { a = module.loadbalancer.lb_ipv4, aaaa = module.loadbalancer.lb_ipv6 } : {}
 
   certSANs = distinct(concat([
     local.controlplane_internel_lb_ip,
@@ -23,7 +26,7 @@ locals {
         tags                 = merge(pool.tags, local.default_tags)
         ssh_keys             = [for key in hcloud_ssh_key.default : key.name]
         network_name         = hcloud_network.k8s_network.name
-        location             = var.location
+        location             = pool.location != "null" ? pool.location : var.location
         private_ip_addresses = try([for i in range(pool.size) : cidrhost("10.0.${index + 1}.0/24", i + 8)], [])
       }
     )
@@ -48,7 +51,11 @@ data "talos_machine_configuration" "this" {
   docs             = false
   config_patches = [
     templatefile("${path.module}/${each.value.talos_conf_patch}", {
-      certSANs = local.certSANs, subnets = local.subnets, controlplane_endpoint_internal = local.controlplane_internal_endpoint, controlplane_internal_ip = local.controlplane_internel_lb_ip
+      certSANs                       = local.certSANs,
+      subnets                        = local.subnets,
+      controlplane_endpoint_internal = local.controlplane_internal_endpoint,
+      controlplane_internal_ip       = local.controlplane_internel_lb_ip
+      extraArgsApiServer             = var.api_server_extra_args
     })
   ]
 }
@@ -112,7 +119,7 @@ resource "hcloud_ssh_key" "default" {
 
 # ################# Network #################
 resource "hcloud_network" "k8s_network" {
-  name     = var.vnet_name
+  name     = "k8s-network"
   ip_range = "10.0.0.0/16"
 }
 
@@ -154,5 +161,25 @@ module "loadbalancer" {
   }]
 
   depends_on = [hcloud_network.k8s_network, hcloud_network_subnet.subnets]
+}
 
+# ################# DNS #################
+
+# Cloudflare
+resource "cloudflare_record" "api_server" {
+  for_each = local.cloudflare_dns
+  zone_id  = var.dns_record.zone
+  name     = var.controlplane_endpoint
+  value    = each.value
+  type     = upper(each.key)
+  comment  = "Managed by terraform"
+}
+
+# AWS Route53
+resource "aws_route53_record" "api_server" {
+  for_each = local.aws_route53
+  zone_id  = var.dns_record.zone
+  name     = var.controlplane_endpoint
+  type     = upper(each.key)
+  records  = [each.value]
 }

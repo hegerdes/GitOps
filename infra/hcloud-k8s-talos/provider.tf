@@ -17,6 +17,14 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "3.102.0"
     }
+    aws = {
+      source  = "hashicorp/aws"
+      version = "5.50.0"
+    }
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "4.33.0"
+    }
     random = {
       source  = "hashicorp/random"
       version = "3.6.1"
