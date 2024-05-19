@@ -64,9 +64,8 @@ data "talos_machine_configuration" "this" {
 data "talos_client_configuration" "this" {
   cluster_name         = local.cluster_name
   client_configuration = talos_machine_secrets.this.client_configuration
-  endpoints = [
-    module.loadbalancer.lb_ipv4
-  ]
+  endpoints            = [module.loadbalancer.lb_ipv4]
+  nodes                = flatten([for index, pool in module.node_groups : pool.ips])
 }
 
 # kubeconfig
@@ -153,11 +152,18 @@ module "loadbalancer" {
     target = "k8s_control_plane"
   }]
 
-  services = [{
-    name        = "controlplane"
-    protocol    = "tcp"
-    source_port = 6443
-    target_port = 6443
+  services = [
+    {
+      name        = "controlplane"
+      protocol    = "tcp"
+      source_port = 6443
+      target_port = 6443
+    },
+    {
+      name        = "talos"
+      protocol    = "tcp"
+      source_port = 50000
+      target_port = 50000
   }]
 
   depends_on = [hcloud_network.k8s_network, hcloud_network_subnet.subnets]

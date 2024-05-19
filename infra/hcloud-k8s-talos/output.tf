@@ -6,7 +6,7 @@ resource "local_sensitive_file" "machineconf" {
 }
 resource "local_sensitive_file" "talosclientconf" {
   content  = data.talos_client_configuration.this.talos_config
-  filename = "out/client_configuration.yaml"
+  filename = "out/talosconfig.yaml"
 }
 resource "local_sensitive_file" "kubeconf" {
   content = yamlencode({

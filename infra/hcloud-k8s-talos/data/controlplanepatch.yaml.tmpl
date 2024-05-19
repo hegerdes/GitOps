@@ -7,10 +7,8 @@ machine:
       %{ endfor ~}
 
     extraConfig:
-      rotateCertificates: true
       serverTLSBootstrap: true
       maxPods: 220
-      protectKernelDefaults: true
       nodeStatusMaxImages: 100
       serializeImagePulls: false
       maxParallelImagePulls: 8
