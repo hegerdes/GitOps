@@ -6,22 +6,23 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: wasm-deployment
+  name: crun-wasm
   namespace: wasm
   labels:
-    app: wasm-example
+    app: crun-wasm
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: wasm-example
+      app: crun-wasm
   template:
     metadata:
       name: hello-wasm
       annotations:
+        # Needed for crun wasm
         module.wasm.image/variant: compat-smart
       labels:
-        app: wasm-example
+        app: crun-wasm
     spec:
       runtimeClassName: crun
       containers:
@@ -29,10 +30,7 @@ spec:
           image: docker.io/wasmedge/example-wasi-http:latest
           #image: wasmedge/example-wasi:latest
           #image: michaelirwin244/wasm-example
-          resources:
-            limits:
-              memory: "265Mi"
-              cpu: "500m"
+          resources: {}
           env:
             - name: foo
               value: bar
