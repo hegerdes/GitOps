@@ -3,13 +3,17 @@ locals {
   controlplane_internel_lb_ip    = "10.0.0.10"
   controlplane_internal_endpoint = "${local.cluster_name}-cp-internal"
   controlplane_public_endpoint   = var.controlplane_endpoint
+  node_pool_ips                  = flatten([for index, pool in module.node_groups : pool.ips])
   cluster_name                   = var.cluster_name
   ssh_keys                       = flatten([for pool in var.node_pools : [for key in pool.ssh_key_paths : file(key)]])
   subnets                        = [for index in range(length(var.node_pools) + 1) : "10.0.${index}.0/24"]
 
-  cloudflare_dns = var.dns_record.create && var.dns_record.provider == "cloudflare" ? { a = module.loadbalancer.lb_ipv4, aaaa = module.loadbalancer.lb_ipv6 } : {}
-  aws_route53    = var.dns_record.create && var.dns_record.provider == "aws" ? { a = module.loadbalancer.lb_ipv4, aaaa = module.loadbalancer.lb_ipv6 } : {}
+  # DNS
+  dns_records    = { a = module.loadbalancer.lb_ipv4, aaaa = module.loadbalancer.lb_ipv6 }
+  cloudflare_dns = var.dns_record.create && var.dns_record.provider == "cloudflare" ? local.dns_records : {}
+  aws_route53    = var.dns_record.create && var.dns_record.provider == "aws" ? local.dns_records : {}
 
+  # CertSANs
   certSANs = distinct(concat([
     local.controlplane_internel_lb_ip,
     local.controlplane_internal_endpoint,
@@ -19,6 +23,7 @@ locals {
     module.loadbalancer.lb_ipv4
   ]))
 
+  # Node Pools
   node_pools = { for index, pool in var.node_pools :
     pool.name => merge(
       pool, {
@@ -65,7 +70,7 @@ data "talos_client_configuration" "this" {
   cluster_name         = local.cluster_name
   client_configuration = talos_machine_secrets.this.client_configuration
   endpoints            = [module.loadbalancer.lb_ipv4]
-  nodes                = flatten([for index, pool in module.node_groups : pool.ips])
+  nodes                = compact([for x in local.node_pool_ips : can(regex("::", x)) ? "" : x])
 }
 
 # kubeconfig

@@ -32,7 +32,7 @@ variables:
 .tf_stacks: &tf_stacks
   - TF_ROOT: infra/k8s-ci-test
     TF_STATE_NAME: k8s-test
-  - TF_ROOT: infra/hcloud-ci-test
+  - TF_ROOT: infra/hcloud-tf-ci-test
     TF_STATE_NAME: hcloud
 
 pre-commit:
