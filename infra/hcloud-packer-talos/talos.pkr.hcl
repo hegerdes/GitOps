@@ -92,10 +92,11 @@ data "http" "customizations_id" {
     Accept = "application/json"
   }
 }
-// Packer does not allow locals in data blocks so we use null data
+// Packer does not allow locals in data blocks so we use null data. Dirty but hashicorp... way of things
 data "null" "talos_download_url" {
   input =    "https://gecopek4tnjqowdbygnxe7ngve0kchwk.lambda-url.eu-central-1.on.aws/?payload=${data.null.talos_custominazion_id.output}&encoding=base64&target=https://factory.talos.dev/schematics"
 }
+// Encode the extention list ty yaml and base64 encde
 data "null" "talos_custominazion_id" {
   input = replace(base64encode(yamlencode({
     customization = {
