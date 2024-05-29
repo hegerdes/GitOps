@@ -12,7 +12,7 @@ packer {
 
 variable "talos_version" {
   type    = string
-  default = "v1.7.2"
+  default = "v1.7.3"
 }
 variable "talos_extentions" {
   type = list(string)
