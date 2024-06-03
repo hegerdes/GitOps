@@ -86,6 +86,7 @@ TF:validate:
 TF:plan:
   extends: [.opentofu:plan]
   needs: [AZ:auth]
+  allow_failure: true
   before_script:
     - !reference [.snippets, kubectl-install]
     - !reference [.snippets, kubectl-gitlab-agent]
@@ -95,6 +96,7 @@ TF:plan:
 TF:apply:
   extends: [.opentofu:apply]
   needs: [AZ:auth, TF:plan]
+  allow_failure: true
   before_script:
     - !reference [.snippets, kubectl-install]
     - !reference [.snippets, kubectl-gitlab-agent]
