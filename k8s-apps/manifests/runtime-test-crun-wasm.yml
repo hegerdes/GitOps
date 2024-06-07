@@ -1,13 +1,8 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: wasm
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: crun-wasm
-  namespace: wasm
+  namespace: runtimetest
   labels:
     app: crun-wasm
 spec:
