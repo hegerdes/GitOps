@@ -55,7 +55,7 @@ resource "hcloud_network_route" "my_routes" {
 # ################# Server #################
 module "node_groups" {
   source   = "hegerdes/hetzner-node-pool/hcloud"
-  version  = "~>0.2"
+  version  = "~>0.3"
   for_each = local.node_pools
   # for_each = {}
 
