@@ -44,8 +44,17 @@ resource "helm_release" "cni" {
     name  = "securityContext.capabilities.cleanCiliumState"
     value = ["NET_ADMIN", "SYS_ADMIN", "SYS_RESOURCE"]
   }
+}
 
-  # values = [
-  #   "${file("values.yaml")}"
-  # ]
+resource "helm_release" "argocd" {
+  name             = "argocd"
+  namespace        = "argocd"
+  repository       = "https://argoproj.github.io/argo-helm"
+  chart            = "argo-cd"
+  create_namespace = true
+  wait             = true
+  atomic           = true
+
+  values     = [file("../../../inventories/hetzner-test/data/raw/helm-values-argocd-raw.yml")]
+  depends_on = [time_sleep.wait, module.node_groups, module.loadbalancer]
 }

@@ -11,7 +11,7 @@ terraform {
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "2.13.1"
+      version = "2.13.2"
     }
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -47,6 +47,10 @@ terraform {
 provider "azurerm" {
   use_oidc = true
   features {}
+}
+
+provider "cloudflare" {
+  api_token = var.dns_record.token
 }
 
 provider "helm" {

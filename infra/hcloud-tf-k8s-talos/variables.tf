@@ -3,6 +3,11 @@ variable "cluster_name" {
   default     = "talos-hcloud"
   description = "Name of the cluster."
 }
+variable "cluster_version" {
+  type        = string
+  default     = "v1.30.1"
+  description = "Version of the cluster."
+}
 variable "controlplane_endpoint" {
   type        = string
   default     = "k8s.example.com"
@@ -51,8 +56,10 @@ variable "dns_record" {
     create   = bool
     zone     = string
     provider = string
+    token    = string
   })
-  default     = { create = false, zone = "", provider = "" }
+  sensitive   = true
+  default     = { create = false, zone = "", provider = "", token = "xxx" }
   description = "DNS record for the controlplane. Provider can be cloudflare, aws, azure"
 
 }

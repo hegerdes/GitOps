@@ -49,11 +49,12 @@ resource "talos_machine_secrets" "this" {}
 data "talos_machine_configuration" "this" {
   for_each = { for index, pool in var.node_pools : pool.name => pool }
 
-  cluster_name     = local.cluster_name
-  cluster_endpoint = "https://${local.controlplane_internal_endpoint}:6443"
-  machine_type     = each.value.tags.role
-  machine_secrets  = talos_machine_secrets.this.machine_secrets
-  docs             = false
+  cluster_name       = local.cluster_name
+  cluster_endpoint   = "https://${local.controlplane_internal_endpoint}:6443"
+  machine_type       = each.value.tags.role
+  machine_secrets    = talos_machine_secrets.this.machine_secrets
+  kubernetes_version = var.cluster_version
+  docs               = false
   config_patches = [
     templatefile("${path.module}/${each.value.talos_conf_patch}", {
       certSANs                       = local.certSANs,
