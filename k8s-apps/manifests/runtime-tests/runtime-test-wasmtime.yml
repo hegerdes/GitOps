@@ -1,15 +1,11 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
   name: wasmtime
   namespace: runtimetest
   labels:
     app: wasmtime
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: wasmtime
   template:
     metadata:
       name: hello-wasm
@@ -21,7 +17,7 @@ spec:
         app: wasmtime
     spec:
       runtimeClassName: wasmtime
-      # restartPolicy: OnFailure
+      restartPolicy: OnFailure
       containers:
         - name: hello-wasm
           # image: docker.io/wasmedge/example-wasi-http:latest
