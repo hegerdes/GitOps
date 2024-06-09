@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wasmer
+  namespace: runtimetest
+  labels:
+    app: wasmer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wasmer
+  template:
+    metadata:
+      name: hello-wasm
+      annotations:
+        # Needed for crun wasm
+        module.wasm.image/variant: compat-smart
+        # module.wasm.image/variant: compat
+      labels:
+        app: wasmer
+    spec:
+      runtimeClassName: wasmer
+      # restartPolicy: OnFailure
+      containers:
+        - name: hello-wasm
+          # image: docker.io/wasmedge/example-wasi-http:latest
+          # image: wasmedge/example-wasi:latest
+          image: michaelirwin244/wasm-example
+          resources: {}
+          env:
+            - name: foo
+              value: bar
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   name: hello-wasm
+#   annotations:
+#     module.wasm.image/variant: compat-smart
+# spec:
+#   hostNetwork: true
+#   containers:
+#   - name: hello-wasm
+#     image: docker.io/wasmedge/example-wasi-http:latest
+#     #image: wasmedge/example-wasi:latest
+#     #image: michaelirwin244/wasm-example

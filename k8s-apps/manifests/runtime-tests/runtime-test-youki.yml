@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: youki
+  namespace: runtimetest
+  labels:
+    app: youki
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: youki
+  template:
+    metadata:
+      name: hello-youki
+      labels:
+        app: youki
+    spec:
+      runtimeClassName: youki
+      containers:
+        - name: hello-youki
+          image: nginx
+          resources: {}
+          env:
+            - name: foo
+              value: bar
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   name: hello-wasm
+#   annotations:
+#     module.wasm.image/variant: compat-smart
+# spec:
+#   hostNetwork: true
+#   containers:
+#   - name: hello-wasm
+#     image: docker.io/wasmedge/example-wasi-http:latest
+#     #image: wasmedge/example-wasi:latest
+#     #image: michaelirwin244/wasm-example
