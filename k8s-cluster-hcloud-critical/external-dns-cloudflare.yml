@@ -15,6 +15,7 @@ spec:
         releaseName: external-dns-cloudflare
         valuesObject:
           provider: cloudflare
+          extraArgs: [--exclude-target-net=10.0.0.0/8]
           domainFilters:
             - henrikgerdes.me
           env:
