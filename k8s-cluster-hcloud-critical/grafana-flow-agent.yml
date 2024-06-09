@@ -75,6 +75,22 @@ spec:
               enabled: true
             cluster_events:
               enabled: true
+          receivers:
+            grpc:
+              enabled: true
+            http:
+              enabled: true
+            zipkin:
+              enabled: true
+          kube-state-metrics:
+            enabled: true
+          prometheus-node-exporter:
+            enabled: true
+          prometheus-operator-crds:
+            enabled: true
+          alloy: {}
+          alloy-events: {}
+          alloy-logs: {}
     - repoURL: https://github.com/hegerdes/GitOps.git
       targetRevision: HEAD
       path: k8s-cluster-hcloud-critical/grafana-flow-agent
