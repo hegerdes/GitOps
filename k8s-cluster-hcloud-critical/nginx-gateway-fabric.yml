@@ -38,7 +38,7 @@ spec:
               name: https
   destination:
     server: "https://kubernetes.default.svc"
-    namespace: nginx-gateway-fabric
+    namespace: nginx-gateway
   info:
     - name: "Chart Info"
       value: "https://artifacthub.io/packages/helm/nginx-gateway-fabric/nginx-gateway-fabric"
