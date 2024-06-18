@@ -14,16 +14,27 @@ machine:
       maxParallelImagePulls: 8
       failSwapOn: true
 
+    extraArgs:
+        cloud-provider: external
+
   network:
     extraHostEntries:
     - ip: ${controlplane_internal_ip}
       aliases:
       - ${controlplane_endpoint_internal}
 
+  certSANs:
+    %{ for SAN in machineCertSANs ~}
+      - ${SAN}
+    %{ endfor ~}
+
 cluster:
+  allowSchedulingOnControlPlanes: true
+  adminKubeconfig:
+      certLifetime: 6h0m0s
   apiServer:
     certSANs:
-    %{ for SAN in certSANs ~}
+    %{ for SAN in apiServerCertSANs ~}
       - ${SAN}
     %{ endfor ~}
 
@@ -32,7 +43,6 @@ cluster:
     %{ for k, v in extraArgsApiServer ~}
         ${k}: "${v}"
     %{ endfor ~}
-
 
   network:
     cni:

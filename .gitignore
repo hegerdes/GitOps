@@ -8,3 +8,4 @@ infra/hcloud-tf-k8s-kubeadm/backend.tf
 infra/hcloud-tf-k8s-talos/backend.tf
 infra/hcloud-tf-k8s-talos/terraform.tfvars.json
 infra/hcloud-tf-k8s-kubeadm/terraform.tfvars.btk.json
+k8s-cluster-shared/linkerd/

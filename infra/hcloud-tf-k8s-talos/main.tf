@@ -1,12 +1,12 @@
 # ################# LOCALS #################
 locals {
-  controlplane_internel_lb_ip    = "10.0.0.10"
-  controlplane_internal_endpoint = "${local.cluster_name}-cp-internal"
-  controlplane_public_endpoint   = var.controlplane_endpoint
-  node_pool_ips                  = flatten([for index, pool in module.node_groups : pool.ips])
-  cluster_name                   = var.cluster_name
-  ssh_keys                       = flatten([for pool in var.node_pools : [for key in pool.ssh_key_paths : file(key)]])
-  subnets                        = [for index in range(length(var.node_pools) + 1) : "10.0.${index}.0/24"]
+  cp_internel_lb_ip    = "10.0.0.10"
+  cp_internal_endpoint = "${local.cluster_name}-cp-internal"
+  cp_public_endpoint   = var.controlplane_endpoint
+  node_pool_ips        = flatten([for index, pool in module.node_groups : pool.vm_ips])
+  cluster_name         = var.cluster_name
+  subnets              = [for index in range(length(var.node_pools) + 1) : "10.0.${index}.0/24"]
+  ssh_keys             = flatten([for pool in var.node_pools : [for key in pool.ssh_key_paths : file(key)]])
 
   # DNS
   dns_records    = { a = module.loadbalancer.lb_ipv4, aaaa = module.loadbalancer.lb_ipv6 }
@@ -14,21 +14,27 @@ locals {
   aws_route53    = var.dns_record.create && var.dns_record.provider == "aws" ? local.dns_records : {}
 
   # CertSANs
+  certSANsAll = flatten([local.certSANs, [module.loadbalancer.lb_ipv6, module.loadbalancer.lb_ipv4]])
   certSANs = distinct(concat([
-    local.controlplane_internel_lb_ip,
-    local.controlplane_internal_endpoint,
-    local.controlplane_internal_endpoint,
-    local.controlplane_public_endpoint,
-    module.loadbalancer.lb_ipv6,
-    module.loadbalancer.lb_ipv4
+    local.cp_internel_lb_ip,
+    local.cp_internal_endpoint,
+    local.cp_public_endpoint,
   ]))
+
+  # IP map configs
+  talos_apply_use_pvt_ip = true
+  tmps                   = flatten([for pool in module.node_groups : [for vm in pool.vms_raw : vm]])
+  vm_pvt_ip_map          = { for vm in local.tmps : (vm.network[*].ip)[0] => vm }
+  private_ips = flatten([for pool in local.node_pools :
+    [for ip in pool.private_ip_addresses : "${pool.name}:${ip}"]
+  ])
 
   # Node Pools
   node_pools = { for index, pool in var.node_pools :
     pool.name => merge(
       pool, {
         user_data            = data.talos_machine_configuration.this[pool.name].machine_configuration
-        tags                 = merge(pool.tags, local.default_tags)
+        tags                 = merge(pool.tags, local.default_tags, { pool = pool.name })
         ssh_keys             = [for key in hcloud_ssh_key.default : key.name]
         network_name         = hcloud_network.k8s_network.name
         location             = pool.location != "null" ? pool.location : var.location
@@ -45,22 +51,34 @@ locals {
 # ################# Talos #################
 resource "talos_machine_secrets" "this" {}
 
-# create the worker/controlplane config and apply patch
+# Ensures that current machine configuration is afer servers are created
+resource "talos_machine_configuration_apply" "this" {
+  for_each                    = toset(local.private_ips)
+  endpoint                    = local.cp_public_endpoint
+  client_configuration        = talos_machine_secrets.this.client_configuration
+  machine_configuration_input = data.talos_machine_configuration.this[split(":", each.key)[0]].machine_configuration
+
+  node       = local.talos_apply_use_pvt_ip ? split(":", each.key)[1] : local.vm_pvt_ip_map[split(":", each.key)[1]].ipv4_address
+  depends_on = [module.node_groups]
+}
+
+# create the worker/controlplane config and apply patches
 data "talos_machine_configuration" "this" {
   for_each = { for index, pool in var.node_pools : pool.name => pool }
 
   cluster_name       = local.cluster_name
-  cluster_endpoint   = "https://${local.controlplane_internal_endpoint}:6443"
+  cluster_endpoint   = "https://${local.cp_internal_endpoint}:6443"
   machine_type       = each.value.tags.role
   machine_secrets    = talos_machine_secrets.this.machine_secrets
   kubernetes_version = var.cluster_version
   docs               = false
   config_patches = [
     templatefile("${path.module}/${each.value.talos_conf_patch}", {
-      certSANs                       = local.certSANs,
+      machineCertSANs                = local.certSANs,
+      apiServerCertSANs              = local.certSANsAll,
       subnets                        = local.subnets,
-      controlplane_endpoint_internal = local.controlplane_internal_endpoint,
-      controlplane_internal_ip       = local.controlplane_internel_lb_ip
+      controlplane_endpoint_internal = local.cp_internal_endpoint,
+      controlplane_internal_ip       = local.cp_internel_lb_ip
       extraArgsApiServer             = var.api_server_extra_args
     })
   ]
@@ -70,14 +88,14 @@ data "talos_machine_configuration" "this" {
 data "talos_client_configuration" "this" {
   cluster_name         = local.cluster_name
   client_configuration = talos_machine_secrets.this.client_configuration
-  endpoints            = [module.loadbalancer.lb_ipv4]
+  endpoints            = compact([for x in local.node_pool_ips : can(regex("::", x)) ? "" : x])
   nodes                = compact([for x in local.node_pool_ips : can(regex("::", x)) ? "" : x])
 }
 
-# kubeconfig
+# create kubeconfig
 data "talos_cluster_kubeconfig" "this" {
   client_configuration = talos_machine_secrets.this.client_configuration
-  node                 = [for pool in module.node_groups : pool.ips[0]][0]
+  node                 = [for pool in module.node_groups : pool.vm_ips[0]][0]
   timeouts = {
     read = "1h"
   }
@@ -87,14 +105,14 @@ data "talos_cluster_kubeconfig" "this" {
 resource "talos_machine_bootstrap" "this" {
   client_configuration = talos_machine_secrets.this.client_configuration
 
-  endpoint = [for pool in module.node_groups : pool.ips[0]][0]
-  node     = [for pool in module.node_groups : pool.ips[0]][0]
+  endpoint = [for pool in module.node_groups : pool.vm_ips[0]][0]
+  node     = [for pool in module.node_groups : pool.vm_ips[0]][0]
 }
 
 # ################# Server #################
 module "node_groups" {
   source  = "hegerdes/hetzner-node-pool/hcloud"
-  version = "~>0.3"
+  version = "~>1"
 
   for_each = local.node_pools
   # for_each = {}
@@ -144,7 +162,7 @@ module "loadbalancer" {
   network_id = hcloud_network.k8s_network.id
   name       = "controlplane"
   location   = var.location
-  private_ip = local.controlplane_internel_lb_ip
+  private_ip = local.cp_internel_lb_ip
   tags = merge(local.default_tags, {
     task      = "lb"
     k8s       = "cp-lb"

@@ -26,7 +26,7 @@ resource "helm_release" "cni" {
   }
   set {
     name  = "k8sServiceHost"
-    value = local.controlplane_internal_endpoint # talos proxy is localhost
+    value = local.cp_internal_endpoint # talos proxy is localhost
   }
   set {
     name  = "k8sServicePort"
@@ -55,6 +55,6 @@ resource "helm_release" "argocd" {
   wait             = true
   atomic           = true
 
-  values     = [file("../../../inventories/hetzner-test/data/raw/helm-values-argocd-raw.yml")]
-  depends_on = [time_sleep.wait, module.node_groups, module.loadbalancer]
+  values     = [file("data/helm-values-argocd-raw.yml")]
+  depends_on = [time_sleep.wait, module.node_groups, module.loadbalancer, helm_release.cni]
 }

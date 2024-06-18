@@ -15,7 +15,7 @@ resource "local_sensitive_file" "kubeconf" {
     clusters = [{
       name = local.cluster_name
       cluster = {
-        server                     = "https://${local.controlplane_public_endpoint}:6443"
+        server                     = "https://${local.cp_public_endpoint}:6443"
         certificate-authority-data = data.talos_cluster_kubeconfig.this.kubernetes_client_configuration.ca_certificate
       }
     }]
@@ -40,9 +40,9 @@ resource "local_sensitive_file" "kubeconf" {
   filename = "out/kubeconf.yaml"
 }
 
-output "vm_pool_ips" {
-  value = { for index, pool in module.node_groups : index => pool.ips }
+output "pool_vm_ips" {
+  value = { for index, pool in module.node_groups : pool.name => pool.vm_ips }
 }
-output "vm_pool_names" {
-  value = { for index, pool in module.node_groups : index => pool.names }
+output "pool_vm_names" {
+  value = { for index, pool in module.node_groups : pool.name => pool.vm_names }
 }
