@@ -6,8 +6,8 @@ stages:
   - cleanup
 
 include:
-  - project: hegerdes/templates
-    file: /gitlab/ci/snippets.yml
+  - project: hegerdes/gitlab-actions
+    file: .gitlab/ci/snippets.yml
   - component: gitlab.com/components/sast/sast@main
     rules:
       - if: $SAST_DISABLED == "true"
@@ -38,9 +38,9 @@ variables:
 pre-commit:
   allow_failure: true
   before_script:
-    - !reference [.snippets, debian_core_tools]
-    - !reference [.snippets, terraform_install]
-    - !reference [.snippets, tflint_install]
+    - !reference [.snippets, debian-core-tools]
+    - !reference [.snippets, terraform-install]
+    - !reference [.snippets, tflint-install]
 
 AZ:auth:
   image: mcr.microsoft.com/azure-cli:latest
