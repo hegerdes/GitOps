@@ -15,15 +15,15 @@ variable "controlplane_endpoint" {
 }
 variable "node_pools" {
   type = list(object({
-    name             = string
-    instance         = string
-    tags             = any
-    image            = string
-    location         = optional(string, "null")
-    size             = optional(number, 1)
-    talos_conf_patch = optional(string, "data/controlplanepatch.yaml.tmpl")
-    ssh_key_paths    = optional(list(string), ["~/.ssh/id_rsa.pub"])
-    vm_names         = optional(list(string), [])
+    name            = string
+    instance        = string
+    tags            = any
+    image           = string
+    size            = optional(number, 1)
+    location        = optional(string, "null")
+    machine_patches = optional(list(string), ["data/controlplanepatch.yaml.tmpl"])
+    ssh_key_paths   = optional(list(string), ["~/.ssh/id_rsa.pub"])
+    vm_names        = optional(list(string), [])
   }))
   default = [{
     name     = "talos-controlplane"
@@ -61,5 +61,4 @@ variable "dns_record" {
   sensitive   = true
   default     = { create = false, zone = "", provider = "", token = "xxx" }
   description = "DNS record for the controlplane. Provider can be cloudflare, aws, azure"
-
 }

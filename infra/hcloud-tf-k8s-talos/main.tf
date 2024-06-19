@@ -25,9 +25,7 @@ locals {
   talos_apply_use_pvt_ip = true
   tmps                   = flatten([for pool in module.node_groups : [for vm in pool.vms_raw : vm]])
   vm_pvt_ip_map          = { for vm in local.tmps : (vm.network[*].ip)[0] => vm }
-  private_ips = flatten([for pool in local.node_pools :
-    [for ip in pool.private_ip_addresses : "${pool.name}:${ip}"]
-  ])
+  private_ips            = flatten([for pool in local.node_pools : [for ip in pool.private_ip_addresses : ip]])
 
   # Node Pools
   node_pools = { for index, pool in var.node_pools :
@@ -56,9 +54,9 @@ resource "talos_machine_configuration_apply" "this" {
   for_each                    = toset(local.private_ips)
   endpoint                    = local.cp_public_endpoint
   client_configuration        = talos_machine_secrets.this.client_configuration
-  machine_configuration_input = data.talos_machine_configuration.this[split(":", each.key)[0]].machine_configuration
+  machine_configuration_input = data.talos_machine_configuration.this[local.vm_pvt_ip_map[each.key].labels.pool].machine_configuration
 
-  node       = local.talos_apply_use_pvt_ip ? split(":", each.key)[1] : local.vm_pvt_ip_map[split(":", each.key)[1]].ipv4_address
+  node       = local.talos_apply_use_pvt_ip ? each.key : local.vm_pvt_ip_map[each.key].ipv4_address
   depends_on = [module.node_groups]
 }
 
@@ -72,8 +70,8 @@ data "talos_machine_configuration" "this" {
   machine_secrets    = talos_machine_secrets.this.machine_secrets
   kubernetes_version = var.cluster_version
   docs               = false
-  config_patches = [
-    templatefile("${path.module}/${each.value.talos_conf_patch}", {
+  config_patches = [for patch in each.value.machine_patches :
+    templatefile("${path.module}/${patch}", {
       machineCertSANs                = local.certSANs,
       apiServerCertSANs              = local.certSANsAll,
       subnets                        = local.subnets,

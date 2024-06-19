@@ -2,7 +2,7 @@
 resource "local_sensitive_file" "machineconf" {
   for_each = data.talos_machine_configuration.this
   content  = each.value.machine_configuration
-  filename = "out/machine_configuration-${md5(each.value.machine_configuration)}.yaml"
+  filename = "out/machine_configuration-${each.key}.yaml"
 }
 resource "local_sensitive_file" "talosclientconf" {
   content  = data.talos_client_configuration.this.talos_config

@@ -1,7 +1,7 @@
 # ################# Helm #################
 resource "time_sleep" "wait" {
   depends_on      = [data.talos_cluster_kubeconfig.this]
-  create_duration = "120s"
+  create_duration = "90s"
 }
 
 resource "helm_release" "cni" {
