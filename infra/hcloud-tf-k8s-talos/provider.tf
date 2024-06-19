@@ -3,43 +3,43 @@ terraform {
   required_providers {
     hcloud = {
       source  = "hetznercloud/hcloud"
-      version = "1.47.0"
+      version = "~>1.47"
     }
     talos = {
       source  = "siderolabs/talos"
-      version = "0.5.0"
+      version = "~>0.5"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "2.13.2"
+      version = "~>2.14"
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "3.102.0"
+      version = "~>3.108"
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "5.50.0"
+      version = "~>5.54"
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "4.33.0"
+      version = "~>4.35"
     }
     random = {
       source  = "hashicorp/random"
-      version = "3.6.1"
+      version = "~>3.6"
     }
     local = {
       source  = "hashicorp/local"
-      version = "2.5.1"
+      version = "~>2.5"
     }
     time = {
       source  = "hashicorp/time"
-      version = "0.11.1"
+      version = "~>0.11"
     }
     null = {
       source  = "hashicorp/null"
-      version = "3.2.2"
+      version = "~>3.2"
     }
   }
 }
