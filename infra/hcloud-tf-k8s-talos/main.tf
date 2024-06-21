@@ -23,8 +23,8 @@ locals {
 
   # IP map configs
   talos_apply_use_pvt_ip = true
-  tmps                   = flatten([for pool in module.node_groups : [for vm in pool.vms_raw : vm]])
-  vm_pvt_ip_map          = { for vm in local.tmps : (vm.network[*].ip)[0] => vm }
+  raw_server_list        = flatten([for pool in module.node_groups : [for vm in pool.vms_raw : vm]])
+  vm_pvt_ip_map          = { for vm in local.raw_server_list : (vm.network[*].ip)[0] => vm }
   private_ips            = flatten([for pool in local.node_pools : [for ip in pool.private_ip_addresses : ip]])
 
   # Node Pools

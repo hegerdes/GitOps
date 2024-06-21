@@ -9,6 +9,8 @@ resource "local_sensitive_file" "talosclientconf" {
   filename = "out/talosconfig.yaml"
 }
 resource "local_sensitive_file" "kubeconf" {
+  filename = "out/kubeconf.yaml"
+  # content  = data.talos_cluster_kubeconfig.this.kubeconfig_raw
   content = yamlencode({
     apiVersion = "v1"
     kind       = "Config"
@@ -36,8 +38,6 @@ resource "local_sensitive_file" "kubeconf" {
     }]
     current-context = "admin@${local.cluster_name}"
   })
-  # content  = data.talos_cluster_kubeconfig.this.kubeconfig_raw
-  filename = "out/kubeconf.yaml"
 }
 
 output "pool_vm_ips" {
