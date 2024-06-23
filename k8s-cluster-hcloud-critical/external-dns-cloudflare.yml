@@ -24,6 +24,26 @@ spec:
                 secretKeyRef:
                   name: external-dns-cloudflare
                   key: apiToken
+          sources:
+            - service
+            - ingress
+            - gateway-httproute
+            # - gateway-tlsroute
+            # - gateway-tcproute
+            # - gateway-udproute
+          rbac:
+            create: true
+            additionalPermissions:
+              - apiGroups: ["gateway.networking.k8s.io"]
+                resources:
+                  [
+                    "gateways",
+                    "httproutes",
+                    "tlsroutes",
+                    "tcproutes",
+                    "udproutes",
+                  ]
+                verbs: ["get", "watch", "list"]
     - repoURL: https://github.com/hegerdes/GitOps.git
       targetRevision: HEAD
       path: k8s-cluster-hcloud-critical/external-dns/cloudflare

@@ -16,6 +16,26 @@ spec:
         valuesObject:
           provider: aws
           extraArgs: [--exclude-target-net=10.0.0.0/8]
+          sources:
+            - service
+            - ingress
+            - gateway-httproute
+            # - gateway-tlsroute
+            # - gateway-tcproute
+            # - gateway-udproute
+          rbac:
+            create: true
+            additionalPermissions:
+              - apiGroups: ["gateway.networking.k8s.io"]
+                resources:
+                  [
+                    "gateways",
+                    "httproutes",
+                    "tlsroutes",
+                    "tcproutes",
+                    "udproutes",
+                  ]
+                verbs: ["get", "watch", "list"]
           extraVolumes:
             - name: secrets
               secret:
