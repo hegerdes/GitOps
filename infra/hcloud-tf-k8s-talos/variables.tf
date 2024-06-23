@@ -62,3 +62,8 @@ variable "dns_record" {
   default     = { create = false, zone = "", provider = "", token = "xxx" }
   description = "DNS record for the controlplane. Provider can be cloudflare, aws, azure"
 }
+variable "argo_values_path" {
+  type        = string
+  default     = "data/helm-values-argocd-raw.yml"
+  description = "Path to the argo values file."
+}

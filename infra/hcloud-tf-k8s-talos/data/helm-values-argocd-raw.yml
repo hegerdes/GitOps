@@ -1,0 +1,68 @@
+# See https://github.com/argoproj/argo-helm/blob/main/charts/argo-cd/values.yaml
+global:
+  additionalLabels: {}
+  domain: argocd.henrikgerdes.me
+  logging:
+    format: text # Either: `text` or `json`
+    level: info # `debug`, `info`, `warn` or `error`
+
+  tolerations:
+    - key: node.cloudprovider.kubernetes.io/uninitialized
+      operator: Exists
+      effect: NoSchedule
+
+configs:
+  cm:
+    url: "https://argocd.henrikgerdes.me"
+    exec.enabled: true
+    admin.enabled: true
+    dex.config: |
+      connectors:
+        # GitHub oidc example
+        - type: github
+          id: github
+          name: GitHub
+          config:
+            clientID: $argocd-secret-sso:dex.acme.clientId
+            clientSecret: $argocd-secret-sso:dex.acme.clientSecret
+            orgs:
+            - name: DemeterPlanet
+
+  rbac:
+    policy.default: role:org-admin
+    scopes: "[groups, email]"
+    policy.csv: |
+      p, role:org-admin, applications, *, */*, allow
+      p, role:org-admin, clusters, get, *, allow
+      p, role:org-admin, repositories, get, *, allow
+      p, role:org-admin, repositories, create, *, allow
+      p, role:org-admin, repositories, update, *, allow
+      p, role:org-admin, repositories, delete, *, allow
+      p, role:org-admin, projects, get, *, allow
+      p, role:org-admin, projects, create, *, allow
+      p, role:org-admin, projects, update, *, allow
+      p, role:org-admin, projects, delete, *, allow
+      p, role:org-admin, logs, get, *, allow
+      p, role:org-admin, exec, create, */*, allow
+      g, DemeterPlanet:all, role:org-admin
+
+  secret:
+    createSecret: true
+    extra:
+      webhook.github.secret: $argocd-secret-sso:webhook.github.secret
+
+## Server
+server:
+  # extraArgs:
+  #   - --insecure
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-prod-nginx"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    ingressClassName: "nginx"
+    tls: true
+    # -- Uses `server.service.servicePortHttps` instead `server.service.servicePortHttp`
+    # https: false

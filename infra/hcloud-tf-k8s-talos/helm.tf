@@ -55,6 +55,6 @@ resource "helm_release" "argocd" {
   wait             = true
   atomic           = true
 
-  values     = [file("data/helm-values-argocd-raw.yml")]
+  values     = [try(file(var.argo_values_path), "")]
   depends_on = [time_sleep.wait, module.node_groups, module.loadbalancer, helm_release.cni]
 }

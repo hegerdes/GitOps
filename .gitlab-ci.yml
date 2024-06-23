@@ -23,7 +23,7 @@ include:
       opentofu_version: 1.7.1
 
 variables:
-  KUBE_CONTEXT: gitlab-ci
+  GL_K8S_CONTEXT: gitlab-ci
   # Replace with your agent's numeric ID
   GL_K8S_AGENT_ID: 1080383
   # For none gitlab.com use https://<GITLAB_DOMAIN>/-/kubernetes-agent/k8s-proxy/
