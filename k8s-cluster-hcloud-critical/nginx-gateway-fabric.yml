@@ -18,21 +18,27 @@ spec:
         nginxGateway:
           replicaCount: 3
         service:
+          externalTrafficPolicy: Cluster
           annotations:
             # See https://github.com/hetznercloud/hcloud-cloud-controller-manager/blob/main/internal/annotation/load_balancer.go#L12
             load-balancer.hetzner.cloud/name: k8s-worker-gateway-lb
             load-balancer.hetzner.cloud/location: fsn1
             load-balancer.hetzner.cloud/use-private-ip: "true"
             load-balancer.hetzner.cloud/network: "k8s-network"
+            # load-balancer.hetzner.cloud/node-selector: # k8s node label
+            # load-balancer.hetzner.cloud/health-check-interval:
+            # load-balancer.hetzner.cloud/health-check-timeout:
           type: LoadBalancer
           ports:
             - port: 80
-              targetPort: 80
+              targetPort: http
               protocol: TCP
+              appProtocol: http
               name: http
               nodePort: 31080
             - port: 443
-              targetPort: 443
+              targetPort: https
+              appProtocol: https
               protocol: TCP
               nodePort: 31443
               name: https
