@@ -133,9 +133,9 @@ module "node_groups" {
 
 # ################# SSH-Key #################
 resource "hcloud_ssh_key" "default" {
-  for_each   = toset(local.ssh_keys)
-  name       = sha256(each.key)
-  public_key = each.key
+  for_each   = { for x in distinct(local.ssh_keys) : sha1(x) => x }
+  name       = sha1(each.value)
+  public_key = each.value
 }
 
 # ################# Network #################
