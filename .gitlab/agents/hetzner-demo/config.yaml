@@ -1,0 +1,6 @@
+ci_access:
+  projects:
+    - id: reddvid/reddvid-combined
+    - id: hegerdes/demo-app-flask-nuxt
+  groups:
+    - id: hegerdes
