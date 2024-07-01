@@ -20,7 +20,7 @@ include:
   - component: gitlab.com/components/opentofu/job-templates@main
     inputs:
       version: latest
-      opentofu_version: 1.7.2
+      opentofu_version: 1.7.1
 
 variables:
   GL_K8S_CONTEXT: gitlab-ci
