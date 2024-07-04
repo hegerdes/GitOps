@@ -78,6 +78,7 @@ data "talos_machine_configuration" "this" {
       controlplane_endpoint_internal = local.cp_internal_endpoint,
       controlplane_internal_ip       = local.cp_internel_lb_ip
       extraArgsApiServer             = var.api_server_extra_args
+      nodeLabels                     = { pool = each.value.name }
     })
   ]
 }

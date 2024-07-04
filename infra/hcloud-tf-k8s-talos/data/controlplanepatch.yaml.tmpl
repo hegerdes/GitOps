@@ -8,10 +8,12 @@ machine:
 
     extraConfig:
       serverTLSBootstrap: true
-      maxPods: 220
-      nodeStatusMaxImages: 100
+      protectKernelDefaults: true
       serializeImagePulls: false
       maxParallelImagePulls: 8
+      nodeStatusMaxImages: 100
+      maxPods: 220
+      readOnlyPort: 0
       failSwapOn: true
 
     extraArgs:
@@ -24,9 +26,14 @@ machine:
       - ${controlplane_endpoint_internal}
 
   certSANs:
-    %{ for SAN in machineCertSANs ~}
-      - ${SAN}
-    %{ endfor ~}
+  %{ for SAN in machineCertSANs ~}
+    - ${SAN}
+  %{ endfor ~}
+
+  nodeLabels:
+  %{ for k,v in nodeLabels ~}
+    ${k}: ${v}
+  %{ endfor ~}
 
 cluster:
   allowSchedulingOnControlPlanes: true
@@ -41,7 +48,7 @@ cluster:
       # Extra arguments to supply to the API server.
     extraArgs:
     %{ for k, v in extraArgsApiServer ~}
-        ${k}: "${v}"
+      ${k}: "${v}"
     %{ endfor ~}
 
   network:
