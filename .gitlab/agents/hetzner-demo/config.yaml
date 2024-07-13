@@ -1,6 +1,16 @@
 ci_access:
   projects:
-    - id: reddvid/reddvid-combined
-    - id: hegerdes/demo-app-flask-nuxt
+    - id: hegerdes/gitops
+  groups:
+    - id: hegerdes
+      default_namespace: default
+    - id: reddvid
+      default_namespace: reddvid
+
+user_access:
+  access_as:
+    user: {}
+  projects:
+    - id: hegerdes/gitops
   groups:
     - id: hegerdes

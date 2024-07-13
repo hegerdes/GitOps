@@ -24,10 +24,7 @@ include:
 
 variables:
   GL_K8S_CONTEXT: gitlab-ci
-  # Replace with your agent's numeric ID
   GL_K8S_AGENT_ID: 1103496
-  # For none gitlab.com use https://<GITLAB_DOMAIN>/-/kubernetes-agent/k8s-proxy/
-  GL_K8S_PROXY_URL: https://kas.gitlab.com/k8s-proxy/
 
 .tf_stacks: &tf_stacks
   - TF_ROOT: infra/k8s-ci-test
@@ -61,7 +58,7 @@ AZ:auth:
         name: hcloud-k8s-token
   script:
     - az login --service-principal -u "${AZURE_CLIENT_ID}" -t "${AZURE_TENANT_ID}" --federated-token $GITLAB_OIDC_TOKEN
-    - echo HCLOUD_TOKEN=$(az keyvault secret show --vault-name hegerdes --name hcloud-k8s-token | jq -r .value) >> job.env
+    - echo "HCLOUD_TOKEN=$(az keyvault secret show --vault-name hegerdes --name hcloud-k8s-token | jq -r .value)" >> job.env
   artifacts:
     expire_in: 15 min
     access: developer
