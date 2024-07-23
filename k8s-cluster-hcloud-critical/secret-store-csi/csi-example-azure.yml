@@ -2,6 +2,7 @@ kind: Pod
 apiVersion: v1
 metadata:
   name: busybox-secrets-store-inline
+  namespace: default
 spec:
   containers:
     - name: busybox
@@ -28,6 +29,7 @@ apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: secrets-store-creds
+  namespace: default
 spec:
   refreshInterval: 1h # rate SecretManager pulls GCPSM
   secretStoreRef:
