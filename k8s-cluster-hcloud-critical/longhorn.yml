@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: longhorn
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+spec:
+  project: default
+  sources:
+    - chart: longhorn
+      repoURL: https://charts.longhorn.io
+      targetRevision: 1.*
+      helm:
+        releaseName: longhorn
+        valuesObject:
+          preUpgradeChecker:
+            jobEnabled: false
+          longhornUI:
+            replicas: 1
+          ingress:
+            enabled: true
+            host: longhorn.henrikgerdes.me
+            tls: true
+            tlsSecret: longhorn-ui-public
+            annotations:
+              cert-manager.io/cluster-issuer: letsencrypt-prod-nginx
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: longhorn-system
+  info:
+    - name: "Chart Info"
+      value: "https://artifacthub.io/packages/helm/longhorn/longhorn"
+    - name: "Project Info"
+      value: "https://github.com/longhorn/longhorn"
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
