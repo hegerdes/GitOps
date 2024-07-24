@@ -5,7 +5,7 @@ variable "cluster_name" {
 }
 variable "cluster_version" {
   type        = string
-  default     = "v1.30.1"
+  default     = "v1.30.3"
   description = "Version of the cluster."
 }
 variable "controlplane_endpoint" {

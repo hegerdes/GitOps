@@ -92,6 +92,7 @@ data "talos_client_configuration" "this" {
 }
 
 # create kubeconfig
+# resource "talos_cluster_kubeconfig" "this" {
 data "talos_cluster_kubeconfig" "this" {
   client_configuration = talos_machine_secrets.this.client_configuration
   node                 = [for pool in module.node_groups : pool.vm_ips[0]][0]

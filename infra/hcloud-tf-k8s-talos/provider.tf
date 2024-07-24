@@ -15,11 +15,11 @@ terraform {
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>3.108"
+      version = "~>3.113"
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "~>5.54"
+      version = "~>5.59"
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
