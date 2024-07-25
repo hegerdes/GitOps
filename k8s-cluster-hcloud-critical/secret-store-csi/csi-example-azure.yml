@@ -2,7 +2,6 @@ kind: Pod
 apiVersion: v1
 metadata:
   name: busybox-secrets-store-inline
-  namespace: default
 spec:
   containers:
     - name: busybox
@@ -29,7 +28,6 @@ apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: secrets-store-creds
-  namespace: default
 spec:
   refreshInterval: 1h # rate SecretManager pulls GCPSM
   secretStoreRef:
@@ -53,7 +51,6 @@ apiVersion: secrets-store.csi.x-k8s.io/v1
 kind: SecretProviderClass
 metadata:
   name: azure-hegerdes-example
-  namespace: default
 spec:
   provider: azure
   parameters:
