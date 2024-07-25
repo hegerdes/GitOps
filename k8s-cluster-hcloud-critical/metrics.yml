@@ -19,6 +19,9 @@ spec:
       targetRevision: 7.*
       helm:
         releaseName: kubernetes-dashboard
+        valuesObject:
+          kong:
+            enabled: false
   destination:
     server: "https://kubernetes.default.svc"
     namespace: kube-system
