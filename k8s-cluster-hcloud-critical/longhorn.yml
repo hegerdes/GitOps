@@ -20,7 +20,8 @@ spec:
             replicas: 1
           ingress:
             enabled: true
-            host: longhorn.henrikgerdes.me
+            host: longhorn.k8s.henrikgerdes.me
+            ingressClassName: nginx
             tls: true
             tlsSecret: longhorn-ui-public
             annotations:

@@ -68,6 +68,13 @@ variable "vnet_routes" {
     destination = string
   }))
   default = []
+  # default = [
+  #   {
+  #     "name": "nat-gateway",
+  #     "gateway": "10.0.0.2",
+  #     "destination": "0.0.0.0/0"
+  #   }
+  # ]
 }
 variable "firewall_rules" {
   type = list(object({
