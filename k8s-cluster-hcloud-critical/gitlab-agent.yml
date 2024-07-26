@@ -10,7 +10,7 @@ spec:
   sources:
     - chart: gitlab-agent
       repoURL: https://charts.gitlab.io
-      targetRevision: 1.*
+      targetRevision: 2.*
       helm:
         releaseName: gitlab-agent
         valuesObject:

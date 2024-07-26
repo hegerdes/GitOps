@@ -17,28 +17,17 @@ spec:
         valuesObject:
           provider:
             packages:
-              - xpkg.upbound.io/upbound/provider-family-azure:v0.39.0
-              - xpkg.upbound.io/coopnorge/provider-github:v0.3.2
-              - xpkg.upbound.io/upbound/provider-terraform:v0.14.1
+              - xpkg.upbound.io/upbound/provider-terraform:v0.17.0
+              # - xpkg.upbound.io/upbound/provider-family-azure:v1.4.0
+              # - xpkg.upbound.io/upbound/provider-family-aws:v1.9.0
+              # - xpkg.upbound.io/coopnorge/provider-github:v0.3.2
           extraObjects: []
           # - apiVersion: pkg.crossplane.io/v1
           #   kind: Provider
           #   metadata:
           #     name: provider-family-azure
           #   spec:
-          #     package: xpkg.upbound.io/upbound/provider-family-azure:v0.39.0
-          # - apiVersion: pkg.crossplane.io/v1
-          #   kind: Provider
-          #   metadata:
-          #     name: provider-github
-          #   spec:
-          #     package: xpkg.upbound.io/coopnorge/provider-github:v0.3.2
-          # - apiVersion: pkg.crossplane.io/v1
-          #   kind: Provider
-          #   metadata:
-          #     name: provider-terraform
-          #   spec:
-          #     package: xpkg.upbound.io/upbound/provider-terraform:v0.12.0
+          #     package: xpkg.upbound.io/upbound/provider-family-azure:v1.4.0
 
     - repoURL: https://github.com/hegerdes/GitOps.git
       targetRevision: HEAD

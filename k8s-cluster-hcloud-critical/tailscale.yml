@@ -28,6 +28,8 @@ spec:
   info:
     - name: "Chart Info"
       value: "https://pkgs.tailscale.com/helmcharts/index.yaml"
+    - name: "Tailscale Operator Docs"
+      value: "https://tailscale.com/kb/1236/kubernetes-operator"
   syncPolicy:
     automated:
       prune: true
