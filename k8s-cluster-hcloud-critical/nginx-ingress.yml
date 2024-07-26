@@ -39,6 +39,19 @@ spec:
             # use-proxy-protocol: true
             use-http2: true
             use-gzip: true
+            enable-opentelemetry: "true"
+            otel-service-name: "nginx-proxy" # Opentelemetry resource name
+            otlp-collector-host: "grafana-metrics-grafana-agent.monitoring.svc.cluster.local"
+            otlp-collector-port: "4317"
+            opentelemetry-trust-incoming-span: "true"
+            opentelemetry-operation-name: "HTTP $request_method $service_name $uri"
+            # opentelemetry-config: "/etc/nginx/opentelemetry.toml"
+            # otel-max-queuesize: "2048"
+            # otel-schedule-delay-millis: "5000"
+            # otel-max-export-batch-size: "512"
+            # otel-sampler: "AlwaysOn" # Also: AlwaysOff, TraceIdRatioBased
+            # otel-sampler-ratio: "1.0"
+            # otel-sampler-parent-based: "false"
           opentelemetry:
             enabled: true
           metrics:
