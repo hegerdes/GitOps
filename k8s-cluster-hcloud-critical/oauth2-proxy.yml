@@ -14,15 +14,23 @@ spec:
         valuesObject:
           config:
             existingSecret: oauth2-client-conf
+            sessionStorage:
+              type: redis
+              redis:
+                existingSecret: oauth2-redis
+                standalone:
+                  connectionUrl: "redis://oauth2-redis-master:6379"
             configFile: |
               provider = "github"
               email_domains = [ "*" ]
               upstreams = [ "file:///dev/null" ]
-              scope = "user"
+              scope = "oidc user"
+              cookie_domains = ".k8s.henrikgerdes.me"
               show_debug_on_error = "true"
               skip_provider_button = "true"
               pass_access_token = "true"
               pass_authorization_header = "true"
+              whitelist_domains = ".k8s.henrikgerdes.me"
           ingress:
             enabled: true
             className: nginx
@@ -36,9 +44,18 @@ spec:
               - hosts:
                   - oauth.k8s.henrikgerdes.me
                 secretName: oauth2-proxy-cert-ing
+    - chart: redis
+      repoURL: registry-1.docker.io/bitnamicharts
+      targetRevision: 19.*
+      helm:
+        releaseName: oauth2-redis
+        valuesObject:
+          architecture: standalone
+          persistence:
+            enabled: false
     - repoURL: https://github.com/hegerdes/GitOps.git
       targetRevision: HEAD
-      path: k8s-cluster-shared/oauth2-proxy
+      path: k8s-cluster-hcloud-critical/oauth2-proxy
       directory:
         recurse: true
   destination:

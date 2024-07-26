@@ -13,13 +13,66 @@ resource "helm_release" "cni" {
   namespace  = "kube-system"
 
   set {
+    name  = "cluster.name"
+    value = var.cluster_name
+  }
+  set {
     name  = "ipam.mode"
     value = "kubernetes"
   }
+  set_list {
+    name  = "ipam.operator.clusterPoolIPv4PodCIDRList"
+    value = ["10.244.0.0/16"]
+  }
+  set {
+    name  = "hostFirewall.enabled"
+    value = true
+  }
+  set {
+    name  = "bandwidthManager.enabled"
+    value = true
+  }
+  set {
+    name  = "bpf.masquerade"
+    value = true
+  }
+  # set {
+  #   name  = "bgp.enabled"
+  #   value = true
+  # }
+  # set {
+  #   name  = "bgp.announce.loadbalancerIP"
+  #   value = true
+  # }
   set {
     name  = "kubeProxyReplacement"
     value = true
   }
+  set {
+    name  = "loadBalancer.algorithm"
+    value = "maglev"
+  }
+  set {
+    name  = "loadBalancer.serviceTopology"
+    value = true
+  }
+  set {
+    name  = "hubble.enabled"
+    value = true
+  }
+  set {
+    name  = "hubble.relay.enabled"
+    value = true
+  }
+  # set {
+  #   name  = "routingMode"
+  #   value = "native"
+  # }
+  # set {
+  #   name  = "ipv4NativeRoutingCIDR"
+  #   value = hcloud_network.k8s_network.ip_range
+  # }
+
   set {
     name  = "cgroup.hostRoot"
     value = "/sys/fs/cgroup"
