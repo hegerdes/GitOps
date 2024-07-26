@@ -42,6 +42,7 @@ spec:
                 name: grafana-agent-loki-cred
                 namespace: monitoring
             tempo:
+              # protocol: otlphttp # "otlp" or "otlphttp"
               # host: https://tempo-eu-west-0.grafana.net
               basicAuth:
                 usernameKey: username
@@ -101,6 +102,8 @@ spec:
     namespace: monitoring
   info:
     - name: "Chart Info"
+      value: "https://staging.artifacthub.io/packages/helm/grafana/k8s-monitoring"
+    - name: "Source Info"
       value: "https://github.com/grafana/k8s-monitoring-helm/tree/main/charts/k8s-monitoring"
   syncPolicy:
     automated:
