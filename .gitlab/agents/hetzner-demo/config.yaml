@@ -3,8 +3,17 @@ ci_access:
     - id: hegerdes/gitops
     - id: hegerdes/gitlab-actions
     - id: hegerdes/reddvid-combined
+      access_as:
+        impersonate:
+          username: hetzner-demo-agent
+          groups:
+            - reddvid
     - id: hegerdes/demo-app-flask-nuxt
-
+      access_as:
+        impersonate:
+          username: hetzner-demo-agent
+          groups:
+            - demo
   groups:
     - id: hegerdes
 
