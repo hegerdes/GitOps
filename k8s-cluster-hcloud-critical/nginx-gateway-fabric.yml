@@ -43,11 +43,13 @@ spec:
               nodePort: 31443
               name: https
   destination:
-    server: "https://kubernetes.default.svc"
+    server: https://kubernetes.default.svc
     namespace: nginx-gateway
   info:
-    - name: "Chart Info"
-      value: "https://artifacthub.io/packages/helm/nginx-gateway-fabric/nginx-gateway-fabric"
+    - name: Chart-Info
+      value: https://artifacthub.io/packages/helm/nginx-gateway-fabric/nginx-gateway-fabric
+    - name: App-Source
+      value: https://github.com/nginxinc/nginx-gateway-fabric/tree/main/charts/nginx-gateway-fabric
   syncPolicy:
     automated:
       prune: true

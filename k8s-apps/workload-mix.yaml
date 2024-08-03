@@ -19,8 +19,8 @@ spec:
     server: https://kubernetes.default.svc
     namespace: wasm
   info:
-    - name: "Example:"
-      value: "https://example.com"
+    - name: Example Link
+      value: https://example.com
   syncPolicy:
     automated:
       prune: true

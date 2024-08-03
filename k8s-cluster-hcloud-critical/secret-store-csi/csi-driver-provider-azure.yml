@@ -15,11 +15,11 @@ spec:
         secrets-store-csi-driver:
           install: false
   destination:
-    server: "https://kubernetes.default.svc"
+    server: https://kubernetes.default.svc
     namespace: kube-system
   info:
-    - name: 'Chart Info'
-      value: 'https://artifacthub.io/packages/helm/csi-secrets-store-provider-azure/csi-secrets-store-provider-azure'
+    - name: Chart-Info
+      value: https://artifacthub.io/packages/helm/csi-secrets-store-provider-azure/csi-secrets-store-provider-azure
   syncPolicy:
     automated:
       prune: true

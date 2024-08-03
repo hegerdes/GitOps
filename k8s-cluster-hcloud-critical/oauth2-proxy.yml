@@ -59,11 +59,13 @@ spec:
       directory:
         recurse: true
   destination:
-    server: "https://kubernetes.default.svc"
+    server: https://kubernetes.default.svc
     namespace: oauth-proxy
   info:
-    - name: "Chart Info"
-      value: "https://artifacthub.io/packages/helm/oauth2-proxy/oauth2-proxy"
+    - name: Chart-Info
+      value: https://artifacthub.io/packages/helm/oauth2-proxy/oauth2-proxy
+    - name: App-Source
+      value: https://github.com/oauth2-proxy/oauth2-proxy
   syncPolicy:
     automated:
       prune: true

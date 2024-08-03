@@ -23,11 +23,13 @@ spec:
       directory:
         recurse: true
   destination:
-    server: "https://kubernetes.default.svc"
+    server: https://kubernetes.default.svc
     namespace: gitlab-agent
   info:
-    - name: "Chart Info"
-      value: "https://artifacthub.io/packages/helm/gitlab/gitlab-agent"
+    - name: Chart-Info
+      value: https://artifacthub.io/packages/helm/gitlab/gitlab-agent
+    - name: App-Source
+      value: https://gitlab.com/gitlab-org/charts/gitlab-agent
   syncPolicy:
     automated:
       prune: true

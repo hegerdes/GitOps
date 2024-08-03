@@ -40,13 +40,13 @@ spec:
     #     end
     #   }
   destination:
-    server: "https://kubernetes.default.svc"
+    server: https://kubernetes.default.svc
     namespace: longhorn-system
   info:
-    - name: "Chart Info"
-      value: "https://artifacthub.io/packages/helm/longhorn/longhorn"
-    - name: "Project Info"
-      value: "https://github.com/longhorn/longhorn"
+    - name: Chart-Info
+      value: https://artifacthub.io/packages/helm/longhorn/longhorn
+    - name: App-Source
+      value: https://github.com/longhorn/longhorn
   syncPolicy:
     automated:
       prune: true

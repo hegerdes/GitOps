@@ -13,11 +13,11 @@ spec:
       releaseName: secrets-store-csi-driver-provider-aws
       valuesObject: {}
   destination:
-    server: "https://kubernetes.default.svc"
+    server: https://kubernetes.default.svc
     namespace: kube-system
   info:
-    - name: "Chart Info"
-      value: "https://github.com/aws/secrets-store-csi-driver-provider-aws/tree/main/charts/secrets-store-csi-driver-provider-aws"
+    - name: Chart-Info
+      value: https://github.com/aws/secrets-store-csi-driver-provider-aws/tree/main/charts/secrets-store-csi-driver-provider-aws
   syncPolicy:
     automated:
       prune: true

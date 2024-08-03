@@ -24,11 +24,13 @@ spec:
       directory:
         recurse: true
   destination:
-    server: "https://kubernetes.default.svc"
+    server: https://kubernetes.default.svc
     namespace: cert-manager
   info:
-    - name: "Chart Info"
-      value: "https://artifacthub.io/packages/helm/cert-manager/cert-manager"
+    - name: Chart-Info
+      value: https://artifacthub.io/packages/helm/cert-manager/cert-manager
+    - name: App-Source
+      value: https://github.com/cert-manager/cert-manager
   syncPolicy:
     automated:
       prune: true

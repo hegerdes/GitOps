@@ -35,11 +35,11 @@ spec:
       directory:
         recurse: true
   destination:
-    server: "https://kubernetes.default.svc"
+    server: https://kubernetes.default.svc
     namespace: crossplane-system
   info:
-    - name: "Chart Info"
-      value: "https://artifacthub.io/packages/helm/crossplane/crossplane"
+    - name: Chart-Info
+      value: https://artifacthub.io/packages/helm/crossplane/crossplane
   syncPolicy:
     # preserveResourcesOnDeletion: true
     automated:

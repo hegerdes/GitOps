@@ -29,11 +29,11 @@ spec:
       directory:
         recurse: true
   destination:
-    server: "https://kubernetes.default.svc"
+    server: https://kubernetes.default.svc
     namespace: cosign-system
   info:
-    - name: "Chart Info"
-      value: "https://artifacthub.io/packages/helm/sigstore/policy-controller"
+    - name: Chart-Info
+      value: https://artifacthub.io/packages/helm/sigstore/policy-controller
   syncPolicy:
     automated:
       prune: true

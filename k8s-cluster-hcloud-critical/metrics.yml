@@ -32,13 +32,13 @@ spec:
                 nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.oauth-proxy.svc.cluster.local/oauth2/auth
                 nginx.ingress.kubernetes.io/auth-signin: https://oauth.k8s.henrikgerdes.me/oauth2/start?rd=https://$host$request_uri
   destination:
-    server: "https://kubernetes.default.svc"
+    server: https://kubernetes.default.svc
     namespace: kube-system
   info:
-    - name: "Chart Info Metrics-Server"
-      value: "https://artifacthub.io/packages/helm/metrics-server/metrics-server"
-    - name: "Chart Info Kubernetes-Dashboard"
-      value: "https://artifacthub.io/packages/helm/k8s-dashboard/kubernetes-dashboard"
+    - name: Chart-Info Metrics-Server
+      value: https://artifacthub.io/packages/helm/metrics-server/metrics-server
+    - name: Chart-Info Kubernetes-Dashboard
+      value: https://artifacthub.io/packages/helm/k8s-dashboard/kubernetes-dashboard
   syncPolicy:
     automated:
       prune: true

@@ -55,11 +55,13 @@ spec:
       directory:
         recurse: true
   destination:
-    server: "https://kubernetes.default.svc"
+    server: https://kubernetes.default.svc
     namespace: external-dns
   info:
-    - name: "Chart Info"
-      value: "https://artifacthub.io/packages/helm/external-dns/external-dns"
+    - name: Chart-Info
+      value: https://artifacthub.io/packages/helm/external-dns/external-dns
+    - name: App-Source
+      value: https://github.com/kubernetes-sigs/external-dns/
   syncPolicy:
     automated:
       prune: true

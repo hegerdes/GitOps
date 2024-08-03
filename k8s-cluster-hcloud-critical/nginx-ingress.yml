@@ -63,11 +63,13 @@ spec:
         prometheus:
           create: true
   destination:
-    server: "https://kubernetes.default.svc"
+    server: https://kubernetes.default.svc
     namespace: ingress-nginx
   info:
-    - name: "Chart Info"
-      value: "https://artifacthub.io/packages/helm/ingress-nginx/ingress-nginx"
+    - name: Chart-Info
+      value: https://artifacthub.io/packages/helm/ingress-nginx/ingress-nginx
+    - name: App-Source
+      value: https://github.com/kubernetes/ingress-nginx
   syncPolicy:
     automated:
       prune: true
