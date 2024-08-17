@@ -17,11 +17,36 @@ spec:
           networking:
             enabled: true
             clusterCIDR: 10.244.0.0/16
+          # NOTE: For the following to work the charts need extra volumes and extra volumes mounts. Will send PR
+          # env:
+          #   HCLOUD_TOKEN: null
+          #   HCLOUD_TOKEN_FILE:
+          #     value: /var/run/secrets/hcloud/token
+          # extraVolumeMounts:
+          #   - name: hcloud-token
+          #     mountPath: /var/run/secrets/hcloud
+          #     readOnly: true
+          # extraVolumes:
+          #   - name: hcloud-token
+          #     secret:
+          #       secretName: hcloud
     - chart: hcloud-csi
       repoURL: https://charts.hetzner.cloud
       targetRevision: 2.*
       helm:
         releaseName: hcloud-csi
+        valuesObject:
+          controller:
+            hcloudToken:
+              file: /var/run/secrets/hcloud/token
+            extraVolumeMounts:
+              - name: hcloud-token
+                mountPath: /var/run/secrets/hcloud
+                readOnly: true
+            extraVolumes:
+              - name: hcloud-token
+                secret:
+                  secretName: hcloud
     - chart: hetzner-load-balancer-exporter
       repoURL: https://wacken89.github.io/hetzner-load-balancer-prometheus-exporter
       targetRevision: 1.*
