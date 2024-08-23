@@ -34,6 +34,30 @@ variables:
   - TF_ROOT: infra/hcloud-tf-ci-test
     TF_STATE_NAME: hcloud
 
+.job-scripts:
+  tf-pre-k8s-setup:
+    - !reference [.snippets, debian-core-tools]
+    - !reference [.snippets, alpine-core-tools]
+    - !reference [.snippets, openssl-install]
+    - !reference [.snippets, kubectl-install]
+    - !reference [.snippets, kubectl-gitlab-agent]
+    - source *.env
+    - |
+      # Check cluster access
+      if ! kubectl cluster-info > /dev/null 2>&1; then
+        echo "Error: kubectl connection to live cluster failed! Trying dummy cluster..."
+        openssl s_client -showcerts -connect kubernetes:6443 </dev/null | \
+          sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > k8s-ca.cert
+        kubectl config set-credentials demo --token="${KUBE_TOKEN}"
+        kubectl config set-cluster dummy \
+          --server=https://kubernetes:6443 \
+          --certificate-authority=k8s-ca.cert \
+          --embed-certs=true
+        kubectl config set-context dummy-cluster --cluster=dummy --user=demo
+        kubectl config use-context dummy-cluster
+      fi
+      kubectl version
+
 pre-commit:
   allow_failure: true
   before_script:
@@ -96,26 +120,7 @@ TF:plan:
     - name: hegerdes/kubernetes-etcd
       alias: kubernetes
   before_script:
-    - !reference [.snippets, debian-core-tools]
-    - !reference [.snippets, alpine-core-tools]
-    - !reference [.snippets, openssl-install]
-    - !reference [.snippets, kubectl-install]
-    - !reference [.snippets, kubectl-gitlab-agent]
-    - source *.env
-    - |
-      if ! kubectl cluster-info; then
-        echo "Error: kubectl connection to live cluster failed! Trying dummy cluster..."
-        openssl s_client -showcerts -connect kubernetes:6443 </dev/null | \
-          sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > k8s-ca.cert
-        kubectl config set-credentials demo --token="${KUBE_TOKEN}"
-        kubectl config set-cluster dummy \
-          --server=https://kubernetes:6443 \
-          --certificate-authority=k8s-ca.cert \
-          --embed-certs=true
-        kubectl config set-context dummy-cluster --cluster=dummy --user=demo
-        kubectl config use-context dummy-cluster
-      fi
-      kubectl cluster-info
+    - !reference [.job-scripts, tf-pre-k8s-setup]
 
 TF:apply:
   extends: [.opentofu:apply]
@@ -131,9 +136,4 @@ TF:apply:
       parallel:
         matrix: *tf_stacks
   before_script:
-    - !reference [.snippets, debian-core-tools]
-    - !reference [.snippets, alpine-core-tools]
-    - !reference [.snippets, openssl-install]
-    - !reference [.snippets, kubectl-install]
-    - !reference [.snippets, kubectl-gitlab-agent]
-    - source *.env
+    - !reference [.job-scripts, tf-pre-k8s-setup]
