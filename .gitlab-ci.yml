@@ -92,18 +92,39 @@ TF:plan:
   needs: [az-auth]
   parallel:
     matrix: *tf_stacks
+  services:
+    - name: hegerdes/kubernetes-etcd
+      alias: kubernetes
   before_script:
     - !reference [.snippets, debian-core-tools]
     - !reference [.snippets, alpine-core-tools]
+    - !reference [.snippets, openssl-install]
     - !reference [.snippets, kubectl-install]
     - !reference [.snippets, kubectl-gitlab-agent]
     - source *.env
+    - |
+      if ! kubectl cluster-info; then
+        echo "Error: kubectl connection to live cluster failed! Trying dummy cluster..."
+        openssl s_client -showcerts -connect kubernetes:6443 </dev/null | \
+          sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > k8s-ca.cert
+        kubectl config set-credentials demo --token="${KUBE_TOKEN}"
+        kubectl config set-cluster dummy \
+          --server=https://kubernetes:6443 \
+          --certificate-authority=k8s-ca.cert \
+          --embed-certs=true
+        kubectl config set-context dummy-cluster --cluster=dummy --user=demo
+        kubectl config use-context dummy-cluster
+      fi
+      kubectl cluster-info
 
 TF:apply:
   extends: [.opentofu:apply]
   allow_failure: true
   parallel:
     matrix: *tf_stacks
+  services:
+    - name: hegerdes/kubernetes-etcd
+      alias: kubernetes
   needs:
     - job: az-auth
     - job: TF:plan
@@ -112,6 +133,7 @@ TF:apply:
   before_script:
     - !reference [.snippets, debian-core-tools]
     - !reference [.snippets, alpine-core-tools]
+    - !reference [.snippets, openssl-install]
     - !reference [.snippets, kubectl-install]
     - !reference [.snippets, kubectl-gitlab-agent]
     - source *.env
