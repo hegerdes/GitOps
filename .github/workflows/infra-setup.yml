@@ -117,7 +117,7 @@ jobs:
           token: ${{ secrets.ORG_GITHUB_PAT }}
 
       - name: Download Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: terraform-output
           path: inventories/hetzner-test/terraform/outputs
