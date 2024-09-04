@@ -18,9 +18,9 @@ permissions:
 
 env:
   # ANSIBLE
-  ANSIBLE_HOST_KEY_CHECKING: 'false'
-  ANSIBLE_FORCE_COLOR: 'true'
-  ANSIBLE_PIPELINING: 'true'
+  ANSIBLE_HOST_KEY_CHECKING: "false"
+  ANSIBLE_FORCE_COLOR: "true"
+  ANSIBLE_PIPELINING: "true"
   ANSIBLE_GATHERING: smart
   ANSIBLE_FORKS: 12
   ANSIBLE_STDOUT_CALLBACK: yaml
@@ -92,9 +92,9 @@ jobs:
       - name: Azure Logout
         continue-on-error: true
         run: |
-            az logout
-            az cache purge
-            az account clear
+          az logout
+          az cache purge
+          az account clear
 
   k8s-bootstrap:
     runs-on: ubuntu-latest
@@ -117,7 +117,7 @@ jobs:
           token: ${{ secrets.ORG_GITHUB_PAT }}
 
       - name: Download Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: terraform-output
           path: inventories/hetzner-test/terraform/outputs
@@ -125,8 +125,8 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
-          cache: 'pip'
+          python-version: "3.11"
+          cache: "pip"
           cache-dependency-path: playbooks/requirements.txt
 
       - name: Log in with Azure
@@ -183,6 +183,6 @@ jobs:
       - name: Azure Logout
         continue-on-error: true
         run: |
-            az logout
-            az cache purge
-            az account clear
+          az logout
+          az cache purge
+          az account clear
