@@ -56,7 +56,8 @@ resource "talos_machine_configuration_apply" "this" {
   client_configuration        = talos_machine_secrets.this.client_configuration
   machine_configuration_input = data.talos_machine_configuration.this[local.vm_pvt_ip_map[each.key].labels.pool].machine_configuration
 
-  node       = local.talos_apply_use_pvt_ip ? each.key : local.vm_pvt_ip_map[each.key].ipv4_address
+  node = local.talos_apply_use_pvt_ip ? each.key : local.vm_pvt_ip_map[each.key].ipv4_address
+  # node       = local.vm_pvt_ip_map[each.key].ipv4_address
   depends_on = [module.node_groups]
 }
 
@@ -69,6 +70,7 @@ data "talos_machine_configuration" "this" {
   machine_type       = each.value.tags.role
   machine_secrets    = talos_machine_secrets.this.machine_secrets
   kubernetes_version = var.cluster_version
+  talos_version      = var.talos_version
   docs               = false
   config_patches = [for patch in each.value.machine_patches :
     templatefile("${path.module}/${patch}", {
@@ -79,6 +81,7 @@ data "talos_machine_configuration" "this" {
       controlplane_internal_ip       = local.cp_internel_lb_ip
       extraArgsApiServer             = var.api_server_extra_args
       nodeLabels                     = { pool = each.value.name }
+      nodeRole                       = each.value.tags.role
     })
   ]
 }
@@ -97,7 +100,7 @@ data "talos_cluster_kubeconfig" "this" {
   client_configuration = talos_machine_secrets.this.client_configuration
   node                 = [for pool in module.node_groups : pool.vm_ips[0]][0]
   timeouts = {
-    read = "1h"
+    read = "8h"
   }
 }
 
@@ -173,7 +176,7 @@ module "loadbalancer" {
   targets = [{
     name   = "controlplanes"
     type   = "label_selector"
-    target = "k8s_control_plane"
+    target = "k8s"
   }]
 
   services = [
@@ -193,6 +196,35 @@ module "loadbalancer" {
   depends_on = [hcloud_network.k8s_network, hcloud_network_subnet.subnets]
 }
 
+# ############### FIREWALL ##############
+resource "hcloud_firewall" "block" {
+  name = "block-all"
+  apply_to {
+    label_selector = "k8s"
+  }
+  apply_to {
+    label_selector = "hcloud/node-group"
+  }
+}
+
+resource "hcloud_firewall" "talos" {
+  name = "talos"
+
+  apply_to {
+    label_selector = "k8s"
+  }
+
+  rule {
+    direction = "in"
+    protocol  = "tcp"
+    port      = "50000-50001"
+    source_ips = [
+      "0.0.0.0/0",
+      "::/0"
+    ]
+  }
+}
+
 # ################# DNS #################
 
 # Cloudflare
@@ -200,7 +232,7 @@ resource "cloudflare_record" "api_server" {
   for_each = local.cloudflare_dns
   zone_id  = var.dns_record.zone
   name     = var.controlplane_endpoint
-  value    = each.value
+  content  = each.value
   type     = upper(each.key)
   comment  = "Managed by terraform"
 }

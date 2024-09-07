@@ -1,7 +1,7 @@
 # See https://github.com/argoproj/argo-helm/blob/main/charts/argo-cd/values.yaml
 global:
   additionalLabels: {}
-  domain: argocd.henrikgerdes.me
+  domain: argocd.k8s.henrikgerdes.me
   logging:
     format: text # Either: `text` or `json`
     level: info # `debug`, `info`, `warn` or `error`
@@ -13,7 +13,7 @@ global:
 
 configs:
   cm:
-    url: "https://argocd.henrikgerdes.me"
+    url: "https://argocd.k8s.henrikgerdes.me"
     exec.enabled: true
     admin.enabled: true
     dex.config: |

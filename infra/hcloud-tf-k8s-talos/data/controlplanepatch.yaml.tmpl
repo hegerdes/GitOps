@@ -18,11 +18,38 @@ machine:
     extraArgs:
         cloud-provider: external
 
+  sysctls:
+    # user.max_user_namespaces: 15000 # Maybe not good but gvisor wants it. See https://kspp.github.io/Recommended_Settings#sysctls
+    net.ipv4.tcp_fastopen: 1
+    net.ipv4.icmp_echo_ignore_broadcasts: 1
+    vm.overcommit_memory: 1
+    kernel.pid_max: 4194304
+    kernel.randomize_va_space: 2
+    net.ipv4.tcp_syncookies: 1
+    net.ipv4.icmp_ignore_bogus_error_responses: 1
+    net.ipv4.tcp_rfc1337: 1
+    net.ipv4.ip_local_port_range: 10240 65535
+
   network:
     extraHostEntries:
     - ip: ${controlplane_internal_ip}
       aliases:
       - ${controlplane_endpoint_internal}
+
+%{ if nodeRole == "controlplane" }
+  features:
+    rbac: true
+    kubernetesTalosAPIAccess:
+        enabled: true
+        allowedRoles:
+          - os:reader
+        # - os:admin
+        # - os:operator
+        # - os:etcd:backup
+        allowedKubernetesNamespaces:
+          - kube-system
+          - cluster-autoscaler
+%{ endif }
 
   certSANs:
   %{ for SAN in machineCertSANs ~}
@@ -52,6 +79,7 @@ cluster:
 
   extraManifests:
     - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/standard-install.yaml
+    - https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml
 
   network:
     cni:

@@ -111,3 +111,44 @@ resource "helm_release" "argocd" {
   values     = [try(file(var.argo_values_path), "")]
   depends_on = [time_sleep.wait, module.node_groups, module.loadbalancer, helm_release.cni]
 }
+
+resource "kubernetes_namespace" "autoscaler" {
+  metadata {
+    name = "cluster-autoscaler"
+  }
+  depends_on = [time_sleep.wait, module.node_groups, module.loadbalancer, helm_release.cni]
+}
+
+resource "kubernetes_secret" "autoscaler-conf" {
+  type = "Opaque"
+  metadata {
+    name      = "hcloud-scale-conf"
+    namespace = kubernetes_namespace.autoscaler.metadata[0].name
+  }
+  data = {
+    ssh-key = length(local.ssh_keys) > 0 ? [for key, val in hcloud_ssh_key.default : val.name][0] : ""
+    cluster-config = base64encode(jsonencode(
+      {
+        imagesForArch = {
+          arm64 = try(compact([for k, v in local.node_pools : strcontains(v.image, "arm64") ? v.image : null])[0], "")
+          amd64 = try(compact([for k, v in local.node_pools : strcontains(v.image, "amd64") ? v.image : null])[0], "")
+        },
+        nodeConfigs = {
+          cas-arm-small = {
+            cloudInit = jsonencode(yamldecode(compact([for k, v in data.talos_machine_configuration.this : v.machine_type == "worker" ? v.machine_configuration : null])[0])),
+            labels = {
+              "node.kubernetes.io/role" = "autoscaler-node"
+            }
+          }
+          cas-amd-small = {
+            cloudInit = jsonencode(yamldecode(compact([for k, v in data.talos_machine_configuration.this : v.machine_type == "worker" ? v.machine_configuration : null])[0])),
+            labels = {
+              "node.kubernetes.io/role" = "autoscaler-node"
+            }
+          }
+        }
+      }
+    ))
+  }
+  depends_on = [time_sleep.wait, module.node_groups, module.loadbalancer]
+}

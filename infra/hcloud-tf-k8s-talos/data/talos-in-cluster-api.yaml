@@ -1,0 +1,78 @@
+---
+apiVersion: talos.dev/v1alpha1
+kind: ServiceAccount
+metadata:
+  name: talos-api-access-talos-secrets
+  namespace: kube-system
+spec:
+  roles:
+    - os:reader
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: talos-conf-manger
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: talos-machine-conf-manager
+  namespace: kube-system
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    # resourceNames: ["talos-machine-conf"]
+    verbs: ["create", "update", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: talos-machine-conf-manager-binding
+  namespace: kube-system
+subjects:
+  - kind: ServiceAccount
+    name: talos-conf-manger
+    namespace: kube-system
+roleRef:
+  kind: Role
+  name: talos-machine-conf-manager
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: talos-api-access
+  namespace: kube-system
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: talos-api-access
+  template:
+    metadata:
+      labels:
+        app: talos-api-access
+    spec:
+      serviceAccountName: talos-conf-manger
+      containers:
+        - name: talos-api-access
+          resources: {}
+          image: alpine:3
+          command:
+            - sh
+            - -c
+            - apk add kubectl && while true; do sleep 7d; done
+          volumeMounts:
+            - mountPath: /var/run/secrets/talos.dev
+              name: talos-secrets
+      tolerations:
+        - operator: Exists
+      volumes:
+        - name: talos-secrets
+          secret:
+            secretName: talos-api-access-talos-secrets
+# wget -O /usr/local/bin/talosctl https://github.com/siderolabs/talos/releases/download/v1.8.0-alpha.2/talosctl-linux-amd64
+# wget -O /usr/local/bin/talosctl https://github.com/siderolabs/talos/releases/download/v1.8.0-alpha.2/talosctl-linux-arm64
+
+# chmod +x /usr/local/bin/talosctl
