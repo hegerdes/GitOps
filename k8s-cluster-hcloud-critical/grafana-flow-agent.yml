@@ -102,7 +102,7 @@ spec:
     namespace: monitoring
   info:
     - name: Chart-Info
-      value: https://staging.artifacthub.io/packages/helm/grafana/k8s-monitoring
+      value: https://artifacthub.io/packages/helm/grafana/k8s-monitoring
     - name: App-Source
       value: https://github.com/grafana/k8s-monitoring-helm/tree/main/charts/k8s-monitoring
   syncPolicy:

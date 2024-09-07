@@ -14,6 +14,14 @@ spec:
       helm:
         releaseName: metrics-server
         valuesObject: {}
+    - chart: node-exporter
+      repoURL: registry-1.docker.io/bitnamicharts
+      targetRevision: 4.*
+      helm:
+        releaseName: node-exporter
+        valuesObject:
+          serviceMonitor:
+            enabled: true
     - chart: kubernetes-dashboard
       repoURL: https://kubernetes.github.io/dashboard/
       targetRevision: 7.*
@@ -31,6 +39,9 @@ spec:
               annotations:
                 nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.oauth-proxy.svc.cluster.local/oauth2/auth
                 nginx.ingress.kubernetes.io/auth-signin: https://oauth.k8s.henrikgerdes.me/oauth2/start?rd=https://$host$request_uri
+          kong:
+            manager:
+              enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system
