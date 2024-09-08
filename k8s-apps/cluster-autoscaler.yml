@@ -40,7 +40,7 @@ spec:
             clusterName: hcloud
     - repoURL: https://github.com/hegerdes/GitOps.git
       targetRevision: HEAD
-      path: k8s-cluster-hcloud-critical/cluster-autoscaler
+      path: k8s-apps/cluster-autoscaler
       directory:
         recurse: true
   destination:
