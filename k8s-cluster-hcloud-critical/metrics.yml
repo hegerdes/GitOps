@@ -14,14 +14,14 @@ spec:
       helm:
         releaseName: metrics-server
         valuesObject: {}
-    - chart: node-exporter
-      repoURL: registry-1.docker.io/bitnamicharts
-      targetRevision: 4.*
-      helm:
-        releaseName: node-exporter
-        valuesObject:
-          serviceMonitor:
-            enabled: true
+    # - chart: node-exporter
+    #   repoURL: registry-1.docker.io/bitnamicharts
+    #   targetRevision: 4.*
+    #   helm:
+    #     releaseName: node-exporter
+    #     valuesObject:
+    #       serviceMonitor:
+    #         enabled: true
     - chart: kubernetes-dashboard
       repoURL: https://kubernetes.github.io/dashboard/
       targetRevision: 7.*
