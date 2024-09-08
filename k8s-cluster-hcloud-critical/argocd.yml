@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - chart: argo-cd
+      repoURL: https://argoproj.github.io/argo-helm
+      targetRevision: 7.*
+      helm:
+        releaseName: argocd
+        valueFiles:
+          - $values/k8s-cluster-hcloud-critical/argocd/helm-values-argocd.yml
+    - repoURL: https://github.com/hegerdes/GitOps.git
+      targetRevision: HEAD
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  info:
+    - name: Chart-Info
+      value: https://artifacthub.io/packages/helm/argo/argo-cd
+    - name: App-Source
+      value: https://github.com/argoproj/argo-cd
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
