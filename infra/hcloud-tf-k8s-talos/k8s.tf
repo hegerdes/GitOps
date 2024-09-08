@@ -112,18 +112,11 @@ resource "helm_release" "argocd" {
   depends_on = [time_sleep.wait, module.node_groups, module.loadbalancer, helm_release.cni]
 }
 
-resource "kubernetes_namespace" "autoscaler" {
-  metadata {
-    name = "cluster-autoscaler"
-  }
-  depends_on = [time_sleep.wait, module.node_groups, module.loadbalancer, helm_release.cni]
-}
-
 resource "kubernetes_secret" "autoscaler-conf" {
   type = "Opaque"
   metadata {
     name      = "hcloud-scale-conf"
-    namespace = kubernetes_namespace.autoscaler.metadata[0].name
+    namespace = "cluster-autoscaler"
   }
   data = {
     ssh-key = length(local.ssh_keys) > 0 ? [for key, val in hcloud_ssh_key.default : val.name][0] : ""
