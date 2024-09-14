@@ -1,51 +1,39 @@
-kind: Pod
-apiVersion: v1
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: busybox-secrets-store-inline
+  labels:
+    app: busybox-secret-csi
 spec:
-  containers:
-    - name: busybox
-      resources: {}
-      image: busybox
-      command:
-        - sleep
-        - 7d
-      volumeMounts:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: busybox-secret-csi
+  template:
+    metadata:
+      labels:
+        app: busybox-secret-csi
+    spec:
+      containers:
+        - name: busybox
+          resources: {}
+          image: busybox
+          command:
+            - sleep
+            - 7d
+          volumeMounts:
+            - name: secrets-store-inline
+              mountPath: /mnt/secrets-store
+              readOnly: true
+      volumes:
         - name: secrets-store-inline
-          mountPath: /mnt/secrets-store
-          readOnly: true
-  volumes:
-    - name: secrets-store-inline
-      csi:
-        driver: secrets-store.csi.k8s.io
-        readOnly: true
-        volumeAttributes:
-          secretProviderClass: azure-hegerdes-example
-        nodePublishSecretRef: # Only required when using service principal mode
-          name: secrets-store-creds # Only required when using service principal mode
----
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
-metadata:
-  name: secrets-store-creds
-spec:
-  refreshInterval: 1h # rate SecretManager pulls GCPSM
-  secretStoreRef:
-    kind: ClusterSecretStore
-    name: azure-store # name of the SecretStore (or kind specified)
-  target:
-    name: secrets-store-creds # name of the k8s Secret to be created
-    creationPolicy: Owner
-  # Data defines the connection between the Kubernetes Secret keys and the Provider data
-  data:
-    - secretKey: clientid
-      remoteRef:
-        key: k8s-eso-aad-client-id
-        decodingStrategy: None # can be None, Base64, Base64URL or Auto
-    - secretKey: clientsecret
-      remoteRef:
-        key: k8s-eso-aad-client-secret
-        decodingStrategy: None # can be None, Base64, Base64URL or Auto
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: azure-hegerdes-example
+            nodePublishSecretRef: # Only required when using service principal mode
+              name: secrets-store-creds # Only required when using service principal mode
 ---
 apiVersion: secrets-store.csi.x-k8s.io/v1
 kind: SecretProviderClass
