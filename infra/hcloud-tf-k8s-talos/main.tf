@@ -1,7 +1,7 @@
 # ################# LOCALS #################
 locals {
   cp_internel_lb_ip    = "10.0.0.10"
-  cp_internal_endpoint = "${local.cluster_name}-cp-internal"
+  cp_internal_endpoint = var.controlplane_endpoint
   cp_public_endpoint   = var.controlplane_endpoint
   node_pool_ips        = flatten([for index, pool in module.node_groups : pool.vm_ips])
   cluster_name         = var.cluster_name
@@ -12,6 +12,11 @@ locals {
   dns_records    = { a = module.loadbalancer.lb_ipv4, aaaa = module.loadbalancer.lb_ipv6 }
   cloudflare_dns = var.dns_record.create && var.dns_record.provider == "cloudflare" ? local.dns_records : {}
   aws_route53    = var.dns_record.create && var.dns_record.provider == "aws" ? local.dns_records : {}
+
+  default_tags = {
+    task      = "k8s",
+    managedby = "terraform"
+  }
 
   # CertSANs
   certSANsAll = flatten([local.certSANs, [module.loadbalancer.lb_ipv6, module.loadbalancer.lb_ipv4]])
@@ -40,10 +45,32 @@ locals {
       }
     )
   }
-  default_tags = {
-    task      = "k8s",
-    managedby = "terraform"
-  }
+
+  # Autoscaler
+  # autoscale-ssh-key   = length(local.ssh_keys) > 0 ? [for key, val in hcloud_ssh_key.default : val.name][0] : ""
+  autoscale_node_conf = compact([for k, v in data.talos_machine_configuration.this : v.machine_type == "worker" ? v.machine_configuration : null])[0]
+  cluster-config = base64encode(jsonencode(
+    {
+      imagesForArch = {
+        arm64 = try(compact([for k, v in local.node_pools : strcontains(v.image, "arm64") ? v.image : null])[0], "")
+        amd64 = try(compact([for k, v in local.node_pools : strcontains(v.image, "amd64") ? v.image : null])[0], "")
+      },
+      nodeConfigs = {
+        cas-arm-small = {
+          cloudInit = jsonencode(yamldecode(local.autoscale_node_conf)),
+          labels = {
+            "node.kubernetes.io/role" = "autoscaler-node"
+          }
+        }
+        cas-amd-small = {
+          cloudInit = jsonencode(yamldecode(local.autoscale_node_conf)),
+          labels = {
+            "node.kubernetes.io/role" = "autoscaler-node"
+          }
+        }
+      }
+    }
+  ))
 }
 
 # ################# Talos #################
@@ -75,7 +102,7 @@ data "talos_machine_configuration" "this" {
   config_patches = [for patch in each.value.machine_patches :
     templatefile("${path.module}/${patch}", {
       machineCertSANs                = local.certSANs,
-      apiServerCertSANs              = local.certSANsAll,
+      apiServerCertSANs              = local.certSANs,
       subnets                        = local.subnets,
       controlplane_endpoint_internal = local.cp_internal_endpoint,
       controlplane_internal_ip       = local.cp_internel_lb_ip
@@ -90,7 +117,7 @@ data "talos_machine_configuration" "this" {
 data "talos_client_configuration" "this" {
   cluster_name         = local.cluster_name
   client_configuration = talos_machine_secrets.this.client_configuration
-  endpoints            = compact([for x in local.node_pool_ips : can(regex("::", x)) ? "" : x])
+  endpoints            = [var.controlplane_endpoint]
   nodes                = compact([for x in local.node_pool_ips : can(regex("::", x)) ? "" : x])
 }
 
@@ -141,6 +168,18 @@ resource "hcloud_ssh_key" "default" {
   for_each   = { for x in distinct(local.ssh_keys) : sha1(x) => x }
   name       = sha1(each.value)
   public_key = each.value
+}
+
+# RSA key of size 4096 bits
+resource "tls_private_key" "dummy" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+# Create a new SSH key
+resource "hcloud_ssh_key" "dummy" {
+  name       = "dummy-key"
+  public_key = tls_private_key.dummy.public_key_openssh
 }
 
 # ################# Network #################
@@ -209,11 +248,9 @@ resource "hcloud_firewall" "block" {
 
 resource "hcloud_firewall" "talos" {
   name = "talos"
-
   apply_to {
     label_selector = "k8s"
   }
-
   rule {
     direction = "in"
     protocol  = "tcp"
@@ -223,6 +260,15 @@ resource "hcloud_firewall" "talos" {
       "::/0"
     ]
   }
+  # rule {
+  #   direction = "in"
+  #   protocol  = "udp"
+  #   port      = "51820"
+  #   source_ips = [
+  #     "0.0.0.0/0",
+  #     "::/0"
+  #   ]
+  # }
 }
 
 # ################# DNS #################
@@ -244,4 +290,17 @@ resource "aws_route53_record" "api_server" {
   name     = var.controlplane_endpoint
   type     = upper(each.key)
   records  = [each.value]
+}
+
+# ################# Export Autoscale Conf #################
+
+data "azurerm_key_vault" "hegerdes" {
+  name                = "hegerdes"
+  resource_group_name = "default"
+}
+
+resource "azurerm_key_vault_secret" "talos-hetzner-custer-autoscale-conf" {
+  name         = "talos-hetzner-custer-autoscale-conf"
+  value        = local.cluster-config
+  key_vault_id = data.azurerm_key_vault.hegerdes.id
 }

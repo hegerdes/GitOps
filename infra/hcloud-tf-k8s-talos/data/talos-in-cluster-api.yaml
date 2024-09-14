@@ -7,6 +7,8 @@ metadata:
 spec:
   roles:
     - os:reader
+    - os:admin
+    - os:etcd:backup
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -54,6 +56,7 @@ spec:
       labels:
         app: talos-api-access
     spec:
+      # runtimeClassName: crun
       serviceAccountName: talos-conf-manger
       containers:
         - name: talos-api-access
@@ -62,16 +65,47 @@ spec:
           command:
             - sh
             - -c
-            - apk add kubectl && while true; do sleep 7d; done
+            - apk add kubectl curl bash jq && bash /var/scripts/install-talosctl.sh && while true; do sleep 7d; done
           volumeMounts:
             - mountPath: /var/run/secrets/talos.dev
               name: talos-secrets
+            - mountPath: /var/scripts
+              name: talos-scripts
       tolerations:
         - operator: Exists
       volumes:
         - name: talos-secrets
           secret:
             secretName: talos-api-access-talos-secrets
+        - name: talos-scripts
+          configMap:
+            name: talos-scripts
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: talos-scripts
+  namespace: kube-system # Change this to the appropriate namespace if needed
+data:
+  install-talosctl.sh: |
+    # Check if talosctl is installed
+    if ! command -v talosctl > /dev/null; then
+      echo "Installing talosctl"
+      echo "You can set the desired version via TALOSCTL_VERSION. Default is latest"
+      if [ "$(uname -m)" = "x86_64" ]; then
+        ARCH=amd64
+      elif [ "$(uname -m)" = "aarch64" ]; then
+        ARCH=arm64
+      else
+        echo "Unknown system arch. Default to amd64"
+      fi
+      TALOSCTL_DEFAULT_VERSION=$(curl -sL https://api.github.com/repos/siderolabs/talos/releases/latest | jq -r .tag_name)
+      TALOSCTL_VERSION=${TALOSCTL_VERSION-$TALOSCTL_DEFAULT_VERSION}
+      curl -sL https://github.com/siderolabs/talos/releases/download/${TALOSCTL_VERSION}/talosctl-linux-${ARCH-amd64} -o /usr/local/bin/talosctl
+      chmod +x /usr/local/bin/talosctl
+    fi
+    talosctl version --client
+
 # wget -O /usr/local/bin/talosctl https://github.com/siderolabs/talos/releases/download/v1.8.0-alpha.2/talosctl-linux-amd64
 # wget -O /usr/local/bin/talosctl https://github.com/siderolabs/talos/releases/download/v1.8.0-alpha.2/talosctl-linux-arm64
 

@@ -13,10 +13,6 @@ terraform {
       source  = "hashicorp/helm"
       version = "~>2.15"
     }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "~>2.32"
-    }
     azurerm = {
       source  = "hashicorp/azurerm"
       version = "~>4.1"
@@ -28,6 +24,10 @@ terraform {
     cloudflare = {
       source  = "cloudflare/cloudflare"
       version = "~>4.41"
+    }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "~>4.0"
     }
     random = {
       source  = "hashicorp/random"
@@ -58,19 +58,11 @@ provider "cloudflare" {
   api_token = var.dns_record.token
 }
 
-provider "kubernetes" {
-  # host = "https://${local.controlplane_public_endpoint}:6443"
-  host = "https://${module.loadbalancer.lb_ipv4}:6443"
-
-  client_certificate     = base64decode(data.talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_certificate)
-  client_key             = base64decode(data.talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_key)
-  cluster_ca_certificate = base64decode(data.talos_cluster_kubeconfig.this.kubernetes_client_configuration.ca_certificate)
-}
 
 provider "helm" {
   kubernetes {
     # host = "https://${local.controlplane_public_endpoint}:6443"
-    host = "https://${module.loadbalancer.lb_ipv4}:6443"
+    host = "https://${local.cp_public_endpoint}:6443"
 
     client_certificate     = base64decode(data.talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_certificate)
     client_key             = base64decode(data.talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_key)

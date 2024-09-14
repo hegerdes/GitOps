@@ -31,6 +31,8 @@ machine:
     net.ipv4.ip_local_port_range: 10240 65535
 
   network:
+    kubespan:
+      enabled: true
     extraHostEntries:
     - ip: ${controlplane_internal_ip}
       aliases:
@@ -77,20 +79,22 @@ cluster:
       ${k}: "${v}"
     %{ endfor ~}
 
+
+  inlineManifests: []
   extraManifests:
     - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/standard-install.yaml
     - https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml
 
-  inlineManifests:
-    - name: namespace-cluster-autoscaler
-      contents: |
-        apiVersion: v1
-        kind: Namespace
-        metadata:
-          name: cluster-autoscaler
 
   network:
     cni:
         name: none
   proxy:
     disabled: true
+  discovery:
+    enabled: true
+    # Configure registries used for cluster member discovery.
+    registries:
+      kubernetes: # Kubernetes registry is problematic with KubeSpan, if the control plane endpoint is routed via KubeSpan.
+        disabled: true
+      service: {}

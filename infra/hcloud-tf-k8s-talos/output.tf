@@ -46,3 +46,6 @@ output "pool_vm_ips" {
 output "pool_vm_names" {
   value = { for index, pool in module.node_groups : pool.name => pool.vm_names }
 }
+output "certSANs" {
+  value = local.certSANsAll
+}
