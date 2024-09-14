@@ -46,13 +46,14 @@ spec:
                 secretName: oauth2-proxy-cert-ing
     - chart: redis
       repoURL: registry-1.docker.io/bitnamicharts
-      targetRevision: 19.*
+      targetRevision: 20.*
       helm:
         releaseName: oauth2-redis
         valuesObject:
           architecture: standalone
           persistence:
-            enabled: false
+            medium: medium
+            enabled: true
     - repoURL: https://github.com/hegerdes/GitOps.git
       targetRevision: HEAD
       path: k8s-cluster-hcloud-critical/oauth2-proxy
