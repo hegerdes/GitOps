@@ -38,7 +38,7 @@ locals {
       pool, {
         user_data            = data.talos_machine_configuration.this[pool.name].machine_configuration
         tags                 = merge(pool.tags, local.default_tags, { pool = pool.name })
-        ssh_keys             = [for key in hcloud_ssh_key.default : key.name]
+        ssh_keys             = concat([for key in hcloud_ssh_key.default : key.name], [hcloud_ssh_key.dummy.id])
         network_name         = hcloud_network.k8s_network.name
         location             = pool.location != "null" ? pool.location : var.location
         private_ip_addresses = try([for i in range(pool.size) : cidrhost("10.0.${index + 1}.0/24", i + 8)], [])
@@ -47,7 +47,6 @@ locals {
   }
 
   # Autoscaler
-  # autoscale-ssh-key   = length(local.ssh_keys) > 0 ? [for key, val in hcloud_ssh_key.default : val.name][0] : ""
   autoscale_node_conf = compact([for k, v in data.talos_machine_configuration.this : v.machine_type == "worker" ? v.machine_configuration : null])[0]
   cluster-config = base64encode(jsonencode(
     {
@@ -75,18 +74,6 @@ locals {
 
 # ################# Talos #################
 resource "talos_machine_secrets" "this" {}
-
-# Ensures that current machine configuration is afer servers are created
-resource "talos_machine_configuration_apply" "this" {
-  for_each                    = toset(local.private_ips)
-  endpoint                    = local.cp_public_endpoint
-  client_configuration        = talos_machine_secrets.this.client_configuration
-  machine_configuration_input = data.talos_machine_configuration.this[local.vm_pvt_ip_map[each.key].labels.pool].machine_configuration
-
-  node = local.talos_apply_use_pvt_ip ? each.key : local.vm_pvt_ip_map[each.key].ipv4_address
-  # node       = local.vm_pvt_ip_map[each.key].ipv4_address
-  depends_on = [module.node_groups]
-}
 
 # create the worker/controlplane config and apply patches
 data "talos_machine_configuration" "this" {
@@ -123,12 +110,16 @@ data "talos_client_configuration" "this" {
 
 # create kubeconfig
 # resource "talos_cluster_kubeconfig" "this" {
-data "talos_cluster_kubeconfig" "this" {
+resource "talos_cluster_kubeconfig" "this" {
   client_configuration = talos_machine_secrets.this.client_configuration
   node                 = [for pool in module.node_groups : pool.vm_ips[0]][0]
-  timeouts = {
-    read = "8h"
-  }
+  # timeouts = {
+  #   create  = "60m"
+  #   update = "60m"
+  # }
+  depends_on = [
+    talos_machine_bootstrap.this
+  ]
 }
 
 # bootstrap the cluster
@@ -137,6 +128,18 @@ resource "talos_machine_bootstrap" "this" {
 
   endpoint = [for pool in module.node_groups : pool.vm_ips[0]][0]
   node     = [for pool in module.node_groups : pool.vm_ips[0]][0]
+}
+
+# Ensures that current machine configuration is afer servers are created
+resource "talos_machine_configuration_apply" "this" {
+  for_each                    = toset(local.private_ips)
+  endpoint                    = local.cp_public_endpoint
+  client_configuration        = talos_machine_secrets.this.client_configuration
+  machine_configuration_input = data.talos_machine_configuration.this[local.vm_pvt_ip_map[each.key].labels.pool].machine_configuration
+
+  node = local.talos_apply_use_pvt_ip ? each.key : local.vm_pvt_ip_map[each.key].ipv4_address
+  # node       = local.vm_pvt_ip_map[each.key].ipv4_address
+  depends_on = [module.node_groups]
 }
 
 # ################# Server #################
@@ -154,6 +157,7 @@ module "node_groups" {
   instance_type  = each.value.instance
   ssh_keys       = each.value.ssh_keys
   snapshot_image = true
+  # public_ipv4    = false
 
   tags                 = each.value.tags
   user_data            = each.value.user_data

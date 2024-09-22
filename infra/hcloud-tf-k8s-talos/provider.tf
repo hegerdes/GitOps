@@ -7,7 +7,7 @@ terraform {
     }
     talos = {
       source  = "siderolabs/talos"
-      version = "~>0.5"
+      version = "0.6.0-beta.0"
     }
     helm = {
       source  = "hashicorp/helm"
@@ -15,7 +15,7 @@ terraform {
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>4.1"
+      version = "~>4.3"
     }
     aws = {
       source  = "hashicorp/aws"
@@ -58,14 +58,17 @@ provider "cloudflare" {
   api_token = var.dns_record.token
 }
 
+provider "aws" {
+  region = "eu-central-1"
+}
 
 provider "helm" {
   kubernetes {
-    # host = "https://${local.controlplane_public_endpoint}:6443"
-    host = "https://${local.cp_public_endpoint}:6443"
+    # host = "https://${local.cp_public_endpoint}:6443"
 
-    client_certificate     = base64decode(data.talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_certificate)
-    client_key             = base64decode(data.talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_key)
-    cluster_ca_certificate = base64decode(data.talos_cluster_kubeconfig.this.kubernetes_client_configuration.ca_certificate)
+    # client_certificate     = base64decode(talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_certificate)
+    # client_key             = base64decode(talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_key)
+    # cluster_ca_certificate = base64decode(talos_cluster_kubeconfig.this.kubernetes_client_configuration.ca_certificate)
+    config_path = local_sensitive_file.kubeconf.filename
   }
 }

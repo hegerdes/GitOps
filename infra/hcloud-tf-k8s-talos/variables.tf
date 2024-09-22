@@ -5,7 +5,7 @@ variable "cluster_name" {
 }
 variable "cluster_version" {
   type        = string
-  default     = "v1.31.0"
+  default     = "v1.31.1"
   description = "Version of the cluster."
 }
 variable "talos_version" {
@@ -70,5 +70,10 @@ variable "dns_record" {
 variable "argo_values_path" {
   type        = string
   default     = "data/helm-values-argocd-raw.yml"
+  description = "Path to the argo values file."
+}
+variable "cilium_values_path" {
+  type        = string
+  default     = "data/helm-values-cilium-raw.yml"
   description = "Path to the argo values file."
 }

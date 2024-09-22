@@ -10,7 +10,6 @@ resource "local_sensitive_file" "talosclientconf" {
 }
 resource "local_sensitive_file" "kubeconf" {
   filename = "out/kubeconf.yaml"
-  # content  = data.talos_cluster_kubeconfig.this.kubeconfig_raw
   content = yamlencode({
     apiVersion = "v1"
     kind       = "Config"
@@ -18,14 +17,14 @@ resource "local_sensitive_file" "kubeconf" {
       name = local.cluster_name
       cluster = {
         server                     = "https://${local.cp_public_endpoint}:6443"
-        certificate-authority-data = data.talos_cluster_kubeconfig.this.kubernetes_client_configuration.ca_certificate
+        certificate-authority-data = talos_cluster_kubeconfig.this.kubernetes_client_configuration.ca_certificate
       }
     }]
     users = [{
       name = "admin@${local.cluster_name}"
       user = {
-        client-certificate-data = data.talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_certificate
-        client-key-data         = data.talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_key
+        client-certificate-data = talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_certificate
+        client-key-data         = talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_key
       }
     }]
     contexts = [{
