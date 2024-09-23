@@ -5,48 +5,53 @@ packer {
   required_plugins {
     hcloud = {
       source  = "github.com/hetznercloud/hcloud"
-      version = ">= 1.4.0"
+      version = ">= 1.6.0"
     }
   }
 }
-
+######################## INPUT ########################
 variable "talos_version" {
-  type    = string
-  default = "v1.7.6"
+  type = string
+  default = "v1.8.0"
 }
 variable "talos_extentions" {
-  type = list(string)
+  type    = list(string)
   default = []
-  // default = ["siderolabs/gvisor", "siderolabs/wasmedge"]
+  // default = ["siderolabs/crun", "siderolabs/gvisor", "siderolabs/wasmedge"]
+}
+variable "talos_kernel_args" {
+  type    = list(string)
+  default = ["security=apparmor"]
 }
 
+######################## LOCALS ########################
 locals {
-  talos_download_github  = "https://github.com/siderolabs/talos/releases/download"
-  talos_download_factory = "https://factory.talos.dev/image"
-
+  talos_download_factory   = "https://factory.talos.dev/image"
   talos_extentions_postfix = length(var.talos_extentions) > 0 ? "-${join("-", local.talos_extentions)}" : ""
   talos_extentions         = [for s in var.talos_extentions : replace(s, "siderolabs/", "")]
 
   talos_custominazion_id  = jsondecode(data.http.customizations_id.body)["id"]
-  talos_download_base_url = length(var.talos_extentions) > 0 ? join("/", [local.talos_download_factory, local.talos_custominazion_id]) : local.talos_download_github
+  talos_download_base_url = join("/", [local.talos_download_factory, local.talos_custominazion_id])
 
-  setups = { for arch in ["amd64", "arm64"] : arch => {
-    image = "${local.talos_download_base_url}/${var.talos_version}/hcloud-${arch}.raw.xz"
-    name  = "talos-${var.talos_version}-${arch}${local.talos_extentions_postfix}"
-    arch  = "${arch}"
+  setups = { for arch in ["amd64", "arm64"] :
+    arch => {
+      image = "${local.talos_download_base_url}/${var.talos_version}/hcloud-${arch}.raw.xz"
+      name  = "talos-${var.talos_version}-${arch}${local.talos_extentions_postfix}"
+      arch  = "${arch}"
 
-    tags = {
-      type       = "infra",
-      os         = "talos",
-      arch       = "${arch}"
-      name       = "talos-${var.talos_version}-${arch}${local.talos_extentions_postfix}"
-      version    = "${var.talos_version}",
-      origin     = length(var.talos_extentions) > 0 ? "talos-factory" : "github"
-      image_id_part_1     = length(var.talos_extentions) > 0 ? substr(local.talos_custominazion_id, 0, 32) : "default"
-      image_id_part_2     = length(var.talos_extentions) > 0 ? substr(local.talos_custominazion_id, 32, 32) : "default"
-      extentions = length(var.talos_extentions) > 0 ? "${join("-", local.talos_extentions)}" : "none"
+      tags = {
+        type            = "infra",
+        os              = "talos",
+        arch            = "${arch}"
+        name            = "talos-${var.talos_version}-${arch}${local.talos_extentions_postfix}"
+        version         = "${var.talos_version}",
+        origin          = length(var.talos_extentions) > 0 ? "talos-factory" : "github"
+        image_id_part_1 = length(var.talos_extentions) > 0 ? substr(local.talos_custominazion_id, 0, 32) : "default"
+        image_id_part_2 = length(var.talos_extentions) > 0 ? substr(local.talos_custominazion_id, 32, 32) : "default"
+        extentions      = length(var.talos_extentions) > 0 ? "${join("-", local.talos_extentions)}" : "none"
+      }
     }
-  } }
+  }
 }
 
 source "hcloud" "talos_amd64" {
@@ -95,7 +100,7 @@ data "http" "customizations_id" {
 }
 // Packer does not allow locals in data blocks so we use null data. Dirty but hashicorp... way of things
 data "null" "talos_download_url" {
-  input =    "https://gecopek4tnjqowdbygnxe7ngve0kchwk.lambda-url.eu-central-1.on.aws/?payload=${data.null.talos_custominazion_id.output}&encoding=base64&target=https://factory.talos.dev/schematics"
+  input = "https://gecopek4tnjqowdbygnxe7ngve0kchwk.lambda-url.eu-central-1.on.aws/?payload=${data.null.talos_custominazion_id.output}&encoding=base64&target=https://factory.talos.dev/schematics"
 }
 // Encode the extention list ty yaml and base64 encde
 data "null" "talos_custominazion_id" {
@@ -104,6 +109,7 @@ data "null" "talos_custominazion_id" {
       systemExtensions = {
         officialExtensions = var.talos_extentions
       }
+      extraKernelArgs = var.talos_kernel_args
     }
-  })),"=", "")
+  })), "=", "")
 }
