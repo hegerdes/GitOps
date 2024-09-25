@@ -6,13 +6,17 @@ hubble:
     enabled: true
 ingressController:
   enabled: true
-  loadbalancerMode: shared
+  loadbalancerMode: dedicated
+  # enableProxyProtocol: true
   service:
+    insecureNodePort: 31080
+    secureNodePort: 31443
     annotations:
       load-balancer.hetzner.cloud/location: fsn1
       load-balancer.hetzner.cloud/name: k8s-worker-ingress-cilium
       load-balancer.hetzner.cloud/use-private-ip: "true"
       load-balancer.hetzner.cloud/network: "k8s-network"
+      # load-balancer.hetzner.cloud/uses-proxyprotocol: "true"
 
 gatewayAPI:
   enabled: true
