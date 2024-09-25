@@ -3,7 +3,7 @@ locals {
   cp_internel_lb_ip    = "10.0.0.10"
   cp_internal_endpoint = var.controlplane_endpoint
   cp_public_endpoint   = var.controlplane_endpoint
-  node_pool_ips        = flatten([for index, pool in module.node_groups : pool.vm_ips])
+  node_pool_ips        = flatten([for index, pool in module.node_pools : pool.vm_ips])
   cluster_name         = var.cluster_name
   subnets              = [for index in range(length(var.node_pools) + 1) : "10.0.${index}.0/24"]
   ssh_keys             = flatten([for pool in var.node_pools : [for key in pool.ssh_key_paths : file(key)]])
@@ -28,7 +28,7 @@ locals {
 
   # IP map configs
   talos_apply_use_pvt_ip = true
-  raw_server_list        = flatten([for pool in module.node_groups : [for vm in pool.vms_raw : vm]])
+  raw_server_list        = flatten([for pool in module.node_pools : [for vm in pool.vms_raw : vm]])
   vm_pvt_ip_map          = { for vm in local.raw_server_list : (vm.network[*].ip)[0] => vm }
   private_ips            = flatten([for pool in local.node_pools : [for ip in pool.private_ip_addresses : ip]])
 
@@ -112,9 +112,9 @@ data "talos_client_configuration" "this" {
 # resource "talos_cluster_kubeconfig" "this" {
 resource "talos_cluster_kubeconfig" "this" {
   client_configuration = talos_machine_secrets.this.client_configuration
-  node                 = [for pool in module.node_groups : pool.vm_ips[0]][0]
+  node                 = [for pool in module.node_pools : pool.vm_ips[0]][0]
   # timeouts = {
-  #   create  = "60m"
+  #   create = "60m"
   #   update = "60m"
   # }
   depends_on = [
@@ -126,8 +126,8 @@ resource "talos_cluster_kubeconfig" "this" {
 resource "talos_machine_bootstrap" "this" {
   client_configuration = talos_machine_secrets.this.client_configuration
 
-  endpoint = [for pool in module.node_groups : pool.vm_ips[0]][0]
-  node     = [for pool in module.node_groups : pool.vm_ips[0]][0]
+  endpoint = [for pool in module.node_pools : pool.vm_ips[0]][0]
+  node     = [for pool in module.node_pools : pool.vm_ips[0]][0]
 }
 
 # Ensures that current machine configuration is afer servers are created
@@ -139,16 +139,15 @@ resource "talos_machine_configuration_apply" "this" {
 
   node = local.talos_apply_use_pvt_ip ? each.key : local.vm_pvt_ip_map[each.key].ipv4_address
   # node       = local.vm_pvt_ip_map[each.key].ipv4_address
-  depends_on = [module.node_groups]
+  depends_on = [module.node_pools]
 }
 
 # ################# Server #################
-module "node_groups" {
+module "node_pools" {
   source  = "hegerdes/hetzner-node-pool/hcloud"
   version = "~>1"
 
   for_each = local.node_pools
-  # for_each = {}
 
   name           = each.value.name
   size           = each.value.size

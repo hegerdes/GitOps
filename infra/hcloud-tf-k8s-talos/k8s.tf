@@ -6,9 +6,10 @@ resource "time_sleep" "wait" {
 
 resource "helm_release" "cni" {
   name       = "cilium"
-  depends_on = [time_sleep.wait, module.node_groups, module.loadbalancer]
+  depends_on = [time_sleep.wait, module.node_pools, module.loadbalancer]
 
   repository = "https://helm.cilium.io/"
+  wait       = false
   chart      = "cilium"
   namespace  = "kube-system"
   values     = [try(file(var.cilium_values_path), "")]
@@ -35,5 +36,5 @@ resource "helm_release" "argocd" {
   create_namespace = true
 
   values     = [try(file(var.argo_values_path), "")]
-  depends_on = [time_sleep.wait, module.node_groups, module.loadbalancer, helm_release.cni]
+  depends_on = [time_sleep.wait, module.node_pools, module.loadbalancer, helm_release.cni]
 }
