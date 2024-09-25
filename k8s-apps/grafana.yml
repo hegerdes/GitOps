@@ -10,19 +10,166 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/hegerdes/GitOps.git
-    targetRevision: HEAD
-    path: infra/hcloud-test/helm-grafana
+    chart: grafana
+    repoURL: https://grafana.github.io/helm-charts
+    targetRevision: 8.*
     helm:
       releaseName: grafana
+      valuesObject:
+        # global:
+        #   imageRegistry: my-registry.example.com
+        #   imagePullSecrets:
+        #     - name: regcred
+        # serviceAccount:
+        #   name: grafana
+        #   automountServiceAccountToken: true
+        # envValueFrom:
+        #   PROMETHEUS_TOKEN:
+        #     secretKeyRef:
+        #       name: grafana-prometheus
+        #       key: token
+        ingress:
+          enabled: true
+          ingressClassName: nginx
+          annotations:
+            cert-manager.io/cluster-issuer: "letsencrypt-prod-nginx"
+          hosts: [grafana.k8s.henrikgerdes.me]
+          tls:
+            - secretName: grafana-ingress
+              hosts:
+                - grafana.k8s.henrikgerdes.me
+        envFromSecret: grafana-secret-sso
+        grafana.ini:
+          auth:
+            disable_login_form: true
+          auth.github:
+            enabled: true
+            allow_sign_up: false
+            auto_login: false
+            scopes: user:email,read:org
+            auth_url: https://github.com/login/oauth/authorize
+            token_url: https://github.com/login/oauth/access_token
+            api_url: https://api.github.com/user
+            allowed_organizations: DemeterPlanet
+            # team_ids:
+            # client_id: # done via env mounted via secret
+            # client_secret: # done via env mounted via secret
+          # auth.gitlab:
+          #   enabled: true
+          #   allow_sign_up: true
+          #   allow_assign_grafana_admin: true
+          #   scopes: openid email profile
+          #   auth_url: https://gitlab.com/oauth/authorize
+          #   token_url: https://gitlab.com/oauth/token
+          #   api_url: https://gitlab.com/api/v4
+          #   role_attribute_path: contains(groups[*], 'demo/devops') && 'Admin' || contains(groups[*], 'demo/dev') && 'Viewer'
+          paths:
+            data: /var/lib/grafana/
+            logs: /var/log/grafana
+            plugins: /var/lib/grafana/plugins
+            provisioning: /etc/grafana/provisioning
+          analytics:
+            check_for_updates: true
+          log:
+            mode: console
+          grafana_net:
+            url: https://grafana.net
+          server:
+            domain: grafana.k8s.henrikgerdes.me
+            root_url: https://grafana.k8s.henrikgerdes.me
+        dashboardProviders:
+          dashboardproviders.yaml:
+            apiVersion: 1
+            providers:
+              - name: "default"
+                orgId: 1
+                folder: ""
+                type: file
+                disableDeletion: false
+                editable: true
+                options:
+                  path: /var/lib/grafana/dashboards/default
+        dashboards:
+          default:
+            node-exporter:
+              gnetId: 1860
+              revision: 37
+              datasource: Prometheus
+              # https://grafana.com/grafana/dashboards/1860-node-exporter-full/
+            k8s-1:
+              gnetId: 14623
+              revision: 1
+              datasource: Prometheus
+              # https://grafana.com/grafana/dashboards/14623-kubernetes-monitoring-overview/
+            etcd:
+              gnetId: 15308
+              revision: 1
+              datasource: Prometheus
+              # https://grafana.com/grafana/dashboards/15308-etcd-cluster-overview/
+            argocd:
+              gnetId: 14584
+              revision: 1
+              datasource: Prometheus
+              # https://grafana.com/grafana/dashboards/14584-argocd/
+            prometheus-stats:
+              gnetId: 2
+              revision: 2
+              datasource: Prometheus
+            cnpg:
+              url: https://raw.githubusercontent.com/cloudnative-pg/grafana-dashboards/refs/heads/main/charts/cluster/grafana-dashboard.json
+              datasource: Prometheus
+            # kube-overview:
+            #   gnetId: 18283
+            #   revision: 1
+            #   datasource: Prometheus
+        # datasources:
+        #   datasources.yaml:
+        #     apiVersion: 1
+        #     datasources:
+        #       - name: Prometheus
+        #         type: prometheus
+        #         url: https://prometheus-k8s.monitoring.svc.cluster.local:9091
+        #         access: proxy
+        #         isDefault: true
+        #         editable: true
+        #         jsonData:
+        #           tlsAuthWithCACert: true
+        #           httpHeaderName1: "Authorization"
+        #         secureJsonData:
+        #           # tlsCACert: |
+        #           httpHeaderValue1: Bearer $OKD_PROMETHEUS_TOKEN
+        extraObjects:
+          - apiVersion: external-secrets.io/v1beta1
+            kind: ExternalSecret
+            metadata:
+              name: grafana-secret-sso
+            spec:
+              refreshInterval: 1h
+              secretStoreRef:
+                kind: ClusterSecretStore
+                name: azure-store
+              target:
+                name: grafana-secret-sso
+                creationPolicy: Owner
+              data:
+                - secretKey: GF_AUTH_GITHUB_CLIENT_ID
+                  remoteRef:
+                    key: github-oauth-argocd-client-id
+                    decodingStrategy: None # can be None, Base64, Base64URL or Auto
+                - secretKey: GF_AUTH_GITHUB_CLIENT_SECRET
+                  remoteRef:
+                    key: github-oauth-argocd-secret
+                    decodingStrategy: None # can be None, Base64, Base64URL or Auto
   destination:
     server: https://kubernetes.default.svc
     namespace: grafana
   info:
     - name: Chart-Info
-      value: https://example.com
+      value: https://artifacthub.io/packages/helm/grafana/grafana
+    - name: App-Docs
+      value: https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/
     - name: App-Source
-      value: https://example.com
+      value: https://github.com/grafana/grafana
   syncPolicy:
     automated:
       prune: true
