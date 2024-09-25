@@ -21,9 +21,11 @@ repos:
       - id: double-quote-string-fixer
 
   - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.89.1
+    rev: v1.96.1
     hooks:
       - id: terraform_fmt
       - id: terraform_validate
+        args:
+          - --hook-config=--tf-path=tofu
       - id: terraform_tflint
       # - id: checkov
