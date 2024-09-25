@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: talos-cloud-controller-manager
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: talos-cloud-controller-manager
+    repoURL: ghcr.io/siderolabs/charts
+    targetRevision: 0.*
+    helm:
+      releaseName: talos-ccm
+      valuesObject:
+        enabledControllers: [node-csr-approval] # [cloud-node node-csr-approval]
+        # Deploy CCM only on control-plane nodes
+        nodeSelector:
+          node-role.kubernetes.io/control-plane: ""
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  info:
+    - name: Chart-Info
+      value: https://github.com/siderolabs/talos-cloud-controller-manager/tree/main/charts/talos-cloud-controller-manager
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
