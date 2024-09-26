@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cloudnative-pg
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: cloudnative-pg
+    repoURL: https://cloudnative-pg.github.io/charts
+    targetRevision: 0.22.*
+    helm:
+      releaseName: cnpg
+      valuesObject:
+        # imagePullSecrets:
+        #   - name: regcred
+        # config:
+        #   data:
+        #     # Options https://cloudnative-pg.io/documentation/current/operator_conf/#available-options
+        #     PULL_SECRET_NAME: regcred
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: cnpg-system
+  info:
+    - name: "Source Info"
+      value: "https://artifacthub.io/packages/helm/cloudnative-pg/cloudnative-pg"
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    retry:
+      limit: 3
+      backoff:
+        duration: 30s
+        factor: 2
+        maxDuration: 5m
