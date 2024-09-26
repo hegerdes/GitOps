@@ -39,6 +39,7 @@ spec:
             # use-proxy-protocol: true
             use-http2: true
             use-gzip: true
+            server-tokens: false
             enable-opentelemetry: "true"
             otel-service-name: "nginx-proxy" # Opentelemetry resource name
             otlp-collector-host: "grafana-metrics-grafana-agent.monitoring.svc.cluster.local"

@@ -1,0 +1,230 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mimir
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: mimir-distributed
+    repoURL: https://grafana.github.io/helm-charts
+    targetRevision: 5.*
+    helm:
+      releaseName: mimir
+      valuesObject:
+        global:
+          extraEnv:
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: mimir-s3-storage-creds
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mimir-s3-storage-creds
+                  key: AWS_SECRET_ACCESS_KEY
+        mimir:
+          structuredConfig:
+            common:
+              storage:
+                # backend: azure #s3, gcs, azure, swift, filesystem.
+                backend: s3
+                # azure:
+                #   container_name: mimir-data
+                #   account_key: "${AZURE_STORAGE_ACCOUNT_KEY}"
+                #   account_name: hegerdesdevblobs
+                #   endpoint_suffix: blob.core.windows.net
+                s3:
+                  # bucket_name: "${BUCKET_NAME}"
+                  endpoint: fsn1.your-objectstorage.com
+                  access_key_id: "${AWS_ACCESS_KEY_ID}" # This is a secret injected via an environment variable
+                  secret_access_key: "${AWS_SECRET_ACCESS_KEY}" # This is a secret injected via an environment variable
+                  http:
+                    insecure_skip_verify: true
+            blocks_storage:
+              s3:
+                bucket_name: hegerdes-mimir-blocks
+              # azure:
+              #   container_name: mimir-blocks
+            alertmanager_storage:
+              s3:
+                bucket_name: hegerdes-mimir-alertmanager
+              # azure:
+              #   container_name: mimir-alertmanager
+            ruler_storage:
+              s3:
+                bucket_name: hegerdes-mimir-ruler
+              # azure:
+              #   container_name: mimir-ruler
+        ruler:
+          env:
+            - name: AZURE_STORAGE_ACCOUNT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mimir-azure-storage-creds
+                  key: azure_storage_account_key
+        alertmanager:
+          enabled: true
+          replicas: 1
+          env:
+            - name: AZURE_STORAGE_ACCOUNT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mimir-azure-storage-creds
+                  key: azure_storage_account_key
+
+          service:
+            annotations: {}
+            labels: {}
+
+          persistentVolume:
+            # If false, use emptyDir
+            enabled: true
+            annotations: {}
+            accessModes: [ReadWriteOnce]
+            size: 1Gi
+            enableRetentionPolicy: false
+            whenDeleted: Retain
+            whenScaled: Retain
+
+        ingester:
+          replicas: 3
+          statefulSet:
+            enabled: true
+          service:
+            annotations: {}
+            labels: {}
+
+          persistentVolume:
+            enabled: true
+            annotations: {}
+            accessModes: [ReadWriteOnce]
+            # Ingester data Persistent Volume size
+            size: 2Gi
+            enableRetentionPolicy: false
+            whenDeleted: Retain
+            whenScaled: Retain
+            # storageClass: "-"
+
+        compactor:
+          replicas: 1
+          service:
+            annotations: {}
+            labels: {}
+          persistentVolume:
+            enabled: true
+            annotations: {}
+            accessModes: [ReadWriteOnce]
+            size: 2Gi
+            # storageClass: "-"
+            enableRetentionPolicy: false
+            whenDeleted: Retain
+            whenScaled: Retain
+
+        memcachedExporter:
+          enabled: false
+
+        # -- Setting for the Grafana Rollout Operator https://github.com/grafana/helm-charts/tree/main/charts/rollout-operator
+        rollout_operator:
+          enabled: true
+
+        minio:
+          enabled: false
+
+        # -- A reverse proxy deployment that is meant to receive traffic for Mimir or GEM.
+        # When enterprise.enabled is true the GEM gateway is deployed. Otherwise, it is an nginx.
+        # Options except those under gateway.nginx apply to both versions - nginx and GEM gateway.
+        gateway:
+          enabledNonEnterprise: true
+          replicas: 1
+
+          tolerations: []
+          service:
+            port: 80
+            type: ClusterIP
+            annotations: {}
+          ingress:
+            enabled: true
+            ingressClassName: nginx
+            annotations:
+              cert-manager.io/cluster-issuer: letsencrypt-prod-nginx
+            hosts:
+              # -- Passed through the `tpl` function to allow templating.
+              - host: mimir.k8s.henrikgerdes.me
+                paths:
+                  - path: /
+                    pathType: Prefix
+            tls:
+              - secretName: mimir-tls
+                hosts:
+                  - mimir.k8s.henrikgerdes.me
+          nginx:
+            verboseLogging: true
+
+            basicAuth:
+              enabled: false
+              # -- Name of an existing basic auth secret to use instead of gateway.nginx.basicAuth.htpasswd. Must contain '.htpasswd' key
+              existingSecret: null
+
+        extraObjects:
+          - apiVersion: external-secrets.io/v1beta1
+            kind: ExternalSecret
+            metadata:
+              name: mimir-azure-storage-creds
+              namespace: mimir
+            spec:
+              refreshInterval: 1h # rate SecretManager pulls GCPSM
+              secretStoreRef:
+                kind: ClusterSecretStore
+                name: azure-store # name of the SecretStore (or kind specified)
+              target:
+                name: mimir-azure-storage-creds # name of the k8s Secret to be created
+                creationPolicy: Owner
+              # Data defines the connection between the Kubernetes Secret keys and the Provider data
+              data:
+                - secretKey: azure_storage_account_key
+                  remoteRef:
+                    key: mimir-azure-sa-key
+                    decodingStrategy: None # can be None, Base64, Base64URL or Auto
+          - apiVersion: external-secrets.io/v1beta1
+            kind: ExternalSecret
+            metadata:
+              name: mimir-s3-storage-creds
+              namespace: mimir
+            spec:
+              refreshInterval: 1h # rate SecretManager pulls GCPSM
+              secretStoreRef:
+                kind: ClusterSecretStore
+                name: azure-store # name of the SecretStore (or kind specified)
+              target:
+                name: mimir-s3-storage-creds # name of the k8s Secret to be created
+                creationPolicy: Owner
+              # Data defines the connection between the Kubernetes Secret keys and the Provider data
+              data:
+                - secretKey: AWS_ACCESS_KEY_ID
+                  remoteRef:
+                    key: hcloud-k8s-testing-s3-key-id
+                    decodingStrategy: None # can be None, Base64, Base64URL or Auto
+                - secretKey: AWS_SECRET_ACCESS_KEY
+                  remoteRef:
+                    key: hcloud-k8s-testing-s3-access-key
+                    decodingStrategy: None # can be None, Base64, Base64URL or Auto
+
+    # - repoURL: https://github.com/hegerdes/GitOps.git
+    #   targetRevision: HEAD
+    #   path: k8s-apps/mimir
+    #   directory:
+    #     recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mimir
+  info:
+    - name: Chart Info
+      value: https://artifacthub.io/packages/helm/grafana/mimir-distributed
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
