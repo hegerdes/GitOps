@@ -1,0 +1,60 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo-app-fn-backend
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+    - chart: demo-backend
+      repoURL: registry-1.docker.io/hegerdes
+      targetRevision: 0.*
+      helm:
+        releaseName: demo-app-fn-backend
+        valuesObject:
+          replicaCount: 1
+          image:
+            pullPolicy: Always
+          ingress:
+            enabled: true
+            className: nginx
+            annotations:
+              cert-manager.io/cluster-issuer: letsencrypt-prod-nginx
+            hosts:
+              - host: demo.k8s.henrikgerdes.me
+                paths:
+                  - path: /api(/|$)(.*)
+                    pathType: Prefix
+    - chart: demo-frontend
+      repoURL: registry-1.docker.io/hegerdes
+      targetRevision: 0.*
+      helm:
+        releaseName: demo-app-fn-frontend
+        valuesObject:
+          replicaCount: 1
+          image:
+            pullPolicy: Always
+          ingress:
+            enabled: true
+            className: nginx
+            annotations:
+              cert-manager.io/cluster-issuer: letsencrypt-prod-nginx
+            hosts:
+              - host: demo.k8s.henrikgerdes.me
+                paths:
+                  - path: /
+                    pathType: Prefix
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: demo
+  info:
+    - name: Chart-Info
+      value: https://github.com/hegerdes/demo-app-flask-nuxt/tree/main/charts
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
