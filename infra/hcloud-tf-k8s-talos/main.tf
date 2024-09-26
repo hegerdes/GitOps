@@ -51,8 +51,8 @@ locals {
   cluster-config = base64encode(jsonencode(
     {
       imagesForArch = {
-        arm64 = try(compact([for k, v in local.node_pools : strcontains(v.image, "arm64") ? v.image : null])[0], "")
-        amd64 = try(compact([for k, v in local.node_pools : strcontains(v.image, "amd64") ? v.image : null])[0], "")
+        arm64 = "name=${try(compact([for k, v in local.node_pools : strcontains(v.image, "arm64") ? v.image : null])[0], "")}"
+        amd64 = "name=${try(compact([for k, v in local.node_pools : strcontains(v.image, "amd64") ? v.image : null])[0], "")}"
       },
       nodeConfigs = {
         cas-arm-small = {
@@ -109,14 +109,9 @@ data "talos_client_configuration" "this" {
 }
 
 # create kubeconfig
-# resource "talos_cluster_kubeconfig" "this" {
 resource "talos_cluster_kubeconfig" "this" {
   client_configuration = talos_machine_secrets.this.client_configuration
   node                 = [for pool in module.node_pools : pool.vm_ips[0]][0]
-  # timeouts = {
-  #   create = "60m"
-  #   update = "60m"
-  # }
   depends_on = [
     talos_machine_bootstrap.this
   ]

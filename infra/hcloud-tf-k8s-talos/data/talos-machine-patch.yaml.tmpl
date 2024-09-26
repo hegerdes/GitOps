@@ -61,9 +61,9 @@ machine:
         enabled: true
         allowedRoles:
           - os:reader
+          - os:etcd:backup
         # - os:admin
         # - os:operator
-        # - os:etcd:backup
         allowedKubernetesNamespaces:
           - kube-system
           - cluster-autoscaler
