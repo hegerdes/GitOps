@@ -51,9 +51,10 @@ spec:
         releaseName: oauth2-redis
         valuesObject:
           architecture: standalone
-          persistence:
-            medium: medium
-            enabled: true
+          master:
+            persistence:
+              enabled: false
+              # medium: medium
     - repoURL: https://github.com/hegerdes/GitOps.git
       targetRevision: HEAD
       path: k8s-cluster-hcloud-critical/oauth2-proxy
@@ -63,7 +64,9 @@ spec:
     server: https://kubernetes.default.svc
     namespace: oauth-proxy
   info:
-    - name: Chart-Info
+    - name: Chart-Info Redis
+      value: https://artifacthub.io/packages/helm/bitnami/redis
+    - name: Chart-Info OAuth2
       value: https://artifacthub.io/packages/helm/oauth2-proxy/oauth2-proxy
     - name: App-Source
       value: https://github.com/oauth2-proxy/oauth2-proxy
