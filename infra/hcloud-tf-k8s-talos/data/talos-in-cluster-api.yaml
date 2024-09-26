@@ -7,8 +7,8 @@ metadata:
 spec:
   roles:
     - os:reader
-    - os:admin
     - os:etcd:backup
+    # - os:admin
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -47,7 +47,7 @@ metadata:
   name: talos-api-access
   namespace: kube-system
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: talos-api-access
@@ -56,8 +56,10 @@ spec:
       labels:
         app: talos-api-access
     spec:
-      # runtimeClassName: crun
+      runtimeClassName: crun
       serviceAccountName: talos-conf-manger
+      nodeSelector:
+        node-role.kubernetes.io/control-plane: ""
       containers:
         - name: talos-api-access
           resources: {}
@@ -65,7 +67,12 @@ spec:
           command:
             - sh
             - -c
-            - apk add kubectl curl bash jq && bash /var/scripts/install-talosctl.sh && while true; do sleep 7d; done
+            - apk add kubectl curl bash jq && bash /var/scripts/install-talosctl.sh && bash /var/scripts/minio-mc-install.sh && while true; do sleep 7d; done
+          env:
+            - name: CP_NODE
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
           volumeMounts:
             - mountPath: /var/run/secrets/talos.dev
               name: talos-secrets
@@ -81,12 +88,76 @@ spec:
           configMap:
             name: talos-scripts
 ---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: etcd-backup
+  namespace: kube-system
+spec:
+  schedule: "30 0 * * *"
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 600
+      parallelism: 1
+      template:
+        spec:
+          restartPolicy: OnFailure
+          serviceAccountName: talos-conf-manger
+          nodeSelector:
+            node-role.kubernetes.io/control-plane: ""
+          containers:
+            - name: talos-api-access
+              resources: {}
+              image: alpine:3
+              command:
+                - sh
+                - -c
+                - apk add kubectl curl bash jq && bash /var/scripts/install-talosctl.sh && bash /var/scripts/minio-mc-install.sh && bash /var/scripts/talosctl-etcd-backup.sh
+              env:
+                - name: CP_NODE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: status.hostIP
+              volumeMounts:
+                - mountPath: /var/run/secrets/talos.dev
+                  name: talos-secrets
+                - mountPath: /var/scripts
+                  name: talos-scripts
+          tolerations:
+            - operator: Exists
+          volumes:
+            - name: talos-secrets
+              secret:
+                secretName: talos-api-access-talos-secrets
+            - name: talos-scripts
+              configMap:
+                name: talos-scripts
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: talos-scripts
   namespace: kube-system # Change this to the appropriate namespace if needed
 data:
+  talosctl-etcd-backup.sh: |
+    #!/bin/bash
+    set -e
+
+    CP_NODE=${CP_NODE:-"10.0.1.8"}
+    if ! command -v talosctl > /dev/null; then
+      echo "talosctl is not installed. Please install it."
+      exit 1
+    fi
+
+    # Check if the output contains the string "os:etcd:backup"
+    output=$(talosctl config info)
+    if ! echo "$output" | grep -q "os:etcd:backup"; then
+      echo "Client is not configured to backup etcd. Please configure it."
+      exit 1
+    fi
+    echo "Creating etcd snapshot on node ${CP_NODE}..."
+    talosctl etcd snapshot etcd.db -n $CP_NODE
   install-talosctl.sh: |
     # Check if talosctl is installed
     if ! command -v talosctl > /dev/null; then
@@ -105,8 +176,22 @@ data:
       chmod +x /usr/local/bin/talosctl
     fi
     talosctl version --client
+  minio-mc-install.sh: |
+    # Check if minio mc is installed
+    if ! command -v mc > /dev/null; then
+      echo "Installing minio mc"
+      if [ "$(uname -m)" = "x86_64" ]; then
+        ARCH=amd64
+      elif [ "$(uname -m)" = "aarch64" ]; then
+        ARCH=arm64
+      else
+        echo "Unknown system arch. Default to amd64"
+      fi
+      curl -sL https://dl.min.io/client/mc/release/linux-${ARCH-amd64}/mc -o /usr/local/bin/mc
+      chmod +x /usr/local/bin/mc
+    fi
+    mc --version
 
 # wget -O /usr/local/bin/talosctl https://github.com/siderolabs/talos/releases/download/v1.8.0-alpha.2/talosctl-linux-amd64
 # wget -O /usr/local/bin/talosctl https://github.com/siderolabs/talos/releases/download/v1.8.0-alpha.2/talosctl-linux-arm64
-
 # chmod +x /usr/local/bin/talosctl
