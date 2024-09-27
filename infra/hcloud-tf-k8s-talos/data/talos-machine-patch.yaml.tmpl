@@ -96,11 +96,9 @@ cluster:
       ${k}: "${v}"
     %{ endfor ~}
 
-
   inlineManifests: []
   extraManifests:
     - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/standard-install.yaml
-#    - https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml
 
   network:
     cni:

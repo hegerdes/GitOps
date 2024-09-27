@@ -11,7 +11,7 @@ packer {
 }
 ######################## INPUT ########################
 variable "talos_version" {
-  type = string
+  type    = string
   default = "v1.8.0"
 }
 variable "talos_extentions" {
@@ -22,6 +22,10 @@ variable "talos_extentions" {
 variable "talos_kernel_args" {
   type    = list(string)
   default = ["security=apparmor"]
+}
+variable "public_ipv4_disabled" {
+  type    = bool
+  default = false
 }
 
 ######################## LOCALS ########################
@@ -55,23 +59,25 @@ locals {
 }
 
 source "hcloud" "talos_amd64" {
-  rescue          = "linux64"
-  image           = "debian-12"
-  location        = "fsn1"
-  server_type     = "cx22"
-  ssh_username    = "root"
-  snapshot_name   = local.setups.amd64.name
-  snapshot_labels = local.setups.amd64.tags
+  rescue               = "linux64"
+  image                = "debian-12"
+  location             = "fsn1"
+  server_type          = "cx22"
+  ssh_username         = "root"
+  snapshot_name        = local.setups.amd64.name
+  snapshot_labels      = local.setups.amd64.tags
+  public_ipv4_disabled = var.public_ipv4_disabled
 }
 
 source "hcloud" "talos_arm64" {
-  image           = "debian-12"
-  location        = "fsn1"
-  rescue          = "linux64"
-  server_type     = "cax11"
-  ssh_username    = "root"
-  snapshot_name   = local.setups.arm64.name
-  snapshot_labels = local.setups.arm64.tags
+  image                = "debian-12"
+  location             = "fsn1"
+  rescue               = "linux64"
+  server_type          = "cax11"
+  ssh_username         = "root"
+  snapshot_name        = local.setups.arm64.name
+  snapshot_labels      = local.setups.arm64.tags
+  public_ipv4_disabled = var.public_ipv4_disabled
 }
 
 build {
@@ -79,11 +85,9 @@ build {
   sources = ["source.hcloud.talos_amd64", "source.hcloud.talos_arm64"]
   provisioner "shell" {
     inline = [
-      "apt-get -qq update",
-      "apt-get -qq install -y wget",
       "export TALOS_IMAGE=${source.name == "talos_amd64" ? local.setups.amd64.image : local.setups.arm64.image}",
       "echo \"Downloading from $TALOS_IMAGE\"",
-      "wget --quiet -O /tmp/talos.raw.xz $TALOS_IMAGE",
+      "curl --fail -sL -o /tmp/talos.raw.xz $TALOS_IMAGE",
       "echo \"Download done\nWriting to /dev/sda\"",
       "xz -d -c /tmp/talos.raw.xz | dd of=/dev/sda && sync",
     ]
