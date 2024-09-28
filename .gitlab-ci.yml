@@ -63,7 +63,7 @@ pre-commit:
   before_script:
     - !reference [.snippets, debian-core-tools]
     - !reference [.snippets, alpine-core-tools]
-    - !reference [.snippets, terraform-install]
+    - !reference [.snippets, opentofu-install]
     - !reference [.snippets, tflint-install]
 
 az-auth:
