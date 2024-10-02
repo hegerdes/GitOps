@@ -84,6 +84,7 @@ az-auth:
       azure_key_vault:
         name: hcloud-k8s-token
   script:
+    - !reference [.snippets, jq-install]
     - az login --service-principal -u "${AZURE_CLIENT_ID}" -t "${AZURE_TENANT_ID}" --federated-token $GITLAB_OIDC_TOKEN
     - |
       # Setting envs
