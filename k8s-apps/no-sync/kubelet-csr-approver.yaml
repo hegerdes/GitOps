@@ -113,7 +113,8 @@ metadata:
 spec:
   completions: 1
   parallelism: 1
-  activeDeadlineSeconds: 320
+  backoffLimit: 5
+  activeDeadlineSeconds: 360
   ttlSecondsAfterFinished: 3600
   template:
     metadata:
@@ -129,7 +130,7 @@ spec:
             [
               "sh",
               "-c",
-              "sleep 5m && pkill -INT kubelet-serving-cert-approver && exit 0",
+              'sleep 5m && echo "Sending kill" && pkill -INT kubelet-serving-cert-approver && exit 0',
             ]
           securityContext:
             allowPrivilegeEscalation: false
