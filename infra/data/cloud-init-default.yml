@@ -73,6 +73,7 @@ packages:
   - jq
   - unzip
   - apparmor
+  - pigz
   - ifupdown
   - aptitude
   - lsb-release
