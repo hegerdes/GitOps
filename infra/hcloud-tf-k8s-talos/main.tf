@@ -110,8 +110,9 @@ data "talos_client_configuration" "this" {
 
 # create kubeconfig
 resource "talos_cluster_kubeconfig" "this" {
-  client_configuration = talos_machine_secrets.this.client_configuration
-  node                 = [for pool in module.node_pools : pool.vm_ips[0]][0]
+  client_configuration         = talos_machine_secrets.this.client_configuration
+  certificate_renewal_duration = "2h"
+  node                         = [for pool in module.node_pools : pool.vm_ips[0]][0]
   depends_on = [
     talos_machine_bootstrap.this
   ]
@@ -258,15 +259,6 @@ resource "hcloud_firewall" "talos" {
       "::/0"
     ]
   }
-  # rule {
-  #   direction = "in"
-  #   protocol  = "udp"
-  #   port      = "51820"
-  #   source_ips = [
-  #     "0.0.0.0/0",
-  #     "::/0"
-  #   ]
-  # }
 }
 
 # ################# DNS #################
