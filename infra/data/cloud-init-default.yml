@@ -108,6 +108,7 @@ apt_get_command:
     '--option=Dpkg::options::=--force-unsafe-io', '--assume-yes', '--quiet', '--no-install-recommends']
 
 runcmd:
+  - echo "10.0.0.8 k8s-controlplane.local" >> /etc/hosts
   - echo "Cloud-Init finished" >> /tmp/cloud-init-msg.txt
 
 power_state:
