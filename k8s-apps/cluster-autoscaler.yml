@@ -13,8 +13,33 @@ spec:
         releaseName: cluster-autoscaler
         valuesObject:
           cloudProvider: hetzner
+          autoDiscovery:
+            clusterName: hcloud
+          rbac:
+            serviceAccount:
+              name: cluster-autoscaler
           extraEnv:
             HCLOUD_NETWORK: k8s-network
+          initContainers:
+            - name: secret-watch
+              image: bitnami/kubectl
+              restartPolicy: Always
+              command: [bash, /scripts/watch-secret.sh]
+              env:
+                - name: POD_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                - name: SECRET_NAME
+                  value: hcloud-scale-conf
+              volumeMounts:
+                - name: scripts
+                  mountPath: "/scripts"
+                  readOnly: true
+          extraVolumes:
+            - name: scripts
+              configMap:
+                name: cluster-scaler-scripts
           extraEnvSecrets:
             HCLOUD_TOKEN:
               name: hcloud
@@ -36,8 +61,62 @@ spec:
               minSize: 0
               instanceType: CX22
               region: FSN1
-          autoDiscovery:
-            clusterName: hcloud
+          extraObjects:
+            - apiVersion: rbac.authorization.k8s.io/v1
+              kind: Role
+              metadata:
+                namespace: default # Change to your desired namespace
+                name: pod-restart-role
+              rules:
+                - apiGroups: [""]
+                  resources: ["pods"]
+                  verbs: ["delete"]
+            - apiVersion: rbac.authorization.k8s.io/v1
+              kind: RoleBinding
+              metadata:
+                name: pod-restart-rolebinding
+              subjects:
+                - kind: ServiceAccount
+                  name: cluster-autoscaler
+                  apiGroup: rbac.authorization.k8s.io
+              roleRef:
+                kind: Role
+                name: pod-restart-role
+                apiGroup: rbac.authorization.k8s.io
+            - apiVersion: v1
+              kind: ConfigMap
+              metadata:
+                name: cluster-scaler-scripts
+              data:
+                watch-secret.sh: |
+                  #!/bin/bash
+
+                  set -e
+
+                  if [ -z "${SECRET_NAME}" ]; then
+                      echo "SECRET_NAME is not set"
+                      exit 1
+                  fi
+
+                  # Function to watch the secret for changes
+                  WATCH_COMMAND="kubectl get secret $SECRET_NAME --watch --no-headers=true --watch-only=true"
+                  watch_secret() {
+                      echo "Watching secret $SECRET_NAME for changes..."
+                      $WATCH_COMMAND | while read -r line; do
+                          # This triggers whenever the kubectl command outputs something to stdout
+                          echo "Secret changed!\nDeleting the pod..."
+                          kubectl delete pod $POD_NAME
+                      done
+                  }
+
+                  # Loop to keep watching the secret and restart on error
+                  while true; do
+                      watch_secret
+                      if [ $? -ne 0 ]; then
+                          echo "An error occurred. Restarting the watch..."
+                          sleep 1 # Optional: Add a short delay before restarting
+                      fi
+                  done
     - repoURL: https://github.com/hegerdes/GitOps.git
       targetRevision: HEAD
       path: k8s-apps/cluster-autoscaler
