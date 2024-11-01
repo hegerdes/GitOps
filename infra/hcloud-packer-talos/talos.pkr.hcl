@@ -50,7 +50,7 @@ locals {
         arch            = "${arch}"
         name            = "talos-${var.talos_version}-${arch}${local.talos_extentions_postfix}"
         version         = "${var.talos_version}",
-        origin          = length(var.talos_extentions) > 0 ? "talos-factory" : "github"
+        origin          = "talos-factory"
         image_id_part_1 = length(var.talos_extentions) > 0 ? substr(local.talos_custominazion_id, 0, 32) : "default"
         image_id_part_2 = length(var.talos_extentions) > 0 ? substr(local.talos_custominazion_id, 32, 32) : "default"
         extentions      = length(var.talos_extentions) > 0 ? "${join("-", local.talos_extentions)}" : "none"

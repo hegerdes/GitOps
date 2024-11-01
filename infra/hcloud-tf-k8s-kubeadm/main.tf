@@ -53,9 +53,9 @@ resource "hcloud_network_route" "my_routes" {
 }
 
 # ################# Server #################
-module "node_groups" {
+module "node_pools" {
   source   = "hegerdes/hetzner-node-pool/hcloud"
-  version  = "~>0.3"
+  version  = "~>1"
   for_each = local.node_pools
   # for_each = {}
 
@@ -71,6 +71,7 @@ module "node_groups" {
   user_data            = each.value.user_data
   network_name         = each.value.network_name
   private_ip_addresses = each.value.private_ip_addresses
+  snapshot_image       = strcontains(each.value.image, "k8s")
 
   depends_on = [hcloud_network.k8s_network]
 }
@@ -96,7 +97,7 @@ resource "hcloud_server" "manager_nodes" {
   count       = var.manager_vm_create ? 1 : 0
   name        = "manager-node"
   image       = "debian-12"
-  server_type = "cx11"
+  server_type = "cax11"
   location    = var.location
   user_data = templatefile("../data/cloud-init-default.yml", {
     ssh_key      = local.ssh_keys

@@ -35,7 +35,9 @@ spec:
       targetRevision: 2.*
       helm:
         releaseName: hcloud-csi
-        # valuesObject:
+        valuesObject:
+          metrics:
+            enabled: true
         #   controller:
         #     hcloudToken:
         #       file: /var/run/secrets/hcloud/token

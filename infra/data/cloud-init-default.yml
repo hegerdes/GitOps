@@ -74,6 +74,7 @@ packages:
   - unzip
   - apparmor
   - pigz
+  - cryptsetup
   - ifupdown
   - aptitude
   - lsb-release
