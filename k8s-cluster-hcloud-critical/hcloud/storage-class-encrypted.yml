@@ -1,0 +1,31 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: hcloud-volumes-encrypted
+provisioner: csi.hetzner.cloud
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
+parameters:
+  csi.storage.k8s.io/node-publish-secret-name: csi-encryption-secret
+  csi.storage.k8s.io/node-publish-secret-namespace: kube-system
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: csi-encryption-secret
+  namespace: kube-system
+spec:
+  refreshInterval: 1h # rate SecretManager pulls GCPSM
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: azure-store # name of the SecretStore (or kind specified)
+  target:
+    name: csi-encryption-secret # name of the k8s Secret to be created
+    creationPolicy: Owner
+  # Data defines the connection between the Kubernetes Secret keys and the Provider data
+  data:
+    - secretKey: encryption-passphrase
+      remoteRef:
+        key: github-webhook-secret
+        decodingStrategy: None # can be None, Base64, Base64URL or Auto
