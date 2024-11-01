@@ -2,8 +2,14 @@ hostFirewall:
   enabled: true
 hubble:
   enabled: true
+  rollOutPods: true
   relay:
     enabled: true
+    rollOutPods: true
+operator:
+  rollOutPods: true
+  replicas: 1
+rollOutCiliumPods: true
 ingressController:
   enabled: true
   loadbalancerMode: dedicated

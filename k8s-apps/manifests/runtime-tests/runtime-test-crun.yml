@@ -35,7 +35,13 @@ spec:
               type: RuntimeDefault
             capabilities:
               drop: [ALL]
-          resources: {}
+          # resources:
+          #   limits:
+          #     memory: "265Mi"
+          #     cpu: "500m"
+          #   requests:
+          #     memory: "265Mi"
+          #     cpu: "500m"
           env:
             - name: foo
               value: bar
