@@ -65,12 +65,14 @@ spec:
             - apiVersion: rbac.authorization.k8s.io/v1
               kind: Role
               metadata:
-                namespace: default # Change to your desired namespace
                 name: pod-restart-role
               rules:
                 - apiGroups: [""]
-                  resources: ["pods"]
-                  verbs: ["delete"]
+                  resources: [pods]
+                  verbs: [delete]
+                - apiGroups: [""]
+                  resources: [secrets]
+                  verbs: [get, list, watch]
             - apiVersion: rbac.authorization.k8s.io/v1
               kind: RoleBinding
               metadata:
@@ -78,7 +80,7 @@ spec:
               subjects:
                 - kind: ServiceAccount
                   name: cluster-autoscaler
-                  apiGroup: rbac.authorization.k8s.io
+                  namespace: cluster-autoscaler
               roleRef:
                 kind: Role
                 name: pod-restart-role
