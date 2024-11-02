@@ -15,12 +15,14 @@ terraform {
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>3.116"
+      version = "~>4.8"
     }
   }
 }
 
+
 provider "azurerm" {
-  use_oidc = true
+  use_oidc        = true
+  subscription_id = "777ba5ef-85e2-4cfd-8162-1da84acac4a6"
   features {}
 }

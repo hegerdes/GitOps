@@ -40,6 +40,7 @@ spec:
             use-http2: true
             use-gzip: true
             server-tokens: false
+            enable-brotli: true
             enable-ocsp: "true"
             enable-opentelemetry: "true"
             otel-service-name: "nginx-proxy" # Opentelemetry resource name

@@ -11,19 +11,19 @@ terraform {
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "~>2.15"
+      version = "~>2.16"
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>4.3"
+      version = "~>4.8"
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "~>5.66"
+      version = "~>5.74"
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~>4.41"
+      version = "~>4.45"
     }
     tls = {
       source  = "hashicorp/tls"
