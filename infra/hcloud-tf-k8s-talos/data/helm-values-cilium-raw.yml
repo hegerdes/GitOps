@@ -1,15 +1,54 @@
+# Docs
+# Config map options: https://docs.cilium.io/en/stable/network/kubernetes/configuration/#configmap-options
+
+# Use kubeproxy replacement & talos kubeprism
+k8sServiceHost: localhost
+k8sServicePort: 7445
+kubeProxyReplacement: true
+rollOutCiliumPods: true
+annotateK8sNode: true
+loadBalancer:
+  algorithm: maglev
+  serviceTopology: true
+
+# routingMode: "native" # default is tunnel
+# directRoutingSkipUnreachable: true
+# autoDirectNodeRoutes: true
+# ipv4NativeRoutingCIDR: "10.0.0.0/8"
+# ipv4NativeRoutingCIDR: "10.244.0.0/16"
+
+endpointRoutes:
+  enabled: true
+
+ipam:
+  mode: kubernetes
+  operator:
+    # -- IPv4 CIDR list range to delegate to individual nodes for IPAM.
+    clusterPoolIPv4PodCIDRList:
+      - 10.244.0.0/16
+
+bandwidthManager:
+  enabled: true
+bpf:
+  masquerade: true
+cgroup:
+  autoMount:
+    enabled: false
+  hostRoot: /sys/fs/cgroup
+
 hostFirewall:
   enabled: true
+gatewayAPI:
+  enabled: true
+operator:
+  rollOutPods: true
+  replicas: 1
 hubble:
   enabled: true
   rollOutPods: true
   relay:
     enabled: true
     rollOutPods: true
-operator:
-  rollOutPods: true
-  replicas: 1
-rollOutCiliumPods: true
 ingressController:
   enabled: true
   loadbalancerMode: dedicated
@@ -24,29 +63,6 @@ ingressController:
       load-balancer.hetzner.cloud/network: "k8s-network"
       # load-balancer.hetzner.cloud/uses-proxyprotocol: "true"
 
-gatewayAPI:
-  enabled: true
-
-k8sServiceHost: localhost
-k8sServicePort: 7445
-kubeProxyReplacement: true
-loadBalancer:
-  algorithm: maglev
-  serviceTopology: true
-
-bandwidthManager:
-  enabled: true
-bpf:
-  masquerade: true
-cgroup:
-  autoMount:
-    enabled: false
-  hostRoot: /sys/fs/cgroup
-ipam:
-  mode: kubernetes
-  operator:
-    clusterPoolIPv4PodCIDRList:
-      - 10.244.0.0/16
 securityContext:
   capabilities:
     ciliumAgent:

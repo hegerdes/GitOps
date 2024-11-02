@@ -40,12 +40,15 @@ spec:
             use-http2: true
             use-gzip: true
             server-tokens: false
+            enable-ocsp: "true"
             enable-opentelemetry: "true"
             otel-service-name: "nginx-proxy" # Opentelemetry resource name
-            otlp-collector-host: "grafana-metrics-grafana-agent.monitoring.svc.cluster.local"
-            otlp-collector-port: "4317"
             opentelemetry-trust-incoming-span: "true"
             opentelemetry-operation-name: "HTTP $request_method $service_name $uri"
+            otlp-collector-host: "grafana-metrics-alloy.monitoring.svc.cluster.local"
+            otlp-collector-port: "4317"
+            otel-sampler: "AlwaysOn" # Also: AlwaysOff, TraceIdRatioBased
+            otel-sampler-parent-based: "true"
             # opentelemetry-config: "/etc/nginx/opentelemetry.toml"
             # otel-max-queuesize: "2048"
             # otel-schedule-delay-millis: "5000"
@@ -57,12 +60,8 @@ spec:
             enabled: true
           metrics:
             enabled: true
-            service:
-              annotations:
-                prometheus.io/port: "10254"
-                prometheus.io/scrape: "true"
-        prometheus:
-          create: true
+            serviceMonitor:
+              enabled: true
   destination:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx

@@ -58,6 +58,8 @@ server:
   ingress:
     enabled: true
     annotations:
+      nginx.ingress.kubernetes.io/enable-opentelemetry: "true"
+      nginx.ingress.kubernetes.io/opentelemetry-trust-incoming-span: "true"
       cert-manager.io/cluster-issuer: "letsencrypt-prod-nginx"
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"

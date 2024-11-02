@@ -100,8 +100,15 @@ cluster:
 
   inlineManifests: []
   extraManifests:
+    # CRDs
     - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml
-    - https://raw.githubusercontent.com/hegerdes/GitOps/refs/heads/main/k8s-apps/no-sync/kubelet-csr-approver.yaml
+    - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/heads/main/charts/kube-prometheus-stack/charts/crds/crds/crd-podmonitors.yaml
+    - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/heads/main/charts/kube-prometheus-stack/charts/crds/crds/crd-probes.yaml
+    - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/heads/main/charts/kube-prometheus-stack/charts/crds/crds/crd-servicemonitors.yaml
+    - https://github.com/prometheus-community/helm-charts/raw/refs/heads/main/charts/kube-prometheus-stack/charts/crds/crds/crd-prometheusrules.yaml
+
+    # Apps
+    - https://raw.githubusercontent.com/hegerdes/GitOps/refs/heads/main/k8s-cluster-hcloud-critical/no-sync/kubelet-csr-approver.yaml
   #  # Or run the csr approver as deployment
   #  - https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml
 

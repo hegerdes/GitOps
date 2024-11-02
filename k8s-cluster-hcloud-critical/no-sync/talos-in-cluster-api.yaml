@@ -158,6 +158,7 @@ data:
     fi
     echo "Creating etcd snapshot on node ${CP_NODE}..."
     talosctl etcd snapshot etcd.db -n $CP_NODE
+    # TODO: upload backup
   install-talosctl.sh: |
     # Check if talosctl is installed
     if ! command -v talosctl > /dev/null; then
