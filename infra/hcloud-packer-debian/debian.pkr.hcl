@@ -3,7 +3,7 @@ packer {
   required_plugins {
     hcloud = {
       source  = "github.com/hetznercloud/hcloud"
-      version = ">= 1.2.0"
+      version = ">= 1.6.0"
     }
   }
 }
@@ -18,7 +18,7 @@ variable "output_name" {
 }
 variable "k8s_version" {
   type    = string
-  default = "1.28.7"
+  default = "1.31.2"
 }
 variable "user_data_path" {
   type    = string
@@ -32,7 +32,7 @@ locals {
 source "hcloud" "k8s-amd64" {
   image         = var.base_image
   location      = "nbg1"
-  server_type   = "cx11"
+  server_type   = "cx22"
   ssh_keys      = []
   user_data     = file(var.user_data_path)
   ssh_username  = "root"
@@ -61,13 +61,12 @@ source "hcloud" "k8s-arm64" {
   }
 }
 build {
-  sources = ["source.hcloud.k8s-amd64", "source.hcloud.k8s-arm64"]
+  # sources = ["source.hcloud.k8s-amd64", "source.hcloud.k8s-arm64"]
+  sources = ["source.hcloud.k8s-arm64"]
 
   provisioner "shell" {
     env = {
       k8s_version = "${var.k8s_version}"
-      k8s_crun_with_wasm = "true"
-      k8s_containerd_variant = "github"
     }
     scripts = [
       "ansible-setup.sh",

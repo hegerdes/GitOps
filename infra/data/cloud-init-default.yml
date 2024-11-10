@@ -69,35 +69,33 @@ package_upgrade: true
 package_reboot_if_required: true
 packages:
   - gnupg
-  - curl
-  - jq
-  - unzip
-  - apparmor
-  - pigz
-  - cryptsetup
-  - ifupdown
-  - aptitude
   - lsb-release
   - ca-certificates
-  - apt-transport-https
-  - unattended-upgrades
-  - policycoreutils
-  - selinux-basics
-  - selinux-policy-default
-  - semodule-utils
-  - setools
+  - curl
+  - pigz # fast decompress for container image
+  - isal # even faster decompress for container image
+  - cryptsetup # support LUKS disk encryptio
+  - apparmor
   - apparmor-profiles-extra
-  - auditd
-  - apt-listchanges
-  - logrotate
-  - mtr-tiny
-  - libyajl2
+  - apt-transport-https
+  - python3-kubernetes # for ansibl
+  - jq # json parsing and validatin
+  - yq # yaml parsing and validatin
+  - criu # low level cri cli - not needed for k8s >=1.3
+  - unzip
   - socat
-  - wget
-  - git
-  - dbus
-  - ipvsadm
+  - mtr-tiny
+  - logrotate
   - open-iscsi
+  - ipvsadm
+  - auditd
+  - dbus
+  - libyajl2 # Needed for youki was
+  # - policycoreutils
+  # - selinux-basics
+  # - selinux-policy-default
+  # - semodule-utils
+  # - setools
 
 #  To specify a different 'apt-get' command, set 'apt_get_command'.
 #  This must be a list, and the subcommand (update, upgrade) is appended to it.
