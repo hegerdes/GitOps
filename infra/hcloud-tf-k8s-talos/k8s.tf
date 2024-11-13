@@ -6,7 +6,7 @@ resource "time_sleep" "wait" {
 
 resource "helm_release" "cni" {
   name       = "cilium"
-  depends_on = [time_sleep.wait, module.node_pools, module.loadbalancer]
+  depends_on = [time_sleep.wait, module.node_pools, module.loadbalancer, local_sensitive_file.kubeconf]
 
   repository      = "https://helm.cilium.io/"
   wait            = false

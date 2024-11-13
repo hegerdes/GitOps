@@ -39,12 +39,15 @@ resource "local_sensitive_file" "kubeconf" {
   })
 }
 
+output "certSANs" {
+  value = local.certSANsAll
+}
 output "vm_pool_ips" {
   value = { for index, pool in module.node_pools : pool.name => pool.vm_ips }
 }
 output "vm_pool_names" {
   value = { for index, pool in module.node_pools : pool.name => pool.vm_names }
 }
-output "certSANs" {
-  value = local.certSANsAll
+output "vm_pool_pvt_ips" {
+  value = local.private_ips_map
 }

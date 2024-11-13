@@ -3,7 +3,7 @@ terraform {
   required_providers {
     hcloud = {
       source  = "hetznercloud/hcloud"
-      version = "~>1.48"
+      version = "~>1.49"
     }
     talos = {
       source  = "siderolabs/talos"
@@ -15,11 +15,11 @@ terraform {
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>4.8"
+      version = "~>4.9"
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "~>5.74"
+      version = "~>5.75"
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
@@ -65,6 +65,7 @@ provider "aws" {
 provider "helm" {
   kubernetes {
     # host = "https://${local.cp_public_endpoint}:6443"
+    # host = "https://${module.loadbalancer.lb_ipv4}:6443"
 
     # client_certificate     = base64decode(talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_certificate)
     # client_key             = base64decode(talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_key)

@@ -31,6 +31,12 @@ locals {
   raw_server_list        = flatten([for pool in module.node_pools : [for vm in pool.vms_raw : vm]])
   vm_pvt_ip_map          = { for vm in local.raw_server_list : (vm.network[*].ip)[0] => vm }
   private_ips            = flatten([for pool in local.node_pools : [for ip in pool.private_ip_addresses : ip]])
+  private_ips_map        = { for vm in local.raw_server_list : vm.name => (vm.network[*].ip)[0] }
+  private_cp_ips         = [for ip, vm in local.vm_pvt_ip_map : ip if contains(keys(vm.labels), "k8s_control_plane")]
+
+  # Talos enpoints
+  talos_endpoint   = local.talos_apply_use_pvt_ip ? local.cp_public_endpoint : null
+  talos_cp_node_ip = local.talos_apply_use_pvt_ip ? local.private_cp_ips[0] : [for pool in module.node_pools : pool.vm_ips[0]][0]
 
   # Node Pools
   node_pools = { for index, pool in var.node_pools :
@@ -112,7 +118,9 @@ data "talos_client_configuration" "this" {
 resource "talos_cluster_kubeconfig" "this" {
   client_configuration         = talos_machine_secrets.this.client_configuration
   certificate_renewal_duration = "2h"
-  node                         = [for pool in module.node_pools : pool.vm_ips[0]][0]
+  endpoint                     = local.talos_endpoint
+  node                         = local.talos_cp_node_ip
+
   depends_on = [
     talos_machine_bootstrap.this
   ]
@@ -121,9 +129,9 @@ resource "talos_cluster_kubeconfig" "this" {
 # bootstrap the cluster
 resource "talos_machine_bootstrap" "this" {
   client_configuration = talos_machine_secrets.this.client_configuration
+  endpoint             = local.talos_endpoint
+  node                 = local.talos_cp_node_ip
 
-  endpoint = [for pool in module.node_pools : pool.vm_ips[0]][0]
-  node     = [for pool in module.node_pools : pool.vm_ips[0]][0]
 }
 
 # Ensures that current machine configuration is afer servers are created
@@ -133,8 +141,7 @@ resource "talos_machine_configuration_apply" "this" {
   client_configuration        = talos_machine_secrets.this.client_configuration
   machine_configuration_input = data.talos_machine_configuration.this[local.vm_pvt_ip_map[each.key].labels.pool].machine_configuration
 
-  node = local.talos_apply_use_pvt_ip ? each.key : local.vm_pvt_ip_map[each.key].ipv4_address
-  # node       = local.vm_pvt_ip_map[each.key].ipv4_address
+  node       = local.talos_apply_use_pvt_ip ? each.key : local.vm_pvt_ip_map[each.key].ipv4_address
   depends_on = [module.node_pools]
 }
 
