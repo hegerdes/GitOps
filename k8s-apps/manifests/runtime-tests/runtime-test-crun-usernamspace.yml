@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crun-usernamespace
+  namespace: runtimetest
+  labels:
+    app: crun-usernamespace
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: crun-usernamespace
+  template:
+    metadata:
+      name: hello-crun
+      labels:
+        app: crun-usernamespace
+    spec:
+      hostUsers: false
+      runtimeClassName: crun
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
+      containers:
+        - name: hello-crun
+          image: nginx
+          command:
+            - sleep
+            - 7d
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop: [ALL]
+          # resources:
+          #   limits:
+          #     memory: "265Mi"
+          #     cpu: "500m"
+          #   requests:
+          #     memory: "265Mi"
+          #     cpu: "500m"
+          env:
+            - name: foo
+              value: bar
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   name: hello-wasm
+#   annotations:
+#     module.wasm.image/variant: compat-smart
+# spec:
+#   hostNetwork: true
+#   containers:
+#   - name: hello-wasm
+#     image: docker.io/wasmedge/example-wasi-http:latest
+#     #image: wasmedge/example-wasi:latest
+#     #image: michaelirwin244/wasm-example
