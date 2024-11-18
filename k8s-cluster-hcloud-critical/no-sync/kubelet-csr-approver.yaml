@@ -126,11 +126,20 @@ spec:
       containers:
         - name: shell
           image: busybox:1.36
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  [
+                    "sh",
+                    "-c",
+                    "pkill -TERM kubelet-serving-cert-approver || true && exit 0",
+                  ]
           command:
             [
               "sh",
               "-c",
-              'sleep 5m && echo "Sending kill" && pkill -INT kubelet-serving-cert-approver && exit 0',
+              'sleep 5m && echo "Sending kill" && pkill -TERM kubelet-serving-cert-approver || true && exit 0',
             ]
           securityContext:
             allowPrivilegeEscalation: false
