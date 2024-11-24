@@ -6,7 +6,7 @@ metadata:
   labels:
     name: grafana
   finalizers:
-    - resources-finalizer.argocd.argoproj.io
+    - resources-finalizer.argocd.argoproj.io/background
 spec:
   project: default
   source:
