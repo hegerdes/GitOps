@@ -15,15 +15,15 @@ terraform {
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>4.9"
+      version = "~>4.11"
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "~>5.75"
+      version = "~>5.77"
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~>4.45"
+      version = "~>4.46"
     }
     tls = {
       source  = "hashicorp/tls"
@@ -40,10 +40,6 @@ terraform {
     time = {
       source  = "hashicorp/time"
       version = "~>0.12"
-    }
-    null = {
-      source  = "hashicorp/null"
-      version = "~>3.2"
     }
   }
 }

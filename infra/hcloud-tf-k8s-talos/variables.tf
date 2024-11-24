@@ -5,7 +5,7 @@ variable "cluster_name" {
 }
 variable "cluster_version" {
   type        = string
-  default     = "v1.31.2"
+  default     = "v1.31.3"
   description = "Version of the cluster."
 }
 variable "talos_version" {
@@ -41,11 +41,21 @@ variable "node_pools" {
     }
   }]
   description = "List of node pools configurations."
+
+  validation {
+    condition     = length(var.node_pools) > 0
+    error_message = "At least one node pool is required."
+  }
+
+  validation {
+    condition     = alltrue([for pool in var.node_pools : pool.size > 0])
+    error_message = "Each node pool must have a non-empty size and image."
+  }
 }
 variable "location" {
   type        = string
   default     = "fsn1"
-  description = "Default location of the ressources."
+  description = "Default location of the resources."
   validation {
     condition     = contains(["fsn1", "nbg1", "hel1", "ash", "hil"], lower(var.location))
     error_message = "Unsupported location."
