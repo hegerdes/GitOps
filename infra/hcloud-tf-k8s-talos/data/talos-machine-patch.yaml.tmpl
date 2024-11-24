@@ -2,9 +2,10 @@ machine:
   kubelet:
     nodeIP:
       validSubnets:
-      %{ for subnet in subnets ~}
-      - ${subnet}
-      %{ endfor ~}
+        - 10.0.0.0/16
+      %{ if ipv6_enabled }
+        - 2000::/3
+      %{ endif }
 
     extraConfig:
       serverTLSBootstrap: true
@@ -30,6 +31,7 @@ machine:
     net.ipv4.icmp_ignore_bogus_error_responses: 1
     net.ipv4.tcp_rfc1337: 1
     net.ipv4.ip_local_port_range: 10240 65535
+    net.ipv6.conf.all.forwarding: 1
 
 #  registries:
 #    mirrors:
@@ -41,6 +43,12 @@ machine:
 #          - https://k8s.mirror.123preview.app
 
   network:
+    interfaces:
+      - dhcp: true
+        dhcpOptions:
+          ipv6: true
+          ipv4: true
+
     kubespan:
       enabled: true
     nameservers:
@@ -51,6 +59,7 @@ machine:
         # - 2a00:1098:2c::1 # Nat64
         # - 2a01:4f8:c2c:123f::1 # Nat64
         # - 2a01:4f9:c010:3f02::1 # Nat64
+
     extraHostEntries:
     - ip: ${controlplane_internal_ip}
       aliases:
@@ -118,6 +127,17 @@ cluster:
   network:
     cni:
       name: none
+    podSubnets:
+      - 10.244.0.0/16
+      %{ if ipv6_enabled }
+      - 2a01:4f8:c013:0::/56
+      %{ endif }
+    serviceSubnets:
+      - 10.96.0.0/12
+      %{ if ipv6_enabled }
+      - 2a01:4f8:c013:1::/112
+      %{ endif }
+
   proxy:
     disabled: true
   discovery:

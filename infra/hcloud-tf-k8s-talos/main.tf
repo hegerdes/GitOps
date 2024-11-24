@@ -3,10 +3,10 @@ locals {
   cp_internel_lb_ip    = "10.0.0.10"
   cp_internal_endpoint = var.controlplane_endpoint
   cp_public_endpoint   = var.controlplane_endpoint
-  node_pool_ips        = flatten([for index, pool in module.node_pools : pool.vm_ips])
   cluster_name         = var.cluster_name
   subnets              = [for index in range(length(var.node_pools) + 1) : "10.0.${index}.0/24"]
   ssh_keys             = flatten([for pool in var.node_pools : [for key in pool.ssh_key_paths : file(key)]])
+  # node_pool_ips        = flatten([for index, pool in module.node_pools : pool.vm_ips])
 
   # DNS
   dns_records    = { a = module.loadbalancer.lb_ipv4, aaaa = module.loadbalancer.lb_ipv6 }
@@ -34,9 +34,9 @@ locals {
   private_ips_map        = { for vm in local.raw_server_list : vm.name => (vm.network[*].ip)[0] }
   private_cp_ips         = [for ip, vm in local.vm_pvt_ip_map : ip if contains(keys(vm.labels), "k8s_control_plane")]
 
-  # Talos enpoints
+  # Talos endpoints
   talos_endpoint   = local.talos_apply_use_pvt_ip ? local.cp_public_endpoint : null
-  talos_cp_node_ip = local.talos_apply_use_pvt_ip ? local.private_cp_ips[0] : [for pool in module.node_pools : pool.vm_ips[0]][0]
+  talos_cp_node_ip = local.talos_apply_use_pvt_ip ? try(local.private_cp_ips[0], "") : try([for pool in module.node_pools : pool.vm_ips[0]][0], "")
 
   # Node Pools
   node_pools = { for index, pool in var.node_pools :
@@ -102,6 +102,7 @@ data "talos_machine_configuration" "this" {
       extraArgsApiServer             = var.api_server_extra_args
       nodeLabels                     = { pool = each.value.name }
       nodeRole                       = each.value.tags.role
+      ipv6_enabled                   = true
     })
   ]
 }
@@ -111,7 +112,7 @@ data "talos_client_configuration" "this" {
   cluster_name         = local.cluster_name
   client_configuration = talos_machine_secrets.this.client_configuration
   endpoints            = [var.controlplane_endpoint]
-  nodes                = compact([for x in local.node_pool_ips : can(regex("::", x)) ? "" : x])
+  nodes                = local.private_ips
 }
 
 # create kubeconfig
@@ -131,7 +132,6 @@ resource "talos_machine_bootstrap" "this" {
   client_configuration = talos_machine_secrets.this.client_configuration
   endpoint             = local.talos_endpoint
   node                 = local.talos_cp_node_ip
-
 }
 
 # Ensures that current machine configuration is afer servers are created

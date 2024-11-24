@@ -9,7 +9,7 @@ resource "local_sensitive_file" "talosclientconf" {
   filename = "out/talosconfig.yaml"
 }
 resource "local_sensitive_file" "kubeconf" {
-  filename = "out/kubeconf.yaml"
+  filename = "out/kubeconfig.yaml"
   content = yamlencode({
     apiVersion = "v1"
     kind       = "Config"

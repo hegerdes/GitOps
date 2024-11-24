@@ -20,12 +20,23 @@ loadBalancer:
 endpointRoutes:
   enabled: true
 
+ipv4:
+  enabled: true
+ipv6:
+  enabled: false
+
+enableIPv4Masquerade: true
+enableIPv6Masquerade: false
+
 ipam:
   mode: kubernetes
   operator:
     # -- IPv4 CIDR list range to delegate to individual nodes for IPAM.
     clusterPoolIPv4PodCIDRList:
       - 10.244.0.0/16
+    clusterPoolIPv6PodCIDRList:
+      - 2a01:4f8:c013:0::/56 # Native NodeIPs
+      # - 2001:db8:42:0::/56 # Overlay
 
 bandwidthManager:
   enabled: true
@@ -38,8 +49,6 @@ cgroup:
 
 hostFirewall:
   enabled: true
-gatewayAPI:
-  enabled: true
 operator:
   rollOutPods: true
   replicas: 1
@@ -49,8 +58,12 @@ hubble:
   relay:
     enabled: true
     rollOutPods: true
+
+gatewayAPI:
+  enabled: false
+
 ingressController:
-  enabled: true
+  enabled: false
   loadbalancerMode: dedicated
   # enableProxyProtocol: true
   service:

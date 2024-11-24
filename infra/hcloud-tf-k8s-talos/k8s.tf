@@ -13,20 +13,12 @@ resource "helm_release" "cni" {
   chart           = "cilium"
   namespace       = "kube-system"
   upgrade_install = true
-  values          = [try(file(var.cilium_values_path), "")]
+  values          = [try(templatefile(var.cilium_values_path, {}), "")]
 
   set {
     name  = "cluster.name"
     value = var.cluster_name
   }
-  # set {
-  #   name  = "k8sServiceHost"
-  #   value = local.cp_internal_endpoint # talos proxy is localhost
-  # }
-  # set {
-  #   name  = "k8sServicePort"
-  #   value = 6443 # talos proxy is 7445
-  # }
 }
 
 resource "helm_release" "argocd" {
