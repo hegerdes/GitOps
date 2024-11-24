@@ -4,8 +4,7 @@ ssh_pwauth: false
 # disable_root: true
 disable_root_opts: no-port-forwarding,no-agent-forwarding,no-X11-forwarding
 
-groups:
-  - cloud
+groups: [cloud]
 
 users:
   - name: bootstrap
@@ -18,25 +17,36 @@ users:
       - ${key}
 %{ endfor ~}
 
-# ansible:
-#   package_name: ansible
-#   install_method: pip
-#   pull:
-#     url: "https://github.com/hegerdes/ansible-playbooks.git"
-#     playbook_name: pb_k8s_local.yml
+# Set up nate route if enabled
+# %{ if nat_enabled && network_role == "client" }
+# # Imperative way: ip route add default via 10.0.0.1
+
+# network:
+#   version: 2
+#   ethernets:
+#     # eth0:
+#     #   # dhcp6: true # Enables IPv6 via DHCP
+#     #   # dhcp4: true # Disable IPv4 on eth0
+#     enp7s0:
+#       gateway4: 10.0.0.1
+#       addresses:
+#         - 10.0.1.0/16
+#       # match:
+#       #   name: "enp*"
+#       routes:
+#         - to: 0.0.0.0/0
+#           via: 10.0.0.1
+#           on-link: true
+# %{ endif }
 
 # Write files
 write_files:
   # # Activate ip forward
   # - content: |
-  #     net.ipv4.tcp_fastopen = 1
   #     net.ipv4.ip_forward = 1
   #     net.ipv4.conf.all.forwarding = 1
-  #     net.ipv6.conf.all.forwarding = 1
   #     net.ipv4.conf.default.forwarding = 1
-  #     net.ipv6.conf.default.forwarding = 1
   #     net.bridge.bridge-nf-call-iptables = 1
-  #     net.bridge.bridge-nf-call-ip6tables = 1
   #   path: /etc/sysctl.conf
   #   append: true
 %{ if nat_enabled && network_role == "client" }
@@ -57,8 +67,8 @@ write_files:
       echo "NAT Server. The time is now $(date -R)!"
       echo "$(date -R): adding NAT ${network_role} route" >> /tmp/cloud-init-info.txt
       echo "$(date -R): iptables -t nat -A POSTROUTING -s '10.0.0.0/16' -o eth0 -j MASQUERADE" >> /tmp/cloud-init-info.txt
+      sysctl -w net.ipv4.ip_forward=1
       iptables -t nat -A POSTROUTING -s '10.0.0.0/16' -o eth0 -j MASQUERADE
-
     path: /var/lib/cloud/scripts/per-boot/nat-gateway.sh
     permissions: "0755"
 %{ endif }
@@ -96,6 +106,13 @@ packages:
   # - selinux-policy-default
   # - semodule-utils
   # - setools
+
+# ansible:
+#   package_name: ansible
+#   install_method: pip
+#   pull:
+#     url: "https://github.com/hegerdes/ansible-playbooks.git"
+#     playbook_name: pb_k8s_local.yml
 
 #  To specify a different 'apt-get' command, set 'apt_get_command'.
 #  This must be a list, and the subcommand (update, upgrade) is appended to it.

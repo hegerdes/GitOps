@@ -22,6 +22,7 @@ locals {
         ssh_keys             = [for key in hcloud_ssh_key.default : key.name]
         network_name         = hcloud_network.k8s_network.name
         location             = var.location
+        public_ipv4          = var.per_instance_ipv4
         private_ip_addresses = try([for i in range(pool.size) : cidrhost("10.0.${index + 1}.0/24", i + 8)], [])
       }
     )
@@ -66,6 +67,7 @@ module "node_pools" {
   instance_type = each.value.instance
   ssh_keys      = each.value.ssh_keys
   vm_names      = each.value.vm_names
+  public_ipv4   = each.value.public_ipv4
 
   tags                 = each.value.tags
   user_data            = each.value.user_data
