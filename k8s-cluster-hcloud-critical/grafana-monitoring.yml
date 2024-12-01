@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: grafana-metrics
+  name: grafana-monitoring
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "4"
@@ -12,7 +12,7 @@ spec:
       repoURL: https://grafana.github.io/helm-charts
       targetRevision: 1.*
       helm:
-        releaseName: grafana-metrics
+        releaseName: grafana-monitoring
         valuesObject:
           cluster:
             name: hetzner-test

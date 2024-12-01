@@ -16,6 +16,11 @@ spec:
         valuesObject:
           crds:
             enabled: true
+          podDnsPolicy: None
+          podDnsConfig:
+            nameservers:
+              - "1.1.1.1"
+              - "8.8.8.8"
           extraArgs:
             - --enable-gateway-api
     - repoURL: https://github.com/hegerdes/GitOps.git

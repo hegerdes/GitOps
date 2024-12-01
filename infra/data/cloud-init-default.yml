@@ -22,6 +22,7 @@ users:
 # # Imperative way: ip route add default via 10.0.0.1
 
 # network:
+#   # Docs: https://cloudinit.readthedocs.io/en/latest/reference/network-config-format-v2.html#gateway4-or-gateway6-scalar
 #   version: 2
 #   ethernets:
 #     # eth0:
