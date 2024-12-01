@@ -7,6 +7,13 @@ machine:
         - 2000::/3
       %{ endif }
 
+    # Needed fpr openebs
+    extraMounts:
+      - destination: /var/openebs/local
+        type: bind
+        source: /var/openebs/local
+        options: [rbind, rshared, rw]
+
     extraConfig:
       serverTLSBootstrap: true
       serializeImagePulls: false
@@ -25,6 +32,7 @@ machine:
     net.ipv4.tcp_fastopen: 1
     net.ipv4.icmp_echo_ignore_broadcasts: 1
     vm.overcommit_memory: 1
+    vm.nr_hugepages: "1024"
     kernel.pid_max: 4194304
     kernel.randomize_va_space: 2
     net.ipv4.tcp_syncookies: 1
@@ -43,12 +51,6 @@ machine:
 #          - https://k8s.mirror.123preview.app
 
   network:
-    interfaces:
-      - dhcp: true
-        dhcpOptions:
-          ipv6: true
-          ipv4: true
-
     kubespan:
       enabled: true
     nameservers:
@@ -56,7 +58,6 @@ machine:
         - 1.0.0.1 # Cloudflare
         - 2606:4700:4700::1111 # Cloudflare
         - 2606:4700:4700::1001 # Cloudflare
-        # - 2a00:1098:2c::1 # Nat64
         # - 2a01:4f8:c2c:123f::1 # Nat64
         # - 2a01:4f9:c010:3f02::1 # Nat64
 
@@ -65,11 +66,22 @@ machine:
       aliases:
       - ${controlplane_endpoint_internal}
 
+  certSANs:
+  %{ for SAN in machineCertSANs ~}
+    - ${SAN}
+  %{ endfor ~}
+
+  nodeLabels:
+  %{ for k,v in nodeLabels ~}
+    ${k}: ${v}
+  %{ endfor ~}
+
 %{ if nodeRole == "controlplane" }
   features:
     rbac: true
     hostDNS:
       enabled: true
+      forwardKubeDNSToHost: false
       resolveMemberNames: true
     kubernetesTalosAPIAccess:
         enabled: true
@@ -82,16 +94,6 @@ machine:
           - kube-system
           - cluster-autoscaler
 %{ endif }
-
-  certSANs:
-  %{ for SAN in machineCertSANs ~}
-    - ${SAN}
-  %{ endfor ~}
-
-  nodeLabels:
-  %{ for k,v in nodeLabels ~}
-    ${k}: ${v}
-  %{ endfor ~}
 
 %{ if nodeRole == "controlplane" }
 cluster:
@@ -130,12 +132,12 @@ cluster:
     podSubnets:
       - 10.244.0.0/16
       %{ if ipv6_enabled }
-      - 2a01:4f8:c013:0::/56
+      - fd00:10:244::/48
       %{ endif }
     serviceSubnets:
       - 10.96.0.0/12
       %{ if ipv6_enabled }
-      - 2a01:4f8:c013:1::/112
+      - fd00:20:123::/112
       %{ endif }
 
   proxy:

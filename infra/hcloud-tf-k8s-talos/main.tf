@@ -4,6 +4,7 @@ locals {
   cp_internal_endpoint = var.controlplane_endpoint
   cp_public_endpoint   = var.controlplane_endpoint
   cluster_name         = var.cluster_name
+  ipv6_enabled         = true
   subnets              = [for index in range(length(var.node_pools) + 1) : "10.0.${index}.0/24"]
   ssh_keys             = flatten([for pool in var.node_pools : [for key in pool.ssh_key_paths : file(key)]])
   # node_pool_ips        = flatten([for index, pool in module.node_pools : pool.vm_ips])
@@ -99,10 +100,13 @@ data "talos_machine_configuration" "this" {
       subnets                        = local.subnets,
       controlplane_endpoint_internal = local.cp_internal_endpoint,
       controlplane_internal_ip       = local.cp_internel_lb_ip
+      ipv6_enabled                   = local.ipv6_enabled
       extraArgsApiServer             = var.api_server_extra_args
-      nodeLabels                     = { pool = each.value.name }
       nodeRole                       = each.value.tags.role
-      ipv6_enabled                   = true
+      nodeLabels = {
+        "pool"              = each.value.name,
+        "openebs.io/engine" = "mayastor"
+      }
     })
   ]
 }

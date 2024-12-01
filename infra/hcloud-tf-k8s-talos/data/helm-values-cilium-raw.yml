@@ -23,10 +23,10 @@ endpointRoutes:
 ipv4:
   enabled: true
 ipv6:
-  enabled: false
+  enabled: ${ipv6_enabled}
 
 enableIPv4Masquerade: true
-enableIPv6Masquerade: false
+enableIPv6Masquerade: true
 
 ipam:
   mode: kubernetes
@@ -35,8 +35,7 @@ ipam:
     clusterPoolIPv4PodCIDRList:
       - 10.244.0.0/16
     clusterPoolIPv6PodCIDRList:
-      - 2a01:4f8:c013:0::/56 # Native NodeIPs
-      # - 2001:db8:42:0::/56 # Overlay
+      - fd00:10:244::/48 # Unique local
 
 bandwidthManager:
   enabled: true
