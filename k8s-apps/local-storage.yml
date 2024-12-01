@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: local-static-storage
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  sources:
+    - chart: local-static-provisioner
+      repoURL: https://kubernetes-sigs.github.io/sig-storage-local-static-provisioner
+      targetRevision: 2.*
+      helm:
+        releaseName: local-static-storage
+        valuesObject:
+          image: registry.k8s.io/sig-storage/local-volume-provisioner:v2.7.0
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: local-static-storage
+  info:
+    - name: App-Info
+      value: https://github.com/kubernetes-sigs/sig-storage-local-static-provisioner
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

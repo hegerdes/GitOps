@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: openebs
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+spec:
+  project: default
+  source:
+    chart: openebs
+    repoURL: https://openebs.github.io/charts
+    targetRevision: 3.*
+    helm:
+      releaseName: openebs
+      valuesObject:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: openebs
+  info:
+    - name: Chart-Info
+      value: https://artifacthub.io/packages/helm/openebs/openebs
+    - name: App-Source
+      value: https://github.com/openebs/openebs
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
