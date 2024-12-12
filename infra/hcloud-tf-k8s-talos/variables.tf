@@ -5,7 +5,7 @@ variable "cluster_name" {
 }
 variable "cluster_version" {
   type        = string
-  default     = "v1.31.3"
+  default     = "v1.32.0"
   description = "Version of the cluster."
 }
 variable "talos_version" {
