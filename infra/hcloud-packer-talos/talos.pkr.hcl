@@ -1,7 +1,7 @@
-# talos.pkr.hcl
 # NOTE: Based on https://www.talos.dev/v1.5/talos-guides/install/cloud-platforms/hetzner/
 
 packer {
+  required_version  = ">=1.12.0"
   required_plugins {
     hcloud = {
       source  = "github.com/hetznercloud/hcloud"
@@ -9,12 +9,13 @@ packer {
     }
   }
 }
+
 ######################## INPUT ########################
 variable "talos_version" {
   type    = string
-  default = "v1.8.3"
+  default = "v1.9.0"
 }
-variable "talos_extentions" {
+variable "talos_extensions" {
   type    = list(string)
   default = []
   # default = ["siderolabs/crun", "siderolabs/gvisor", "siderolabs/wasmedge", "siderolabs/tailscale"]
@@ -23,37 +24,32 @@ variable "talos_kernel_args" {
   type    = list(string)
   default = ["security=apparmor"]
 }
-variable "public_ipv4_disabled" {
-  // Currently not prssible since the talos factory is IPv4 only
-  type    = bool
-  default = false
-}
 
 ######################## LOCALS ########################
 locals {
   talos_download_factory   = "https://factory.talos.dev/image"
-  talos_extentions_postfix = length(var.talos_extentions) > 0 ? "-${join("-", local.talos_extentions)}" : ""
-  talos_extentions         = [for s in var.talos_extentions : replace(s, "siderolabs/", "")]
+  talos_extensions_postfix = length(var.talos_extensions) > 0 ? "-${join("-", local.talos_extensions)}" : ""
+  talos_extensions         = [for ext in var.talos_extensions : replace(ext, "siderolabs/", "")]
 
-  talos_custominazion_id  = jsondecode(data.http.customizations_id.body)["id"]
-  talos_download_base_url = join("/", [local.talos_download_factory, local.talos_custominazion_id])
+  talos_customization_id  = jsondecode(data.http.customizations_id.body)["id"]
+  talos_download_base_url = join("/", [local.talos_download_factory, local.talos_customization_id])
 
   setups = { for arch in ["amd64", "arm64"] :
     arch => {
       image = "${local.talos_download_base_url}/${var.talos_version}/hcloud-${arch}.raw.xz"
-      name  = "talos-${var.talos_version}-${arch}${local.talos_extentions_postfix}"
+      name  = "talos-${var.talos_version}-${arch}${local.talos_extensions_postfix}"
       arch  = "${arch}"
 
       tags = {
         type            = "infra",
         os              = "talos",
         arch            = "${arch}"
-        name            = "talos-${var.talos_version}-${arch}${local.talos_extentions_postfix}"
+        name            = "talos-${var.talos_version}-${arch}${local.talos_extensions_postfix}"
         version         = "${var.talos_version}",
         origin          = "talos-factory"
-        image_id_part_1 = length(var.talos_extentions) > 0 ? substr(local.talos_custominazion_id, 0, 32) : "default"
-        image_id_part_2 = length(var.talos_extentions) > 0 ? substr(local.talos_custominazion_id, 32, 32) : "default"
-        extentions      = length(var.talos_extentions) > 0 ? "${join("-", local.talos_extentions)}" : "none"
+        image_id_part_1 = length(var.talos_extensions) > 0 ? substr(local.talos_customization_id, 0, 32) : "default"
+        image_id_part_2 = length(var.talos_extensions) > 0 ? substr(local.talos_customization_id, 32, 32) : "default"
+        extensions      = length(var.talos_extensions) > 0 ? "${join("-", local.talos_extensions)}" : "none"
       }
     }
   }
@@ -67,7 +63,6 @@ source "hcloud" "talos_amd64" {
   ssh_username         = "root"
   snapshot_name        = local.setups.amd64.name
   snapshot_labels      = local.setups.amd64.tags
-  public_ipv4_disabled = var.public_ipv4_disabled
 }
 
 source "hcloud" "talos_arm64" {
@@ -78,7 +73,6 @@ source "hcloud" "talos_arm64" {
   ssh_username         = "root"
   snapshot_name        = local.setups.arm64.name
   snapshot_labels      = local.setups.arm64.tags
-  public_ipv4_disabled = var.public_ipv4_disabled
 }
 
 build {
@@ -96,25 +90,18 @@ build {
 }
 
 ######################## DATA ########################
-// Packer can only do get requests. So we use a lambda to do the post for the customizations_id
 data "http" "customizations_id" {
-  url = data.null.talos_download_url.output
-  request_headers = {
-    Accept = "application/json"
-  }
-}
-// Packer does not allow locals in data blocks so we use null data. Dirty but hashicorp... way of things
-data "null" "talos_download_url" {
-  input = "https://gecopek4tnjqowdbygnxe7ngve0kchwk.lambda-url.eu-central-1.on.aws/?payload=${data.null.talos_custominazion_id.output}&encoding=base64&target=https://factory.talos.dev/schematics"
-}
-// Encode the extention list ty yaml and base64 encde
-data "null" "talos_custominazion_id" {
-  input = replace(base64encode(yamlencode({
+  url = "https://factory.talos.dev/schematics"
+  method = "POST"
+  request_body = yamlencode({
     customization = {
       systemExtensions = {
-        officialExtensions = var.talos_extentions
+        officialExtensions = var.talos_extensions
       }
       extraKernelArgs = var.talos_kernel_args
     }
-  })), "=", "")
+  })
+  request_headers = {
+    Accept = "application/json"
+  }
 }
