@@ -11,6 +11,9 @@ loadBalancer:
   algorithm: maglev
   serviceTopology: true
 
+envoy:
+  enabled: false
+
 # routingMode: "native" # default is tunnel
 # directRoutingSkipUnreachable: true
 # autoDirectNodeRoutes: true
