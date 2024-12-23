@@ -114,7 +114,7 @@ spec:
   completions: 1
   parallelism: 1
   backoffLimit: 5
-  activeDeadlineSeconds: 360
+  activeDeadlineSeconds: 720
   ttlSecondsAfterFinished: 3600
   template:
     metadata:

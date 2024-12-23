@@ -174,18 +174,18 @@ spec:
               name: mimir-azure-storage-creds
               namespace: mimir
             spec:
-              refreshInterval: 1h # rate SecretManager pulls GCPSM
+              refreshInterval: 1h
               secretStoreRef:
                 kind: ClusterSecretStore
-                name: azure-store # name of the SecretStore (or kind specified)
+                name: azure-store
               target:
-                name: mimir-azure-storage-creds # name of the k8s Secret to be created
+                name: mimir-azure-storage-creds
                 creationPolicy: Owner
-              # Data defines the connection between the Kubernetes Secret keys and the Provider data
+
               data:
                 - secretKey: azure_storage_account_key
                   remoteRef:
-                    key: mimir-azure-sa-key
+                    key: azure-sa-devblobs-key-1
                     decodingStrategy: None # can be None, Base64, Base64URL or Auto
           - apiVersion: external-secrets.io/v1beta1
             kind: ExternalSecret
@@ -193,14 +193,14 @@ spec:
               name: mimir-s3-storage-creds
               namespace: mimir
             spec:
-              refreshInterval: 1h # rate SecretManager pulls GCPSM
+              refreshInterval: 1h
               secretStoreRef:
                 kind: ClusterSecretStore
-                name: azure-store # name of the SecretStore (or kind specified)
+                name: azure-store
               target:
-                name: mimir-s3-storage-creds # name of the k8s Secret to be created
+                name: mimir-s3-storage-creds
                 creationPolicy: Owner
-              # Data defines the connection between the Kubernetes Secret keys and the Provider data
+
               data:
                 - secretKey: AWS_ACCESS_KEY_ID
                   remoteRef:
