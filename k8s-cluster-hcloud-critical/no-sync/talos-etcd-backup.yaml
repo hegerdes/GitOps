@@ -41,52 +41,25 @@ roleRef:
   name: talos-machine-conf-manager
   apiGroup: rbac.authorization.k8s.io
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
 metadata:
-  name: talos-api-access
+  name: azure-sas
   namespace: kube-system
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: talos-api-access
-  template:
-    metadata:
-      labels:
-        app: talos-api-access
-    spec:
-      runtimeClassName: crun
-      serviceAccountName: talos-conf-manger
-      nodeSelector:
-        node-role.kubernetes.io/control-plane: ""
-      containers:
-        - name: talos-api-access
-          resources: {}
-          image: alpine:3
-          command:
-            - sh
-            - -c
-            - apk add kubectl curl bash jq && bash /var/scripts/install-talosctl.sh && bash /var/scripts/minio-mc-install.sh && while true; do sleep 7d; done
-          env:
-            - name: CP_NODE
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.hostIP
-          volumeMounts:
-            - mountPath: /var/run/secrets/talos.dev
-              name: talos-secrets
-            - mountPath: /var/scripts
-              name: talos-scripts
-      tolerations:
-        - operator: Exists
-      volumes:
-        - name: talos-secrets
-          secret:
-            secretName: talos-api-access-talos-secrets
-        - name: talos-scripts
-          configMap:
-            name: talos-scripts
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: azure-store
+  target:
+    name: azure-sas
+    creationPolicy: Owner
+
+  data:
+    - secretKey: url
+      remoteRef:
+        key: azure-sa-devblobs-kube-test-sas-backup
+        decodingStrategy: None # can be None, Base64, Base64URL or Auto
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -113,12 +86,17 @@ spec:
               command:
                 - sh
                 - -c
-                - apk add kubectl curl bash jq && bash /var/scripts/install-talosctl.sh && bash /var/scripts/minio-mc-install.sh && bash /var/scripts/talosctl-etcd-backup.sh
+                - apk add kubectl curl bash jq && bash /var/scripts/install-talosctl.sh && bash /var/scripts/talosctl-etcd-backup.sh
               env:
                 - name: CP_NODE
                   valueFrom:
                     fieldRef:
                       fieldPath: status.hostIP
+                - name: AZURE_SAS_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: azure-sas
+                      key: url
               volumeMounts:
                 - mountPath: /var/run/secrets/talos.dev
                   name: talos-secrets
@@ -126,6 +104,7 @@ spec:
                   name: talos-scripts
           tolerations:
             - operator: Exists
+              key: node-role.kubernetes.io/control-plane
           volumes:
             - name: talos-secrets
               secret:
@@ -144,8 +123,14 @@ data:
     #!/bin/bash
     set -e
 
+    BACKUP_DIR=${BACKUP_DIR:-"/tmp"}
+    CLUSTER_NAME=${CLUSTER_NAME:-"talos"}
+    DATESTAMP=$(date +"%Y-%m-%d-%H-%M-%S")
+    BACKUP_NAME="${CLUSTER_NAME}-etcd-${DATESTAMP}.db"
+    SCRIPT_PATH=$(dirname $(realpath -s $0))
+
     CP_NODE=${CP_NODE:-"10.0.1.8"}
-    if ! command -v talosctl > /dev/null; then
+    if ! command -v talosctl >/dev/null; then
       echo "talosctl is not installed. Please install it."
       exit 1
     fi
@@ -156,9 +141,30 @@ data:
       echo "Client is not configured to backup etcd. Please configure it."
       exit 1
     fi
+
     echo "Creating etcd snapshot on node ${CP_NODE}..."
-    talosctl etcd snapshot etcd.db -n $CP_NODE
-    # TODO: upload backup
+    talosctl etcd snapshot "${BACKUP_DIR}/${BACKUP_NAME}" -n $CP_NODE
+
+    # Check if the EVN AZURE_SAS_URL is set
+    if [ ! -z "$AZURE_SAS_URL" ]; then
+      if ! azcopy -v talosctl >/dev/null; then
+        bash $SCRIPT_PATH/az-copy-install.sh
+      fi
+      azcopy copy "${BACKUP_DIR}/${BACKUP_NAME}" "${AZURE_SAS_URL}"
+    fi
+
+    if [ ! -z "$S3_ENDPOINT_URL" ]; then
+      if [ -z "$S3_BUCKET_NAME" ]; then
+        echo "S3_BUCKET_NAME is not set."
+        exit 1
+      fi
+      if ! azcopy -v talosctl >/dev/null; then
+        bash $SCRIPT_PATH/minio-mc-install.sh
+      fi
+      mc alias set btk $S3_ENDPOINT_URL $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY
+      mc cp --json "${BACKUP_DIR}/${BACKUP_NAME}" "btk/${S3_BUCKET_NAME}/"
+    fi
+
   install-talosctl.sh: |
     # Check if talosctl is installed
     if ! command -v talosctl > /dev/null; then
@@ -192,7 +198,75 @@ data:
       chmod +x /usr/local/bin/mc
     fi
     mc --version
+  az-copy-install.sh: |
+    # Check if azcopy is installed
+    if ! command -v azcopy > /dev/null; then
+      echo "Installing azcopy"
+      if [ "$(uname -m)" = "aarch64" ]; then
+        ARCH="-arm64"
+      fi
+      if command -v apk > /dev/null; then
+        apk add --no-cache libc6-compat > /dev/null
+      fi
+      curl -sL https://aka.ms/downloadazcopy-v10-linux${ARCH} -o az-copy.tar
+      tar -xf az-copy.tar --strip-components=1 -C /usr/local/bin/
+    fi
+    azcopy --version
 
-# wget -O /usr/local/bin/talosctl https://github.com/siderolabs/talos/releases/download/v1.8.0-alpha.2/talosctl-linux-amd64
-# wget -O /usr/local/bin/talosctl https://github.com/siderolabs/talos/releases/download/v1.8.0-alpha.2/talosctl-linux-arm64
+
+# wget -O /usr/local/bin/talosctl https://github.com/siderolabs/talos/releases/download/v1.9.0/talosctl-linux-amd64
+# wget -O /usr/local/bin/talosctl https://github.com/siderolabs/talos/releases/download/v1.9.0/talosctl-linux-arm64
 # chmod +x /usr/local/bin/talosctl
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: talos-api-access
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: talos-api-access
+  template:
+    metadata:
+      labels:
+        app: talos-api-access
+    spec:
+      serviceAccountName: talos-conf-manger
+      nodeSelector:
+        node-role.kubernetes.io/control-plane: ""
+      containers:
+        - name: talos-api-access
+          resources: {}
+          image: alpine:3
+          command:
+            - sh
+            - -c
+            - apk add kubectl curl bash jq && bash /var/scripts/install-talosctl.sh && bash /var/scripts/minio-mc-install.sh && bash /var/scripts/az-copy-install.sh && while true; do sleep 7d; done
+          env:
+            - name: CP_NODE
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: AZURE_SAS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: azure-sas
+                  key: url
+          volumeMounts:
+            - mountPath: /var/run/secrets/talos.dev
+              name: talos-secrets
+            - mountPath: /var/scripts
+              name: talos-scripts
+      tolerations:
+        - operator: Exists
+          key: node-role.kubernetes.io/control-plane
+      volumes:
+        - name: talos-secrets
+          secret:
+            secretName: talos-api-access-talos-secrets
+        - name: talos-scripts
+          configMap:
+            name: talos-scripts
