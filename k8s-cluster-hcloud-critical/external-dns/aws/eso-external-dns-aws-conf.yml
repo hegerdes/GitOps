@@ -4,14 +4,14 @@ metadata:
   name: aws-external-dns-123-preview
   namespace: external-dns
 spec:
-  refreshInterval: 1h # rate SecretManager pulls GCPSM
+  refreshInterval: 1h
   secretStoreRef:
     kind: ClusterSecretStore
-    name: azure-store # name of the SecretStore (or kind specified)
+    name: azure-store
   target:
-    name: external-dns-aws # name of the k8s Secret to be created
+    name: external-dns-aws
     creationPolicy: Owner
-  # Data defines the connection between the Kubernetes Secret keys and the Provider data
+
   data:
     - secretKey: credentials
       remoteRef:

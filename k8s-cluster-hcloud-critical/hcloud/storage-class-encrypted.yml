@@ -16,14 +16,14 @@ metadata:
   name: csi-encryption-secret
   namespace: kube-system
 spec:
-  refreshInterval: 1h # rate SecretManager pulls GCPSM
+  refreshInterval: 1h
   secretStoreRef:
     kind: ClusterSecretStore
-    name: azure-store # name of the SecretStore (or kind specified)
+    name: azure-store
   target:
-    name: csi-encryption-secret # name of the k8s Secret to be created
+    name: csi-encryption-secret
     creationPolicy: Owner
-  # Data defines the connection between the Kubernetes Secret keys and the Provider data
+
   data:
     - secretKey: encryption-passphrase
       remoteRef:

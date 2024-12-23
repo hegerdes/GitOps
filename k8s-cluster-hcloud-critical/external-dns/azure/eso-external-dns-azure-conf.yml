@@ -4,14 +4,14 @@ metadata:
   name: aad-sp-external-dns-azure
   namespace: external-dns
 spec:
-  refreshInterval: 1h           # rate SecretManager pulls GCPSM
+  refreshInterval: 1h
   secretStoreRef:
     kind: ClusterSecretStore
-    name: azure-store               # name of the SecretStore (or kind specified)
+    name: azure-store
   target:
-    name: external-dns-azure  # name of the k8s Secret to be created
+    name: external-dns-azure
     creationPolicy: Owner
-  # Data defines the connection between the Kubernetes Secret keys and the Provider data
+
   data:
     - secretKey: azure.json
       remoteRef:
