@@ -36,20 +36,22 @@ node_pools = [
     ssh_key_paths = ["~/.ssh/id_rsa.pub", "~/.ssh/cloud-test.pub"]
   }
 ]
-loadbancers = {
-  name = "lb-cp"
-  services = {
-    name        = "k8s"
-    protocol    = "tcp"
-    source_port = 6443
-    target_port = 6443
+loadbancers = [
+  {
+    name = "lb-cp"
+    services = [{
+      name        = "k8s"
+      protocol    = "tcp"
+      source_port = 6443
+      target_port = 6443
+    }]
+    targets = [{
+      name   = "cp"
+      type   = "label_selector"
+      target = "k8s_control_plane"
+    }]
   }
-  targets = {
-    name   = "cp"
-    type   = "label_selector"
-    target = "k8s_control_plane"
-  }
-}
+]
 
 firewall_rules = [
   {
@@ -71,7 +73,7 @@ firewall_rules = [
   }
 ]
 
-per_instance_ipv4 = false
+per_instance_ipv4 = true
 vnet_routes = [{
   name        = "nat-gateway"
   gateway     = "10.0.0.2"

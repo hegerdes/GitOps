@@ -7,15 +7,15 @@ terraform {
     }
     talos = {
       source  = "siderolabs/talos"
-      version = "~>0.6"
+      version = "~>0.7"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "~>2.16"
+      version = "~>2.17"
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>4.11"
+      version = "~>4.14"
     }
     aws = {
       source  = "hashicorp/aws"
@@ -60,12 +60,11 @@ provider "aws" {
 
 provider "helm" {
   kubernetes {
-    # host = "https://${local.cp_public_endpoint}:6443"
-    # host = "https://${module.loadbalancer.lb_ipv4}:6443"
-
-    # client_certificate     = base64decode(talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_certificate)
-    # client_key             = base64decode(talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_key)
+    # host                   = yamldecode(talos_cluster_kubeconfig.this.kubeconfig_raw).clusters[0].cluster.server
     # cluster_ca_certificate = base64decode(talos_cluster_kubeconfig.this.kubernetes_client_configuration.ca_certificate)
+
+    # client_certificate = base64decode(talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_certificate)
+    # client_key         = base64decode(talos_cluster_kubeconfig.this.kubernetes_client_configuration.client_key)
     config_path = local_sensitive_file.kubeconf.filename
   }
 }

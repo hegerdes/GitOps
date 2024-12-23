@@ -28,7 +28,7 @@ machine:
       rotate-server-certificates: true
 
   sysctls:
-    # user.max_user_namespaces: 15000 # Maybe not good but gvisor wants it. See https://kspp.github.io/Recommended_Settings#sysctls
+    user.max_user_namespaces: 15000 # Maybe not good but gvisor wants it. See https://kspp.github.io/Recommended_Settings#sysctls
     net.ipv4.tcp_fastopen: 1
     net.ipv4.icmp_echo_ignore_broadcasts: 1
     vm.overcommit_memory: 1
@@ -115,7 +115,7 @@ cluster:
   inlineManifests: []
   extraManifests:
     # CRDs
-    - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml
+    - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/standard-install.yaml
     - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/heads/main/charts/kube-prometheus-stack/charts/crds/crds/crd-podmonitors.yaml
     - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/heads/main/charts/kube-prometheus-stack/charts/crds/crds/crd-probes.yaml
     - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/heads/main/charts/kube-prometheus-stack/charts/crds/crds/crd-servicemonitors.yaml

@@ -1,6 +1,6 @@
 variable "location" {
   type        = string
-  default     = "fsn1"
+  default     = "nbg1"
   description = "Location of the ressources."
   validation {
     condition     = contains(["fsn1", "nbg1", "hel1", "ash", "hil"], lower(var.location))

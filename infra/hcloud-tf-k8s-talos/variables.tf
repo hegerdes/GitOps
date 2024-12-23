@@ -10,7 +10,7 @@ variable "cluster_version" {
 }
 variable "talos_version" {
   type        = string
-  default     = "v1.8.3"
+  default     = "v1.9.0"
   description = "Talos Version of the cluster."
 }
 variable "controlplane_endpoint" {
@@ -54,7 +54,7 @@ variable "node_pools" {
 }
 variable "location" {
   type        = string
-  default     = "fsn1"
+  default     = "nbg1"
   description = "Default location of the resources."
   validation {
     condition     = contains(["fsn1", "nbg1", "hel1", "ash", "hil"], lower(var.location))
