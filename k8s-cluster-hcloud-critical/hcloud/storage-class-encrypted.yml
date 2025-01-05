@@ -23,7 +23,6 @@ spec:
   target:
     name: csi-encryption-secret
     creationPolicy: Owner
-
   data:
     - secretKey: encryption-passphrase
       remoteRef:

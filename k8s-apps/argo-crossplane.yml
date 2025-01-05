@@ -17,9 +17,9 @@ spec:
         valuesObject:
           provider:
             packages:
-              - xpkg.upbound.io/upbound/provider-terraform:v0.18.0
-              # - xpkg.upbound.io/upbound/provider-family-azure:v1.7.0
-              # - xpkg.upbound.io/upbound/provider-family-aws:v1.16.0
+              - xpkg.upbound.io/upbound/provider-terraform:v0.19.1
+              # - xpkg.upbound.io/upbound/provider-family-azure:v1.10.0
+              # - xpkg.upbound.io/upbound/provider-family-aws:v1.18.0
               # - xpkg.upbound.io/coopnorge/provider-github:v0.13.0
           extraObjects: []
           # - apiVersion: pkg.crossplane.io/v1
