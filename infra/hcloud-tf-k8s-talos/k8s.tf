@@ -10,7 +10,7 @@ resource "helm_release" "cni" {
 
   repository      = "https://helm.cilium.io/"
   wait            = false
-  version         = "1.17.0-rc.0"
+  version         = "1.17.0-rc.1"
   chart           = "cilium"
   namespace       = "kube-system"
   upgrade_install = true
