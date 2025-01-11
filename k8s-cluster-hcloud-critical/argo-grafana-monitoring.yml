@@ -15,7 +15,7 @@ spec:
         releaseName: grafana-monitoring
         valuesObject:
           cluster:
-            name: hetzner-test
+            name: hetzner-k8s
           externalServices:
             prometheus:
               hostKey: host
@@ -55,7 +55,7 @@ spec:
             enabled: true
             opencost:
               exporter:
-                defaultClusterId: hetzner-test
+                defaultClusterId: hetzner-k8s
               prometheus:
                 existingSecretName: grafana-agent-prometheus-cred
                 username_key: username

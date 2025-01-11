@@ -31,9 +31,9 @@ spec:
               load-balancer.hetzner.cloud/uses-proxyprotocol: "true" # Needs ipMode proxy support from CNI
             type: LoadBalancer
             ipFamilyPolicy: PreferDualStack
-            ipFamilies:
-              - IPv4
-              - IPv6
+            # ipFamilies:
+            #   - IPv4
+            #   - IPv6
             externalTrafficPolicy: Local
             nodePorts:
               http: 32080

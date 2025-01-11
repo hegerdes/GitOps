@@ -48,17 +48,22 @@ spec:
         valuesObject:
           metrics:
             enabled: true
-        #   controller:
-        #     hcloudToken:
-        #       file: /var/run/secrets/hcloud/token
-        #     extraVolumeMounts:
-        #       - name: hcloud-token
-        #         mountPath: /var/run/secrets/hcloud
-        #         readOnly: true
-        #     extraVolumes:
-        #       - name: hcloud-token
-        #         secret:
-        #           secretName: hcloud
+          controller:
+            hcloudToken:
+              file: /var/run/secrets/hcloud/token
+            extraVolumeMounts:
+              - name: hcloud-token
+                mountPath: /var/run/secrets/hcloud
+                readOnly: true
+            extraVolumes:
+              - name: hcloud-token
+                secret:
+                  secretName: hcloud
+          node:
+            extraVolumes:
+              - name: hcloud-token
+                secret:
+                  secretName: hcloud
     - chart: hetzner-load-balancer-exporter
       repoURL: https://wacken89.github.io/hetzner-load-balancer-prometheus-exporter
       targetRevision: 1.*
