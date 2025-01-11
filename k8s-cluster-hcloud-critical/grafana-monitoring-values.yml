@@ -1,7 +1,9 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/grafana/k8s-monitoring-helm/refs/heads/main/charts/k8s-monitoring/values.schema.json
 
+# Examples https://github.com/grafana/k8s-monitoring-helm/blob/main/charts/k8s-monitoring/docs/examples/features/cluster-events/default/values.yaml
+
 cluster:
-  name: hetzner-test
+  name: hetzner-k8s
 
 global:
   scrapeInterval: 30s
@@ -121,7 +123,7 @@ opencost:
   enabled: true
   opencost:
     exporter:
-      defaultClusterId: hetzner-test
+      defaultClusterId: hetzner-k8s
     prometheus:
       existingSecretName: grafana-agent-prometheus-cred
       username_key: username
