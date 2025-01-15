@@ -5,6 +5,7 @@ metadata:
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "2"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   project: default
   sources:
@@ -59,11 +60,11 @@ spec:
               - name: hcloud-token
                 secret:
                   secretName: hcloud
+          # TODO: Remove once https://github.com/hetznercloud/csi-driver/pull/843 is released
           node:
             extraVolumes:
               - name: hcloud-token
-                secret:
-                  secretName: hcloud
+                emptyDir: {}
     - chart: hetzner-load-balancer-exporter
       repoURL: https://wacken89.github.io/hetzner-load-balancer-prometheus-exporter
       targetRevision: 1.*
