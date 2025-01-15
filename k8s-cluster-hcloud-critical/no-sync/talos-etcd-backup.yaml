@@ -8,38 +8,12 @@ spec:
   roles:
     - os:reader
     - os:etcd:backup
-    # - os:admin
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: talos-conf-manger
+  name: talos-etcd-backup
   namespace: kube-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: talos-machine-conf-manager
-  namespace: kube-system
-rules:
-  - apiGroups: [""]
-    resources: ["secrets"]
-    # resourceNames: ["talos-machine-conf"]
-    verbs: ["create", "update", "delete"]
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: talos-machine-conf-manager-binding
-  namespace: kube-system
-subjects:
-  - kind: ServiceAccount
-    name: talos-conf-manger
-    namespace: kube-system
-roleRef:
-  kind: Role
-  name: talos-machine-conf-manager
-  apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
@@ -76,7 +50,8 @@ spec:
       template:
         spec:
           restartPolicy: OnFailure
-          serviceAccountName: talos-conf-manger
+          serviceAccountName: talos-etcd-backup
+          hostUsers: false
           nodeSelector:
             node-role.kubernetes.io/control-plane: ""
           containers:
@@ -86,7 +61,7 @@ spec:
               command:
                 - sh
                 - -c
-                - apk add kubectl curl bash jq && bash /var/scripts/install-talosctl.sh && bash /var/scripts/talosctl-etcd-backup.sh
+                - apk add kubectl curl bash jq && bash /var/scripts/talosctl-etcd-backup.sh
               env:
                 - name: CP_NODE
                   valueFrom:
@@ -97,6 +72,31 @@ spec:
                     secretKeyRef:
                       name: azure-sas
                       key: url
+                      optional: true
+                - name: S3_ENDPOINT_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: aws-s3
+                      key: endpoint
+                      optional: true
+                - name: S3_BUCKET_NAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: aws-s3
+                      key: bucket
+                      optional: true
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: aws-s3
+                      key: access_key_id
+                      optional: true
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: aws-s3
+                      key: secret_access_key
+                      optional: true
               volumeMounts:
                 - mountPath: /var/run/secrets/talos.dev
                   name: talos-secrets
@@ -126,14 +126,13 @@ data:
 
     BACKUP_DIR=${BACKUP_DIR:-"/tmp"}
     CLUSTER_NAME=${CLUSTER_NAME:-"talos"}
-    DATESTAMP=$(date +"%Y-%m-%d-%H-%M-%S")
-    BACKUP_NAME="${CLUSTER_NAME}-etcd-${DATESTAMP}.db"
+    DATETIME=$(date +"%Y-%m-%d-%H-%M-%S")
+    BACKUP_NAME="${CLUSTER_NAME}-etcd-${DATETIME}.db"
     SCRIPT_PATH=$(dirname $(realpath $0))
 
     CP_NODE=${CP_NODE:-"10.0.1.8"}
     if ! command -v talosctl >/dev/null; then
-      echo "talosctl is not installed. Please install it."
-      exit 1
+        bash $SCRIPT_PATH/install-talosctl.sh
     fi
 
     # Check if the output contains the string "os:etcd:backup"
@@ -146,7 +145,7 @@ data:
     echo "Creating etcd snapshot on node ${CP_NODE}..."
     talosctl etcd snapshot "${BACKUP_DIR}/${BACKUP_NAME}" -n $CP_NODE
 
-    # Check if the EVN AZURE_SAS_URL is set
+    # Check if the ENV AZURE_SAS_URL is set
     if [ ! -z "$AZURE_SAS_URL" ]; then
       if ! command -v azcopy >/dev/null; then
         bash $SCRIPT_PATH/az-copy-install.sh
@@ -154,6 +153,7 @@ data:
       azcopy copy "${BACKUP_DIR}/${BACKUP_NAME}" "${AZURE_SAS_URL}"
     fi
 
+    # Check if the ENV S3_ENDPOINT_URL is set
     if [ ! -z "$S3_ENDPOINT_URL" ]; then
       if [ -z "$S3_BUCKET_NAME" ]; then
         echo "S3_BUCKET_NAME is not set."
@@ -165,7 +165,6 @@ data:
       mc alias set btk $S3_ENDPOINT_URL $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY
       mc cp --json "${BACKUP_DIR}/${BACKUP_NAME}" "btk/${S3_BUCKET_NAME}/"
     fi
-
   install-talosctl.sh: |
     # Check if talosctl is installed
     if ! command -v talosctl > /dev/null; then
@@ -215,10 +214,42 @@ data:
     azcopy --version
 
 
-# wget -O /usr/local/bin/talosctl https://github.com/siderolabs/talos/releases/download/v1.9.0/talosctl-linux-amd64
-# wget -O /usr/local/bin/talosctl https://github.com/siderolabs/talos/releases/download/v1.9.0/talosctl-linux-arm64
+# wget -O /usr/local/bin/talosctl https://github.com/siderolabs/talos/releases/download/v1.9.1/talosctl-linux-amd64
+# wget -O /usr/local/bin/talosctl https://github.com/siderolabs/talos/releases/download/v1.9.1/talosctl-linux-arm64
 # chmod +x /usr/local/bin/talosctl
+---
 
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: talos-conf-manger
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: talos-machine-conf-manager
+  namespace: kube-system
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    # resourceNames: ["talos-machine-conf"]
+    verbs: ["create", "update", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: talos-machine-conf-manager-binding
+  namespace: kube-system
+subjects:
+  - kind: ServiceAccount
+    name: talos-conf-manger
+    namespace: kube-system
+roleRef:
+  kind: Role
+  name: talos-machine-conf-manager
+  apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -241,11 +272,12 @@ spec:
       containers:
         - name: talos-api-access
           resources: {}
+          terminationMessagePolicy: FallbackToLogsOnError
           image: alpine:3
           command:
             - sh
             - -c
-            - apk add kubectl curl bash jq && bash /var/scripts/install-talosctl.sh && bash /var/scripts/minio-mc-install.sh && bash /var/scripts/az-copy-install.sh && while true; do sleep 7d; done
+            - apk add kubectl curl bash jq && while true; do sleep 7d; done
           env:
             - name: CP_NODE
               valueFrom:
