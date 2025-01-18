@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kubevirt
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/hegerdes/GitOps.git
+    targetRevision: feat/kubevirt
+    path: k8s-apps/kubevirt
+    directory:
+      recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kubevirt
+  info:
+    - name: Chart-Info
+      value: https://pkgs.kubevirt.com/helmcharts/index.yaml
+    - name: kubevirt Operator Docs
+      value: https://kubevirt.com/kb/1236/kubernetes-operator
+    - name: App-Source
+      value: https://github.com/kubevirt/kubevirt
+  syncPolicy:
+    # automated:
+    #   prune: true
+    #   selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
