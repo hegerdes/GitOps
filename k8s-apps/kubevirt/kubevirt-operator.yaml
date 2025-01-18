@@ -8064,7 +8064,7 @@ metadata:
   name: virt-operator
   namespace: kubevirt
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       kubevirt.io: virt-operator
