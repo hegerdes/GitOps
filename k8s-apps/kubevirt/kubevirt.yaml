@@ -9,7 +9,8 @@ spec:
   configuration:
     developerConfiguration:
       useEmulation: true
-      featureGates: []
+      featureGates:
+        - MultiArchitecture
   customizeComponents: {}
   imagePullPolicy: IfNotPresent
   workloadUpdateStrategy: {}
