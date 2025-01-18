@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wasm-spin
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: wasm-spin
+  template:
+    metadata:
+      labels:
+        app: wasm-spin
+    spec:
+      runtimeClassName: wasmtime-spin-v2
+      containers:
+        - name: spin-hello
+          image: ghcr.io/spinkube/containerd-shim-spin/examples/spin-rust-hello:v0.13.0
+          command: ["/"]
