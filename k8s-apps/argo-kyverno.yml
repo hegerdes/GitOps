@@ -18,6 +18,8 @@ spec:
   info:
     - name: Chart-Info
       value: https://artifacthub.io/packages/helm/kyverno/kyverno
+    - name: Policy-Info
+      value: https://kyverno.io/policies/
   syncPolicy:
     automated:
       prune: true
