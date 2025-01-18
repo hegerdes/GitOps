@@ -22,8 +22,8 @@ spec:
     - name: App-Source
       value: https://github.com/kubevirt/kubevirt
   syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+    # automated:
+    #   prune: true
+    #   selfHeal: true
     syncOptions:
       - CreateNamespace=true
