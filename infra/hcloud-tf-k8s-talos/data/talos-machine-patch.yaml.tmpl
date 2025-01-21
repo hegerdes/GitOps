@@ -22,12 +22,16 @@ machine:
       maxPods: 220
       readOnlyPort: 0
       failSwapOn: true
+      featureGates:
+        UserNamespacesSupport: true
+        UserNamespacesPodSecurityStandards: true
 
     extraArgs:
       cloud-provider: external
       rotate-server-certificates: true
 
   sysctls:
+    # Some defaults https://github.com/siderolabs/talos/blob/main/internal/app/machined/pkg/controllers/runtime/kernel_param_defaults.go
     user.max_user_namespaces: 15000 # Maybe not good but gvisor wants it. See https://kspp.github.io/Recommended_Settings#sysctls
     net.ipv4.tcp_fastopen: 1
     net.ipv4.icmp_echo_ignore_broadcasts: 1
@@ -39,7 +43,6 @@ machine:
     net.ipv4.icmp_ignore_bogus_error_responses: 1
     net.ipv4.tcp_rfc1337: 1
     net.ipv4.ip_local_port_range: 10240 65535
-    net.ipv6.conf.all.forwarding: 1
 
 #  registries:
 #    mirrors:
