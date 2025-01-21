@@ -32,23 +32,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: default
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          repository: hegerdes/ansible-playbooks
-          path: playbooks
-          token: ${{ secrets.ORG_GITHUB_PAT }}
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          repository: hegerdes/inventories
-          path: inventories
-          token: ${{ secrets.ORG_GITHUB_PAT }}
-
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v3
-
       - name: Log in with Azure
         uses: azure/login@v2
         with:
@@ -56,9 +39,32 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+      - name: Load GitHub PAT from KeyVault
+        run: |
+          ORG_GITHUB_PAT=$(az keyvault secret show --vault-name ${{ github.repository_owner }} --name hcloud-k8s-token | jq -r .value)
+          echo "::add-mask::$ORG_GITHUB_PAT"
+          echo "ORG_GITHUB_PAT=$ORG_GITHUB_PAT" >> "$GITHUB_ENV"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          repository: hegerdes/ansible-playbooks
+          path: playbooks
+          token: ${{ env.ORG_GITHUB_PAT }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          repository: hegerdes/inventories
+          path: inventories
+          token: ${{ env.ORG_GITHUB_PAT }}
+
+      - name: Set up Terraform
+        uses: opentofu/setup-opentofu@v1
+
       - name: Setting up vars
         run: |
-          # Provison infra
+          # Provision infra
           echo "Setting up secrets and agents"
           mkdir -p ~/.ssh
           chmod 700 -R ~/.ssh
@@ -70,13 +76,13 @@ jobs:
           echo "::add-mask::$HCLOUD_TOKEN"
           echo "HCLOUD_TOKEN=$HCLOUD_TOKEN" >> "$GITHUB_ENV"
 
-      - name: Run Terraform
-        working-directory: inventories/hetzner-test/terraform
+      - name: Run Terraform/Tofu
+        working-directory: inventories/hetzner-k8s/terraform
         run: |
-          terraform --version
-          terraform init
-          terraform plan ${{ inputs.tf-extra-args || '' }} -out plan.infra
-          terraform apply -auto-approve plan.infra
+          tofu --version
+          tofu init
+          tofu plan ${{ inputs.tf-extra-args || '' }} -out plan.infra
+          tofu apply -auto-approve plan.infra
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
@@ -86,7 +92,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: terraform-output
-          path: inventories/hetzner-test/terraform/outputs
+          path: inventories/hetzner-k8s/terraform/outputs
           retention-days: 8
 
       - name: Azure Logout
@@ -102,33 +108,6 @@ jobs:
     needs: k8s-infra
     environment: default
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          repository: hegerdes/ansible-playbooks
-          path: playbooks
-          token: ${{ secrets.ORG_GITHUB_PAT }}
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          repository: hegerdes/inventories
-          path: inventories
-          token: ${{ secrets.ORG_GITHUB_PAT }}
-
-      - name: Download Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: terraform-output
-          path: inventories/hetzner-test/terraform/outputs
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
-          cache: "pip"
-          cache-dependency-path: playbooks/requirements.txt
-
       - name: Log in with Azure
         uses: azure/login@v2
         with:
@@ -136,13 +115,46 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+      - name: Load GitHub PAT from KeyVault
+        run: |
+          ORG_GITHUB_PAT=$(az keyvault secret show --vault-name ${{ github.repository_owner }} --name hcloud-k8s-token | jq -r .value)
+          echo "::add-mask::$ORG_GITHUB_PAT"
+          echo "ORG_GITHUB_PAT=$ORG_GITHUB_PAT" >> "$GITHUB_ENV"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          repository: hegerdes/ansible-playbooks
+          path: playbooks
+          token: ${{ env.ORG_GITHUB_PAT }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          repository: hegerdes/inventories
+          path: inventories
+          token: ${{ env.ORG_GITHUB_PAT }}
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: terraform-output
+          path: inventories/hetzner-k8s/terraform/outputs
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: playbooks/requirements.txt
+
       - name: Install Ansible
         working-directory: playbooks
         run: pip install -r requirements.txt && pip freeze
 
       - name: Setting up vars
         run: |
-          # Provison infra
+          # Provision infra
           echo "Setting up secrets and agents"
           mkdir -p ~/.ssh
           chmod 700 -R ~/.ssh
@@ -169,10 +181,10 @@ jobs:
           eval $(ssh-agent -s) > /dev/null
           az keyvault secret show --vault-name ${{ github.repository_owner }} --name ssh-25519-ci-pvt \
             | jq -r .value | base64 -d | tr -d '\r' | ssh-add - > /dev/null
-          echo "Will run playbook in this inventroy:"
-          ansible-inventory -i inventories/hetzner-test/hcloud.yml --playbook-dir playbooks --graph
+          echo "Will run playbook in this inventory:"
+          ansible-inventory -i inventories/hetzner-k8s/hcloud.yml --playbook-dir playbooks --graph
           echo "Starting playbook run..."
-          time ansible-playbook -i inventories/hetzner-test/hcloud.yml playbooks/pb_k8s_remote.yml
+          time ansible-playbook -i inventories/hetzner-k8s/hcloud.yml playbooks/pb_k8s_remote.yml
 
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
