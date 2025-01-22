@@ -17,14 +17,13 @@ variable "talos_version" {
 }
 variable "talos_extensions" {
   type    = list(string)
-  # default = []
-  default = ["siderolabs/crun", "siderolabs/gvisor", "siderolabs/wasmedge"]
-  # Extensions:
-  # "siderolabs/tailscale"
+  default = []
+  # default = ["siderolabs/crun", "siderolabs/gvisor", "siderolabs/wasmedge"]
 }
 variable "talos_kernel_args" {
   type    = list(string)
   default = []
+  # default = ["security=apparmor"]
 }
 
 ######################## LOCALS ########################
