@@ -300,8 +300,8 @@ data "azurerm_key_vault" "hegerdes" {
   resource_group_name = "default"
 }
 
-resource "azurerm_key_vault_secret" "talos-hetzner-custer-autoscale-conf" {
-  name         = "talos-hetzner-custer-autoscale-conf"
+resource "azurerm_key_vault_secret" "k8s-hetzner-custer-autoscale-conf" {
+  name         = "k8s-hetzner-custer-autoscale-conf"
   value        = local.cluster-config
   key_vault_id = data.azurerm_key_vault.hegerdes.id
 }

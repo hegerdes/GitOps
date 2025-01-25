@@ -12,6 +12,8 @@ spec:
       helm:
         releaseName: cluster-autoscaler
         valuesObject:
+          extraArgs:
+            max-node-provision-time: 10m0s
           cloudProvider: hetzner
           autoDiscovery:
             clusterName: hcloud
