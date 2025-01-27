@@ -1,5 +1,14 @@
 # Helper: tf destroy -target hcloud_server.worker_pool_arm64 -target hcloud_server.worker_pool_amd64 -target hcloud_server.control_plane_pool
 # ################# SSH-Key #################
+resource "tls_private_key" "dummy" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+# Create a new SSH key
+resource "hcloud_ssh_key" "dummy" {
+  name       = "dummy-key"
+  public_key = tls_private_key.dummy.public_key_openssh
+}
 resource "hcloud_ssh_key" "default" {
   for_each   = toset(local.ssh_keys)
   name       = sha256(each.key)
