@@ -36,13 +36,13 @@ source "hcloud" "k8s-amd64" {
   ssh_keys      = []
   user_data     = file(var.user_data_path)
   ssh_username  = "root"
-  snapshot_name = local.output_name
+  snapshot_name = "${local.output_name}-amd64"
   snapshot_labels = {
     type    = "infra",
     base    = var.base_image,
     version = "${var.k8s_version}",
-    name    = local.output_name
-
+    name    = "${local.output_name}-amd64"
+    arch    = "amd64"
   }
 }
 source "hcloud" "k8s-arm64" {
@@ -52,19 +52,31 @@ source "hcloud" "k8s-arm64" {
   ssh_keys      = []
   user_data     = file(var.user_data_path)
   ssh_username  = "root"
-  snapshot_name = local.output_name
+  snapshot_name = "${local.output_name}-arm64"
   snapshot_labels = {
     type    = "infra",
     base    = var.base_image,
     version = "${var.k8s_version}",
-    name    = local.output_name
+    name    = "${local.output_name}-arm64"
+    arch    = "arm64"
   }
 }
 build {
-  # sources = ["source.hcloud.k8s-amd64", "source.hcloud.k8s-arm64"]
-  sources = ["source.hcloud.k8s-arm64"]
+  sources = ["source.hcloud.k8s-amd64", "source.hcloud.k8s-arm64"]
+  # sources = ["source.hcloud.k8s-arm64"]
 
   provisioner "shell" {
+    expect_disconnect = true
+    env = {
+      k8s_version = "${var.k8s_version}"
+    }
+    scripts = [
+      "ansible-setup.sh",
+    ]
+  }
+  provisioner "shell" {
+    pause_before = "30s"
+    max_retries = 3
     env = {
       k8s_version = "${var.k8s_version}"
     }
