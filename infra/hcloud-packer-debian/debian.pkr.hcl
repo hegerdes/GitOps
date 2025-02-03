@@ -22,7 +22,7 @@ variable "k8s_version" {
 }
 variable "user_data_path" {
   type    = string
-  default = "cloud-init-default.yml"
+  default = "cloud-init.yml"
 }
 
 locals {
@@ -76,7 +76,7 @@ build {
   }
   provisioner "shell" {
     pause_before = "30s"
-    max_retries = 3
+    max_retries = 1
     env = {
       k8s_version = "${var.k8s_version}"
     }

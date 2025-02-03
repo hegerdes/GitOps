@@ -17,7 +17,6 @@ packages:
   - apparmor
   - apparmor-profiles-extra
   - apt-transport-https
-  - python3-kubernetes # for ansible
   - jq # json parsing and validating
   - yq # yaml parsing and validating
   - unzip
@@ -28,7 +27,7 @@ packages:
   - ipvsadm
   - auditd
   - dbus
-  - libyajl2 # Needed for youki was
+  - libyajl2 # Needed for youki wasm
   # - policycoreutils
   # - selinux-basics
   # - selinux-policy-default

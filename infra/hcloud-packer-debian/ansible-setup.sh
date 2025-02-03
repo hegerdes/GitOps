@@ -33,6 +33,16 @@ k8s_absent_packages:
   - "man-db"
   - "manpages"
   - "vim-tiny"
+  - "vim"
+  - "vim-runtime"
+  - "libsodium23"
+  - "vim-common"
+  - "perl"
+  - "htop"
+  - "libgdbm-compat4"
+  - "libgdbm6"
+  - "libperl5.36"
+  - "perl-modules-5.36"
   - "qemu-guest-agent"
   - "linux-image-6.1.*"
 EOF
@@ -62,18 +72,21 @@ else
 
   # Package cleanup
   rm -rf ~/.local/lib/python3.11 ~/.local/bin/ ~/.ansible ~/.cache/* ~/playbooks
-  apt-get purge --yes python3-pip python3-wheel git git-man liberror-perl wget man-db manpages vim-tiny qemu-guest-agent python3-google-auth linux-image-6.1.*
   pip3 list -v
+  apt-get purge --yes python3-pip python3-wheel git git-man liberror-perl wget man-db manpages vim-tiny qemu-guest-agent python3-google-auth linux-image-6.1.*
   apt list --installed
   apt-get autoremove --yes
   apt-get clean && apt-get autoclean
 
   # Cloud-init cleanup
   cloud-init clean --machine-id --seed --logs
-  rm -rvf /var/lib/cloud/instances /etc/machine-id /var/lib/dbus/machine-id /var/log/cloud-init*
+  rm -rvf /var/lib/cloud/* /etc/machine-id /var/lib/dbus/machine-id /var/log/cloud-init*
   cloud-init status
 
   # Caches cleanup
-  rm -rf /var/cache/apt/* /var/cache/debconf/* /var/cache/dpkg/* /var/log/*.log /tmp/*
+  rm -rf /var/cache/apt/* /var/cache/debconf/* /var/cache/dpkg/* /var/cache/ansible/* /var/log/*.log* /tmp/* /var/tmp/* /usr/share/doc/*
+  dd if=/dev/zero of=/mnt/zero.fill bs=1M || true
+  rm -rf /mnt/zero.fill
   df -h
+  sync
 fi

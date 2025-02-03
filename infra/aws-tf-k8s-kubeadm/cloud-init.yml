@@ -1,0 +1,39 @@
+#cloud-config
+
+ssh_pwauth: false
+# disable_root: true
+disable_root_opts: no-port-forwarding,no-agent-forwarding,no-X11-forwarding
+
+groups: [cloud]
+
+users:
+  - name: bootstrap
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, cloud
+    shell: /bin/bash
+    lock_passwd: true
+    ssh_authorized_keys:
+%{ for key in ssh_keys ~}
+      - ${key}
+%{ endfor ~}
+
+package_update: true
+package_upgrade: true
+package_reboot_if_required: true
+packages:
+  - gnupg
+  - lsb-release
+  - ca-certificates
+  - curl
+  - apt-transport-https
+  - jq # json parsing and validating
+  - yq # yaml parsing and validating
+  - unzip
+apt_get_command:
+   ['apt-get', '--option=Dpkg::Options::=--force-confold',
+    '--option=Dpkg::options::=--force-unsafe-io', '--assume-yes', '--quiet', '--no-install-recommends']
+
+runcmd:
+  - wget https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb
+  - dpkg -i amazon-ssm-agent.deb
+  - echo "Cloud-Init finished" >> /srv/cloud-init-msg.txt

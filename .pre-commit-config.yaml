@@ -4,7 +4,7 @@ repos:
     hooks:
       - id: check-yaml
         args: [--allow-multiple-documents]
-        exclude: .gitlab-ci.yml|infra/data/cloud-init-default.yml
+        exclude: .gitlab-ci.yml|infra/.*/cloud-init.yml
       - id: check-json
       - id: pretty-format-json
         args: [--autofix, --no-sort-keys, --no-ensure-ascii]
