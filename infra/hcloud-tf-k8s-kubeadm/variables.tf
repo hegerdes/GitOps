@@ -16,9 +16,11 @@ variable "node_pools" {
     image           = string
     location        = optional(string, "fsn1")
     size            = optional(number, 1)
-    cloud_init_path = optional(string, "../data/cloud-init-default.yml")
+    cloud_init_path = optional(string, "cloud-init.yml")
     ssh_key_paths   = optional(list(string), ["~/.ssh/id_rsa.pub"])
     vm_names        = optional(list(string), [])
+    ipv4_enabled    = optional(bool, true)
+    ipv6_enabled    = optional(bool, true)
   }))
   default     = []
   description = "List of node pools configurations."
@@ -41,12 +43,6 @@ variable "loadbancers" {
   }))
   default     = []
   description = "List of loadbalancers."
-}
-
-variable "per_instance_ipv4" {
-  type        = bool
-  default     = true
-  description = "If every node should have its own public IPv4 address. If enabled adds extra cost. If false you need manager_vm_create set to true for using nat over this vm."
 }
 
 variable "vnet_name" {

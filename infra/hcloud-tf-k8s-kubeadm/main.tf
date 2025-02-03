@@ -16,13 +16,11 @@ locals {
         user_data = templatefile(pool.cloud_init_path, {
           ssh_key      = [for key in pool.ssh_key_paths : file(key)]
           network_role = "client"
-          nat_enabled  = !var.per_instance_ipv4
         })
         tags                 = merge(pool.tags, local.default_tags)
         ssh_keys             = [for key in hcloud_ssh_key.default : key.name]
         network_name         = hcloud_network.k8s_network.name
         location             = var.location
-        public_ipv4          = var.per_instance_ipv4
         private_ip_addresses = try([for i in range(pool.size) : cidrhost("10.0.${index + 1}.0/24", i + 8)], [])
       }
     )
@@ -67,7 +65,8 @@ module "node_pools" {
   instance_type = each.value.instance
   ssh_keys      = each.value.ssh_keys
   vm_names      = each.value.vm_names
-  public_ipv4   = each.value.public_ipv4
+  public_ipv4   = each.value.ipv4_enabled
+  public_ipv6   = each.value.ipv6_enabled
 
   tags                 = each.value.tags
   user_data            = each.value.user_data
@@ -101,10 +100,8 @@ resource "hcloud_server" "manager_nodes" {
   image       = "debian-12"
   server_type = "cax11"
   location    = var.location
-  user_data = templatefile("../data/cloud-init-default.yml", {
-    ssh_key      = local.ssh_keys
-    network_role = "gateway"
-    nat_enabled  = !var.per_instance_ipv4
+  user_data = templatefile("cloud-init.yml", {
+    ssh_key = local.ssh_keys
   })
   labels = {
     managedby = "terraform"
