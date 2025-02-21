@@ -10,7 +10,7 @@ variable "cluster_version" {
 }
 variable "talos_version" {
   type        = string
-  default     = "v1.9.3"
+  default     = "v1.9.4"
   description = "Talos Version of the cluster."
 }
 variable "controlplane_endpoint" {

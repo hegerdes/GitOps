@@ -10,6 +10,7 @@ node_pools = [
       role              = "control-plane"
     }
     ssh_key_paths = ["~/.ssh/id_rsa.pub", "~/.ssh/cloud-test.pub"]
+    ipv4_enabled  = true
   },
   {
     name     = "worker-node-amd64"
@@ -22,6 +23,7 @@ node_pools = [
       role       = "worker"
     }
     ssh_key_paths = ["~/.ssh/id_rsa.pub", "~/.ssh/cloud-test.pub"]
+    ipv4_enabled  = true
   },
   {
     name     = "worker-node-arm64"
@@ -34,6 +36,7 @@ node_pools = [
       role       = "worker"
     }
     ssh_key_paths = ["~/.ssh/id_rsa.pub", "~/.ssh/cloud-test.pub"]
+    ipv4_enabled  = true
   }
 ]
 loadbancers = [
