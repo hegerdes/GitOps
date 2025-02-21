@@ -51,6 +51,9 @@ configs:
     extra:
       webhook.github.secret: $argocd-secret-sso:webhook.github.secret
 
+  params:
+    controller.sync.timeout.seconds: "5m"
+
 ## Server
 server:
   # extraArgs:
