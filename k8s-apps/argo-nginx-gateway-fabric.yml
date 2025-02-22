@@ -31,16 +31,12 @@ spec:
           type: LoadBalancer
           ports:
             - port: 80
-              targetPort: http
+              targetPort: 80
               protocol: TCP
-              appProtocol: http
               name: http
-              nodePort: 31080
             - port: 443
-              targetPort: https
-              appProtocol: https
+              targetPort: 443
               protocol: TCP
-              nodePort: 31443
               name: https
   destination:
     server: https://kubernetes.default.svc
