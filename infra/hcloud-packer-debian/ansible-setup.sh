@@ -44,6 +44,7 @@ k8s_absent_packages:
   - "libperl5.36"
   - "perl-modules-5.36"
   - "qemu-guest-agent"
+  - "locales-all"
   - "linux-image-6.1.*"
 EOF
 
