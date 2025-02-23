@@ -10,91 +10,136 @@ spec:
   sources:
     - chart: k8s-monitoring
       repoURL: https://grafana.github.io/helm-charts
-      targetRevision: 1.*
+      targetRevision: 2.*
       helm:
         releaseName: grafana-monitoring
         valuesObject:
+          # yaml-language-server: $schema=https://raw.githubusercontent.com/grafana/k8s-monitoring-helm/refs/heads/main/charts/k8s-monitoring/values.schema.json
+          # Examples https://github.com/grafana/k8s-monitoring-helm/blob/main/charts/k8s-monitoring/docs/examples/features/cluster-events/default/values.yaml
           cluster:
             name: hetzner-k8s
-          externalServices:
-            prometheus:
-              hostKey: host
-              # host: https://prometheus-prod-01-eu-west-0.grafana.net
-              # Authenticate to Prometheus using basic authentication
-              basicAuth:
+          global:
+            scrapeInterval: 30s
+          destinations:
+            - name: grafana-com-metrics
+              type: prometheus
+              url: https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push
+              auth:
+                type: basic
                 usernameKey: username
                 passwordKey: password
-              # Credential management
               secret:
                 create: false
                 name: grafana-agent-prometheus-cred
                 namespace: monitoring
-            loki:
-              hostKey: host
-              # host: https://logs-prod-eu-west-0.grafana.net
-              # Authenticate to Prometheus using basic authentication
-              basicAuth:
+            - name: grafana-com-loki
+              type: loki
+              url: https://logs-prod-eu-west-0.grafana.net/loki/api/v1/push
+              auth:
+                type: basic
                 usernameKey: username
                 passwordKey: password
-              # Credential management
               secret:
                 create: false
                 name: grafana-agent-loki-cred
                 namespace: monitoring
-            tempo:
-              # protocol: otlphttp # "otlp" or "otlphttp"
-              # host: https://tempo-eu-west-0.grafana.net
-              basicAuth:
+            - name: grafana-com-tempo
+              type: otlp
+              protocol: grpc
+              url: https://tempo-eu-west-0.grafana.net:443
+              metrics: { enabled: false }
+              logs: { enabled: false }
+              traces: { enabled: true }
+              auth:
+                type: basic
                 usernameKey: username
                 passwordKey: password
               secret:
                 create: false
                 name: grafana-agent-tempo-cred
                 namespace: monitoring
-          opencost:
+
+          clusterMetrics:
             enabled: true
+            # https://github.com/sustainable-computing-io/kepler
+            kepler:
+              enabled: false
+            # https://github.com/opencost/opencost
             opencost:
-              exporter:
-                defaultClusterId: hetzner-k8s
-              prometheus:
-                existingSecretName: grafana-agent-prometheus-cred
-                username_key: username
-                password_key: password
-                external:
-                  url: https://prometheus-prod-01-eu-west-0.grafana.net/api/prom
-          metrics:
-            enabled: true
-            cost:
-              enabled: true
+              enabled: false
+            windows-exporter:
+              deploy: false
             node-exporter:
-              enabled: true
-          traces:
+              deploy: true
+          clusterEvents:
             enabled: true
-          logs:
+          nodeLogs:
+            enabled: false
+          podLogs:
             enabled: true
-            pod_logs:
-              enabled: true
-            cluster_events:
-              enabled: true
-          receivers:
-            grpc:
-              enabled: true
-            http:
-              enabled: true
-            zipkin:
-              enabled: true
-          kube-state-metrics:
+          alloy-metrics:
             enabled: true
-          prometheus-node-exporter:
+          alloy-logs:
             enabled: true
-          prometheus-operator-crds:
+          alloy-singleton:
             enabled: true
-          alloy: {}
-          alloy-events: {}
-          alloy-logs: {}
+          alloy-receiver:
+            enabled: true
+            alloy:
+              extraPorts:
+                - name: otlp-grpc
+                  port: 4317
+                  targetPort: 4317
+                  protocol: TCP
+                - name: otlp-http
+                  port: 4318
+                  targetPort: 4318
+                  protocol: TCP
+                - name: zipkin
+                  port: 9411
+                  targetPort: 9411
+                  protocol: TCP
+                - name: jaeger-grpc
+                  port: 14250
+                  targetPort: 14250
+                  protocol: TCP
+          prometheusOperatorObjects:
+            enabled: true
+          applicationObservability:
+            enabled: true
+            connectors:
+              grafanaCloudMetrics:
+                enabled: true
+            receivers:
+              jaeger:
+                grpc:
+                  enabled: true
+                  port: 14250
+              otlp:
+                grpc:
+                  enabled: true
+                  port: 4317
+                http:
+                  enabled: true
+                  port: 4318
+              zipkin:
+                enabled: true
+                port: 9411
+          integrations:
+            alloy:
+              instances:
+                - name: alloy
+                  labelSelectors:
+                    app.kubernetes.io/name:
+                      - alloy-metrics
+                      - alloy-singleton
+                      - alloy-logs
+                      - alloy-receiver
+          extraObjects: []
+
     - repoURL: https://github.com/hegerdes/GitOps.git
       targetRevision: HEAD
-      path: k8s-cluster-hcloud-critical/grafana-alloy
+      path: k8s-cluster-hcloud-critical/grafana-monitoring
       directory:
         recurse: true
   destination:
