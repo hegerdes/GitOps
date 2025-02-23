@@ -29,10 +29,10 @@ variables:
   GL_K8S_AGENT_ID: 1103496
 
 .tf_stacks: &tf_stacks
-  - TF_ROOT: infra/k8s-ci-test
-    TF_STATE_NAME: k8s-test
-  - TF_ROOT: infra/hcloud-tf-ci-test
-    TF_STATE_NAME: hcloud
+  - GITLAB_TOFU_ROOT_DIR: infra/k8s-ci-test
+    GITLAB_TOFU_STATE_NAME: k8s-test
+  - GITLAB_TOFU_ROOT_DIR: infra/hcloud-tf-ci-test
+    GITLAB_TOFU_STATE_NAME: hcloud
 
 .job-scripts:
   tf-pre-k8s-setup:
