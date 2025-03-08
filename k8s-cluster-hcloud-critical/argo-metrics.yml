@@ -14,14 +14,15 @@ spec:
       helm:
         releaseName: metrics-server
         valuesObject: {}
-    # - chart: node-exporter
-    #   repoURL: registry-1.docker.io/bitnamicharts
+    # - chart: prometheus-node-exporter
+    #   repoURL: https://prometheus-community.github.io/helm-charts
     #   targetRevision: 4.*
     #   helm:
     #     releaseName: node-exporter
     #     valuesObject:
-    #       serviceMonitor:
-    #         enabled: true
+    #       prometheus:
+    #         monitor:
+    #           enabled: true
     # - chart: kubernetes-dashboard
     #   repoURL: https://kubernetes.github.io/dashboard/
     #   targetRevision: 7.*
