@@ -275,12 +275,13 @@ resource "hcloud_firewall" "talos" {
 # ################# DNS #################
 
 # Cloudflare
-resource "cloudflare_record" "api_server" {
+resource "cloudflare_dns_record" "api_server" {
   for_each = local.cloudflare_dns
   zone_id  = var.dns_record.zone
   name     = var.controlplane_endpoint
   content  = each.value
   type     = upper(each.key)
+  ttl      = try(each.value.ttl, 3600)
   comment  = "Managed by terraform"
 }
 
@@ -305,3 +306,8 @@ resource "azurerm_key_vault_secret" "k8s-hetzner-custer-autoscale-conf" {
   value        = local.cluster-config
   key_vault_id = data.azurerm_key_vault.hegerdes.id
 }
+
+# import {
+#   to = azurerm_key_vault_secret.k8s-hetzner-custer-autoscale-conf
+#   id = "https://hegerdes.vault.azure.net/secrets/k8s-hetzner-custer-autoscale-conf/aeef5ae9ad1a4eeba182300aff937dcb"
+# }

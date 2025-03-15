@@ -15,15 +15,15 @@ terraform {
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>4.16"
+      version = "~>4.20"
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "~>5.83"
+      version = "~>5.88"
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~>4.46"
+      version = "~>5.1"
     }
     tls = {
       source  = "hashicorp/tls"

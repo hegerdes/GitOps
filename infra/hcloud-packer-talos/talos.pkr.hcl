@@ -13,7 +13,7 @@ packer {
 ######################## INPUT ########################
 variable "talos_version" {
   type    = string
-  default = "v1.9.4"
+  default = "v1.9.5"
 }
 variable "talos_extensions" {
   type    = list(string)
@@ -94,7 +94,7 @@ build {
 data "http" "customizations_id" {
   url = "https://factory.talos.dev/schematics"
   method = "POST"
-  request_body = yamlencode({
+  request_body = jsonencode({
     customization = {
       systemExtensions = {
         officialExtensions = var.talos_extensions
