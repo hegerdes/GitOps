@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/hegerdes/GitOps.git
-    targetRevision: feat/kubevirt
+    targetRevision: main
     path: k8s-apps/kubevirt
     directory:
       recurse: true
