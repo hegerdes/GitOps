@@ -10,10 +10,20 @@ spec:
   source:
     chart: openebs
     repoURL: https://openebs.github.io/charts
-    targetRevision: 3.*
+    targetRevision: 4.*
     helm:
       releaseName: openebs
       valuesObject:
+        engines:
+          local:
+            lvm:
+              enabled: true
+            zfs:
+              enabled: false
+          replicated:
+            mayastor:
+              enabled: false
+
   destination:
     server: https://kubernetes.default.svc
     namespace: openebs

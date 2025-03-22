@@ -14,9 +14,6 @@ spec:
       helm:
         releaseName: hcloud-cloud-controller-manager
         valuesObject:
-          # image:
-          #   repository: docker.io/hegerdes/debug
-          #   tag: hccm
           networking:
             enabled: true
             clusterCIDR: 10.244.0.0/16

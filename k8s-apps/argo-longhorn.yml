@@ -26,19 +26,10 @@ spec:
           tlsSecret: longhorn-ui-public
           annotations:
             cert-manager.io/cluster-issuer: letsencrypt-prod-nginx
-            nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.oauth-proxy.svc.cluster.local/oauth2/auth
-            nginx.ingress.kubernetes.io/auth-signin: https://oauth.k8s.henrikgerdes.me/oauth2/start?rd=https://$host$request_uri
-            nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, X-Auth-Request-Email, X-Auth-Request-User, X-Auth-Request-Access-Token"
+            # nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.oauth-proxy.svc.cluster.local/oauth2/auth
+            # nginx.ingress.kubernetes.io/auth-signin: https://oauth.k8s.henrikgerdes.me/oauth2/start?rd=https://$host$request_uri
+            # nginx.ingress.kubernetes.io/auth-response-headers: "Authorization, X-Auth-Request-Email, X-Auth-Request-User, X-Auth-Request-Access-Token"
 
-    # nginx.ingress.kubernetes.io/auth-signin: https://${MY_OAUTH_DOMAIN}/oauth2/start?rd=https://$host$request_uri
-    # nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.default.svc.cluster.local/oauth2/auth
-    # nginx.ingress.kubernetes.io/configuration-snippet: |
-    #   auth_request_set $name_upstream_1 $upstream_cookie__oauth2_proxy_1;
-    #   access_by_lua_block {
-    #     if ngx.var.name_upstream_1 ~= "" then
-    #       ngx.header["Set-Cookie"] = "_oauth2_proxy_1=" .. ngx.var.name_upstream_1 .. ngx.var.auth_cookie:match("(; .*)")
-    #     end
-    #   }
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn-system

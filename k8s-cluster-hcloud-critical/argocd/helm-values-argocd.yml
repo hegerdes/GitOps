@@ -5,7 +5,6 @@ global:
   logging:
     format: text # Either: `text` or `json`
     level: info # `debug`, `info`, `warn` or `error`
-
   tolerations:
     - key: node.cloudprovider.kubernetes.io/uninitialized
       operator: Exists
@@ -50,7 +49,6 @@ configs:
     createSecret: true
     extra:
       webhook.github.secret: $argocd-secret-sso:webhook.github.secret
-
   params:
     controller.sync.timeout.seconds: "5m"
 
