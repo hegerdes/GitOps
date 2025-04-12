@@ -13,6 +13,9 @@ PATH=~/.local/bin:$PATH
 
 if [ ! -d "playbooks" ]; then
   git clone --depth 1 https://github.com/hegerdes/ansible-playbooks.git playbooks
+  cd playbooks
+  git show --oneline -s
+  cd ..
 fi
 
 # setup ansible play
@@ -24,7 +27,6 @@ k8s_crun_with_wasm: true
 k8s_youki_with_wasm: true
 k8s_cri: crun
 k8s_containerd_variant: github
-k8s_credential_provider_enabled: false
 k8s_ensure_min_kernel_version: 6.12.*
 k8s_external_cp_host: kubernetes.k8s.henrikgerdes.me
 k8s_shared_api_server_endpoint: k8s-controlplane.local
