@@ -15,7 +15,7 @@ terraform {
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>4.20"
+      version = "~>4.26"
     }
     aws = {
       source  = "hashicorp/aws"
@@ -47,7 +47,12 @@ terraform {
 provider "azurerm" {
   use_oidc        = true
   subscription_id = "777ba5ef-85e2-4cfd-8162-1da84acac4a6"
-  features {}
+  features {
+    key_vault {
+      purge_soft_deleted_secrets_on_destroy = true
+      recover_soft_deleted_secrets          = true
+    }
+  }
 }
 
 provider "cloudflare" {
