@@ -58,6 +58,8 @@ packages:
   - open-iscsi
   - ipvsadm
   - auditd
+  - fuse
+  - python3-kubernetes
   - dbus
   - libyajl2 # Needed for youki was
   # - policycoreutils
@@ -86,8 +88,8 @@ runcmd:
   - echo "10.0.0.8 k8s-controlplane.local" >> /etc/hosts
   - echo "Cloud-Init finished" >> /srv/cloud-init-msg.txt
 
-power_state:
- mode: reboot
- message: Bye Bye
- timeout: 300
- condition: True
+# power_state:
+#  mode: reboot
+#  message: Bye Bye
+#  timeout: 300
+#  condition: True
