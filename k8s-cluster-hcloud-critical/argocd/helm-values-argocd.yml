@@ -15,6 +15,13 @@ configs:
     url: "https://argocd.k8s.henrikgerdes.me"
     exec.enabled: true
     admin.enabled: false
+    resource.exclusions: |
+      - apiGroups:
+        - cilium.io
+        kinds:
+        - CiliumIdentity
+        clusters:
+
     dex.config: |
       connectors:
         # GitHub OIDC example
@@ -50,7 +57,7 @@ configs:
     extra:
       webhook.github.secret: $argocd-secret-sso:webhook.github.secret
   params:
-    controller.sync.timeout.seconds: "5m"
+    controller.sync.timeout.seconds: "300"
 
 ## Server
 server:
