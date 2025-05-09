@@ -2,7 +2,7 @@ node_pools = [
   {
     name     = "controlplane-node-amd64"
     instance = "cx32"
-    image    = "snapshot-debian-12-k8s-v1.33.0-amd64"
+    image    = "debian-12-k8s-v1.33.0-amd64"
     size     = 1
     tags = {
       k8s_control_plane = "true"
@@ -15,7 +15,7 @@ node_pools = [
   {
     name     = "worker-node-amd64"
     instance = "cx22"
-    image    = "snapshot-debian-12-k8s-v1.33.0-amd64"
+    image    = "debian-12-k8s-v1.33.0-amd64"
     size     = 1
     tags = {
       k8s_worker = "true"
@@ -28,7 +28,7 @@ node_pools = [
   {
     name     = "worker-node-arm64"
     instance = "cax11"
-    image    = "snapshot-debian-12-k8s-v1.33.0-arm64"
+    image    = "debian-12-k8s-v1.33.0-arm64"
     size     = 1
     tags = {
       k8s_worker = "true"
@@ -58,21 +58,21 @@ loadbancers = [
 
 firewall_rules = [
   {
-    name           = "block"
-    label_selector = "k8s"
+    name            = "block"
+    label_selectors = ["k8s"]
   },
   {
-    name           = "ssh"
-    direction      = "in"
-    protocol       = "tcp"
-    ports          = "22"
-    label_selector = "manager"
+    name            = "ssh"
+    direction       = "in"
+    protocol        = "tcp"
+    ports           = "22"
+    label_selectors = ["manager"]
   },
   {
-    name           = "icmp"
-    direction      = "in"
-    protocol       = "icmp"
-    label_selector = "k8s"
+    name            = "icmp"
+    direction       = "in"
+    protocol        = "icmp"
+    label_selectors = ["k8s"]
   }
 ]
 

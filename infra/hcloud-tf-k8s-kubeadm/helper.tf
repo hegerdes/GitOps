@@ -26,9 +26,14 @@ resource "hcloud_firewall" "dynamic" {
   labels = {
     managedby = "terraform"
   }
-  apply_to {
-    label_selector = each.value.label_selector
+
+  dynamic "apply_to" {
+    for_each = each.value.label_selectors
+    content {
+      label_selector = apply_to.value
+    }
   }
+
   dynamic "rule" {
     for_each = contains(["tcp", "udp", "icmp", "gre", "esp"], lower(each.value.protocol)) ? [1] : []
     content {

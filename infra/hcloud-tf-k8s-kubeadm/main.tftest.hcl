@@ -9,12 +9,12 @@ run "local" {
 
   assert {
     condition     = can(yamldecode(local.cloud_init_user_data))
-    error_message = "SUnable to render cloud-init config"
+    error_message = "Unable to render cloud-init config"
   }
 
   // Snapshot
   assert {
     condition     = can(yamldecode(local.cloud_init_user_data))
-    error_message = "SUnable to render cloud-init config"
+    error_message = "Unable to render cloud-init config"
   }
 }

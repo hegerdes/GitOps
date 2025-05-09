@@ -1,6 +1,6 @@
 variable "location" {
   type        = string
-  default     = "nbg1"
+  default     = "fsn1"
   description = "Location of the ressources."
   validation {
     condition     = contains(["fsn1", "nbg1", "hel1", "ash", "hil"], lower(var.location))
@@ -80,7 +80,7 @@ variable "firewall_rules" {
     source_ips      = optional(list(string), ["0.0.0.0/0", "::/0"])
     destination_ips = optional(list(string), [])
     ports           = optional(string)
-    label_selector  = string
+    label_selectors = list(string)
   }))
   default = []
 }

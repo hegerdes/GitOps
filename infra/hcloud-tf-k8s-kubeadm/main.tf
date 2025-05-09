@@ -21,6 +21,7 @@ locals {
         ssh_keys             = [for key in hcloud_ssh_key.default : key.name]
         network_name         = hcloud_network.k8s_network.name
         location             = var.location
+        snapshot_image       = strcontains(pool.image, "k8s")
         private_ip_addresses = try([for i in range(pool.size) : cidrhost("10.0.${index + 1}.0/24", i + 8)], [])
       }
     )
