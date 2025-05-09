@@ -14,7 +14,7 @@ variable "base_image" {
 }
 variable "output_name" {
   type    = string
-  default = "snapshot-debian-12-k8s"
+  default = "debian-12-k8s"
 }
 variable "k8s_version" {
   type    = string
@@ -31,7 +31,7 @@ locals {
 
 source "hcloud" "k8s-amd64" {
   image         = var.base_image
-  location      = "nbg1"
+  location      = "fsn1"
   server_type   = "cx22"
   ssh_keys      = []
   user_data     = file(var.user_data_path)
@@ -47,7 +47,7 @@ source "hcloud" "k8s-amd64" {
 }
 source "hcloud" "k8s-arm64" {
   image         = var.base_image
-  location      = "nbg1"
+  location      = "fsn1"
   server_type   = "cax11"
   ssh_keys      = []
   user_data     = file(var.user_data_path)

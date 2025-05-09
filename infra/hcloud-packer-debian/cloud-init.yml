@@ -10,13 +10,13 @@ packages:
   - gnupg
   - lsb-release
   - ca-certificates
-  - curl
   - pigz # fast decompress for container image
   - isal # even faster decompress for container image
   - cryptsetup # support LUKS disk encryptio
   - apparmor
   - apparmor-profiles-extra
   - apt-transport-https
+  - python3-debian
   - jq # json parsing and validating
   - yq # yaml parsing and validating
   - unzip
@@ -24,6 +24,7 @@ packages:
   - mtr-tiny
   - logrotate
   - open-iscsi
+  - fuse
   - ipvsadm
   - auditd
   - dbus

@@ -4,6 +4,12 @@ set -e -o pipefail
 echo "Waiting for cloud-init to finish..."
 cloud-init status --wait
 
+if [ -f /root/ansible-setup.done ]; then
+  rm -rf /root/ansible-setup.done
+  exit 0
+fi
+
+HC_NET_UTILS="https://packages.hetzner.com/hcloud/deb/hc-utils_0.0.6-1_all.deb"
 # setup requirements
 echo "Installing packages..."
 apt-get update -qq
@@ -40,14 +46,29 @@ k8s_absent_packages:
   - "libsodium23"
   - "vim-common"
   - "perl"
+  - "less"
+  - "xdg-user-dirs"
+  - "whiptail"
+  - "nano"
+  - "bash-completion"
+  - "bind9-dnsutils"
   - "htop"
   - "libgdbm-compat4"
   - "libgdbm6"
   - "libperl5.36"
+  - "rsync"
   - "perl-modules-5.36"
+  - "acl"
+  - "netcat-traditional"
+  - "python3-reportbug"
   - "qemu-guest-agent"
   - "locales-all"
   - "linux-image-6.1.*"
+  - "cron"
+  - "cron-daemon"
+  - "keyboard-configuration"
+  - "console-setup"
+  - "sudo"
 EOF
 
 printenv | sed 's/=/\: /g' | grep k8s >>hostvars.yaml
@@ -76,10 +97,13 @@ else
   # Package cleanup
   rm -rf ~/.local/lib/python3.11 ~/.local/bin/ ~/.ansible ~/.cache/* ~/playbooks
   pip3 list -v
-  apt-get purge --yes python3-pip python3-wheel git git-man liberror-perl wget man-db manpages vim-tiny qemu-guest-agent python3-google-auth linux-image-6.1.*
+  apt-get purge --yes python3-pip python3-wheel curl git git-man liberror-perl wget man-db manpages vim-tiny qemu-guest-agent python3-google-auth linux-image-6.1.*
   apt list --installed
   apt-get autoremove --yes
+  python3 -c "import urllib.request; urllib.request.urlretrieve(\"$HC_NET_UTILS\", \"/tmp/hc-utils.deb\")"
+  apt-get install -qq --yes --no-install-recommends /tmp/hc-utils.deb
   apt-get clean && apt-get autoclean
+  rm -rf /usr/bin/crictl
 
   # Cloud-init cleanup
   cloud-init clean --machine-id --seed --logs
@@ -87,9 +111,17 @@ else
   cloud-init status
 
   # Caches cleanup
-  rm -rf /var/cache/apt/* /var/lib/apt/lists/* /var/cache/debconf/* /var/cache/dpkg/* /var/cache/ansible/* /var/log/*.log* /tmp/* /var/tmp/* /usr/share/doc/*
+  systemctl stop systemd-journald
+  rm -rf /var/cache/apt/* /var/lib/apt/lists/* /var/cache/debconf/* /var/cache/dpkg/* /var/cache/ansible/* /var/log/*.log* /tmp/* /var/tmp/* /var/log/journal/* /usr/share/doc/* /usr/share/man/*
+  find /usr/lib/python3 -type f -name "*.pyc" -delete
+  find /usr/share/locale/ -maxdepth 1 -type d ! -name 'en' ! -name 'en_US' ! -name 'en_US.UTF-8' -exec rm -rf {} +
+
   dd if=/dev/zero of=/mnt/zero.fill bs=1M || true
   rm -rf /mnt/zero.fill
+  systemctl start systemd-journald
+  journalctl --vacuum-time=1s
   df -h
   sync
 fi
+
+echo "marker file" >/root/ansible-setup.done
