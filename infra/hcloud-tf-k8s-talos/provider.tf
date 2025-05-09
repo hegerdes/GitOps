@@ -3,11 +3,11 @@ terraform {
   required_providers {
     hcloud = {
       source  = "hetznercloud/hcloud"
-      version = "~>1.49"
+      version = "~>1.50"
     }
     talos = {
       source  = "siderolabs/talos"
-      version = "~>0.7"
+      version = "~>0.8"
     }
     helm = {
       source  = "hashicorp/helm"
@@ -15,7 +15,7 @@ terraform {
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>4.26"
+      version = "~>4.27"
     }
     aws = {
       source  = "hashicorp/aws"
@@ -31,7 +31,7 @@ terraform {
     }
     random = {
       source  = "hashicorp/random"
-      version = "~>3.6"
+      version = "~>3.7"
     }
     local = {
       source  = "hashicorp/local"
