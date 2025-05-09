@@ -15,12 +15,6 @@ configs:
     url: "https://argocd.k8s.henrikgerdes.me"
     exec.enabled: true
     admin.enabled: false
-    resource.exclusions: |
-      - apiGroups:
-        - cilium.io
-        kinds:
-        - CiliumIdentity
-        clusters:
 
     dex.config: |
       connectors:
