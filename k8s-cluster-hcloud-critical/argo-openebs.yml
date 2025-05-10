@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     chart: openebs
-    repoURL: https://openebs.github.io/charts
+    repoURL: https://openebs.github.io/openebs
     targetRevision: 4.*
     helm:
       releaseName: openebs
@@ -23,7 +23,6 @@ spec:
           replicated:
             mayastor:
               enabled: false
-
   destination:
     server: https://kubernetes.default.svc
     namespace: openebs
