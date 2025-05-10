@@ -105,6 +105,12 @@ spec:
                   protocol: TCP
           prometheusOperatorObjects:
             enabled: true
+            crds:
+              deploy: true
+            podMonitors:
+              enabled: true
+            serviceMonitors:
+              enabled: true
           applicationObservability:
             enabled: true
             connectors:
