@@ -1,4 +1,5 @@
 # NOTE: Based on https://www.talos.dev/v1.5/talos-guides/install/cloud-platforms/hetzner/
+# export HCLOUD_TOKEN=$(az keyvault secret show --vault-name hegerdes --name hcloud-k8s-token | jq -r .value)
 
 packer {
   required_version  = ">=1.12.0"
@@ -13,7 +14,7 @@ packer {
 ######################## INPUT ########################
 variable "talos_version" {
   type    = string
-  default = "v1.10.1"
+  default = "v1.10.2"
 }
 variable "talos_extensions" {
   type    = list(string)

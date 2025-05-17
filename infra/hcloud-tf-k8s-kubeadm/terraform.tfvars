@@ -2,7 +2,7 @@ node_pools = [
   {
     name     = "controlplane-node-amd64"
     instance = "cx32"
-    image    = "debian-12-k8s-v1.33.0-amd64"
+    image    = "debian-12-k8s-v1.33.1-amd64"
     size     = 1
     tags = {
       k8s_control_plane = "true"
@@ -15,7 +15,7 @@ node_pools = [
   {
     name     = "worker-node-amd64"
     instance = "cx22"
-    image    = "debian-12-k8s-v1.33.0-amd64"
+    image    = "debian-12-k8s-v1.33.1-amd64"
     size     = 1
     tags = {
       k8s_worker = "true"
@@ -28,7 +28,7 @@ node_pools = [
   {
     name     = "worker-node-arm64"
     instance = "cax11"
-    image    = "debian-12-k8s-v1.33.0-arm64"
+    image    = "debian-12-k8s-v1.33.1-arm64"
     size     = 1
     tags = {
       k8s_worker = "true"

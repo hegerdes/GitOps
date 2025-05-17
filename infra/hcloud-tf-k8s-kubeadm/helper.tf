@@ -45,3 +45,14 @@ resource "hcloud_firewall" "dynamic" {
     }
   }
 }
+
+################### DATA #################
+data "azurerm_key_vault" "hegerdes" {
+  name                = "hegerdes"
+  resource_group_name = "default"
+}
+
+data "azurerm_key_vault_secret" "hcloud_token" {
+  name         = "hcloud-k8s-token"
+  key_vault_id = data.azurerm_key_vault.hegerdes.id
+}

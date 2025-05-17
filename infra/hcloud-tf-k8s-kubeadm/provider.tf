@@ -30,3 +30,7 @@ provider "azurerm" {
   subscription_id = "777ba5ef-85e2-4cfd-8162-1da84acac4a6"
   features {}
 }
+
+provider "hcloud" {
+  token = data.azurerm_key_vault_secret.hcloud_token.value
+}

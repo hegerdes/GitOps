@@ -63,6 +63,10 @@ provider "aws" {
   region = "eu-central-1"
 }
 
+provider "hcloud" {
+  token = data.azurerm_key_vault_secret.hcloud_token.value
+}
+
 provider "helm" {
   kubernetes {
     # host                   = yamldecode(talos_cluster_kubeconfig.this.kubeconfig_raw).clusters[0].cluster.server

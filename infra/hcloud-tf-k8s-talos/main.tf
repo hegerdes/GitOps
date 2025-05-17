@@ -301,6 +301,11 @@ data "azurerm_key_vault" "hegerdes" {
   resource_group_name = "default"
 }
 
+data "azurerm_key_vault_secret" "hcloud_token" {
+  name         = "hcloud-k8s-token"
+  key_vault_id = data.azurerm_key_vault.hegerdes.id
+}
+
 resource "azurerm_key_vault_secret" "k8s-hetzner-custer-autoscale-conf" {
   name         = "k8s-hetzner-custer-autoscale-conf"
   value        = local.cluster-config

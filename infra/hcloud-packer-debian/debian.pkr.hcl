@@ -1,4 +1,5 @@
 # hcloud.pkr.hcl
+# export HCLOUD_TOKEN=$(az keyvault secret show --vault-name hegerdes --name hcloud-k8s-token | jq -r .value)
 packer {
   required_plugins {
     hcloud = {
@@ -18,7 +19,7 @@ variable "output_name" {
 }
 variable "k8s_version" {
   type    = string
-  default = "1.33.0"
+  default = "1.33.1"
 }
 variable "user_data_path" {
   type    = string
