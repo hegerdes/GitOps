@@ -7,7 +7,7 @@ machine:
         - 2000::/3
       %{ endif }
 
-    # Needed fpr openebs
+    # Needed for openebs
     extraMounts:
       - destination: /var/openebs/local
         type: bind
@@ -59,8 +59,8 @@ machine:
     nameservers:
         - 1.1.1.1 # Cloudflare
         - 1.0.0.1 # Cloudflare
-        - 2606:4700:4700::1111 # Cloudflare
-        - 2606:4700:4700::1001 # Cloudflare
+        # - 2606:4700:4700::1111 # Cloudflare
+        # - 2606:4700:4700::1001 # Cloudflare
         # - 2a01:4f8:c2c:123f::1 # Nat64
         # - 2a01:4f9:c010:3f02::1 # Nat64
 
@@ -115,19 +115,24 @@ cluster:
       ${k}: "${v}"
     %{ endfor ~}
 
+    auditPolicy:
+        apiVersion: audit.k8s.io/v1
+        kind: Policy
+        rules:
+          - level: Metadata
+
   inlineManifests: []
   extraManifests:
     # CRDs
-    - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/standard-install.yaml
+    - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml
     - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/heads/main/charts/kube-prometheus-stack/charts/crds/crds/crd-podmonitors.yaml
     - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/heads/main/charts/kube-prometheus-stack/charts/crds/crds/crd-probes.yaml
     - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/heads/main/charts/kube-prometheus-stack/charts/crds/crds/crd-servicemonitors.yaml
     - https://github.com/prometheus-community/helm-charts/raw/refs/heads/main/charts/kube-prometheus-stack/charts/crds/crds/crd-prometheusrules.yaml
+    - https://raw.githubusercontent.com/external-secrets/external-secrets/refs/heads/main/deploy/crds/bundle.yaml
 
     # Apps
-    - https://raw.githubusercontent.com/hegerdes/GitOps/refs/heads/main/k8s-cluster-hcloud-critical/no-sync/kubelet-csr-approver.yaml
-  #  # Or run the csr approver as deployment
-  #  - https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml
+    - https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml
 
   network:
     cni:
