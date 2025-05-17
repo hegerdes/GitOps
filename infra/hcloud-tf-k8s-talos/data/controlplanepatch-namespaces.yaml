@@ -46,6 +46,14 @@ cluster:
             automated:
               prune: false
               selfHeal: true
+              # The retry feature is available since v1.7
+          retry:
+            limit:
+            backoff:
+              duration: 5s
+              factor: 5
+              maxDuration: 5m
+
 machine:
   nodeLabels:
     node.kubernetes.io/exclude-from-external-load-balancers:

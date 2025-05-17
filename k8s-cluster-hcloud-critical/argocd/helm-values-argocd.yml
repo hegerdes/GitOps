@@ -68,3 +68,9 @@ server:
       nginx.ingress.kubernetes.io/ssl-passthrough: "true"
     ingressClassName: "nginx"
     tls: true
+
+repoServer:
+  dnsConfig:
+    nameservers:
+      - 1.1.1.1
+      - 8.8.8.8

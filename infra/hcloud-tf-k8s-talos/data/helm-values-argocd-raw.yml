@@ -66,3 +66,9 @@ server:
     tls: true
     # -- Uses `server.service.servicePortHttps` instead `server.service.servicePortHttp`
     # https: false
+
+repoServer:
+  dnsConfig:
+    nameservers:
+      - 1.1.1.1
+      - 8.8.8.8
