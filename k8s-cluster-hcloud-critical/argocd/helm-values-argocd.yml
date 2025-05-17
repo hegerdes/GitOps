@@ -14,7 +14,7 @@ configs:
   cm:
     url: "https://argocd.k8s.henrikgerdes.me"
     exec.enabled: true
-    admin.enabled: true
+    admin.enabled: false
 
     dex.config: |
       connectors:

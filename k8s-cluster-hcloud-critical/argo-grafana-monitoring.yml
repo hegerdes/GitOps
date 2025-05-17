@@ -66,7 +66,15 @@ spec:
               enabled: false
             # https://github.com/opencost/opencost
             opencost:
-              enabled: false
+              enabled: true
+              metricsSource: grafana-cloud-metrics
+              opencost:
+                exporter:
+                  defaultClusterId: hetzner-k8s
+                prometheus:
+                  existingSecretName: grafana-agent-prometheus-cred
+                  external:
+                    url: https://prometheus-prod-01-eu-west-0.grafana.net/api/prom
             windows-exporter:
               deploy: false
             node-exporter:

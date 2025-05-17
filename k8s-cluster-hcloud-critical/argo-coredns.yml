@@ -101,4 +101,4 @@ spec:
     - kind: Deployment
       group: apps
       jqPathExpressions:
-        - .spec.template.spec.containers[].ports
+        - .spec.template.spec.containers[].ports[].name

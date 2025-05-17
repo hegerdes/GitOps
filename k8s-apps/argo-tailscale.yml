@@ -19,7 +19,7 @@ spec:
 
     - repoURL: https://github.com/hegerdes/GitOps.git
       targetRevision: HEAD
-      path: k8s-cluster-hcloud-critical/tailscale
+      path: k8s-apps/tailscale
       directory:
         recurse: true
   destination:
