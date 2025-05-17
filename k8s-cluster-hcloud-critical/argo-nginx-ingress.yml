@@ -30,7 +30,7 @@ spec:
               load-balancer.hetzner.cloud/network: "k8s-network"
               load-balancer.hetzner.cloud/uses-proxyprotocol: "true" # Needs ipMode proxy support from CNI
             type: LoadBalancer
-            ipFamilyPolicy: PreferDualStack
+            # ipFamilyPolicy: PreferDualStack
             # ipFamilies:
             #   - IPv4
             #   - IPv6

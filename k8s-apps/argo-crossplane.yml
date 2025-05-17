@@ -17,7 +17,8 @@ spec:
         valuesObject:
           provider:
             packages:
-              - xpkg.upbound.io/upbound/provider-terraform:v0.19.4
+              - xpkg.upbound.io/upbound/provider-terraform:v0
+              - xpkg.upbound.io/upbound/provider-aws-s3:v1
               # - xpkg.upbound.io/upbound/provider-family-azure:v1.10.0
               # - xpkg.upbound.io/upbound/provider-family-aws:v1.18.0
               # - xpkg.upbound.io/coopnorge/provider-github:v0.13.0

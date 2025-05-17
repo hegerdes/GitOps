@@ -56,22 +56,57 @@ spec:
               - name: hcloud-token
                 secret:
                   secretName: hcloud
-    - chart: hetzner-load-balancer-exporter
-      repoURL: https://wacken89.github.io/hetzner-load-balancer-prometheus-exporter
-      targetRevision: 1.*
+    - chart: hcloud-exporter
+      repoURL: https://promhippie.github.io/charts
+      targetRevision: 3.*
       helm:
-        releaseName: hcloud-lb-exporter
+        releaseName: hcloud-exporter
         valuesObject:
-          env:
-            - name: LOAD_BALANCER_IDS
-              value: "all"
-            - name: SCRAPE_INTERVAL
-              value: "30"
-            - name: ACCESS_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  key: token
-                  name: hcloud
+          collector:
+            floatingIps: false
+            pricing: false
+            images: true
+            servers: true
+            serverMetrics: true
+            loadBalancers: true
+            sshKeys: true
+            volumes: true
+          config:
+            token: file:///var/run/secrets/hcloud/token
+            # tokenKey: token
+            # existingSecret: hcloud
+          serviceMonitor:
+            enabled: true
+          extraEnvVariables:
+            HCLOUD_EXPORTER_LOG_PRETTY: "true"
+          extraVolumeMounts:
+            - name: hcloud-token
+              mountPath: /var/run/secrets/hcloud
+              readOnly: true
+          extraVolumes:
+            - name: hcloud-token
+              secret:
+                secretName: hcloud
+          resources:
+            limits:
+              cpu: 250m
+              memory: 256Mi
+    # - chart: hetzner-load-balancer-exporter
+    #   repoURL: https://wacken89.github.io/hetzner-load-balancer-prometheus-exporter
+    #   targetRevision: 1.*
+    #   helm:
+    #     releaseName: hcloud-lb-exporter
+    #     valuesObject:
+    #       env:
+    #         - name: LOAD_BALANCER_IDS
+    #           value: "all"
+    #         - name: SCRAPE_INTERVAL
+    #           value: "30"
+    #         - name: ACCESS_TOKEN
+    #           valueFrom:
+    #             secretKeyRef:
+    #               key: token
+    #               name: hcloud
     - repoURL: https://github.com/hegerdes/GitOps.git
       targetRevision: HEAD
       path: k8s-cluster-hcloud-critical/hcloud
@@ -87,9 +122,12 @@ spec:
       value: https://github.com/hetznercloud/csi-driver
     - name: Chart-Info Hetzner-LB-Exporter
       value: https://github.com/wacken89/hetzner-load-balancer-prometheus-exporter
+    - name: Chart-Info Hetzner-Exporter
+      value: https://github.com/promhippie/charts/tree/master/stable/hcloud-exporter
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - SkipDryRunOnMissingResource=true
