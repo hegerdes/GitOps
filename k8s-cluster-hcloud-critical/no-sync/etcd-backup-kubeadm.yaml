@@ -1,0 +1,59 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: etcd-backup
+  namespace: kube-system
+spec:
+  # run daily at midnight
+  schedule: "0 0 * * *"
+  # keep the last 3 successful and 1 failed jobs
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        spec:
+          # only schedule on control-plane nodes
+          nodeSelector:
+            node-role.kubernetes.io/control-plane: ""
+          # give the container access to the host network so etcdctl can hit localhost:2379
+          hostNetwork: true
+          restartPolicy: OnFailure
+          volumes:
+            # mount the live etcd data directory
+            - name: etcd-data
+              hostPath:
+                path: /var/lib/etcd
+                type: DirectoryOrCreate
+            # mount the control-plane etcd TLS certs so etcdctl can authenticate
+            - name: etcd-certs
+              hostPath:
+                path: /etc/kubernetes/pki/etcd
+                type: DirectoryOrCreate
+          containers:
+            - name: backup
+              image: bitnami/etcd
+              env:
+                - name: ETCDCTL_API
+                  value: "3"
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  TIMESTAMP=$(date +\%Y\%m\%d-\%H\%M\%S)
+                  etcdctl snapshot save /var/lib/etcd/backup-${TIMESTAMP}.db \
+                    --endpoints=https://localhost:2379 \
+                    --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+                    --cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt \
+                    --key=/etc/kubernetes/pki/etcd/healthcheck-client.key
+                  # remove snapshots older than 30 days
+                  find /var/lib/etcd -type f -mtime +30 -name 'backup-*.db' -delete
+              volumeMounts:
+                - name: etcd-data
+                  mountPath: /var/lib/etcd
+                  readOnly: false
+                - name: etcd-certs
+                  mountPath: /etc/kubernetes/pki/etcd
+                  readOnly: true
