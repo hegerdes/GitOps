@@ -68,7 +68,7 @@ spec:
                 passwordKey: password
               secret:
                 create: false
-                name: grafana-agent-otel-cred
+                name: grafana-agent-otl-cred
                 namespace: monitoring
               metrics:
                 enabled: true
