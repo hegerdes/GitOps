@@ -19,7 +19,7 @@ spec:
           extraArgs:
             - --enable-gateway-api
           prometheus:
-            serviceMonitor:
+            servicemonitor:
               enabled: true
           # podDnsPolicy: None
           # podDnsConfig:
