@@ -103,6 +103,10 @@ cluster:
   allowSchedulingOnControlPlanes: true
   adminKubeconfig:
       certLifetime: 8h0m0s
+
+  etcd:
+    advertisedSubnets: [10.0.0.0/16]
+    listenSubnets: [10.0.0.0/16]
   apiServer:
     certSANs:
     %{ for SAN in apiServerCertSANs ~}
@@ -120,6 +124,9 @@ cluster:
         kind: Policy
         rules:
           - level: Metadata
+
+  externalCloudProvider:
+    enabled: true
 
   inlineManifests: []
   extraManifests:
