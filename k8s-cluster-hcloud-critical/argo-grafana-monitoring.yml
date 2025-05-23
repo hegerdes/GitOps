@@ -58,7 +58,24 @@ spec:
                 create: false
                 name: grafana-agent-tempo-cred
                 namespace: monitoring
-
+            - name: grafana-cloud-otlp-endpoint
+              type: otlp
+              url: https://otlp-gateway-prod-eu-west-0.grafana.net./otlp
+              protocol: http
+              auth:
+                type: basic
+                usernameKey: username
+                passwordKey: password
+              secret:
+                create: false
+                name: grafana-agent-otel-cred
+                namespace: monitoring
+              metrics:
+                enabled: true
+              logs:
+                enabled: true
+              traces:
+                enabled: true
           clusterMetrics:
             enabled: true
             # https://github.com/sustainable-computing-io/kepler
@@ -67,7 +84,7 @@ spec:
             # https://github.com/opencost/opencost
             opencost:
               enabled: true
-              metricsSource: grafana-cloud-metrics
+              metricsSource: grafana-com-metrics
               opencost:
                 exporter:
                   defaultClusterId: hetzner-k8s
