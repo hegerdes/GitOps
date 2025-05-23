@@ -96,3 +96,11 @@ securityContext:
       - NET_ADMIN
       - SYS_ADMIN
       - SYS_RESOURCE
+
+prometheus:
+  metricsService: true
+  enabled: true
+  port: 9962
+  serviceMonitor:
+    enabled: true
+    interval: "30s"
