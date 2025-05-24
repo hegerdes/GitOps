@@ -1,3 +1,4 @@
+## template: jinja
 #cloud-config
 
 ssh_pwauth: false
@@ -5,6 +6,8 @@ ssh_pwauth: false
 disable_root_opts: no-port-forwarding,no-agent-forwarding,no-X11-forwarding
 
 groups: [cloud]
+preserve_hostname: false
+hostname: "{{ ds.meta_data.instance_id }}"
 
 users:
   - name: bootstrap
@@ -16,7 +19,6 @@ users:
 %{ for key in ssh_keys ~}
       - ${key}
 %{ endfor ~}
-
 package_update: true
 package_upgrade: true
 package_reboot_if_required: true
@@ -25,15 +27,37 @@ packages:
   - lsb-release
   - ca-certificates
   - curl
+  - fuse
   - apt-transport-https
   - jq # json parsing and validating
   - yq # yaml parsing and validating
   - unzip
 apt_get_command:
-   ['apt-get', '--option=Dpkg::Options::=--force-confold',
-    '--option=Dpkg::options::=--force-unsafe-io', '--assume-yes', '--quiet', '--no-install-recommends']
+  [
+    "apt-get",
+    "--option=Dpkg::Options::=--force-confold",
+    "--option=Dpkg::options::=--force-unsafe-io",
+    "--assume-yes",
+    "--quiet",
+    "--no-install-recommends",
+  ]
+
+fs_setup:
+  - label: "ebs-volume"
+    filesystem: "ext4"
+    device: "/dev/nvme1n1"
+    overwrite: true
+
+mounts:
+  - ["/dev/nvme1n1", "/mnt/ebs", "ext4", "defaults,nofail", "0", "2"]
+
+bootcmd:
+  - mkdir -p /mnt/ebs
 
 runcmd:
-  - wget https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb
+  - chmod -R 777 /mnt/ebs
+  - mkdir -p /mnt/ebs/containerd
+  - curl -sL -o amazon-ssm-agent.deb https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb
   - dpkg -i amazon-ssm-agent.deb
+  - rm -f amazon-ssm-agent.deb
   - echo "Cloud-Init finished" >> /srv/cloud-init-msg.txt
