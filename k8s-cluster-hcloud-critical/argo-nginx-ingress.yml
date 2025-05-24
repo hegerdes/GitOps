@@ -17,9 +17,8 @@ spec:
         controller:
           name: controller
           kind: DaemonSet # `DaemonSet` or `Deployment`
-          # annotations:
-          # podAnnotations:
-          # cluster-autoscaler.kubernetes.io/enable-ds-eviction: "true" set on pod
+          podAnnotations:
+            cluster-autoscaler.kubernetes.io/enable-ds-eviction: "true"
           service:
             enabled: true
             annotations:
