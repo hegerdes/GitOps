@@ -8,10 +8,13 @@ spec:
   source:
     chart: secrets-store-csi-driver-provider-aws
     repoURL: https://aws.github.io/secrets-store-csi-driver-provider-aws
-    targetRevision: 0.*
+    targetRevision: 1.*
     helm:
       releaseName: secrets-store-csi-driver-provider-aws
-      valuesObject: {}
+      valuesObject:
+        linux:
+          podAnnotations:
+            cluster-autoscaler.kubernetes.io/enable-ds-eviction: "true"
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system

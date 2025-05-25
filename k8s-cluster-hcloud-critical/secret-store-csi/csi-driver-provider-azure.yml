@@ -12,6 +12,9 @@ spec:
     helm:
       releaseName: csi-secrets-store-provider-azure
       valuesObject:
+        linux:
+          podAnnotations:
+            cluster-autoscaler.kubernetes.io/enable-ds-eviction: "true"
         secrets-store-csi-driver:
           install: false
   destination:
