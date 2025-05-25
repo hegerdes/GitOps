@@ -43,7 +43,7 @@ locals {
   node_pools = { for index, pool in var.node_pools :
     pool.name => merge(
       pool, {
-        user_data            = data.talos_machine_configuration.this[pool.name].machine_configuration
+        user_data            = try(data.talos_machine_configuration.this[pool.name].machine_configuration, "")
         tags                 = merge(pool.tags, local.default_tags, { pool = pool.name })
         ssh_keys             = concat([for key in hcloud_ssh_key.default : key.name], [hcloud_ssh_key.dummy.id])
         network_name         = hcloud_network.k8s_network.name
@@ -253,6 +253,11 @@ resource "hcloud_firewall" "block" {
   }
   apply_to {
     label_selector = "hcloud/node-group"
+  }
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = "bash ${path.module}/data/delete-lb.sh"
   }
 }
 

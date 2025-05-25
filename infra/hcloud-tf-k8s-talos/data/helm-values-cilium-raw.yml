@@ -97,6 +97,9 @@ securityContext:
       - SYS_ADMIN
       - SYS_RESOURCE
 
+podAnnotations:
+  cluster-autoscaler.kubernetes.io/enable-ds-eviction: "true"
+
 prometheus:
   metricsService: true
   enabled: true

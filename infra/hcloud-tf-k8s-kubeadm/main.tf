@@ -101,7 +101,7 @@ resource "hcloud_server" "manager_nodes" {
   image       = "debian-12"
   server_type = "cax11"
   location    = var.location
-  user_data = templatefile("cloud-init.yml", {
+  user_data = templatefile("data/cloud-init.yml", {
     ssh_key = local.ssh_keys
   })
   labels = {
@@ -123,5 +123,14 @@ resource "hcloud_server" "manager_nodes" {
       ssh_keys,
       user_data
     ]
+  }
+  provisioner "local-exec" {
+    when    = destroy
+    command = "bash ${path.module}/data/delete-secret.sh"
+  }
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = "bash ${path.module}/data/delete-lb.sh"
   }
 }
