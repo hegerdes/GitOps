@@ -12,10 +12,18 @@ locals {
     owner     = "hegerdes"
     managedby = "terraform"
   }
-  controlplane_tags = merge(local.tags,
+  ec2_tags = merge(local.tags,
     {
       k8s = "true"
       app = "k8s"
+  })
+  controlplane_tags = merge(local.tags,
+    {
+      k8s_cp = "true"
+  })
+  worker_tags = merge(local.tags,
+    {
+      k8s_worker = "true"
   })
 
   vpc_cidr = "10.0.0.0/16"
@@ -138,7 +146,7 @@ resource "aws_autoscaling_group" "cp" {
   }
 
   dynamic "tag" {
-    for_each = local.tags
+    for_each = local.controlplane_tags
     content {
       key                 = tag.key
       value               = tag.value
@@ -146,35 +154,6 @@ resource "aws_autoscaling_group" "cp" {
     }
   }
 }
-# resource "aws_autoscaling_group" "worker" {
-#   name                      = "${local.name}-worker"
-#   max_size                  = 2
-#   min_size                  = 1
-#   health_check_grace_period = 300
-#   desired_capacity          = 1
-#   force_delete              = true
-#   placement_group           = aws_placement_group.cp.id
-#   vpc_zone_identifier       = module.vpc.private_subnets
-#   target_group_arns         = [aws_lb_target_group.cp.arn]
-
-#   launch_template {
-#     id      = aws_launch_template.cp.id
-#     version = aws_launch_template.cp.latest_version
-#   }
-
-#   timeouts {
-#     delete = "10m"
-#   }
-
-#   dynamic "tag" {
-#     for_each = local.tags
-#     content {
-#       key                 = tag.key
-#       value               = tag.value
-#       propagate_at_launch = true
-#     }
-#   }
-# }
 
 resource "aws_launch_template" "cp" {
   name_prefix   = local.name
@@ -211,6 +190,7 @@ resource "aws_launch_template" "cp" {
     subnet_id             = element(module.vpc.private_subnets, 0)
     security_groups       = [module.security_group.security_group_id]
     ipv6_address_count    = 1
+    primary_ipv6          = true
     delete_on_termination = true
   }
 
@@ -221,16 +201,62 @@ resource "aws_launch_template" "cp" {
     http_protocol_ipv6          = "enabled"
     instance_metadata_tags      = "enabled"
   }
+  private_dns_name_options {
+    hostname_type = "resource-name"
+  }
 
   tag_specifications {
     resource_type = "instance"
-    tags          = local.controlplane_tags
+    tags          = local.ec2_tags
   }
   tag_specifications {
     resource_type = "volume"
-    tags          = local.controlplane_tags
+    tags          = local.ec2_tags
   }
 }
+
+################################################################################
+# Worker Autoscale Group
+################################################################################
+
+resource "aws_placement_group" "worker-tf-1" {
+  name     = "${local.name}-worker-tf-1"
+  strategy = "spread"
+  tags     = local.tags
+}
+
+resource "aws_autoscaling_group" "worker" {
+  count                     = 0
+  name                      = "${local.name}-worker"
+  max_size                  = 2
+  min_size                  = 1
+  health_check_grace_period = 300
+  desired_capacity          = 1
+  force_delete              = true
+  placement_group           = aws_placement_group.worker-tf-1.id
+  vpc_zone_identifier       = module.vpc.private_subnets
+  target_group_arns         = [aws_lb_target_group.cp.arn]
+
+  launch_template {
+    id      = aws_launch_template.cp.id
+    version = aws_launch_template.cp.latest_version
+  }
+
+  timeouts {
+    delete = "10m"
+  }
+
+  dynamic "tag" {
+    for_each = local.worker_tags
+    content {
+      key                 = tag.key
+      value               = tag.value
+      propagate_at_launch = true
+    }
+  }
+}
+
+
 ################################################################################
 # Controlplane Loadbalancer
 ################################################################################
