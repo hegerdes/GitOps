@@ -9,4 +9,5 @@ if [ -z "$AUTOSCALER_CONF" ]; then
 else
     echo "Deleting secret: $ING_LB_ID"
     az keyvault secret delete --vault-name hegerdes --name $AUTOSCALER_CONF
+    az keyvault secret purge --vault-name hegerdes --name $AUTOSCALER_CONF
 fi
