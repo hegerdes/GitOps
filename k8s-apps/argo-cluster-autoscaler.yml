@@ -12,8 +12,13 @@ spec:
       helm:
         releaseName: k8s-scaler
         valuesObject:
+          image:
+            #   repository: hegerdes/debug
+            tag: v1.33.0
           extraArgs:
             max-node-provision-time: 10m0s
+            ignore-daemonsets-utilization: "true"
+            skip-nodes-with-system-pods: "false"
           cloudProvider: hetzner
           autoDiscovery:
             clusterName: hcloud
@@ -22,6 +27,7 @@ spec:
               name: cluster-autoscaler
           extraEnv:
             HCLOUD_NETWORK: k8s-network
+            HCLOUD_CLUSTER_CONFIG_FILE: /hcloud/conf/cluster-config
           initContainers:
             - name: secret-watch
               image: bitnami/kubectl
@@ -42,13 +48,20 @@ spec:
             - name: scripts
               configMap:
                 name: cluster-scaler-scripts
+            - name: scale-conf
+              secret:
+                secretName: hcloud-scale-conf
+          extraVolumeMounts:
+            - name: scale-conf
+              mountPath: "/hcloud/conf"
+              readOnly: true
           extraEnvSecrets:
             HCLOUD_TOKEN:
               name: hcloud
               key: token
-            HCLOUD_CLUSTER_CONFIG:
-              name: hcloud-scale-conf
-              key: cluster-config
+            # HCLOUD_CLUSTER_CONFIG:
+            #   name: hcloud-scale-conf
+            #   key: cluster-config
             HCLOUD_SSH_KEY:
               name: hcloud-scale-conf
               key: ssh-key
