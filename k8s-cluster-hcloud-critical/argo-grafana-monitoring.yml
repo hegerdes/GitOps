@@ -14,7 +14,7 @@ spec:
       helm:
         releaseName: grafana-monitoring
         valueFiles:
-          - $values/k8s-cluster-hcloud-critical/grafana-monitoring/helm-values-argocd.yml
+          - $values/k8s-cluster-hcloud-critical/grafana-monitoring/grafana-monitoring-values.yml
     - repoURL: https://github.com/hegerdes/GitOps.git
       targetRevision: HEAD
       ref: values
