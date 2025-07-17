@@ -44,3 +44,15 @@ apt_get_command:
     "--quiet",
     "--no-install-recommends",
   ]
+
+write_files:
+  - path: /etc/dpkg/dpkg.cfg.d/01_nodoc
+    content: |
+      path-exclude /usr/share/doc/*
+      # Need to keep copyright files for legal reasons
+      # path-include /usr/share/doc/*/copyright
+      path-exclude /usr/share/man/*
+      path-exclude /usr/share/groff/*
+      path-exclude /usr/share/info/*
+      path-exclude /usr/share/lintian/*
+      path-exclude /usr/share/linda/*
