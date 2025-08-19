@@ -35,15 +35,15 @@ packages:
   # - semodule-utils
   # - setools
 
-apt_get_command:
-  [
-    "apt-get",
-    "--option=Dpkg::Options::=--force-confold",
-    "--option=Dpkg::options::=--force-unsafe-io",
-    "--assume-yes",
-    "--quiet",
-    "--no-install-recommends",
-  ]
+# apt_get_command:
+#   [
+#     "apt-get",
+#     "--option=Dpkg::Options::=--force-confold",
+#     "--option=Dpkg::options::=--force-unsafe-io",
+#     "--assume-yes",
+#     "--quiet",
+#     "--no-install-recommends",
+#   ]
 
 write_files:
   - path: /etc/dpkg/dpkg.cfg.d/01_nodoc

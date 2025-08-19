@@ -1,16 +1,19 @@
 #!/bin/bash
 set -e -o pipefail
 
-echo "Waiting for cloud-init to finish..."
-cloud-init status --wait
-
+# Done when this file exists
 if [ -f /root/ansible-setup.done ]; then
   rm -rf /root/ansible-setup.done
   exit 0
 fi
 
+# Wait for cloud-init to finish
+echo "Waiting for cloud-init to finish..."
+cloud-init status --wait
+
+# Setup requirements
+PACKAGE_PURGES="python3-pip python3-wheel curl git git-man liberror-perl wget man-db manpages vim-tiny qemu-guest-agent python3-google-auth"
 HC_NET_UTILS="https://packages.hetzner.com/hcloud/deb/hc-utils_0.0.6-1_all.deb"
-# setup requirements
 echo "Installing packages..."
 apt-get update -qq
 apt-get install -qq --yes --no-install-recommends git python3-pip
@@ -62,13 +65,17 @@ k8s_absent_packages:
   - "python3-reportbug"
   - "qemu-guest-agent"
   - "locales-all"
-  - "linux-image-6.1.*"
   - "cron"
   - "cron-daemon"
   - "keyboard-configuration"
   - "console-setup"
   - "sudo"
 EOF
+
+if [ "$(grep VERSION_CODENAME /etc/os-release)" != "VERSION_CODENAME=trixie" ]; then
+  echo "  - 'linux-image-6.1.*'" >> hostvars.yaml
+  PACKAGE_PURGES="${PACKAGE_PURGES} linux-image-6.1.*"
+fi
 
 printenv | sed 's/=/\: /g' | grep k8s >>hostvars.yaml
 cat hostvars.yaml
@@ -96,7 +103,7 @@ else
   # Package cleanup
   rm -rf ~/.local/lib/python3.11 ~/.local/bin/ ~/.ansible ~/.cache/* ~/playbooks
   pip3 list -v
-  apt-get purge --yes python3-pip python3-wheel curl git git-man liberror-perl wget man-db manpages vim-tiny qemu-guest-agent python3-google-auth linux-image-6.1.*
+  apt-get purge --yes $PACKAGE_PURGES
   apt list --installed
   apt-get autoremove --yes
   python3 -c "import urllib.request; urllib.request.urlretrieve(\"$HC_NET_UTILS\", \"/tmp/hc-utils.deb\")"

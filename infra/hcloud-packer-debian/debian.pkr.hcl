@@ -4,18 +4,18 @@ packer {
   required_plugins {
     hcloud = {
       source  = "github.com/hetznercloud/hcloud"
-      version = ">= 1.6.0"
+      version = ">= 1.7.0"
     }
   }
 }
 
 variable "base_image" {
   type    = string
-  default = "debian-12"
+  default = "debian-13"
 }
 variable "output_name" {
   type    = string
-  default = "debian-12-k8s"
+  default = "k8s"
 }
 variable "k8s_version" {
   type    = string
@@ -27,7 +27,7 @@ variable "user_data_path" {
 }
 
 locals {
-  output_name = "${var.output_name}-v${var.k8s_version}"
+  output_name = "${var.output_name}-v${var.k8s_version}-${var.base_image}"
 }
 
 source "hcloud" "k8s-amd64" {

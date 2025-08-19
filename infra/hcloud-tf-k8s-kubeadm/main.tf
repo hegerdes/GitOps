@@ -98,7 +98,7 @@ module "loadbalancers" {
 resource "hcloud_server" "manager_nodes" {
   count       = var.manager_vm_create ? 1 : 0
   name        = "manager-node"
-  image       = "debian-12"
+  image       = "debian-13"
   server_type = "cax11"
   location    = var.location
   user_data = templatefile("data/cloud-init.yml", {
@@ -132,5 +132,9 @@ resource "hcloud_server" "manager_nodes" {
   provisioner "local-exec" {
     when    = destroy
     command = "bash ${path.module}/data/delete-lb.sh"
+  }
+  provisioner "local-exec" {
+    when    = destroy
+    command = "bash ${path.module}/data/delete-volumes.sh"
   }
 }
