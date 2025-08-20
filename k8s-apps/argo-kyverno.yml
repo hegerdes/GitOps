@@ -3,15 +3,22 @@ kind: Application
 metadata:
   name: kyverno
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   project: default
-  source:
-    chart: kyverno
-    repoURL: https://kyverno.github.io/kyverno/
-    targetRevision: 3.*
-    helm:
-      releaseName: kyverno
-      valuesObject: {}
+  sources:
+    - chart: kyverno
+      repoURL: https://kyverno.github.io/kyverno/
+      targetRevision: 3.*
+      helm:
+        releaseName: kyverno
+        valuesObject: {}
+    - repoURL: https://github.com/hegerdes/GitOps.git
+      targetRevision: HEAD
+      path: k8s-apps/kyverno
+      directory:
+        recurse: true
   destination:
     server: https://kubernetes.default.svc
     namespace: kyverno
