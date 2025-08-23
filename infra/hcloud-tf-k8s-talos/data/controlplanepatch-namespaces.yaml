@@ -29,8 +29,6 @@ cluster:
         metadata:
           name: argocd-cluster-apps
           namespace: argocd
-          annotations:
-            argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
         spec:
           project: default
           source:
@@ -46,7 +44,6 @@ cluster:
             automated:
               prune: false
               selfHeal: true
-              # The retry feature is available since v1.7
           retry:
             limit:
             backoff:
