@@ -39,6 +39,7 @@ node_pools = [
     ipv4_enabled  = true
   }
 ]
+
 loadbancers = [
   {
     name = "lb-cp"
