@@ -28,7 +28,7 @@ node_pools = [
   {
     name     = "worker-node-arm64"
     instance = "cax11"
-    image    = "k8s-v1.34.0-debian-13-amd64"
+    image    = "k8s-v1.34.0-debian-13-arm64"
     size     = 1
     tags = {
       k8s_worker = "true"

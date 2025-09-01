@@ -12,7 +12,7 @@ echo "Waiting for cloud-init to finish..."
 cloud-init status --wait
 
 # Setup requirements
-PACKAGE_PURGES="python3-pip python3-wheel curl git git-man liberror-perl wget man-db manpages vim-tiny qemu-guest-agent python3-google-auth"
+PACKAGE_PURGES="python3-pip python3-wheel curl git git-man cron cron-daemon-common file liberror-perl wget man-db manpages vim-tiny qemu-guest-agent python3-google-auth"
 HC_NET_UTILS="https://packages.hetzner.com/hcloud/deb/hc-utils_0.0.6-1_all.deb"
 echo "Installing packages..."
 apt-get update -qq
@@ -47,6 +47,8 @@ k8s_absent_packages:
   - "vim-runtime"
   - "libsodium23"
   - "vim-common"
+  - "file"
+  - "traceroute"
   - "perl"
   - "less"
   - "xdg-user-dirs"
@@ -101,7 +103,7 @@ else
   echo "Cleanup..."
 
   # Package cleanup
-  rm -rf ~/.local/lib/python3.11 ~/.local/bin/ ~/.ansible ~/.cache/* ~/playbooks
+  rm -rf ~/.local/lib/python3.* ~/.local/bin/ ~/.ansible ~/.cache/* ~/playbooks
   pip3 list -v
   apt-get purge --yes $PACKAGE_PURGES
   apt list --installed
@@ -109,7 +111,7 @@ else
   python3 -c "import urllib.request; urllib.request.urlretrieve(\"$HC_NET_UTILS\", \"/tmp/hc-utils.deb\")"
   apt-get install -qq --yes --no-install-recommends /tmp/hc-utils.deb
   apt-get clean && apt-get autoclean
-  rm -rf /usr/bin/crictl
+  rm -rf /usr/bin/crictl /usr/bin/runsc-metric-server
 
   # Cloud-init cleanup
   cloud-init clean --machine-id --seed --logs
@@ -117,14 +119,17 @@ else
   cloud-init status
 
   # Caches cleanup
+  journalctl --rotate
+  journalctl --vacuum-time=1s
   systemctl stop systemd-journald
-  rm -rf /var/cache/apt/* /var/lib/apt/lists/* /var/cache/debconf/* /var/cache/dpkg/* /var/cache/ansible/* /var/log/*.log* /tmp/* /var/tmp/* /usr/share/doc/* /usr/share/man/* /var/log/journal/* /run/log/journal
+  rm -rf /var/cache/apt/* /var/lib/apt/lists/* /var/cache/debconf/* /var/cache/dpkg/* /var/cache/ansible/* /var/log/*.log* /tmp/* /var/tmp/* /usr/share/doc/* /usr/share/man/* /var/log/journal/* /run/log/journal/*
   find /usr/lib/python3 -type f -name "*.pyc" -delete
   find /usr/share/locale/ -maxdepth 1 -type d ! -name 'en' ! -name 'en_US' ! -name 'en_US.UTF-8' -exec rm -rf {} +
 
   dd if=/dev/zero of=/mnt/zero.fill bs=1M || true
   rm -rf /mnt/zero.fill
   systemctl start systemd-journald
+  journalctl --rotate
   journalctl --vacuum-time=1s
   df -h
   sync
