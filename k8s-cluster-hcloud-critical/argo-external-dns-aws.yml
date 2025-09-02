@@ -14,7 +14,8 @@ spec:
       helm:
         releaseName: external-dns-aws
         valuesObject:
-          provider: aws
+          provider:
+            name: aws
           extraArgs: [--exclude-target-net=10.0.0.0/8]
           sources:
             - service
