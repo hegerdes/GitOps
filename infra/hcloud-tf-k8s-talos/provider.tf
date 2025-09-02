@@ -3,23 +3,23 @@ terraform {
   required_providers {
     hcloud = {
       source  = "hetznercloud/hcloud"
-      version = "~>1.50"
+      version = "~>1.52"
     }
     talos = {
       source  = "siderolabs/talos"
-      version = "~>0.8"
+      version = "~>0.9"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "~>2.17"
+      version = "~>3.0"
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>4.27"
+      version = "~>4.42"
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "~>5.88"
+      version = "~>6.11"
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
@@ -68,7 +68,7 @@ provider "hcloud" {
 }
 
 provider "helm" {
-  kubernetes {
+  kubernetes = {
     # host                   = yamldecode(talos_cluster_kubeconfig.this.kubeconfig_raw).clusters[0].cluster.server
     # cluster_ca_certificate = base64decode(talos_cluster_kubeconfig.this.kubernetes_client_configuration.ca_certificate)
 

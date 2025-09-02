@@ -14,7 +14,7 @@ packer {
 ######################## INPUT ########################
 variable "talos_version" {
   type    = string
-  default = "v1.10.7"
+  default = "v1.11.0"
 }
 variable "talos_extensions" {
   type    = list(string)

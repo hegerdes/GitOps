@@ -8,21 +8,22 @@ resource "helm_release" "cni" {
   name  = "cilium"
   count = fileexists(local_sensitive_file.kubeconf.filename) ? 1 : 0
 
-  repository      = "https://helm.cilium.io/"
-  wait            = false
-  chart           = "cilium"
-  namespace       = "kube-system"
-  upgrade_install = true
+  repository = "https://helm.cilium.io/"
+  wait       = false
+  chart      = "cilium"
+  namespace  = "kube-system"
   values = [try(templatefile(var.cilium_values_path, {
     ipv6_enabled = local.ipv6_enabled
   }), "")]
 
   depends_on = [time_sleep.wait, module.node_pools, module.loadbalancer, local_sensitive_file.kubeconf]
 
-  set {
-    name  = "cluster.name"
-    value = var.cluster_name
-  }
+  set = [
+    {
+      name  = "cluster.name"
+      value = var.cluster_name
+    }
+  ]
 }
 
 resource "helm_release" "argocd" {
@@ -33,7 +34,6 @@ resource "helm_release" "argocd" {
   repository       = "https://argoproj.github.io/argo-helm"
   chart            = "argo-cd"
   timeout          = 240
-  upgrade_install  = true
   create_namespace = true
 
   values     = [try(file(var.argo_values_path), "")]
