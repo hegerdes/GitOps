@@ -126,6 +126,7 @@ else
   find /usr/lib/python3 -type f -name "*.pyc" -delete
   find /usr/share/locale/ -maxdepth 1 -type d ! -name 'en' ! -name 'en_US' ! -name 'en_US.UTF-8' -exec rm -rf {} +
 
+  echo "Zeroing out free space..."
   dd if=/dev/zero of=/mnt/zero.fill bs=1M || true
   rm -rf /mnt/zero.fill
   systemctl start systemd-journald
