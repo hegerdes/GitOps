@@ -10,7 +10,7 @@ variable "cluster_version" {
 }
 variable "talos_version" {
   type        = string
-  default     = "v1.11.0"
+  default     = "v1.11.1"
   description = "Talos Version of the cluster."
 }
 variable "controlplane_endpoint" {
@@ -71,7 +71,7 @@ variable "dns_record" {
     create   = bool
     zone     = string
     provider = string
-    token    = string
+    token    = optional(string)
     ttl      = optional(number)
   })
   sensitive   = true

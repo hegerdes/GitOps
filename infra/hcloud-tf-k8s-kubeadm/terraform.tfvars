@@ -1,8 +1,8 @@
 node_pools = [
   {
-    name     = "controlplane-node-amd64"
-    instance = "cx32"
-    image    = "k8s-v1.34.1-debian-13-amd64"
+    name     = "controlplane-node-arm64"
+    instance = "cax21"
+    image    = "k8s-v1.34.1-debian-13-arm64"
     size     = 1
     tags = {
       k8s_control_plane = "true"

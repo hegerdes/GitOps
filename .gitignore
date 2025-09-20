@@ -6,8 +6,6 @@ todo-sort
 infra/hcloud-tf-k8s-talos/out
 infra/hcloud-tf-k8s-kubeadm/backend.tf
 infra/hcloud-tf-k8s-talos/backend.tf
-infra/hcloud-tf-k8s-talos/terraform.tfvars.json
-infra/hcloud-tf-k8s-talos/terraform.tfvars-ipv6.json
 infra/hcloud-tf-k8s-kubeadm/terraform.tfvars.btk.json
 infra/hcloud-tf-k8s-talos/data/controlplanepatch-secrets.yaml
 infra/hcloud-tf-k8s-talos/data/k8s-secret-external-secret.yml
