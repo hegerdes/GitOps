@@ -111,6 +111,7 @@ spec:
       targetRevision: HEAD
       path: k8s-cluster-hcloud-critical/hcloud
       directory:
+        jsonnet: {}
         recurse: true
   destination:
     server: https://kubernetes.default.svc

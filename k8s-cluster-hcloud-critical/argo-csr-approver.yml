@@ -20,7 +20,7 @@ spec:
       value: https://github.com/alex1989hu/kubelet-serving-cert-approver
   syncPolicy:
     automated:
-      prune: false
+      prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
