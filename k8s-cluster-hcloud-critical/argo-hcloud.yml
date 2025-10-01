@@ -14,6 +14,8 @@ spec:
       helm:
         releaseName: hcloud-cloud-controller-manager
         valuesObject:
+          rbac:
+            create: false
           networking:
             enabled: true
             clusterCIDR: 10.244.0.0/16
@@ -121,10 +123,10 @@ spec:
       value: https://github.com/hetznercloud/hcloud-cloud-controller-manager
     - name: Chart-Info Hetzner-CSI-Driver
       value: https://github.com/hetznercloud/csi-driver
-    - name: Chart-Info Hetzner-LB-Exporter
-      value: https://github.com/wacken89/hetzner-load-balancer-prometheus-exporter
     - name: Chart-Info Hetzner-Exporter
       value: https://github.com/promhippie/charts/tree/master/stable/hcloud-exporter
+    # - name: Chart-Info Hetzner-LB-Exporter
+    #   value: https://github.com/wacken89/hetzner-load-balancer-prometheus-exporter
   syncPolicy:
     automated:
       prune: true
