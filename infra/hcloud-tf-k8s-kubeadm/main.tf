@@ -17,7 +17,7 @@ locals {
           ssh_key      = [for key in pool.ssh_key_paths : file(key)]
           network_role = "client"
         })
-        tags                 = merge(pool.tags, local.default_tags)
+        tags                 = merge(pool.tags, local.default_tags, { image : pool.image })
         ssh_keys             = [for key in hcloud_ssh_key.default : key.name]
         network_name         = hcloud_network.k8s_network.name
         location             = var.location
