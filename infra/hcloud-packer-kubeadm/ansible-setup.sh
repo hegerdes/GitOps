@@ -15,7 +15,7 @@ cloud-init status --wait
 PACKAGE_PURGES="python3-pip python3-wheel curl git git-man cron cron-daemon-common file liberror-perl wget man-db manpages vim-tiny qemu-guest-agent python3-google-auth"
 HC_NET_UTILS="https://packages.hetzner.com/hcloud/deb/hc-utils_0.0.6-1_all.deb"
 echo "Installing packages..."
-apt-get update -qq
+apt-get update -qq && apt-get upgrade -qq --yes --no-install-recommends
 apt-get install -qq --yes --no-install-recommends git python3-pip
 pip3 install --user --break-system-packages --no-warn-script-location --no-cache-dir ansible jmespath
 PATH=~/.local/bin:$PATH
@@ -35,7 +35,7 @@ cat <<EOF >hostvars.yaml
 k8s_crun_with_wasm: true
 k8s_youki_with_wasm: true
 k8s_cri: crun
-k8s_ensure_min_kernel_version: 6.12.*
+k8s_ensure_min_kernel_version: "{{ k8s_ensure_min_kernel_version_map[ansible_facts.lsb.codename] }}"
 k8s_external_cp_host: kubernetes.k8s.henrikgerdes.me
 k8s_shared_api_server_endpoint: k8s-controlplane.local
 k8s_absent_packages:
@@ -74,9 +74,14 @@ k8s_absent_packages:
   - "sudo"
 EOF
 
-if [ "$(grep VERSION_CODENAME /etc/os-release)" != "VERSION_CODENAME=trixie" ]; then
+# Purge older kernel versions
+if [ "$(grep VERSION_CODENAME /etc/os-release)" == "VERSION_CODENAME=bookworm" ]; then
   echo "  - 'linux-image-6.1.*'" >> hostvars.yaml
   PACKAGE_PURGES="${PACKAGE_PURGES} linux-image-6.1.*"
+fi
+if [ "$(grep VERSION_CODENAME /etc/os-release)" == "VERSION_CODENAME=trixie" ]; then
+  echo "  - 'linux-image-6.12.*'" >> hostvars.yaml
+  PACKAGE_PURGES="${PACKAGE_PURGES} linux-image-6.12.*"
 fi
 
 printenv | sed 's/=/\: /g' | grep k8s >>hostvars.yaml
@@ -98,6 +103,8 @@ ansible-playbook pb_k8s_local.yml --extra-vars "@hostvars.yaml" -v && cd
 if [ -f /var/run/reboot-required ]; then
   echo "Reboot required. Rebooting now..."
   rm -rf /var/run/reboot-required
+  journalctl --sync
+  journalctl --flush
   reboot && exit 0
 else
   echo "Cleanup..."
@@ -119,6 +126,8 @@ else
   cloud-init status
 
   # Caches cleanup
+  journalctl --sync
+  journalctl --flush
   journalctl --rotate
   journalctl --vacuum-time=1s
   systemctl stop systemd-journald
@@ -130,6 +139,8 @@ else
   dd if=/dev/zero of=/mnt/zero.fill bs=1M || true
   rm -rf /mnt/zero.fill
   systemctl start systemd-journald
+  journalctl --sync
+  journalctl --flush
   journalctl --rotate
   journalctl --vacuum-time=1s
   df -h

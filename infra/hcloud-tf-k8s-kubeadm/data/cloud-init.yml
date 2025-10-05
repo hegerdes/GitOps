@@ -60,7 +60,7 @@ packages:
   - auditd
   - fuse
   - dbus
-  - libyajl2 # Needed for youki was
+  - libyajl2 # Needed for youki wasm
 
   # Only needed on Cp nodes
   - python3-kubernetes
@@ -79,15 +79,6 @@ packages:
 #   pull:
 #     url: "https://github.com/hegerdes/ansible-playbooks.git"
 #     playbook_name: pb_k8s_local.yml
-
-#  To specify a different 'apt-get' command, set 'apt_get_command'.
-#  This must be a list, and the subcommand (update, upgrade) is appended to it.
-#  default is:
-#    ['apt-get', '--option=Dpkg::Options::=--force-confold',
-#     '--option=Dpkg::options::=--force-unsafe-io', '--assume-yes', '--quiet']
-apt_get_command:
-   ['apt-get', '--option=Dpkg::Options::=--force-confold',
-    '--option=Dpkg::options::=--force-unsafe-io', '--assume-yes', '--quiet', '--no-install-recommends']
 
 runcmd:
   - echo "10.0.0.8 k8s-controlplane.local" >> /etc/hosts
