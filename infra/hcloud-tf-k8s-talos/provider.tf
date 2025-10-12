@@ -56,7 +56,7 @@ provider "azurerm" {
 }
 
 provider "cloudflare" {
-  api_token = var.dns_record.token
+  api_token = data.azurerm_key_vault_secret.cloudflare_token.value
 }
 
 provider "aws" {

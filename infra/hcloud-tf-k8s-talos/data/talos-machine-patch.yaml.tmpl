@@ -18,13 +18,17 @@ machine:
       serverTLSBootstrap: true
       serializeImagePulls: false
       maxParallelImagePulls: 8
-      nodeStatusMaxImages: 100
+      nodeStatusMaxImages: -1
+      imageMinimumGCAge: 5m
+      imageMaximumGCAge: 1h
+      volumeStatsAggPeriod: 5m
+      enableProfilingHandler: false
+      enableDebugFlagsHandler: false
       maxPods: 220
       readOnlyPort: 0
       failSwapOn: true
       featureGates:
-        UserNamespacesSupport: true
-        UserNamespacesPodSecurityStandards: true
+        ImageVolume: true
 
     extraArgs:
       cloud-provider: external
@@ -102,7 +106,7 @@ machine:
 cluster:
   allowSchedulingOnControlPlanes: true
   adminKubeconfig:
-      certLifetime: 8h0m0s
+    certLifetime: 8h0m0s
 
   etcd:
     advertisedSubnets: [10.0.0.0/16]

@@ -44,7 +44,7 @@ locals {
     pool.name => merge(
       pool, {
         user_data            = try(data.talos_machine_configuration.this[pool.name].machine_configuration, "")
-        tags                 = merge(pool.tags, local.default_tags, { pool = pool.name })
+        tags                 = merge(pool.tags, local.default_tags, { pool = pool.name, image = pool.image })
         ssh_keys             = concat([for key in hcloud_ssh_key.default : key.name], [hcloud_ssh_key.dummy.id])
         network_name         = hcloud_network.k8s_network.name
         location             = pool.location != "null" ? pool.location : var.location
@@ -308,6 +308,10 @@ data "azurerm_key_vault" "hegerdes" {
 
 data "azurerm_key_vault_secret" "hcloud_token" {
   name         = "hcloud-k8s-token"
+  key_vault_id = data.azurerm_key_vault.hegerdes.id
+}
+data "azurerm_key_vault_secret" "cloudflare_token" {
+  name         = "cloudflare-dns-henrikgerdes-me"
   key_vault_id = data.azurerm_key_vault.hegerdes.id
 }
 
