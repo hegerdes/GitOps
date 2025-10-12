@@ -38,24 +38,20 @@ rules:
       - services
     verbs:
       - list
-      - patch
-      - update
       - watch
   - apiGroups:
       - ""
     resources:
       - services/status
     verbs:
-      - list
       - patch
       - update
-      - watch
-  # - apiGroups:
-  #     - ""
-  #   resources:
-  #     - serviceaccounts
-  #   verbs:
-  #     - create
+  - apiGroups:
+      - ""
+    resources:
+      - serviceaccounts
+    verbs:
+      - create
   - apiGroups:
       - ""
     resources:
@@ -66,16 +62,6 @@ rules:
       - update
       - watch
   - apiGroups:
-      - ""
-    resources:
-      - endpoints
-    verbs:
-      - create
-      - get
-      - list
-      - watch
-      - update
-  - apiGroups:
       - coordination.k8s.io
     resources:
       - leases
@@ -85,21 +71,3 @@ rules:
       - list
       - watch
       - update
-  - apiGroups:
-      - ""
-    resources:
-      - serviceaccounts/token
-    verbs:
-      - create
-  - apiGroups:
-      - authentication.k8s.io
-    resources:
-      - tokenreviews
-    verbs:
-      - create
-  - apiGroups:
-      - authorization.k8s.io
-    resources:
-      - subjectaccessreviews
-    verbs:
-      - create
