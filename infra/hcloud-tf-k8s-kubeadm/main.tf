@@ -83,7 +83,6 @@ module "loadbalancers" {
   source   = "hegerdes/hetzner-loadbalancer/hcloud"
   version  = "~>0.1"
   for_each = local.loadbalancers
-  # for_each = {}
 
   location   = var.location
   network_id = hcloud_network.k8s_network.id

@@ -14,7 +14,7 @@ node_pools = [
   },
   {
     name     = "worker-node-amd64"
-    instance = "cx22"
+    instance = "cx23"
     image    = "k8s-v1.34.1-debian-13-amd64"
     size     = 1
     tags = {

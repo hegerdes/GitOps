@@ -33,7 +33,7 @@ locals {
 source "hcloud" "k8s-amd64" {
   image         = var.base_image
   location      = "fsn1"
-  server_type   = "cx22"
+  server_type   = "cx23"
   ssh_keys      = []
   user_data     = file(var.user_data_path)
   ssh_username  = "root"
