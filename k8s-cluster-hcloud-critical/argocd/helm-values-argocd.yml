@@ -66,6 +66,17 @@ server:
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
       nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+
+      nginx.ingress.kubernetes.io/hsts: "true"
+      nginx.ingress.kubernetes.io/hsts-max-age: "63072000" # 2 years
+      nginx.ingress.kubernetes.io/hsts-include-subdomains: "true"
+      nginx.ingress.kubernetes.io/hsts-preload: "true"
+      nginx.ingress.kubernetes.io/proxy-body-size: "1m" # raise if needed
+
+      # OWASP
+      nginx.ingress.kubernetes.io/enable-modsecurity: "true"
+      nginx.ingress.kubernetes.io/enable-owasp-core-rules: "true"
+
     ingressClassName: "nginx"
     tls: true
 
