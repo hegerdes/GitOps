@@ -1,11 +1,10 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
   name: busybox-secrets-store-inline
   labels:
     app: busybox-secret-csi
 spec:
-  replicas: 3
   selector:
     matchLabels:
       app: busybox-secret-csi
