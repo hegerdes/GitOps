@@ -38,7 +38,7 @@ locals {
 ################################################################################
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~>5.19"
+  version = "~>6.5"
 
   name                                                          = local.name
   azs                                                           = local.azs
@@ -262,7 +262,7 @@ resource "aws_autoscaling_group" "worker" {
 ################################################################################
 module "cp_lb" {
   source  = "terraform-aws-modules/alb/aws"
-  version = "~>9.14"
+  version = "~>10.0"
 
   name = local.name
   tags = local.tags
@@ -279,7 +279,7 @@ module "cp_lb" {
       port     = 6443
       protocol = "TCP"
       forward = {
-        arn = aws_lb_target_group.cp.arn
+        target_group_arn = aws_lb_target_group.cp.arn
       }
     }
   }

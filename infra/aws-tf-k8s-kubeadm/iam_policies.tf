@@ -98,7 +98,6 @@ data "aws_iam_policy_document" "vpc_ec2_ipv4" {
   }
 }
 
-
 data "aws_iam_policy_document" "k8s-cloud-controller" {
   statement {
     actions = [

@@ -65,6 +65,10 @@ pre-commit:
     - !reference [.snippets, alpine-core-tools]
     - !reference [.snippets, opentofu-install]
     - !reference [.snippets, tflint-install]
+    - !reference [.snippets, ssh-client-install]
+    - |
+      # Generating ssh demo-key-pair
+      ssh-keygen -t rsa -b 4096 -C "demo@example.com" -f ~/.ssh/id_rsa -N ""
 
 kube-lint:
   image: alpine

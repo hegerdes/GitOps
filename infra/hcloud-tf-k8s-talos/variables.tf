@@ -74,7 +74,6 @@ variable "dns_record" {
     token    = optional(string)
     ttl      = optional(number)
   })
-  sensitive   = true
   default     = { create = false, zone = "", provider = "", token = "xxx" }
   description = "DNS record for the controlplane. Provider can be cloudflare, aws, azure"
 }
