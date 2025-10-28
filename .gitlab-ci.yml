@@ -22,7 +22,7 @@ include:
   - component: gitlab.com/components/opentofu/job-templates@main
     inputs:
       version: latest
-      opentofu_version: 1.9.0
+      opentofu_version: 1.10.6
 
 variables:
   GL_K8S_CONTEXT: gitlab-ci
@@ -66,10 +66,27 @@ pre-commit:
     - !reference [.snippets, opentofu-install]
     - !reference [.snippets, tflint-install]
 
+kube-lint:
+  image: alpine
+  stage: validate
+  needs: []
+  before_script:
+    - !reference [.snippets, debian-core-tools]
+    - !reference [.snippets, alpine-core-tools]
+    - !reference [.snippets, kubectl-install]
+    - !reference [.snippets, kubeconform-install]
+    - !reference [.snippets, helm-install]
+    - !reference [.snippets, yq-by-mike-farah-install]
+  script:
+    - ./k8s-manifest-lint.sh
+
+  rules:
+    - !reference [.rules, default-merge-rules]
+    - !reference [.rules, default-branch-only-rules]
+
 az-auth:
   image: mcr.microsoft.com/azure-cli:latest
   stage: .pre
-  before_script: []
   id_tokens:
     GITLAB_OIDC_TOKEN:
       aud: https://gitlab.com
@@ -93,8 +110,7 @@ az-auth:
   artifacts:
     expire_in: 15 min
     access: none
-    paths:
-      - "*.env"
+    paths: ["*.env"]
     reports:
       dotenv: ci.env
   rules:
