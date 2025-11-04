@@ -82,7 +82,7 @@ kube-lint:
     - !reference [.snippets, helm-install]
     - !reference [.snippets, yq-by-mike-farah-install]
   script:
-    - ./k8s-manifest-lint.sh
+    - ./scripts/k8s-manifest-lint.sh
 
   rules:
     - !reference [.rules, default-merge-rules]
