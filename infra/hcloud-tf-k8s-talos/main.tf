@@ -44,11 +44,15 @@ locals {
     pool.name => merge(
       pool, {
         user_data            = try(data.talos_machine_configuration.this[pool.name].machine_configuration, "")
-        tags                 = merge(pool.tags, local.default_tags, { pool = pool.name, image = pool.image })
         ssh_keys             = concat([for key in hcloud_ssh_key.default : key.name], [hcloud_ssh_key.dummy.id])
         network_name         = hcloud_network.k8s_network.name
-        location             = pool.location != "null" ? pool.location : var.location
+        location             = try(lower(pool.location), var.location)
         private_ip_addresses = try([for i in range(pool.size) : cidrhost("10.0.${index + 1}.0/24", i + 8)], [])
+        tags = merge(pool.tags, local.default_tags, {
+          pool  = pool.name,
+          image = pool.image,
+          location : try(lower(pool.location), var.location)
+        })
       }
     )
   }
@@ -258,6 +262,14 @@ resource "hcloud_firewall" "block" {
   provisioner "local-exec" {
     when    = destroy
     command = "bash ${path.module}/data/delete-lb.sh"
+  }
+  provisioner "local-exec" {
+    when    = destroy
+    command = "bash ${path.module}/data/delete-autoscale-vms.sh"
+  }
+  provisioner "local-exec" {
+    when    = destroy
+    command = "bash ${path.module}/data/delete-volumes.sh"
   }
 }
 

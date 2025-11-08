@@ -35,6 +35,9 @@ resource "helm_release" "argocd" {
   chart            = "argo-cd"
   timeout          = 240
   create_namespace = true
+  lifecycle {
+    ignore_changes = [values]
+  }
 
   values     = [try(file(var.argo_values_path), "")]
   depends_on = [time_sleep.wait, module.node_pools, module.loadbalancer, helm_release.cni]

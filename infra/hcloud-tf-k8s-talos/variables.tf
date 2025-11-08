@@ -25,7 +25,7 @@ variable "node_pools" {
     tags            = any
     image           = string
     size            = optional(number, 1)
-    location        = optional(string, "null")
+    location        = optional(string)
     machine_patches = optional(list(string), ["data/controlplanepatch.yaml.tmpl"])
     ssh_key_paths   = optional(list(string), ["~/.ssh/id_rsa.pub"])
     vm_names        = optional(list(string), [])

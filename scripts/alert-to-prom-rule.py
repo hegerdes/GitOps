@@ -28,23 +28,23 @@ def sanitize_name(name: str, max_len: int = 63) -> str:
     return s
 
 
-def load_yaml_documents(paths: List[str]) -> Dict[str, List[Dict[str, Any]]]:
+def load_yaml_documents(paths: List[str]) -> Dict[str, Dict[str, Any]]:
     docs = {}
     for path in paths:
         with os.open(path, 'r') as f:
             for doc in yaml.safe_load_all(f):
                 if doc is None:
                     continue
-                docs[sanitize_name(path)] = List(doc)
+                docs[sanitize_name(path)] = list(doc)[0]
     return docs
 
 
-def get_rules_from_urls(urls: Dict[str, str]) -> Dict[str, List[Dict[str, Any]]]:
+def get_rules_from_urls(urls: Dict[str, str]) -> Dict[str, Dict[str, Any]]:
     docs = {}
     for name, url in urls.items():
         response = requests.get(url, timeout=15)
         response.raise_for_status()
-        docs[name] = list(yaml.safe_load_all(response.text))
+        docs[name] = list(yaml.safe_load_all(response.text))[0]
     return docs
 
 
@@ -54,7 +54,7 @@ def convert_rules(docs: Dict[str, List[Dict[str, Any]]], out_dir: str = OUT_DIR)
         rendered['metadata']['name'] = sanitize_name(k)
         rendered['spec'] = v
         print('Writing rules for', k)
-        out_file = os.path.join(out_dir, f"{sanitize_name(k)}.yaml")
+        out_file = os.path.join(out_dir, f"prometheus-rule-{sanitize_name(k)}.yaml")
         with open(out_file, 'w') as f:
             yaml.dump(
                 rendered,
