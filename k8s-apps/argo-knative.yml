@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: keda
+  namespace: argocd
+  labels:
+    name: keda
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  source:
+    chart: knative-operator
+    repoURL: https://knative.github.io/operator
+    targetRevision: 1.*
+    helm:
+      releaseName: knative-operator
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: keda
+  info:
+    - name: Chart-Info
+      value: https://github.com/knative/operator/tree/main/config/charts/knative-operator
+    - name: App-Docs
+      value: https://knative.dev/docs/
+    - name: App-Source
+      value: https://github.com/knative/serving
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

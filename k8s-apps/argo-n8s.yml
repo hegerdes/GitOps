@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: n8n
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  source:
+    chart: n8n
+    repoURL: 8gears.container-registry.com/library
+    targetRevision: 1.*
+    helm:
+      releaseName: n8n
+      valuesObject:
+        ingress:
+          enabled: false
+          annotations:
+            cert-manager.io/cluster-issuer: "letsencrypt-prod-nginx"
+          hosts:
+            - host: n8n.k8s.henrikgerdes.me
+              paths: [/]
+          tls:
+            - hosts:
+                - n8n.k8s.henrikgerdes.me
+              secretName: n8n-ing-tls
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: n8n
+  info:
+    - name: Chart-Info
+      value: https://artifacthub.io/packages/helm/open-8gears/n8n
+    - name: Code-Info
+      value: https://github.com/n8n-io/n8n
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

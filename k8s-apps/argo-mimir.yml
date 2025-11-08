@@ -3,16 +3,21 @@ kind: Application
 metadata:
   name: mimir
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/background
 spec:
   project: default
   source:
     chart: mimir-distributed
     repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 5.*
+    targetRevision: 6.*
     helm:
       releaseName: mimir
       valuesObject:
+        nginx:
+          enabled: false
         global:
+          # dnsService: coredns
           extraEnv:
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
@@ -30,53 +35,50 @@ spec:
               storage:
                 # backend: azure #s3, gcs, azure, swift, filesystem.
                 backend: s3
+                s3:
+                  bucket_name: hegerdes-monitoring
+                  region: weur
+                  endpoint: f8dcb6c50cc8b86dcf6953a50c3bf736.r2.cloudflarestorage.com
+                  access_key_id: "${AWS_ACCESS_KEY_ID}"
+                  secret_access_key: "${AWS_SECRET_ACCESS_KEY}"
+                  # http:
+                  #   insecure_skip_verify: true
                 # azure:
                 #   container_name: mimir-data
                 #   account_key: "${AZURE_STORAGE_ACCOUNT_KEY}"
                 #   account_name: hegerdesdevblobs
                 #   endpoint_suffix: blob.core.windows.net
-                s3:
-                  # bucket_name: "${BUCKET_NAME}"
-                  endpoint: fsn1.your-objectstorage.com
-                  access_key_id: "${AWS_ACCESS_KEY_ID}" # This is a secret injected via an environment variable
-                  secret_access_key: "${AWS_SECRET_ACCESS_KEY}" # This is a secret injected via an environment variable
-                  http:
-                    insecure_skip_verify: true
             blocks_storage:
-              s3:
-                bucket_name: hegerdes-mimir-blocks
+              # s3:
+              #   bucket_name: hegerdes-mimir-blocks
               # azure:
               #   container_name: mimir-blocks
+              storage_prefix: k8smimir4blocks
+
             alertmanager_storage:
-              s3:
-                bucket_name: hegerdes-mimir-alertmanager
+              # s3:
+              #   bucket_name: hegerdes-mimir-alertmanager
               # azure:
               #   container_name: mimir-alertmanager
+              storage_prefix: k8smimir4alerts
             ruler_storage:
-              s3:
-                bucket_name: hegerdes-mimir-ruler
+              # s3:
+              #   bucket_name: hegerdes-mimir-ruler
               # azure:
               #   container_name: mimir-ruler
-        ruler:
-          env:
-            - name: AZURE_STORAGE_ACCOUNT_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: mimir-azure-storage-creds
-                  key: azure_storage_account_key
+              storage_prefix: k8smimir4ruler
+            ruler:
+              external_url: https://grafana.k8s.henrikgerdes.me
+            limits:
+              max_global_series_per_user: 2000000
+              ingestion_rate: 100000 # default of 10000 * 10
+              ingestion_burst_size: 2000000 # default of 200000 * 10
+              ruler_max_rules_per_rule_group: 40
         alertmanager:
           enabled: true
           replicas: 1
-          env:
-            - name: AZURE_STORAGE_ACCOUNT_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: mimir-azure-storage-creds
-                  key: azure_storage_account_key
-
-          service:
-            annotations: {}
-            labels: {}
+          # userConfig:
+          #   alertmanager_config: |
 
           persistentVolume:
             # If false, use emptyDir
@@ -92,15 +94,11 @@ spec:
           replicas: 3
           statefulSet:
             enabled: true
-          service:
-            annotations: {}
-            labels: {}
 
           persistentVolume:
             enabled: true
             annotations: {}
             accessModes: [ReadWriteOnce]
-            # Ingester data Persistent Volume size
             size: 2Gi
             enableRetentionPolicy: false
             whenDeleted: Retain
@@ -109,15 +107,11 @@ spec:
 
         compactor:
           replicas: 1
-          service:
-            annotations: {}
-            labels: {}
           persistentVolume:
             enabled: true
             annotations: {}
             accessModes: [ReadWriteOnce]
             size: 2Gi
-            # storageClass: "-"
             enableRetentionPolicy: false
             whenDeleted: Retain
             whenScaled: Retain
@@ -127,7 +121,7 @@ spec:
 
         # -- Setting for the Grafana Rollout Operator https://github.com/grafana/helm-charts/tree/main/charts/rollout-operator
         rollout_operator:
-          enabled: true
+          enabled: false
 
         minio:
           enabled: false
@@ -136,19 +130,16 @@ spec:
         # When enterprise.enabled is true the GEM gateway is deployed. Otherwise, it is an nginx.
         # Options except those under gateway.nginx apply to both versions - nginx and GEM gateway.
         gateway:
+          enabled: true
           enabledNonEnterprise: true
           replicas: 1
-
-          tolerations: []
-          service:
-            port: 80
-            type: ClusterIP
-            annotations: {}
           ingress:
-            enabled: true
-            ingressClassName: nginx
+            enabled: false
             annotations:
               cert-manager.io/cluster-issuer: letsencrypt-prod-nginx
+              # # Basic auth for now
+              # nginx.ingress.kubernetes.io/auth-type: "basic"
+              # nginx.ingress.kubernetes.io/auth-secret: "monitoring-auth"
             hosts:
               # -- Passed through the `tpl` function to allow templating.
               - host: mimir.k8s.henrikgerdes.me
@@ -159,39 +150,11 @@ spec:
               - secretName: mimir-tls
                 hosts:
                   - mimir.k8s.henrikgerdes.me
-          nginx:
-            verboseLogging: true
-
-            basicAuth:
-              enabled: false
-              # -- Name of an existing basic auth secret to use instead of gateway.nginx.basicAuth.htpasswd. Must contain '.htpasswd' key
-              existingSecret: null
-
         extraObjects:
           - apiVersion: external-secrets.io/v1
             kind: ExternalSecret
             metadata:
-              name: mimir-azure-storage-creds
-              namespace: mimir
-            spec:
-              refreshInterval: 1h
-              secretStoreRef:
-                kind: ClusterSecretStore
-                name: azure-store
-              target:
-                name: mimir-azure-storage-creds
-                creationPolicy: Owner
-
-              data:
-                - secretKey: azure_storage_account_key
-                  remoteRef:
-                    key: azure-sa-devblobs-key-1
-                    decodingStrategy: None # can be None, Base64, Base64URL or Auto
-          - apiVersion: external-secrets.io/v1
-            kind: ExternalSecret
-            metadata:
               name: mimir-s3-storage-creds
-              namespace: mimir
             spec:
               refreshInterval: 1h
               secretStoreRef:
@@ -204,18 +167,13 @@ spec:
               data:
                 - secretKey: AWS_ACCESS_KEY_ID
                   remoteRef:
-                    key: hcloud-k8s-testing-s3-key-id
+                    key: cloudflare-r2-monitoring-key-id
                     decodingStrategy: None # can be None, Base64, Base64URL or Auto
                 - secretKey: AWS_SECRET_ACCESS_KEY
                   remoteRef:
-                    key: hcloud-k8s-testing-s3-access-key
+                    key: cloudflare-r2-monitoring-secret-key
                     decodingStrategy: None # can be None, Base64, Base64URL or Auto
 
-    # - repoURL: https://github.com/hegerdes/GitOps.git
-    #   targetRevision: HEAD
-    #   path: k8s-apps/mimir
-    #   directory:
-    #     recurse: true
   destination:
     server: https://kubernetes.default.svc
     namespace: mimir

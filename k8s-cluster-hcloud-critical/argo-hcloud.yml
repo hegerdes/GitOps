@@ -25,7 +25,7 @@ spec:
           env:
             HCLOUD_TOKEN: null
             HCLOUD_INSTANCES_ADDRESS_FAMILY:
-              value: dualstack
+              value: dualstack # ipv4 (default), ipv6 or dualstack
             HCLOUD_TOKEN_FILE:
               value: /var/run/secrets/hcloud/token
           #   HCLOUD_DEBUG:

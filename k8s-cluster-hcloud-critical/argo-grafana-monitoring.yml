@@ -10,7 +10,7 @@ spec:
   sources:
     - chart: k8s-monitoring
       repoURL: https://grafana.github.io/helm-charts
-      targetRevision: 2.*
+      targetRevision: 3.*
       helm:
         releaseName: grafana-monitoring
         valueFiles:
