@@ -1,0 +1,21 @@
+apiVersion: gateway.nginx.org/v1alpha2
+kind: NginxProxy
+metadata:
+  name: ngf-proxy-config
+  namespace: nginx-gateway
+spec:
+  rewriteClientIP:
+    mode: ProxyProtocol
+    trustedAddresses:
+      - type: CIDR
+        value: "0.0.0.0/0"
+  kubernetes:
+    daemonSet:
+      container:
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+    service:
+      externalTrafficPolicy: Local
+      type: LoadBalancer

@@ -1,51 +1,67 @@
-# https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io/v1.Gateway
-# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/refs/heads/main/gateway.networking.k8s.io/gateway_v1.json
-apiVersion: gateway.networking.k8s.io/v1
-kind: Gateway
-metadata:
-  name: gateway
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod-nginx"
+# Example gateway object:
+name: nginx-default-gateway
+namespace: nginx-gateway
+annotations:
+  cert-manager.io/cluster-issuer: "letsencrypt-prod-nginx"
 spec:
   gatewayClassName: nginx
+  infrastructure:
+    annotations:
+      load-balancer.hetzner.cloud/name: k8s-nginx-gateway-lb
+      load-balancer.hetzner.cloud/location: fsn1
+      load-balancer.hetzner.cloud/use-private-ip: "true"
+      load-balancer.hetzner.cloud/network: "k8s-network"
+      load-balancer.hetzner.cloud/uses-proxyprotocol: "true" # Needs ipMode proxy support from CNI
+    parametersRef:
+      group: gateway.nginx.org
+      kind: NginxProxy
+      name: ngf-proxy-config
   listeners:
-    - name: http
-      port: 80
-      protocol: HTTP
-      # hostname: "nginx.ngf.henrikgerdes.me"
-      hostname: "*.ngf.henrikgerdes.me"
-      allowedRoutes:
-        namespaces:
-          from: All
-    - name: https
+    - name: grafana
       port: 443
+      hostname: "grafana.k8s-gw.henrikgerdes.me"
       protocol: HTTPS
-      # hostname: "nginx.ngf.henrikgerdes.me"
-      hostname: "*.ngf.henrikgerdes.me"
-      allowedRoutes:
-        namespaces:
-          from: All
       tls:
         mode: Terminate
         certificateRefs:
-          - name: ngf.henrikgerdes.me
----
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
-metadata:
-  name: nginx
-spec:
-  parentRefs:
-    - name: gateway
-      sectionName: http
-  hostnames:
-    - "nginx.ngf.henrikgerdes.me"
-    - "test.ngf.henrikgerdes.me"
-  rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /
-      backendRefs:
-        - name: nginx
-          port: 80
+          - kind: Secret
+            group: ""
+            name: grafana-tls-gw-certs
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: harbor
+      port: 443
+      hostname: "harbor.k8s-gw.henrikgerdes.me"
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            group: ""
+            name: harbor-tls-gw-cert
+      allowedRoutes:
+        namespaces:
+          from: All
+
+    # # Fallbacks
+    # - name: https
+    #   port: 443
+    #   hostname: "*.k8s-gw.henrikgerdes.me"
+    #   protocol: HTTPS
+    #   tls:
+    #     mode: Terminate
+    #     certificateRefs:
+    #       - kind: Secret
+    #         group: ""
+    #         name: tls-gw-certs
+    #   allowedRoutes:
+    #     namespaces:
+    #       from: All
+    - name: http
+      port: 80
+      hostname: "*.k8s-gw.henrikgerdes.me"
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: All

@@ -3,41 +3,25 @@ kind: Application
 metadata:
   name: nginx-gateway-fabric
   namespace: argocd
-  annotations:
-    argocd.argoproj.io/sync-wave: "3"
 spec:
   project: default
-  source:
-    # Example OCI chart
-    chart: nginx-gateway-fabric
-    repoURL: ghcr.io/nginxinc/charts
-    targetRevision: 1.*
-    helm:
-      releaseName: nginx-gateway-fabric
-      valuesObject:
-        nginxGateway:
-          replicaCount: 3
-        service:
-          externalTrafficPolicy: Cluster
-          annotations:
-            # See https://github.com/hetznercloud/hcloud-cloud-controller-manager/blob/main/internal/annotation/load_balancer.go#L12
-            load-balancer.hetzner.cloud/name: k8s-worker-gateway-lb
-            load-balancer.hetzner.cloud/location: fsn1
-            load-balancer.hetzner.cloud/use-private-ip: "true"
-            load-balancer.hetzner.cloud/network: "k8s-network"
-            # load-balancer.hetzner.cloud/node-selector: # k8s node label
-            # load-balancer.hetzner.cloud/health-check-interval:
-            # load-balancer.hetzner.cloud/health-check-timeout:
-          type: LoadBalancer
-          ports:
-            - port: 80
-              targetPort: 80
-              protocol: TCP
-              name: http
-            - port: 443
-              targetPort: 443
-              protocol: TCP
-              name: https
+  sources:
+    - chart: nginx-gateway-fabric
+      repoURL: ghcr.io/nginx/charts
+      targetRevision: 2.*
+      helm:
+        releaseName: nginx-gateway-fabric
+        valuesObject:
+          nginxGateway:
+            replicas: 1
+          # A list of Gateway objects. View https://gateway-api.sigs.k8s.io/reference/spec/#gateway
+          # https://cert-manager.io/docs/usage/gateway/
+          gateways: []
+    - repoURL: https://github.com/hegerdes/GitOps.git
+      targetRevision: HEAD
+      path: k8s-apps/nginx-gateway-fabric
+      directory:
+        recurse: true
   destination:
     server: https://kubernetes.default.svc
     namespace: nginx-gateway
@@ -52,3 +36,5 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - ServerSideApply=true
+      - SkipDryRunOnMissingResource=true
