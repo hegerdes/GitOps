@@ -1,0 +1,104 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: harbor
+  namespace: argocd
+  labels:
+    name: harbor
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  sources:
+    - chart: harbor
+      repoURL: https://helm.goharbor.io
+      targetRevision: 1.*
+      helm:
+        releaseName: harbor
+        valuesObject:
+          core:
+            nodeSelector:
+              kubernetes.io/arch: amd64
+          registry:
+            nodeSelector:
+              kubernetes.io/arch: amd64
+          jobservice:
+            nodeSelector:
+              kubernetes.io/arch: amd64
+          portal:
+            nodeSelector:
+              kubernetes.io/arch: amd64
+          trivy:
+            nodeSelector:
+              kubernetes.io/arch: amd64
+          database:
+            internal:
+              nodeSelector:
+                kubernetes.io/arch: amd64
+          redis:
+            internal:
+              nodeSelector:
+                kubernetes.io/arch: amd64
+          existingSecretAdminPassword: harbor-admin-creds
+          existingSecretAdminPasswordKey: HARBOR_ADMIN_PASSWORD
+          externalURL: https://harbor.k8s.henrikgerdes.me
+          expose:
+            type: route
+            tls:
+              enabled: false
+            # ingress:
+            #   className: nginx
+            #   hosts:
+            #     core: harbor.k8s.henrikgerdes.me
+            #   annotations:
+            #     cert-manager.io/cluster-issuer: "letsencrypt-prod-nginx"
+            #     ingress.kubernetes.io/ssl-redirect: "true"
+            #     ingress.kubernetes.io/proxy-body-size: "0"
+            #     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+            #     nginx.ingress.kubernetes.io/proxy-body-size: "0"
+            route:
+              labels: {}
+              annotations: {}
+              parentRefs:
+                - name: nginx-default-gateway
+                  namespace: nginx-gateway
+                  kind: Gateway
+                  group: gateway.networking.k8s.io
+              hosts: [harbor.k8s-gw.henrikgerdes.me]
+            persistence:
+              persistentVolumeClaim:
+                registry:
+                  # storageClass:
+                  size: 10Gi
+
+              imageChartStorage:
+                type: filesystem
+                s3:
+                  # Secrets REGISTRY_STORAGE_S3_ACCESSKEY and REGISTRY_STORAGE_S3_SECRETKEY for registry
+                  #existingSecret: ""
+                  region: us-west-1
+                  bucket: bucketname
+                  #accesskey: awsaccesskey
+                  #secretkey: awssecretkey
+                  #regionendpoint: http://myobjects.local
+                  #rootdirectory: /s3/object/name/prefix
+                  #storageclass: STANDARD
+    - repoURL: https://github.com/hegerdes/GitOps.git
+      targetRevision: HEAD
+      path: k8s-apps/harbor
+      directory:
+        recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: harbor
+  info:
+    - name: Chart-Info
+      value: https://artifacthub.io/packages/helm/harbor/harbor
+    - name: App-Source
+      value: https://github.com/goharbor/harbor
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
