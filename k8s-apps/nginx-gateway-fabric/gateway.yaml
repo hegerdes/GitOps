@@ -1,48 +1,50 @@
-# Example gateway object:
-name: nginx-default-gateway
-namespace: nginx-gateway
-annotations:
-  cert-manager.io/cluster-issuer: "letsencrypt-prod-nginx"
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-nginx
+  name: nginx-default-gateway
+  namespace: nginx-gateway
 spec:
   gatewayClassName: nginx
   infrastructure:
     annotations:
-      load-balancer.hetzner.cloud/name: k8s-nginx-gateway-lb
       load-balancer.hetzner.cloud/location: fsn1
+      load-balancer.hetzner.cloud/name: k8s-nginx-gateway-lb
+      load-balancer.hetzner.cloud/network: k8s-network
       load-balancer.hetzner.cloud/use-private-ip: "true"
-      load-balancer.hetzner.cloud/network: "k8s-network"
-      load-balancer.hetzner.cloud/uses-proxyprotocol: "true" # Needs ipMode proxy support from CNI
+      load-balancer.hetzner.cloud/uses-proxyprotocol: "true"
     parametersRef:
       group: gateway.nginx.org
       kind: NginxProxy
       name: ngf-proxy-config
   listeners:
     - name: grafana
+      allowedRoutes:
+        namespaces:
+          from: All
+      hostname: grafana.k8s-gw.henrikgerdes.me
       port: 443
-      hostname: "grafana.k8s-gw.henrikgerdes.me"
       protocol: HTTPS
       tls:
         mode: Terminate
         certificateRefs:
-          - kind: Secret
+          - name: grafana-tls-gw-cert
             group: ""
-            name: grafana-tls-gw-certs
-      allowedRoutes:
-        namespaces:
-          from: All
+            kind: Secret
     - name: harbor
-      port: 443
-      hostname: "harbor.k8s-gw.henrikgerdes.me"
-      protocol: HTTPS
-      tls:
-        mode: Terminate
-        certificateRefs:
-          - kind: Secret
-            group: ""
-            name: harbor-tls-gw-cert
       allowedRoutes:
         namespaces:
           from: All
+      hostname: harbor.k8s-gw.henrikgerdes.me
+      port: 443
+      protocol: HTTPS
+      tls:
+        certificateRefs:
+          - name: harbor-tls-gw-cert
+            group: ""
+            kind: Secret
+        mode: Terminate
 
     # # Fallbacks
     # - name: https
@@ -59,9 +61,9 @@ spec:
     #     namespaces:
     #       from: All
     - name: http
-      port: 80
-      hostname: "*.k8s-gw.henrikgerdes.me"
-      protocol: HTTP
       allowedRoutes:
         namespaces:
           from: All
+      hostname: "*.k8s-gw.henrikgerdes.me"
+      port: 80
+      protocol: HTTP
