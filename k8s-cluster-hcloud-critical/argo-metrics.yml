@@ -18,7 +18,7 @@ spec:
             - --cert-dir=/tmp
             - --kubelet-use-node-status-port
             - --metric-resolution=15s
-            # - --kubelet-preferred-address-types=Hostname,InternalDNS,InternalIP,ExternalDNS,ExternalIP
+            - --kubelet-preferred-address-types=InternalDNS,InternalIP,ExternalDNS,ExternalIP
     # - chart: prometheus-node-exporter
     #   repoURL: https://prometheus-community.github.io/helm-charts
     #   targetRevision: 4.*

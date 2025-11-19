@@ -138,7 +138,7 @@ resource "talos_cluster_kubeconfig" "this" {
 # bootstrap the cluster
 resource "talos_machine_bootstrap" "this" {
   client_configuration = talos_machine_secrets.this.client_configuration
-  endpoint             = local.talos_endpoint
+  endpoint             = local.cp_public_endpoint
   node                 = local.talos_cp_node_ip
 }
 
