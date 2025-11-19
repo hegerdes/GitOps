@@ -6,7 +6,7 @@ import yaml
 import requests
 from typing import List, Dict, Any
 
-OUT_DIR = os.path.join(os.path.dirname(__file__), 'rules')
+OUT_DIR = os.path.join(os.path.dirname(__file__), 'prom-rules')
 PROMETHEUS_RULE_TEMPLATE = {
     'apiVersion': 'monitoring.coreos.com/v1',
     'kind': 'PrometheusRule',

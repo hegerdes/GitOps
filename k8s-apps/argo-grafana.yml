@@ -12,22 +12,10 @@ spec:
   source:
     chart: grafana
     repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 8.*
+    targetRevision: 10.*
     helm:
       releaseName: grafana
       valuesObject:
-        # global:
-        #   imageRegistry: my-registry.example.com
-        #   imagePullSecrets:
-        #     - name: regcred
-        # serviceAccount:
-        #   name: grafana
-        #   automountServiceAccountToken: true
-        # envValueFrom:
-        #   PROMETHEUS_TOKEN:
-        #     secretKeyRef:
-        #       name: grafana-prometheus
-        #       key: token
         ingress:
           enabled: true
           ingressClassName: nginx
@@ -38,7 +26,19 @@ spec:
             - secretName: grafana-ingress
               hosts:
                 - grafana.k8s.henrikgerdes.me
+        route:
+          main:
+            enabled: false
+            hostnames: [grafana.k8s-gw.henrikgerdes.me]
+            parentRefs:
+              - name: nginx-default-gateway
+                namespace: nginx-gateway
+                kind: Gateway
+                group: gateway.networking.k8s.io
         envFromSecret: grafana-secret-sso
+        plugins:
+          - digrich-bubblechart-panel
+          - grafana-clock-panel
         grafana.ini:
           auth:
             disable_login_form: true
@@ -63,11 +63,6 @@ spec:
           #   token_url: https://gitlab.com/oauth/token
           #   api_url: https://gitlab.com/api/v4
           #   role_attribute_path: contains(groups[*], 'demo/devops') && 'Admin' || contains(groups[*], 'demo/dev') && 'Viewer'
-          paths:
-            data: /var/lib/grafana/
-            logs: /var/log/grafana
-            plugins: /var/lib/grafana/plugins
-            provisioning: /etc/grafana/provisioning
           analytics:
             check_for_updates: true
           log:
@@ -88,40 +83,95 @@ spec:
                 disableDeletion: false
                 editable: true
                 options:
-                  path: /var/lib/grafana/dashboards/default
+                  path: /var/lib/grafana/dashboards
+              - name: "kubernetes-dashboards"
+                orgId: 1
+                folder: "Kubernetes"
+                type: file
+                disableDeletion: false
+                editable: true
+                options:
+                  path: /var/lib/grafana/dashboards/kubernetes
+              - name: "custom-dashboards"
+                orgId: 1
+                folder: "Custom"
+                type: file
+                disableDeletion: false
+                editable: true
+                options:
+                  path: /var/lib/grafana/dashboards/custom
         dashboards:
           default:
+            cert-manager:
+              gnetId: 11001
+              revision: 1
+              datasource: Mimir
+
+            nginx-ingress:
+              gnetId: 9614
+              revision: 1
+              datasource: Mimir
+
             node-exporter:
               gnetId: 1860
               revision: 37
-              datasource: Prometheus
+              datasource: Mimir
               # https://grafana.com/grafana/dashboards/1860-node-exporter-full/
-            k8s-1:
-              gnetId: 14623
-              revision: 1
-              datasource: Prometheus
-              # https://grafana.com/grafana/dashboards/14623-kubernetes-monitoring-overview/
-            etcd:
-              gnetId: 15308
-              revision: 1
-              datasource: Prometheus
-              # https://grafana.com/grafana/dashboards/15308-etcd-cluster-overview/
+
             argocd:
               gnetId: 14584
               revision: 1
-              datasource: Prometheus
+              datasource: Mimir
               # https://grafana.com/grafana/dashboards/14584-argocd/
+
             prometheus-stats:
               gnetId: 2
               revision: 2
-              datasource: Prometheus
+              datasource: Mimir
+
             cnpg:
               url: https://raw.githubusercontent.com/cloudnative-pg/grafana-dashboards/refs/heads/main/charts/cluster/grafana-dashboard.json
-              datasource: Prometheus
-            # kube-overview:
-            #   gnetId: 18283
-            #   revision: 1
-            #   datasource: Prometheus
+              datasource: Mimir
+
+            kube-overview:
+              gnetId: 18283
+              revision: 1
+              datasource: Mimir
+
+          kubernetes-dashboards:
+            k8s-apiserver:
+              url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-system-api-server.json
+              datasource: Mimir
+
+            k8s-coredns:
+              url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-system-coredns.json
+              datasource: Mimir
+
+            k8s-etcd:
+              gnetId: 15308 # https://grafana.com/grafana/dashboards/15308-etcd-cluster-overview/
+              revision: 1
+              datasource: Mimir
+
+            k8s-global-1:
+              gnetId: 14623 # https://grafana.com/grafana/dashboards/14623-kubernetes-monitoring-overview/
+              revision: 1
+              datasource: Mimir
+
+            k8s-global-2:
+              url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-global.json
+              datasource: Mimir
+
+            k8s-namespaces:
+              url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-namespaces.json
+              datasource: Mimir
+
+            k8s-nodes-view:
+              url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-nodes.json
+              datasource: Mimir
+
+            k8s-pods-view:
+              url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-pods.json
+              datasource: Mimir
         # datasources:
         #   datasources.yaml:
         #     apiVersion: 1

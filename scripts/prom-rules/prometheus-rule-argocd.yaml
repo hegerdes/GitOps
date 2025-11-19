@@ -1,0 +1,28 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  annotations: {}
+  labels: {}
+  name: argocd
+spec:
+  groups:
+  - name: EmbeddedExporter
+    rules:
+    - alert: ArgocdServiceNotSynced
+      annotations:
+        description: "Service {{ $labels.name }} run by argo is currently not in sync.\n\
+          \  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+        summary: ArgoCD service not synced (instance {{ $labels.instance }})
+      expr: argocd_app_info{sync_status!="Synced"} != 0
+      for: 15m
+      labels:
+        severity: warning
+    - alert: ArgocdServiceUnhealthy
+      annotations:
+        description: "Service {{ $labels.name }} run by argo is currently not healthy.\n\
+          \  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+        summary: ArgoCD service unhealthy (instance {{ $labels.instance }})
+      expr: argocd_app_info{health_status!="Healthy"} != 0
+      for: 15m
+      labels:
+        severity: warning
