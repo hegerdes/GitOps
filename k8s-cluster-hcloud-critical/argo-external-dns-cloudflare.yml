@@ -16,7 +16,10 @@ spec:
         valuesObject:
           provider:
             name: cloudflare
-          extraArgs: [--exclude-target-net=10.0.0.0/8]
+          extraArgs:
+            - --exclude-target-net=10.0.0.0/8
+            # - --gateway-name=nginx-default-gateway
+            # - --gateway-namespace=nginx-gateway
           domainFilters:
             - henrikgerdes.me
           env:
@@ -40,6 +43,7 @@ spec:
                   [
                     "gateways",
                     "httproutes",
+                    "grpcroutes",
                     "tlsroutes",
                     "tcproutes",
                     "udproutes",
