@@ -70,7 +70,7 @@ spec:
                   health_check 5s
                   max_concurrent 1000
               - name: cache
-                param1eters: 30
+                parameters: 60
                 configBlock: |-
                   disable success cluster.local
                   disable denial cluster.local
