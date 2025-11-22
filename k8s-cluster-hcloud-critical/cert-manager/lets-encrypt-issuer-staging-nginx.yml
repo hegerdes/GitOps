@@ -20,6 +20,12 @@ spec:
       - http01:
           gatewayHTTPRoute:
             parentRefs:
-              - name: nginx
-                namespace: nginx
+              - name: nginx-default-gateway
+                namespace: nginx-gateway
+                kind: Gateway
+      - http01:
+          gatewayHTTPRoute:
+            parentRefs:
+              - name: cilium-gateway
+                namespace: gateway
                 kind: Gateway
