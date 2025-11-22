@@ -19,12 +19,14 @@ spec:
             class: nginx
       - http01:
           gatewayHTTPRoute:
+            serviceType: ClusterIP
             parentRefs:
               - name: nginx-default-gateway
                 namespace: nginx-gateway
                 kind: Gateway
       - http01:
           gatewayHTTPRoute:
+            serviceType: ClusterIP
             parentRefs:
               - name: cilium-gateway
                 namespace: gateway
