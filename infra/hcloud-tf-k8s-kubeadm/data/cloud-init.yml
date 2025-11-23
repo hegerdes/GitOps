@@ -20,9 +20,6 @@ users:
 
 # Write files
 write_files:
-  - content: Created by Packer
-    path: /var/log/created-by.log
-    append: true
   - content: |
       #!/bin/bash
       echo "Set DNS64 nameservers. The time is now $(date -R)!"

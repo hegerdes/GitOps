@@ -34,28 +34,41 @@ spec:
               # - name: nginx-default-gateway
               #   namespace: nginx-gateway
               - name: cilium-gateway
-                namespace: gateway
+                namespace: cilium-gateway
                 kind: Gateway
                 group: gateway.networking.k8s.io
-        envFromSecret: grafana-secret-sso
+        envFromSecret: grafana-secret-sso-entra
         plugins:
           - digrich-bubblechart-panel
           - grafana-clock-panel
         grafana.ini:
           auth:
             disable_login_form: true
-          auth.github:
+          auth.azuread:
+            name: Microsoft SSO
             enabled: true
-            allow_sign_up: false
+            allow_sign_up: true
             auto_login: false
-            scopes: user:email,read:org
-            auth_url: https://github.com/login/oauth/authorize
-            token_url: https://github.com/login/oauth/access_token
-            api_url: https://api.github.com/user
-            allowed_organizations: DemeterPlanet
-            # team_ids:
-            # client_id: # done via env mounted via secret
-            # client_secret: # done via env mounted via secret
+            scopes: openid email profile
+            auth_url: https://login.microsoftonline.com/295b5ac3-2e4e-4ade-85d8-7dc31617bc2c/oauth2/v2.0/authorize
+            token_url: https://login.microsoftonline.com/295b5ac3-2e4e-4ade-85d8-7dc31617bc2c/oauth2/v2.0/token
+            allowed_organizations: 295b5ac3-2e4e-4ade-85d8-7dc31617bc2c
+            role_attribute_strict: false
+            allow_assign_grafana_admin: true
+            skip_org_role_sync: false
+            use_pkce: true
+          # auth.github:
+          #   enabled: true
+          #   allow_sign_up: false
+          #   auto_login: false
+          #   scopes: user:email,read:org
+          #   auth_url: https://github.com/login/oauth/authorize
+          #   token_url: https://github.com/login/oauth/access_token
+          #   api_url: https://api.github.com/user
+          #   allowed_organizations: DemeterPlanet
+          # team_ids:
+          # client_id: # done via env mounted via secret
+          # client_secret: # done via env mounted via secret
           # auth.gitlab:
           #   enabled: true
           #   allow_sign_up: true
@@ -72,6 +85,8 @@ spec:
           grafana_net:
             url: https://grafana.net
           server:
+            # domain: grafana.k8s-gw.henrikgerdes.me
+            # root_url: https://grafana.k8s-gw.henrikgerdes.me
             domain: grafana.k8s.henrikgerdes.me
             root_url: https://grafana.k8s.henrikgerdes.me
         dashboardProviders:
@@ -194,14 +209,14 @@ spec:
           - apiVersion: external-secrets.io/v1
             kind: ExternalSecret
             metadata:
-              name: grafana-secret-sso
+              name: grafana-secret-sso-gh
             spec:
               refreshInterval: 1h
               secretStoreRef:
                 kind: ClusterSecretStore
                 name: azure-store
               target:
-                name: grafana-secret-sso
+                name: grafana-secret-sso-gh
                 creationPolicy: Owner
               data:
                 - secretKey: GF_AUTH_GITHUB_CLIENT_ID
@@ -211,6 +226,27 @@ spec:
                 - secretKey: GF_AUTH_GITHUB_CLIENT_SECRET
                   remoteRef:
                     key: github-oauth-argocd-secret
+                    decodingStrategy: None # can be None, Base64, Base64URL or Auto
+          - apiVersion: external-secrets.io/v1
+            kind: ExternalSecret
+            metadata:
+              name: grafana-secret-sso-entra
+            spec:
+              refreshInterval: 1h
+              secretStoreRef:
+                kind: ClusterSecretStore
+                name: azure-store
+              target:
+                name: grafana-secret-sso-entra
+                creationPolicy: Owner
+              data:
+                - secretKey: GF_AUTH_AZUREAD_CLIENT_ID
+                  remoteRef:
+                    key: aad-testing-client-id
+                    decodingStrategy: None # can be None, Base64, Base64URL or Auto
+                - secretKey: GF_AUTH_AZUREAD_CLIENT_SECRET
+                  remoteRef:
+                    key: aad-testing-client-secret
                     decodingStrategy: None # can be None, Base64, Base64URL or Auto
   destination:
     server: https://kubernetes.default.svc
