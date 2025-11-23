@@ -2,22 +2,24 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod-gw-nginx
-  name: nginx-default-gateway
-  namespace: nginx-gateway
+    cert-manager.io/cluster-issuer: letsencrypt-prod-gw-cilium
+  name: cilium-gateway
+  namespace: cilium-gateway
 spec:
-  gatewayClassName: nginx
+  gatewayClassName: cilium
   infrastructure:
     annotations:
       load-balancer.hetzner.cloud/location: fsn1
-      load-balancer.hetzner.cloud/name: k8s-nginx-gateway-lb
+      load-balancer.hetzner.cloud/name: k8s-cilium-gateway-lb
       load-balancer.hetzner.cloud/network: k8s-network
       load-balancer.hetzner.cloud/use-private-ip: "true"
       load-balancer.hetzner.cloud/uses-proxyprotocol: "true"
-    parametersRef:
-      group: gateway.nginx.org
-      kind: NginxProxy
-      name: ngf-proxy-config
+
+      load-balancer.hetzner.cloud/ipv6-disabled: "true"
+    # parametersRef:
+    #   group: gateway.nginx.org
+    #   kind: NginxProxy
+    #   name: ngf-proxy-config
   listeners:
     - name: grafana
       allowedRoutes:

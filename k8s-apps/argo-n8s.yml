@@ -17,7 +17,7 @@ spec:
         ingress:
           enabled: false
           annotations:
-            cert-manager.io/cluster-issuer: "letsencrypt-prod-nginx"
+            cert-manager.io/cluster-issuer: "letsencrypt-prod-ing-nginx"
           hosts:
             - host: n8n.k8s.henrikgerdes.me
               paths: [/]

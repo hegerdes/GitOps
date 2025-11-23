@@ -51,7 +51,7 @@ spec:
             #   hosts:
             #     core: harbor.k8s.henrikgerdes.me
             #   annotations:
-            #     cert-manager.io/cluster-issuer: "letsencrypt-prod-nginx"
+            #     cert-manager.io/cluster-issuer: "letsencrypt-prod-ing-nginx"
             #     ingress.kubernetes.io/ssl-redirect: "true"
             #     ingress.kubernetes.io/proxy-body-size: "0"
             #     nginx.ingress.kubernetes.io/ssl-redirect: "true"

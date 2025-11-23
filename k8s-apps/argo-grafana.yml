@@ -20,7 +20,7 @@ spec:
           enabled: true
           ingressClassName: nginx
           annotations:
-            cert-manager.io/cluster-issuer: "letsencrypt-prod-nginx"
+            cert-manager.io/cluster-issuer: letsencrypt-prod-ing-nginx
           hosts: [grafana.k8s.henrikgerdes.me]
           tls:
             - secretName: grafana-ingress
@@ -28,11 +28,13 @@ spec:
                 - grafana.k8s.henrikgerdes.me
         route:
           main:
-            enabled: false
+            enabled: true
             hostnames: [grafana.k8s-gw.henrikgerdes.me]
             parentRefs:
-              - name: nginx-default-gateway
-                namespace: nginx-gateway
+              # - name: nginx-default-gateway
+              #   namespace: nginx-gateway
+              - name: cilium-gateway
+                namespace: gateway
                 kind: Gateway
                 group: gateway.networking.k8s.io
         envFromSecret: grafana-secret-sso
