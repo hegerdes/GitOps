@@ -7,7 +7,7 @@ AUTOSCALER_CONF=$(az keyvault secret list --vault-name hegerdes --only-show-erro
 if [ -z "$AUTOSCALER_CONF" ]; then
     echo "Secret k8s-hetzner-custer-autoscale-conf not found"
 else
-    echo "Deleting secret: $ING_LB_ID"
+    echo "Deleting secret: $AUTOSCALER_CONF"
     az keyvault secret delete --vault-name hegerdes --name $AUTOSCALER_CONF
     az keyvault secret purge --vault-name hegerdes --name $AUTOSCALER_CONF
 fi
