@@ -1,7 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: ca-hegerdes
+spec:
+  ca:
+    secretName: ca-hegerdes
+---
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: ca-hegerdes-local
+  name: ca-hegerdes
   namespace: cert-manager
 spec:
   refreshInterval: 1h
@@ -9,7 +17,7 @@ spec:
     kind: ClusterSecretStore
     name: azure-store
   target:
-    name: ca-hegerdes-local
+    name: ca-hegerdes
     creationPolicy: Owner
 
   data:
