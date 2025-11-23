@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: open-policy-agent
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - chart: opa-kube-mgmt
+      repoURL: https://open-policy-agent.github.io/kube-mgmt/charts
+      targetRevision: 9.*
+      helm:
+        releaseName: open-policy-agent
+        valuesObject:
+          nodeSelector:
+            kubernetes.io/arch: amd64
+    # - repoURL: https://github.com/hegerdes/GitOps.git
+    #   targetRevision: HEAD
+    #   path: k8s-apps/open-policy-agent
+    #   directory:
+    #     recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: policy-agent
+  info:
+    - name: Chart-Info
+      value: https://artifacthub.io/packages/helm/opa-kube-mgmt/opa-kube-mgmt
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
