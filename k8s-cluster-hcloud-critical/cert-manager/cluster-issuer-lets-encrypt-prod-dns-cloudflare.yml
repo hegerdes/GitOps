@@ -2,7 +2,6 @@ apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: letsencrypt-prod-dns-cloudflare
-  namespace: cert-manager
 spec:
   acme:
     # The ACME server URL
@@ -19,3 +18,22 @@ spec:
             apiTokenSecretRef:
               name: certmanager-dns-cloudflare
               key: apiToken
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: certmanager-dns-cloudflare
+  namespace: cert-manager
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: azure-store
+  target:
+    name: certmanager-dns-cloudflare
+    creationPolicy: Owner
+  data:
+    - secretKey: apiToken
+      remoteRef:
+        key: cloudflare-dns-henrikgerdes-me
+        decodingStrategy: None # can be None, Base64, Base64URL or Auto
