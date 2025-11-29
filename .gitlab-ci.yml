@@ -24,9 +24,15 @@ include:
       version: latest
       opentofu_version: 1.10.6
 
+# Shared variables
 variables:
   GL_K8S_CONTEXT: gitlab-ci
   GL_K8S_AGENT_ID: 1103496
+  AWS_PROFILE: aws-gitlab-ci
+  AWS_ROLE_ARN: arn:aws:iam::842273266054:role/gitlab-ci-hegerdes-gitops
+  AWS_ROLE_SESSION_NAME: "ci-job-${CI_JOB_ID}"
+  AWS_DEFAULT_REGION: "eu-central-1"
+  TF_IN_AUTOMATION: "true"
 
 .tf_stacks: &tf_stacks
   - GITLAB_TOFU_ROOT_DIR: infra/k8s-ci-test
@@ -57,6 +63,19 @@ variables:
         kubectl config use-context dummy-cluster
       fi
       kubectl version
+  aws-oidc-login:
+    - |
+      mkdir -p ~/.aws
+      cat > ~/.aws/config <<EOF
+      [profile ${AWS_PROFILE}]
+      region = ${AWS_DEFAULT_REGION}
+      output = json
+      role_arn=${AWS_ROLE_ARN}
+      web_identity_token_file = /tmp/web_identity_token
+      EOF
+      echo "${GITLAB_OIDC_TOKEN}" > /tmp/web_identity_token
+    - aws --version
+    - aws sts get-caller-identity
 
 pre-commit:
   allow_failure: true
@@ -87,6 +106,25 @@ kube-lint:
   rules:
     - !reference [.rules, default-merge-rules]
     - !reference [.rules, default-branch-only-rules]
+
+aws-auth:
+  stage: .pre
+  image:
+    name: debian
+    entrypoint: [""]
+  id_tokens:
+    GITLAB_OIDC_TOKEN:
+      aud: https://gitlab.com
+  script:
+    - !reference [.snippets, debian-core-tools]
+    - !reference [.snippets, alpine-core-tools]
+    - !reference [.snippets, kubectl-install]
+    - !reference [.snippets, aws-cli-install]
+    - !reference [.job-scripts, aws-oidc-login]
+    - |
+      # Getting auth token
+      KUBE_TOKEN=$(aws sts get-web-identity-token --audience "https://k8s.hegerdes.com" --signing-algorithm ES384 | jq -r .WebIdentityToken)
+      kubectl --server https://kubernetes.k8s.henrikgerdes.me:6443 --insecure-skip-tls-verify=true --token $KUBE_TOKEN get pods -A
 
 az-auth:
   image: mcr.microsoft.com/azure-cli:latest
