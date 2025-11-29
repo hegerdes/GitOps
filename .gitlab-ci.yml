@@ -28,11 +28,8 @@ include:
 variables:
   GL_K8S_CONTEXT: gitlab-ci
   GL_K8S_AGENT_ID: 1103496
-  AWS_PROFILE: aws-gitlab-ci
-  AWS_ROLE_ARN: arn:aws:iam::842273266054:role/gitlab-ci-hegerdes-gitops
-  AWS_ROLE_SESSION_NAME: "ci-job-${CI_JOB_ID}"
-  AWS_DEFAULT_REGION: "eu-central-1"
   TF_IN_AUTOMATION: "true"
+  KUBE_SERVER: https://kubernetes.k8s.henrikgerdes.me:6443
 
 .tf_stacks: &tf_stacks
   - GITLAB_TOFU_ROOT_DIR: infra/k8s-ci-test
@@ -109,9 +106,12 @@ kube-lint:
 
 aws-auth:
   stage: .pre
-  image:
-    name: debian
-    entrypoint: [""]
+  image: debian
+  variables:
+    AWS_PROFILE: aws-gitlab-ci
+    AWS_ROLE_ARN: arn:aws:iam::842273266054:role/gitlab-ci-hegerdes-gitops
+    AWS_ROLE_SESSION_NAME: "ci-job-${CI_JOB_ID}"
+    AWS_DEFAULT_REGION: "eu-central-1"
   id_tokens:
     GITLAB_OIDC_TOKEN:
       aud: https://gitlab.com
@@ -124,7 +124,12 @@ aws-auth:
     - |
       # Getting auth token
       KUBE_TOKEN=$(aws sts get-web-identity-token --audience "https://k8s.hegerdes.com" --signing-algorithm ES384 | jq -r .WebIdentityToken)
-      kubectl --server https://kubernetes.k8s.henrikgerdes.me:6443 --insecure-skip-tls-verify=true --token $KUBE_TOKEN get pods -A
+      # Using curl to check if the site is accessible
+      if curl --output /dev/null --silent --head --fail --insecure "$KUBE_SERVER/healthz"; then
+        kubectl --server $KUBE_SERVER --insecure-skip-tls-verify=true --token $KUBE_TOKEN get pods -A
+      else
+        echo "Kube-Server is offline. Skipping auth check"
+      fi
 
 az-auth:
   image: mcr.microsoft.com/azure-cli:latest
