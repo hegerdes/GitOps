@@ -1,3 +1,4 @@
+manager_vm_create = false
 node_pools = [
   {
     name     = "controlplane-node-arm64"

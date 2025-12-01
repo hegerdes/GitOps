@@ -60,6 +60,7 @@ source "hcloud" "k8s-arm64" {
     version = "${var.k8s_version}",
     name    = "${local.output_name}-arm64"
     arch    = "arm64"
+    category = "k8s"
   }
 }
 build {

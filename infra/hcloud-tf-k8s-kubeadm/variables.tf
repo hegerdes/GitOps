@@ -53,7 +53,7 @@ variable "vnet_name" {
 
 variable "manager_vm_create" {
   type        = bool
-  default     = "true"
+  default     = true
   description = "Create a manager nodes that is not part of the k8s cluster."
 }
 

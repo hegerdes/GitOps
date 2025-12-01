@@ -14,8 +14,7 @@ locals {
     pool.name => merge(
       pool, {
         user_data = templatefile(pool.cloud_init_path, {
-          ssh_key      = [for key in pool.ssh_key_paths : file(key)]
-          network_role = "client"
+          ssh_key = [for key in pool.ssh_key_paths : file(key)]
         })
         tags                 = merge(pool.tags, local.default_tags, { pool = pool.name, image = pool.image })
         ssh_keys             = [for key in hcloud_ssh_key.default : key.name]

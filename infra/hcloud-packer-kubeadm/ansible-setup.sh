@@ -10,10 +10,11 @@ fi
 # Wait for cloud-init to finish
 echo "Waiting for cloud-init to finish..."
 cloud-init status --wait
+systemctl stop systemd-journald
 
 # Setup requirements
-PACKAGE_PURGES="python3-pip python3-wheel curl git git-man cron cron-daemon-common file liberror-perl wget man-db manpages vim-tiny qemu-guest-agent python3-google-auth"
-HC_NET_UTILS="https://packages.hetzner.com/hcloud/deb/hc-utils_0.0.6-1_all.deb"
+PACKAGE_PURGES="python3-pip python3-wheel curl git git-man cron cron-daemon-common file liberror-perl wget man-db manpages vim-tiny qemu-guest-agent python3-google-auth aptitude"
+HC_NET_UTILS="https://packages.hetzner.com/hcloud/deb/hc-utils_0.0.7-1_all.deb"
 echo "Installing packages..."
 apt-get update -qq && apt-get upgrade -qq --yes --no-install-recommends
 apt-get install -qq --yes --no-install-recommends git python3-pip
@@ -113,17 +114,25 @@ else
   rm -rf ~/.local/lib/python3.* ~/.local/bin/ ~/.ansible ~/.cache/* ~/playbooks
   pip3 list -v
   apt-get purge --yes $PACKAGE_PURGES
-  apt list --installed
   apt-get autoremove --yes
+  apt list --installed
   python3 -c "import urllib.request; urllib.request.urlretrieve(\"$HC_NET_UTILS\", \"/tmp/hc-utils.deb\")"
   apt-get install -qq --yes --no-install-recommends /tmp/hc-utils.deb
   apt-get clean && apt-get autoclean
   rm -rf /usr/bin/crictl /usr/bin/runsc-metric-server
 
   # Cloud-init cleanup
-  cloud-init clean --machine-id --seed --logs
-  rm -rvf /var/lib/cloud/* /etc/machine-id /var/lib/dbus/machine-id /var/log/cloud-init*
+  cloud-init clean --seed --logs
+  rm -rvf /var/lib/cloud/* /var/log/cloud-init*
   cloud-init status
+
+  # Remove kernel modules
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/sound/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/bluetooth/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/media/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/net/wireless/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/gpu/*
+  depmod -a $(uname -r)
 
   # Caches cleanup
   journalctl --sync
@@ -131,7 +140,7 @@ else
   journalctl --rotate
   journalctl --vacuum-time=1s
   systemctl stop systemd-journald
-  rm -rf /var/cache/apt/* /var/lib/apt/lists/* /var/cache/debconf/* /var/cache/dpkg/* /var/cache/ansible/* /var/log/*.log* /tmp/* /var/tmp/* /usr/share/doc/* /usr/share/man/* /var/log/journal/* /run/log/journal/*
+  rm -rf /var/cache/apt/* /var/cache/apparmor/* /var/lib/apt/lists/* /var/cache/debconf/* /var/cache/dpkg/* /var/cache/ansible/* /var/log/*.log* /tmp/* /var/tmp/* /usr/share/doc/* /usr/share/man/* /var/log/journal/* /run/log/journal/* /usr/lib/python3.13/__pycache__/*
   find /usr/lib/python3 -type f -name "*.pyc" -delete
   find /usr/share/locale/ -maxdepth 1 -type d ! -name 'en' ! -name 'en_US' ! -name 'en_US.UTF-8' -exec rm -rf {} +
 
