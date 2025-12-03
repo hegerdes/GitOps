@@ -1,0 +1,98 @@
+name: Lint
+
+on:
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  k8s-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install pre-required tools
+        run: |
+          apt-get update
+          apt-get install --yes --no-install-recommends curl jq parallel
+
+      - name: Install tools
+        run: |
+          # Check if kubectl is installed
+          if ! command -v kubectl > /dev/null; then
+            echo "Installing kubectl"
+            echo "You can set the desired version via KUBECTL_VERSION. Default is latest"
+            if [ "$(uname -m)" = "x86_64" ]; then
+              ARCH=amd64
+            elif [ "$(uname -m)" = "aarch64" ]; then
+              ARCH=arm64
+            else
+              echo "Unknown system arch. Default to amd64"
+            fi
+            KUBECTL_DEFAULT_VERSION=$(curl -sL https://dl.k8s.io/release/stable.txt)
+            KUBECTL_VERSION="${KUBECTL_VERSION-$KUBECTL_DEFAULT_VERSION}"
+            # Fix version not beginning with "v"
+            if ! echo "${KUBECTL_VERSION}" | grep -q "v"; then
+              KUBECTL_VERSION="v${KUBECTL_VERSION}"
+            fi
+            curl -sL --fail --output /usr/bin/kubectl "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${ARCH-amd64}/kubectl"
+            chmod +x /usr/bin/kubectl
+          fi
+          kubectl version --client
+          # Check if kubeconform is installed
+          if ! command -v kubeconform > /dev/null; then
+            echo "Installing kubeconform"
+            echo "You can set the desired version via KUBECONFORM_VERSION. Default is latest"
+            if [ "$(uname -m)" = "x86_64" ]; then
+              ARCH=amd64
+            elif [ "$(uname -m)" = "aarch64" ]; then
+              ARCH=arm64
+            else
+              echo "Unknown system arch. Default to amd64"
+            fi
+            KUBECONFORM_DEFAULT_VERSION=$(curl -sL https://api.github.com/repos/yannh/kubeconform/releases/latest | jq -r .tag_name)
+            curl -sL --fail --output /tmp/kubeconform.tar.gz \
+              https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VERSION-$KUBECONFORM_DEFAULT_VERSION}/kubeconform-linux-${ARCH-amd64}.tar.gz
+            tar -xzf /tmp/kubeconform.tar.gz -C /usr/local/bin/ --exclude={LICENSE,README.md}
+            rm /tmp/kubeconform.tar.gz
+            chmod +x /usr/local/bin/kubeconform
+          fi
+          kubeconform -v
+          # Check if helm is installed
+          if ! command -v helm > /dev/null; then
+            echo "Installing helm"
+            echo "You can set the desired version via HELM_VERSION. Default is latest"
+            if [ "$(uname -m)" = "x86_64" ]; then
+              ARCH=amd64
+            elif [ "$(uname -m)" = "aarch64" ]; then
+              ARCH=arm64
+            else
+              echo "Unknown system arch. Default to amd64"
+            fi
+            HELM_DEFAULT_VERSION=$(curl -sL https://api.github.com/repos/helm/helm/releases/latest | jq -r .tag_name)
+            curl -sL --fail --output /tmp/helm.tar.gz https://get.helm.sh/helm-${HELM_VERSION-$HELM_DEFAULT_VERSION}-linux-${ARCH-amd64}.tar.gz
+            tar -xzf /tmp/helm.tar.gz -C /usr/local/bin/ --strip-components=1 --exclude={LICENSE,README.md}
+          fi
+          helm version
+          # Check if yq is installed
+          if ! command -v yq > /dev/null; then
+            echo "Installing yq (by Mike Farah)"
+            echo "You can set the desired version via YQ_VERSION. Default is latest"
+            if [ "$(uname -m)" = "x86_64" ]; then
+              ARCH=amd64
+            elif [ "$(uname -m)" = "aarch64" ]; then
+              ARCH=arm64
+            else
+              echo "Unknown system arch. Default to amd64"
+            fi
+            YQ_DEFAULT_VERSION=$(curl -sL https://api.github.com/repos/mikefarah/yq/releases/latest | jq -r .tag_name)
+            curl -sL --fail --output /usr/bin/yq \
+              https://github.com/mikefarah/yq/releases/download/${YQ_VERSION-$YQ_DEFAULT_VERSION}/yq_linux_${ARCH-amd64}
+            chmod +x /usr/bin/yq
+          fi
+          yq --version
+
+      - name: Run Lint
+        run: ./scripts/k8s-manifest-lint.sh

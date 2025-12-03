@@ -170,4 +170,3 @@ done
 find $HELM_TEMPLATE_DST -type f -name "*.yaml" | parallel --joblog helm.log -k kubeconform -summary -ignore-missing-schemas
 
 cat *.log
-rm *.log
