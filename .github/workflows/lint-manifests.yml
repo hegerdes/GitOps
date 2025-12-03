@@ -15,8 +15,8 @@ jobs:
 
       - name: Install pre-required tools
         run: |
-          apt-get update
-          apt-get install --yes --no-install-recommends curl jq parallel
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends curl jq parallel
 
       - name: Install tools
         run: |
@@ -37,7 +37,7 @@ jobs:
             if ! echo "${KUBECTL_VERSION}" | grep -q "v"; then
               KUBECTL_VERSION="v${KUBECTL_VERSION}"
             fi
-            curl -sL --fail --output /usr/bin/kubectl "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${ARCH-amd64}/kubectl"
+            sudo curl -sL --fail --output /usr/bin/kubectl "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${ARCH-amd64}/kubectl"
             chmod +x /usr/bin/kubectl
           fi
           kubectl version --client
@@ -55,7 +55,7 @@ jobs:
             KUBECONFORM_DEFAULT_VERSION=$(curl -sL https://api.github.com/repos/yannh/kubeconform/releases/latest | jq -r .tag_name)
             curl -sL --fail --output /tmp/kubeconform.tar.gz \
               https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VERSION-$KUBECONFORM_DEFAULT_VERSION}/kubeconform-linux-${ARCH-amd64}.tar.gz
-            tar -xzf /tmp/kubeconform.tar.gz -C /usr/local/bin/ --exclude={LICENSE,README.md}
+            sudo tar -xzf /tmp/kubeconform.tar.gz -C /usr/local/bin/ --exclude={LICENSE,README.md}
             rm /tmp/kubeconform.tar.gz
             chmod +x /usr/local/bin/kubeconform
           fi
@@ -73,7 +73,7 @@ jobs:
             fi
             HELM_DEFAULT_VERSION=$(curl -sL https://api.github.com/repos/helm/helm/releases/latest | jq -r .tag_name)
             curl -sL --fail --output /tmp/helm.tar.gz https://get.helm.sh/helm-${HELM_VERSION-$HELM_DEFAULT_VERSION}-linux-${ARCH-amd64}.tar.gz
-            tar -xzf /tmp/helm.tar.gz -C /usr/local/bin/ --strip-components=1 --exclude={LICENSE,README.md}
+            sudo tar -xzf /tmp/helm.tar.gz -C /usr/local/bin/ --strip-components=1 --exclude={LICENSE,README.md}
           fi
           helm version
           # Check if yq is installed
@@ -88,7 +88,7 @@ jobs:
               echo "Unknown system arch. Default to amd64"
             fi
             YQ_DEFAULT_VERSION=$(curl -sL https://api.github.com/repos/mikefarah/yq/releases/latest | jq -r .tag_name)
-            curl -sL --fail --output /usr/bin/yq \
+            sudo curl -sL --fail --output /usr/bin/yq \
               https://github.com/mikefarah/yq/releases/download/${YQ_VERSION-$YQ_DEFAULT_VERSION}/yq_linux_${ARCH-amd64}
             chmod +x /usr/bin/yq
           fi
