@@ -38,7 +38,7 @@ jobs:
               KUBECTL_VERSION="v${KUBECTL_VERSION}"
             fi
             sudo curl -sL --fail --output /usr/bin/kubectl "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${ARCH-amd64}/kubectl"
-            chmod +x /usr/bin/kubectl
+            sudo chmod +x /usr/bin/kubectl
           fi
           kubectl version --client
           # Check if kubeconform is installed
@@ -57,7 +57,7 @@ jobs:
               https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VERSION-$KUBECONFORM_DEFAULT_VERSION}/kubeconform-linux-${ARCH-amd64}.tar.gz
             sudo tar -xzf /tmp/kubeconform.tar.gz -C /usr/local/bin/ --exclude={LICENSE,README.md}
             rm /tmp/kubeconform.tar.gz
-            chmod +x /usr/local/bin/kubeconform
+            sudo chmod +x /usr/local/bin/kubeconform
           fi
           kubeconform -v
           # Check if helm is installed
@@ -90,7 +90,7 @@ jobs:
             YQ_DEFAULT_VERSION=$(curl -sL https://api.github.com/repos/mikefarah/yq/releases/latest | jq -r .tag_name)
             sudo curl -sL --fail --output /usr/bin/yq \
               https://github.com/mikefarah/yq/releases/download/${YQ_VERSION-$YQ_DEFAULT_VERSION}/yq_linux_${ARCH-amd64}
-            chmod +x /usr/bin/yq
+            sudo chmod +x /usr/bin/yq
           fi
           yq --version
 
