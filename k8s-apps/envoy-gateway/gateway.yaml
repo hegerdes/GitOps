@@ -1,0 +1,76 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: envoy
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-dns-cloudflare
+  name: envoy-default-gateway
+  namespace: envoy-gateway
+spec:
+  gatewayClassName: envoy
+  infrastructure:
+    annotations:
+      load-balancer.hetzner.cloud/location: fsn1
+      load-balancer.hetzner.cloud/name: k8s-envoy-gateway-lb
+      load-balancer.hetzner.cloud/network: k8s-network
+      load-balancer.hetzner.cloud/use-private-ip: "true"
+      load-balancer.hetzner.cloud/uses-proxyprotocol: "true"
+    # parametersRef:
+    #   group: gateway.nginx.org
+    #   kind: NginxProxy
+    #   name: ngf-proxy-config
+  listeners:
+    - name: grafana
+      allowedRoutes:
+        namespaces:
+          from: All
+      hostname: grafana.k8s-gw.henrikgerdes.me
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: grafana-tls-gw-cert
+            group: ""
+            kind: Secret
+    - name: harbor
+      allowedRoutes:
+        namespaces:
+          from: All
+      hostname: harbor.k8s-gw.henrikgerdes.me
+      port: 443
+      protocol: HTTPS
+      tls:
+        certificateRefs:
+          - name: harbor-tls-gw-cert
+            group: ""
+            kind: Secret
+        mode: Terminate
+
+    # # Fallbacks
+    # - name: https
+    #   port: 443
+    #   hostname: "*.k8s-gw.henrikgerdes.me"
+    #   protocol: HTTPS
+    #   tls:
+    #     mode: Terminate
+    #     certificateRefs:
+    #       - kind: Secret
+    #         group: ""
+    #         name: tls-gw-certs
+    #   allowedRoutes:
+    #     namespaces:
+    #       from: All
+    - name: http
+      allowedRoutes:
+        namespaces:
+          from: All
+      hostname: "*.k8s-gw.henrikgerdes.me"
+      port: 80
+      protocol: HTTP

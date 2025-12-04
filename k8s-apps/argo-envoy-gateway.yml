@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: envoy-gateway
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - chart: gateway-helm
+      repoURL: docker.io/envoyproxy
+      targetRevision: 1.*
+      helm:
+        releaseName: envoy-gateway
+        valuesObject: {}
+    - repoURL: https://github.com/hegerdes/GitOps.git
+      targetRevision: HEAD
+      path: k8s-apps/envoy-gateway
+      directory:
+        recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: envoy-gateway
+  info:
+    - name: Chart-Info
+      value: https://github.com/envoyproxy/gateway/blob/main/charts/gateway-helm
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
