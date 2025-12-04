@@ -1,0 +1,101 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-workflows
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - chart: argo-workflows
+      repoURL: https://argoproj.github.io/argo-helm
+      targetRevision: 0.*
+      helm:
+        releaseName: argo-workflows
+        valuesObject:
+          crds:
+            full: true
+          server:
+            authModes: [sso]
+            ingress:
+              enabled: true
+              annotations:
+                cert-manager.io/cluster-issuer: "letsencrypt-prod-ing-nginx"
+
+              ingressClassName: nginx
+              hosts: [argo-workflows.k8s.henrikgerdes.me]
+              tls:
+                - secretName: argoworkflows-ing-tls
+                  hosts: [argo-workflows.k8s.henrikgerdes.me]
+            sso:
+              enabled: true
+              scopes:
+                - groups
+              issuer: https://login.microsoftonline.com/295b5ac3-2e4e-4ade-85d8-7dc31617bc2c/v2.0
+              clientId:
+                name: argo-workflows-server-sso
+                key: client-id
+              clientSecret:
+                name: argo-workflows-server-sso
+                key: client-secret
+              redirectUrl: https://argo-workflows.k8s.henrikgerdes.me/oauth2/callback
+          controller:
+            persistence:
+              archive: true
+              postgresql:
+                host: argo-workflow-execution-rw
+                port: 5432
+                database: app
+                tableName: argo_workflows
+                # the database secrets must be in the same namespace of the controller
+                userNameSecret:
+                  name: argo-workflow-execution-app
+                  key: username
+                passwordSecret:
+                  name: argo-workflow-execution-app
+                  key: password
+                ssl: true
+                # sslMode must be one of: disable, require, verify-ca, verify-full
+                # you can find more information about those ssl options here: https://godoc.org/github.com/lib/pq
+                sslMode: require
+          extraObjects:
+            - apiVersion: external-secrets.io/v1
+              kind: ExternalSecret
+              metadata:
+                name: argo-workflows-server-sso
+              spec:
+                refreshInterval: 1h
+                secretStoreRef:
+                  kind: ClusterSecretStore
+                  name: azure-store
+                target:
+                  name: argo-workflows-server-sso
+                  creationPolicy: Owner
+                data:
+                  - secretKey: client-id
+                    remoteRef:
+                      key: aad-testing-client-id
+                      decodingStrategy: None # can be None, Base64, Base64URL or Auto
+                  - secretKey: client-secret
+                    remoteRef:
+                      key: aad-testing-client-secret
+                      decodingStrategy: None # can be None, Base64, Base64URL or Auto
+    - repoURL: https://github.com/hegerdes/GitOps.git
+      targetRevision: HEAD
+      path: k8s-apps/argo-workflow
+      directory:
+        recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo-workflow
+  info:
+    - name: Chart-Info
+      value: https://artifacthub.io/packages/helm/argo/argo-workflows
+    - name: App-Source
+      value: https://github.com/argoproj/argo-workflows
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
