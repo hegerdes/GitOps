@@ -1,0 +1,34 @@
+apiVersion: external-secrets.io/v1
+kind: ClusterExternalSecret
+metadata:
+  name: hegerdes-ca
+spec:
+  externalSecretName: hegerdes-ca
+
+  # This is a list of basic label selector to select the namespaces to deploy ExternalSecrets to.
+  # you can read more about them here https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#resources-that-support-set-based-requirements
+  # The list is OR'd together, so if any of the namespaceSelectors match the namespace,
+  # the ExternalSecret will be deployed to that namespace.
+  namespaceSelectors:
+    - matchLabels: {}
+
+  # How often the ClusterExternalSecret should reconcile itself
+  # This will decide how often to check and make sure that the ExternalSecrets exist in the matching namespaces
+  refreshTime: "15m"
+
+  # This is the spec of the ExternalSecrets to be created
+  # The content of this was taken from our ExternalSecret example
+  externalSecretSpec:
+    secretStoreRef:
+      name: azure-store
+      kind: ClusterSecretStore
+    refreshInterval: "1h"
+    target:
+      name: hegerdes-ca
+      template:
+        type: Opaque
+    data:
+      - secretKey: ca.crt
+        remoteRef:
+          key: tls-hegerdes-local-crt
+          decodingStrategy: Auto # can be None, Base64, Base64URL or Auto
