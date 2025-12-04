@@ -1,0 +1,86 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: linkerd
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  sources:
+    - chart: linkerd-crds
+      repoURL: https://helm.linkerd.io/stable
+      targetRevision: 1.*
+      helm:
+        valuesObject:
+          installGatewayAPI: false
+    - chart: linkerd-control-plane
+      repoURL: https://helm.linkerd.io/stable
+      targetRevision: 1.*
+      helm:
+        releaseName: linkerd
+        valuesObject:
+          identity:
+            issuer:
+              scheme: linkerd.io/TLS
+          proxyInit:
+            iptablesMode: nft
+          identityTrustAnchorsPEM: |
+            -----BEGIN CERTIFICATE-----
+            MIIBjTCCATSgAwIBAgIRAKLL2281v+VsJCs+aQsiRTgwCgYIKoZIzj0EAwIwJTEj
+            MCEGA1UEAxMacm9vdC5saW5rZXJkLmNsdXN0ZXIubG9jYWwwHhcNMjQwOTIyMTMz
+            NDE5WhcNMzQwOTIwMTMzNDE5WjAlMSMwIQYDVQQDExpyb290LmxpbmtlcmQuY2x1
+            c3Rlci5sb2NhbDBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABAFu0OqP4tbl5qif
+            e69wiyHcpohthRrbP1O3sNGANHYXl6JaCCUcl9EqKQ1e3kdwKnyBRCuLmtprQ5Th
+            fcMoYgyjRTBDMA4GA1UdDwEB/wQEAwIBBjASBgNVHRMBAf8ECDAGAQH/AgEBMB0G
+            A1UdDgQWBBRBlCulO6e8d4Rg+qCozE7V9zw7AjAKBggqhkjOPQQDAgNHADBEAiAE
+            Xbj2zuVyVS5gAx935f7OpJIoYM03WQ5+5QmLdeYLGQIgFpt1Da6w4qGj1zVj1iXL
+            L1vGgMjF9Prp/fUqTtBCSEM=
+            -----END CERTIFICATE-----
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: linkerd
+  info:
+    - name: Chart Info
+      value: https://artifacthub.io/packages/helm/linkerd2/linkerd-control-plane
+    - name: Install Info
+      value: https://linkerd.io/2.15/tasks/install-helm/
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: linkerd
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: linkerd-issuer
+  namespace: linkerd
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: azure-store
+  target:
+    name: linkerd-identity-issuer
+    creationPolicy: Owner
+  data:
+    - secretKey: crt.pem
+      remoteRef:
+        key: linkerd-demo-issuer-crt
+        decodingStrategy: Auto # can be None, Base64, Base64URL or Auto
+    - secretKey: key.pem
+      remoteRef:
+        key: linkerd-demo-issuer-key
+        decodingStrategy: Auto # can be None, Base64, Base64URL or Auto
+
+
+# helm upgrade --install --kubeconfig ~/.kube/hetzner-test-kubeconfig.yml linkerd-control-plane --create-namespace -n linkerd   --set-file identityTrustAnchorsPEM=ca.crt   --set-file identity.issuer.tls.crtPEM=issuer.crt   --set-file identity.issuer.tls.keyPEM=issuer.key   linkerd-edge/linkerd-control-plane
