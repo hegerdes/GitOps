@@ -25,43 +25,42 @@ variable "user_data_path" {
   type    = string
   default = "cloud-init.yml"
 }
+variable "location" {
+  type    = string
+  default = "nbg1"
+}
 
 locals {
   output_name = "${var.output_name}-v${var.k8s_version}-${var.base_image}"
-}
-
-source "hcloud" "k8s-amd64" {
-  image         = var.base_image
-  location      = "fsn1"
-  server_type   = "cx23"
-  ssh_keys      = []
-  user_data     = file(var.user_data_path)
-  ssh_username  = "root"
-  snapshot_name = "${local.output_name}-amd64"
-  snapshot_labels = {
+  shares_tags = {
     type    = "infra",
     base    = var.base_image,
     version = "${var.k8s_version}",
     name    = "${local.output_name}-amd64"
     arch    = "amd64"
+    category = "k8s"
   }
+}
+
+source "hcloud" "k8s-amd64" {
+  image         = var.base_image
+  location      = var.location
+  server_type   = "cx23"
+  ssh_keys      = []
+  user_data     = file(var.user_data_path)
+  ssh_username  = "root"
+  snapshot_name = "${local.output_name}-amd64"
+  snapshot_labels = merge(local.shares_tags, {})
 }
 source "hcloud" "k8s-arm64" {
   image         = var.base_image
-  location      = "fsn1"
+  location      = var.location
   server_type   = "cax11"
   ssh_keys      = []
   user_data     = file(var.user_data_path)
   ssh_username  = "root"
   snapshot_name = "${local.output_name}-arm64"
-  snapshot_labels = {
-    type    = "infra",
-    base    = var.base_image,
-    version = "${var.k8s_version}",
-    name    = "${local.output_name}-arm64"
-    arch    = "arm64"
-    category = "k8s"
-  }
+  snapshot_labels = merge(local.shares_tags, {})
 }
 build {
   sources = ["source.hcloud.k8s-amd64", "source.hcloud.k8s-arm64"]
