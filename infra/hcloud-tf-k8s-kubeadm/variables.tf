@@ -1,6 +1,6 @@
 variable "location" {
   type        = string
-  default     = "fsn1"
+  default     = "nbg1"
   description = "Location of the ressources."
   validation {
     condition     = contains(["fsn1", "nbg1", "hel1", "ash", "hil"], lower(var.location))
@@ -14,7 +14,7 @@ variable "node_pools" {
     instance        = string
     tags            = any
     image           = string
-    location        = optional(string, "fsn1")
+    location        = optional(string, "nbg1")
     size            = optional(number, 1)
     cloud_init_path = optional(string, "data/cloud-init.yml")
     ssh_key_paths   = optional(list(string), ["~/.ssh/id_rsa.pub"])
