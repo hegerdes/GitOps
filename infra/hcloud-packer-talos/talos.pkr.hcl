@@ -25,6 +25,10 @@ variable "talos_kernel_args" {
   default = []
   # default = ["security=apparmor"]
 }
+variable "location" {
+  type    = string
+  default = "nbg1"
+}
 
 ######################## LOCALS ########################
 locals {
@@ -59,8 +63,8 @@ locals {
 source "hcloud" "talos_amd64" {
   rescue               = "linux64"
   image                = "debian-12"
-  location             = "fsn1"
-  server_type          = "cx22"
+  location             = var.location
+  server_type          = "cx23"
   ssh_username         = "root"
   snapshot_name        = local.setups.amd64.name
   snapshot_labels      = local.setups.amd64.tags
@@ -68,7 +72,7 @@ source "hcloud" "talos_amd64" {
 
 source "hcloud" "talos_arm64" {
   image                = "debian-12"
-  location             = "fsn1"
+  location             = var.location
   rescue               = "linux64"
   server_type          = "cax11"
   ssh_username         = "root"
