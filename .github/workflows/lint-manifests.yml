@@ -3,12 +3,11 @@ name: Lint
 on:
   push:
 
-permissions:
-  contents: read
-
 jobs:
   k8s-lint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -96,3 +95,26 @@ jobs:
 
       - name: Run Lint
         run: ./scripts/k8s-manifest-lint.sh
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: rendered-manifests
+          path: rendered-manifests
+
+      - name: Create diff
+        run: |
+          cd rendered-manifests
+          mkdir -p rendered
+          cp -av /tmp/*.yaml rendered/
+          git add rendered
+          git diff --cached
+          git diff --cached --quiet || git commit -m "Update generated manifests from commit ${{ github.sha }}"
+          git status
+
+      - name: Push updates
+        if: ${{ always() && format('refs/heads/{0}', github.event.repository.default_branch) == github.ref }}
+        run: |
+          cd rendered-manifests
+          git pull
+          git push
