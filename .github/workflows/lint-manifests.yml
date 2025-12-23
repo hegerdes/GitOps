@@ -105,6 +105,10 @@ jobs:
       - name: Create diff
         run: |
           cd rendered-manifests
+          git config user.email "GitHub-Actions@github.com"
+          git config user.name "github-actions"
+          git config color.ui auto
+          git config color.diff auto
           mkdir -p rendered
           cp -av /tmp/*.yaml rendered/
           git add rendered
