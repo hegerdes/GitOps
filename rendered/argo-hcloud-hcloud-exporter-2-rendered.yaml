@@ -1,0 +1,199 @@
+---
+# Source: hcloud-exporter/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: hcloud-exporter-2
+  labels:
+    helm.sh/chart: hcloud-exporter-3.2.1
+    app.kubernetes.io/name: hcloud-exporter
+    app.kubernetes.io/instance: hcloud-exporter-2
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: hcloud-exporter/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: hcloud-exporter-2
+  labels:
+    helm.sh/chart: hcloud-exporter-3.2.1
+    app.kubernetes.io/name: hcloud-exporter
+    app.kubernetes.io/instance: hcloud-exporter-2
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+data:
+   token: "ZmlsZTovLy92YXIvcnVuL3NlY3JldHMvaGNsb3VkL3Rva2Vu"
+---
+# Source: hcloud-exporter/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: hcloud-exporter-2
+  labels:
+    helm.sh/chart: hcloud-exporter-3.2.1
+    app.kubernetes.io/name: hcloud-exporter
+    app.kubernetes.io/instance: hcloud-exporter-2
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 9501
+      targetPort: http
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: hcloud-exporter
+    app.kubernetes.io/instance: hcloud-exporter-2
+---
+# Source: hcloud-exporter/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hcloud-exporter-2
+  labels:
+    helm.sh/chart: hcloud-exporter-3.2.1
+    app.kubernetes.io/name: hcloud-exporter
+    app.kubernetes.io/instance: hcloud-exporter-2
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    checksum/secret: f2e7cbb7d38a200de816fb0a5d61a988ea5684749b42376aad7f6ff5747c3499
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: hcloud-exporter
+      app.kubernetes.io/instance: hcloud-exporter-2
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: hcloud-exporter-3.2.1
+        app.kubernetes.io/name: hcloud-exporter
+        app.kubernetes.io/instance: hcloud-exporter-2
+        app.kubernetes.io/version: "2.1.0"
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+        checksum/secret: f2e7cbb7d38a200de816fb0a5d61a988ea5684749b42376aad7f6ff5747c3499
+    spec:
+      serviceAccountName: hcloud-exporter-2
+      containers:
+        - name: hcloud-exporter
+          image: "quay.io/promhippie/hcloud-exporter:2.1.0"
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - all
+            readOnlyRootFilesystem: true
+            runAsGroup: 10000
+            runAsNonRoot: true
+            runAsUser: 10000
+          env:
+            - name: HCLOUD_EXPORTER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: hcloud-exporter-2
+                  key: token
+            - name: HCLOUD_EXPORTER_COLLECTOR_FLOATING_IPS
+              value: "false"
+            - name: HCLOUD_EXPORTER_COLLECTOR_IMAGES
+              value: "true"
+            - name: HCLOUD_EXPORTER_COLLECTOR_PRICING
+              value: "false"
+            - name: HCLOUD_EXPORTER_COLLECTOR_SERVERS
+              value: "true"
+            - name: HCLOUD_EXPORTER_COLLECTOR_SERVER_METRICS
+              value: "true"
+            - name: HCLOUD_EXPORTER_COLLECTOR_LOAD_BALANCERS
+              value: "true"
+            - name: HCLOUD_EXPORTER_COLLECTOR_SSH_KEYS
+              value: "true"
+            - name: HCLOUD_EXPORTER_COLLECTOR_VOLUMES
+              value: "true"
+            - name: HCLOUD_EXPORTER_LOG_PRETTY
+              value: "true"
+          ports:
+            - name: http
+              containerPort: 9501
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+          resources:
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          volumeMounts:
+            
+            - mountPath: /var/run/secrets/hcloud
+              name: hcloud-token
+              readOnly: true
+      volumes:
+        
+        - name: hcloud-token
+          secret:
+            secretName: hcloud
+---
+# Source: hcloud-exporter/templates/servicemonitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: hcloud-exporter-2
+  labels:
+    helm.sh/chart: hcloud-exporter-3.2.1
+    app.kubernetes.io/name: hcloud-exporter
+    app.kubernetes.io/instance: hcloud-exporter-2
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  endpoints:
+  - targetPort: 9501
+    interval: 30s
+    path: /metrics
+    scrapeTimeout: 30s
+  jobLabel: hcloud-exporter-2
+  namespaceSelector:
+    matchNames:
+    - default
+  selector:
+    matchLabels:
+      helm.sh/chart: hcloud-exporter-3.2.1
+      app.kubernetes.io/name: hcloud-exporter
+      app.kubernetes.io/instance: hcloud-exporter-2
+      app.kubernetes.io/version: "2.1.0"
+      app.kubernetes.io/managed-by: Helm
+---
+# Source: hcloud-exporter/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "hcloud-exporter-2-test-connection"
+  labels:
+    helm.sh/chart: hcloud-exporter-3.2.1
+    app.kubernetes.io/name: hcloud-exporter
+    app.kubernetes.io/instance: hcloud-exporter-2
+    app.kubernetes.io/version: "2.1.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  restartPolicy: Never
+  containers:
+    - name: wget
+      image: busybox
+      command:
+        - wget
+      args:
+        - --spider
+        - http://hcloud-exporter-2:9501

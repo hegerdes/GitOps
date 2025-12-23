@@ -1,0 +1,218 @@
+---
+# Source: opa-kube-mgmt/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: open-policy-agent-0-opa-kube-mgmt
+  labels:
+    app: open-policy-agent-0-opa-kube-mgmt
+    chart: opa-kube-mgmt-9.3.0
+    release: "open-policy-agent-0"
+    heritage: "Helm"
+---
+# Source: opa-kube-mgmt/templates/webhookconfiguration.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: open-policy-agent-0-opa-kube-mgmt-cert
+  labels:
+    app: open-policy-agent-0-opa-kube-mgmt
+    chart: "opa-kube-mgmt-9.3.0"
+    release: "open-policy-agent-0"
+    heritage: "Helm"
+type: Opaque
+data:
+  tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURlVENDQW1HZ0F3SUJBZ0lRUVhMNVBCTWJGdzYyWGlCcEQ2bkdRekFOQmdrcWhraUc5dzBCQVFzRkFEQWIKTVJrd0Z3WURWUVFERXhCdmNHRXRZV1J0YVhOemFXOXVMV05oTUI0WERUSTFNVEl5TXpFMU5UQXhNVm9YRFRNMQpNVEl5TVRFMU5UQXhNVm93T0RFMk1EUUdBMVVFQXhNdGIzQmxiaTF3YjJ4cFkza3RZV2RsYm5RdE1DMXZjR0V0CmEzVmlaUzF0WjIxMExtUmxabUYxYkhRdWMzWmpNSUlCSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUIKQ2dLQ0FRRUFwdVN3OTlQUFhzWTFQT010Z3RyZUthZU9zVnAxVk9XOEtEWDdRR1RTYkhBWE1GbGs5aWpSMllWRwpMM1pOL3lhK0VVbXkzRi9mcmsrLzhXYWhWL0dtQlcxdTAxd1BtY3hhNFZDQkVrSkg5aEJjQTUrL1k3SVhCYkp1CjI5WU1JS0x2Q2tHZnRVYXJrNDF5aFJWYy9zYmU4VGsyMkNJdlpwZ0xsYzFrN2dPamlzZXVPakdYVlR6Wmt3a0cKUXVJS1BmNUptSEFpUS9GRklMQU9rVWZEcXlBdlhJQnEyQmo4KzFQQ3F4RTdqeVNDRnZPVDVxZGx0UU9xNUR0egpMMlFVZkREUVFicjNBM1hlNmNPR0tiNEtWVjdxOTM0NGg5UnNXbzVWekY0MWNMSFdDWThuUzdoWGMxME1UNnlBCnNTMml4cm5QSzVyUTEyYyt4TEw3NUN2ME9NV1dNUUlEQVFBQm80R2JNSUdZTUE0R0ExVWREd0VCL3dRRUF3SUYKb0RBZEJnTlZIU1VFRmpBVUJnZ3JCZ0VGQlFjREFRWUlLd1lCQlFVSEF3SXdEQVlEVlIwVEFRSC9CQUl3QURBZgpCZ05WSFNNRUdEQVdnQlNrU3laR0diUGlVQmp5VTZ2TXIyVzR5L2hoMmpBNEJnTlZIUkVFTVRBdmdpMXZjR1Z1CkxYQnZiR2xqZVMxaFoyVnVkQzB3TFc5d1lTMXJkV0psTFcxbmJYUXVaR1ZtWVhWc2RDNXpkbU13RFFZSktvWkkKaHZjTkFRRUxCUUFEZ2dFQkFGWDRmRDBXUXNhTjdIcWlIcHVOakdUZnlhVmhFTytPQUxVQ0ltenJwK1NkZkYyLwp0Wkd4eWJ1eGd4dkJqMWZkUDl0MVpyNStSWEdZRHJlYW1TNmppUFE2RWR4d09lR0c0QXZ4NlkwbTJoc3ArRE0wCm9HeHB2a2xaSk5JcHl6Z2I2OFhxSFdXQnNjZEhra2w0T21URGg4andFWEtsZjlndUVleXZZWDFuRTdmT2w5TEoKL241Nk1mNm5UajkxdDRCTjJCcWkrbUdKUWZWdlUzMGwzRFg2U3A0blAvanJsendHS1dxeXRrblUrb3JVd0FocwpIZkd1cjhBYWQ0dVhKK0R6eWpzQURBVmFUZ2cxajM5a05NTTdPTlA1Smo0ak8weHRSSjQ5OFBXUHo2T0o1QW1iCnBaTEg3VURZdGJ4R3FRT3NBVGZvY3o5VGsvaXZ4WSthQjU3QnZIVT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+  tls.key: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFb2dJQkFBS0NBUUVBcHVTdzk5UFBYc1kxUE9NdGd0cmVLYWVPc1ZwMVZPVzhLRFg3UUdUU2JIQVhNRmxrCjlpalIyWVZHTDNaTi95YStFVW15M0YvZnJrKy84V2FoVi9HbUJXMXUwMXdQbWN4YTRWQ0JFa0pIOWhCY0E1Ky8KWTdJWEJiSnUyOVlNSUtMdkNrR2Z0VWFyazQxeWhSVmMvc2JlOFRrMjJDSXZacGdMbGMxazdnT2ppc2V1T2pHWApWVHpaa3drR1F1SUtQZjVKbUhBaVEvRkZJTEFPa1VmRHF5QXZYSUJxMkJqOCsxUENxeEU3anlTQ0Z2T1Q1cWRsCnRRT3E1RHR6TDJRVWZERFFRYnIzQTNYZTZjT0dLYjRLVlY3cTkzNDRoOVJzV281VnpGNDFjTEhXQ1k4blM3aFgKYzEwTVQ2eUFzUzJpeHJuUEs1clExMmMreExMNzVDdjBPTVdXTVFJREFRQUJBb0gvZUFqRHYzdDRDcEpFZUNacwo5VkMxdVAvcWdXU3VQd0Y4OHU3Z1p0QWRDQ0VXakkrL0xjenVJYVRaZGdtQXo2THQwVUZRZzIveFVVM0tuN1ZSCkZnK1hlUS9jUmVoUTBDMUtzQU5XMGVzYUZzQnRiYTNYMmJ5ZEVsdmpuL216ZjBXdzU0K0xicllGY1hxcWcwMTYKTlVTVDFLdHg1c0d2bGZxRldwai9uckMvVDNCbEtib09aNFRVWjFSdWY5cHBBVnR4V2lqOVFSZ1E3bFdWdGJubApHZ0c2MERzOFFheEZycFFaUE1xR2o1a0RaRmhvaEF1bHNRNzRadU5zU0c4Rm1wU01SbkFOdzczR2NBS2YxQ3l5CmR6SVlhM09EUThFTEdiQzV4ZmRsNGFNSzhpczdrQ1dPUjN3OHJ6aTg0NFZ0VjJzdjlOa2J6Ny9RSnVPcVdwb0oKS2NtQkFvR0JBTmRndkNGRjUweEgwQ2JYRkFJK1F4VFdQQW5TU0dLWm9yeDdZTDVZOU5FL0NwempXY25Fb3J3ZApSeGJNeWg1RU9OaTF2YnhlSXBCSzBFS09SaVMyTTdodyt0RFBablJuNXcvMG1Mc2Q0YlQrbzMzOEhFTkZxTi9uClBzb1p4TFR3RU1yRGhjejVCUDR1bENPVGM3Y1BRZE9SUTJHQVQxeEhTa2FKU0hzNmNRTHhBb0dCQU1aZThBZUUKaXBUZjhWTU84eXpkMFMwckNGaUZBa3FZa2VkODRNclJXYWhtMnc4bFhQZElSMURZck1FSVpRL2xBQzNxUGhLdApVU1o0OFJUdWV6QXkvV2RFV0J3d2hZcVZuK1VqaGtBL3puWktJQ3F3NDFyUXlwY2o4WGtiY0ordVVNQ3B1OWoyCllGL3NxcUlpRHYwZEFXb2k1U2xBc3BBVEhOY1Vwc3c0YzBkQkFvR0JBTTloMWNRMEN3TG9Jd1ZERTRFVmNvSWQKeHJHdVNRU242b3FTUWhVR2tyVG9mcytTR21LdGRBU3VMRVZINjFZNVdvTlFlK0Zrd3VNdEpscnZvNXExMWhkQwpzajlkZE1taFFsdWFxWFdDMEZIMjNuWHd5MFg3VFNCTENhcVFKVmdUMEJkdExPaXczcDNoTzhNRnQrWU1TdFhzCmlYVFlsNUhERTBIWDduSzVVeGdCQW9HQkFNSWZBNXNIdkNtbDRGMmNZcUhFUzc5OHZnVUozRTB0Y3BKcXBQdzAKMUIwMDBpZkhNMnVWb3B4ZC9PaEZrOGh6RzdMUzZIMlVkN1pEWWdCT3crUk44YWFOdmYrUUNBNnZEekxIaWNmego2TkhmQmcxZzNvdnZpR0ZSUGl0Nmk4TG5iWVNzVlBRalhmcGcrallCU0ZPdmY4UGlkQWpqbEJuamFqU2J0QUpqCk40UkJBb0dBTVFsendJZFViSC92MnZzdnlDR0tLQitFQWdUcUFCUzhLSEFVZjU0TE4rZHlNKytkTEw3SDlRRTMKbHpPV0lnM2pBU1VobFVzbHJqOGlxZzBJa0xpWXJVa3JyejBaNThsUUVlSTNtV2J4SXpnVjRXWUo5Tml4ZEQ3RgpVMW90Q1lnM0k1SVRpVDJiYUt6NFZVcDZLZDZVb0RCMlpLbThmYlRMdjdJNlJ2TFgyL2c9Ci0tLS0tRU5EIFJTQSBQUklWQVRFIEtFWS0tLS0tCg==
+---
+# Source: opa-kube-mgmt/templates/rbac-mgmt.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    app: opa-kube-mgmt
+    chart: opa-kube-mgmt-9.3.0
+    release: open-policy-agent-0
+    component: mgmt
+  name: open-policy-agent-0-opa-kube-mgmt-mgmt
+  namespace: default
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+---
+# Source: opa-kube-mgmt/templates/rbac-mgmt.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app: opa-kube-mgmt
+    chart: opa-kube-mgmt-9.3.0
+    release: open-policy-agent-0
+    component: mgmt
+  name: open-policy-agent-0-opa-kube-mgmt-mgmt
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: open-policy-agent-0-opa-kube-mgmt-mgmt
+subjects:
+  - kind: ServiceAccount
+    name: open-policy-agent-0-opa-kube-mgmt
+    namespace: default
+---
+# Source: opa-kube-mgmt/templates/service.yaml
+kind: Service
+apiVersion: v1
+metadata:
+  name: open-policy-agent-0-opa-kube-mgmt
+  labels:
+    app: open-policy-agent-0-opa-kube-mgmt
+    chart: "opa-kube-mgmt-9.3.0"
+    release: "open-policy-agent-0"
+    heritage: "Helm"
+spec:
+  selector:
+    app: open-policy-agent-0-opa-kube-mgmt
+  ports:
+  - name: opa
+    port: 8181
+    targetPort: opa
+---
+# Source: opa-kube-mgmt/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open-policy-agent-0-opa-kube-mgmt
+  labels:
+    app: open-policy-agent-0-opa-kube-mgmt
+    chart: "opa-kube-mgmt-9.3.0"
+    release: "open-policy-agent-0"
+    heritage: "Helm"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open-policy-agent-0-opa-kube-mgmt
+  template:
+    metadata:
+      annotations:
+      labels:
+        app: open-policy-agent-0-opa-kube-mgmt
+      name: open-policy-agent-0-opa-kube-mgmt
+    spec:
+      initContainers:
+        - name: initpolicy
+          image: openpolicyagent/kube-mgmt:9.3.0
+          imagePullPolicy: IfNotPresent
+          resources:
+            {}
+          command:
+          - /bin/sh
+          - -c
+          - |
+            tr -dc 'A-F0-9' < /dev/urandom | dd bs=1 count=32 2>/dev/null > /bootstrap/mgmt-token
+            TOKEN=`cat /bootstrap/mgmt-token`
+            cat > /bootstrap/authz.rego <<EOF
+            package system.authz
+            import rego.v1
+            default allow := false
+            # Allow anonymous access to the default policy decision.
+            allow if { input.path = [""]; input.method == "POST" }
+            allow if { input.path = [""]; input.method == "GET" }
+            # This is only used for health check in liveness and readiness probe
+            allow if { input.path = ["health"]; input.method == "GET" }
+            allow if { input.identity == "$TOKEN" }
+            EOF
+          volumeMounts:
+            - name: bootstrap
+              mountPath: /bootstrap
+      containers:
+        - name: opa
+          ports:
+          - name: opa
+            containerPort: 8181
+          image: "openpolicyagent/opa:1.3.0"
+          imagePullPolicy: IfNotPresent
+          env:
+          resources:
+            {}
+          args:
+            - "run"
+            - "--server"
+            - "--tls-cert-file=/certs/tls.crt"
+            - "--tls-private-key-file=/certs/tls.key"
+            - "--addr=0.0.0.0:8181"
+            - "--log-level=info"
+            - "--log-format=json"
+            - "--authentication=token"
+            - "--authorization=basic"
+            - "--ignore=.*"
+            - "/bootstrap"
+          volumeMounts:
+            - name: certs
+              readOnly: true
+              mountPath: /certs
+            - name: bootstrap
+              readOnly: true
+              mountPath: /bootstrap
+          readinessProbe:
+            httpGet:
+              path: /health
+              scheme: HTTPS
+              port: opa
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              scheme: HTTPS
+              port: opa
+            initialDelaySeconds: 10
+            periodSeconds: 15
+        - name: mgmt
+          image: openpolicyagent/kube-mgmt:9.3.0
+          imagePullPolicy: IfNotPresent
+          startupProbe:
+
+            failureThreshold: 5
+            httpGet:
+              path: /health
+              port: 8181
+              scheme: HTTPS
+            initialDelaySeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 10
+          env:
+          resources:
+            
+            {}
+          args:
+            - --opa-auth-token-file=/bootstrap/mgmt-token
+            - --opa-url=https://127.0.0.1:8181/v1
+            - --opa-allow-insecure
+            - "--namespaces=default"
+            - "--enable-data=true"
+            - "--enable-policies=true"
+
+            - "--replicate-path=kubernetes"
+            - "--replicate-ignore-namespaces="
+          volumeMounts:
+            - name: bootstrap
+              readOnly: true
+              mountPath: /bootstrap
+      serviceAccountName: open-policy-agent-0-opa-kube-mgmt
+      volumes:
+        - name: certs
+          secret:
+            secretName: open-policy-agent-0-opa-kube-mgmt-cert
+        - name: bootstrap
+          emptyDir: {}
+      affinity:
+        {}
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      tolerations:
+        []
+      topologySpreadConstraints:
+        []

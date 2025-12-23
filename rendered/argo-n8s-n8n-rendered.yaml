@@ -1,0 +1,130 @@
+---
+# Source: n8n/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: n8n
+  namespace: default
+  labels:
+    helm.sh/chart: n8n-1.1.0
+    app.kubernetes.io/name: n8n
+    app.kubernetes.io/instance: n8n
+    app.kubernetes.io/version: "1.116.2"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: n8n/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: n8n
+  namespace: default
+  labels:
+    helm.sh/chart: n8n-1.1.0
+    app.kubernetes.io/name: n8n
+    app.kubernetes.io/instance: n8n
+    app.kubernetes.io/version: "1.116.2"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: n8n
+    app.kubernetes.io/instance: n8n
+    app.kubernetes.io/type: master
+---
+# Source: n8n/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: n8n
+  namespace: default
+  labels:
+    helm.sh/chart: n8n-1.1.0
+    app.kubernetes.io/name: n8n
+    app.kubernetes.io/instance: n8n
+    app.kubernetes.io/version: "1.116.2"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: n8n
+      app.kubernetes.io/instance: n8n
+      app.kubernetes.io/type: master
+  template:
+    metadata:
+      annotations:
+        checksum/config: 05f48fa1dac3a71e714ba907c34a63fa5074c7da4e372ee69afe0eee5ce4cd9c
+      labels:
+        app.kubernetes.io/name: n8n
+        app.kubernetes.io/instance: n8n
+        app.kubernetes.io/type: master
+    spec:
+      serviceAccountName: n8n
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+      containers:
+        - name: n8n
+          securityContext:
+            {}
+          image: "n8nio/n8n:1.116.2"
+          imagePullPolicy: IfNotPresent
+          envFrom:
+          env: []
+          lifecycle:
+            {}
+          ports:
+            - name: http
+              containerPort: 5678
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          resources:
+            {}
+          volumeMounts:
+            - name: data
+              mountPath: /home/node/.n8n
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: "data"
+          emptyDir: {}
+---
+# Source: n8n/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "n8n-test-connection"
+  labels:
+    helm.sh/chart: n8n-1.1.0
+    app.kubernetes.io/name: n8n
+    app.kubernetes.io/instance: n8n
+    app.kubernetes.io/version: "1.116.2"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: alpine
+      command: ['sh', '-c']
+      args:
+        - |
+          echo "Testing connection to n8n:80";
+          nslookup n8n;
+          wget n8n:80;
+  restartPolicy: Never

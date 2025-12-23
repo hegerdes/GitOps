@@ -1,0 +1,319 @@
+---
+# Source: gitlab-agent/templates/ocs/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: gitlab-agent-0-ocs-scanning-pod-sa
+  namespace: default
+  labels:
+    helm.sh/chart: gitlab-agent-2.22.0
+    app.kubernetes.io/name: gitlab-agent
+    app.kubernetes.io/instance: gitlab-agent-0
+    app.kubernetes.io/version: "v18.7.0"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: gitlab-agent/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: gitlab-agent-0
+  labels:
+    helm.sh/chart: gitlab-agent-2.22.0
+    app.kubernetes.io/name: gitlab-agent
+    app.kubernetes.io/instance: gitlab-agent-0
+    app.kubernetes.io/version: "v18.7.0"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: gitlab-agent/templates/ocs/clusterrole.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: default:gitlab-agent-0:ocs
+  labels:
+    helm.sh/chart: gitlab-agent-2.22.0
+    app.kubernetes.io/name: gitlab-agent
+    app.kubernetes.io/instance: gitlab-agent-0
+    app.kubernetes.io/version: "v18.7.0"
+    app.kubernetes.io/managed-by: Helm
+rules:
+- apiGroups:
+  - batch
+  resources:
+  - cronjobs
+  - jobs
+  verbs:
+  - list
+  - get
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - replicationcontrollers
+  - serviceaccounts
+  - namespaces
+  - services
+  - configmaps
+  - resourcequotas
+  - limitranges
+  - nodes
+  - secrets
+  verbs:
+  - list
+  - get
+- apiGroups:
+  - "apps"
+  resources:
+  - replicasets
+  - daemonsets
+  - statefulsets
+  - deployments
+  verbs:
+  - list
+  - get
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - roles
+  - rolebindings
+  - clusterroles
+  - clusterrolebindings
+  verbs:
+  - list
+  - get
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - networkpolicies
+  - ingresses
+  verbs:
+  - list
+  - get
+---
+# Source: gitlab-agent/templates/clusterrolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: default:gitlab-agent-0-cluster-admin
+  labels:
+    helm.sh/chart: gitlab-agent-2.22.0
+    app.kubernetes.io/name: gitlab-agent
+    app.kubernetes.io/instance: gitlab-agent-0
+    app.kubernetes.io/version: "v18.7.0"
+    app.kubernetes.io/managed-by: Helm
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: gitlab-agent-0
+  namespace: default
+---
+# Source: gitlab-agent/templates/ocs/clusterrolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: default:gitlab-agent-0:ocs
+  labels:
+    helm.sh/chart: gitlab-agent-2.22.0
+    app.kubernetes.io/name: gitlab-agent
+    app.kubernetes.io/instance: gitlab-agent-0
+    app.kubernetes.io/version: "v18.7.0"
+    app.kubernetes.io/managed-by: Helm
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: default:gitlab-agent-0:ocs
+subjects:
+- kind: ServiceAccount
+  name: gitlab-agent-0-ocs-scanning-pod-sa
+  namespace: default
+---
+# Source: gitlab-agent/templates/ocs/role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: gitlab-agent-0:ocs
+  namespace: default
+  labels:
+    helm.sh/chart: gitlab-agent-2.22.0
+    app.kubernetes.io/name: gitlab-agent
+    app.kubernetes.io/instance: gitlab-agent-0
+    app.kubernetes.io/version: "v18.7.0"
+    app.kubernetes.io/managed-by: Helm
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - create
+---
+# Source: gitlab-agent/templates/ocs/rolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: gitlab-agent-0:ocs
+  namespace: default
+  labels:
+    helm.sh/chart: gitlab-agent-2.22.0
+    app.kubernetes.io/name: gitlab-agent
+    app.kubernetes.io/instance: gitlab-agent-0
+    app.kubernetes.io/version: "v18.7.0"
+    app.kubernetes.io/managed-by: Helm
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: gitlab-agent-0:ocs
+subjects:
+- kind: ServiceAccount
+  name: gitlab-agent-0-ocs-scanning-pod-sa
+  namespace: default
+---
+# Source: gitlab-agent/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitlab-agent-0-service
+  labels:
+    helm.sh/chart: gitlab-agent-2.22.0
+    app.kubernetes.io/name: gitlab-agent
+    app.kubernetes.io/instance: gitlab-agent-0
+    app.kubernetes.io/version: "v18.7.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: observability
+      protocol: TCP
+      name: tcp-gitlab-agent-observability
+  selector:
+    app.kubernetes.io/name: gitlab-agent
+    app.kubernetes.io/instance: gitlab-agent-0
+---
+# Source: gitlab-agent/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # NOTE: the `-v1` suffix was introduced as an epoch version to be able
+  # to gracefully recreate the deployment in case there is no upgrade
+  # path otherwise, e.g. when changing an immutable field.
+  # see https://gitlab.com/gitlab-org/charts/gitlab-agent/-/issues/38 for ctx
+  name: gitlab-agent-0-v2
+  labels:
+    helm.sh/chart: gitlab-agent-2.22.0
+    app.kubernetes.io/name: gitlab-agent
+    app.kubernetes.io/instance: gitlab-agent-0
+    app.kubernetes.io/version: "v18.7.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gitlab-agent
+      app.kubernetes.io/instance: gitlab-agent-0
+  template:
+    metadata:
+      annotations:        
+        prometheus.io/path: /metrics
+        prometheus.io/port: "8080"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/instance: gitlab-agent-0
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: gitlab-agent
+        app.kubernetes.io/version: v18.7.0
+        helm.sh/chart: gitlab-agent-2.22.0
+    spec:
+      automountServiceAccountToken: false
+      serviceAccountName: gitlab-agent-0
+      securityContext:
+        {}
+      containers:
+        - name: gitlab-agent
+          securityContext:
+            {}
+          image: registry.gitlab.com/gitlab-org/cluster-integration/gitlab-agent/agentk:v18.7.0
+          imagePullPolicy: IfNotPresent
+          terminationMessagePolicy: FallbackToLogsOnError
+          args:
+            - --token-file=/etc/agentk/secrets/token
+            - --kas-address=wss://kas.gitlab.com
+          ports:
+            - name: observability
+              containerPort: 8080
+              protocol: TCP
+            - containerPort: 8082
+              name: api
+          livenessProbe:
+            httpGet:
+              path: /liveness
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            {}
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+               fieldRef:
+                 fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: GITLAB_AGENT_TELEMETRY_installation_method
+              value: helm-chart
+            - name: GITLAB_AGENT_TELEMETRY_helm_chart_version
+              value: 2.22.0
+            - name: SERVICE_ACCOUNT_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.serviceAccountName
+            - name: OCS_ENABLED
+              value: "true"
+            - name: OCS_SERVICE_ACCOUNT_NAME
+              value: gitlab-agent-0-ocs-scanning-pod-sa
+          volumeMounts:
+            - name: service-account-token-volume
+              mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+              readOnly: true
+            - name: secret-volume
+              mountPath: /etc/agentk/secrets
+              readOnly: true
+      volumes:
+        - name: service-account-token-volume
+          projected:
+            defaultMode: 0444
+            sources:
+            - configMap:
+                name: kube-root-ca.crt
+            - downwardAPI:
+                items:
+                - fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.namespace
+                  path: namespace
+            - serviceAccountToken:
+                expirationSeconds: 3600
+                path: token
+        - name: secret-volume
+          secret:
+            defaultMode: 0444
+            secretName: gitlab-agent-token
