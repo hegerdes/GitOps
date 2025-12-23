@@ -96,7 +96,7 @@ jobs:
       - name: Run Lint
         run: ./scripts/k8s-manifest-lint.sh
 
-      - name: Checkout repository
+      - name: Checkout rendered manifest branch
         uses: actions/checkout@v4
         with:
           ref: rendered-manifests
@@ -110,7 +110,24 @@ jobs:
           git config color.ui auto
           git config color.diff auto
           mkdir -p rendered
+          echo "Moving these rendered manifests:"
           cp -av /tmp/*.yaml rendered/
+
+          # Format
+          for f in *.yaml; do
+          tmp="$(mktemp "${f}.tmp.XXXXXX")"
+
+            if yq eval -P "$f" > "$tmp"; then
+              mv -- "$tmp" "$f"
+              echo "Formatted: $f"
+            else
+              echo "Failed to format: $f" >&2
+              rm -f -- "$tmp"
+            fi
+          done
+
+          # Diff
+          echo "Rendered diff:"
           git add rendered
           git diff --cached
           git diff --cached --quiet || git commit -m "Update generated manifests from commit ${{ github.sha }}"
