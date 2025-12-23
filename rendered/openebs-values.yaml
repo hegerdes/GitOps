@@ -1,0 +1,17 @@
+engines:
+  local:
+    lvm:
+      enabled: true
+    zfs:
+      enabled: false
+  replicated:
+    mayastor:
+      enabled: false
+loki:
+  enabled: false
+  localpvScConfig:
+    enabled: false
+  minio:
+    enabled: false
+alloy:
+  enabled: false

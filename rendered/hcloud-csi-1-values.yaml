@@ -1,0 +1,1 @@
+{"metrics": {"enabled": true}, "controller": {"hcloudToken": {"file": "/var/run/secrets/hcloud/token"}, "extraVolumeMounts": [{"name": "hcloud-token", "mountPath": "/var/run/secrets/hcloud", "readOnly": true}], "extraVolumes": [{"name": "hcloud-token", "secret": {"secretName": "hcloud"}}]}}

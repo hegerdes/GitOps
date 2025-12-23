@@ -1,0 +1,1 @@
+{"webhook": {"namespaceSelector": {"matchExpressions": [{"key": "webhooks.knative.dev/exclude", "operator": "In", "values": ["true"]}, {"key": "policy.sigstore.dev/include", "operator": "In", "values": ["true"]}]}}}

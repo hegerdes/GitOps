@@ -1,0 +1,1 @@
+{"operator": {"metricsVulnIdEnabled": true, "metricsExposedSecretInfo": true, "metricsImageInfo": true, "scanJobTimeout": "30m"}}

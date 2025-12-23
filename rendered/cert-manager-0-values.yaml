@@ -1,0 +1,1 @@
+{"crds": {"enabled": true}, "extraArgs": ["--enable-gateway-api"], "prometheus": {"servicemonitor": {"enabled": true}}}

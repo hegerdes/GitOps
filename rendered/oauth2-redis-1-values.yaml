@@ -1,0 +1,1 @@
+{"architecture": "standalone", "master": {"kind": "Deployment", "persistence": {"enabled": false, "medium": "", "sizeLimit": "2Gi"}}}

@@ -1,0 +1,10 @@
+reloader:
+  ignoreJobs: true
+  ignoreCronJobs: true
+  deployment:
+    containerSecurityContext:
+      capabilities:
+        drop:
+          - ALL
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true

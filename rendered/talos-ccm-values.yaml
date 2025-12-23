@@ -1,0 +1,4 @@
+enabledControllers: [node-csr-approval] # [cloud-node node-csr-approval]
+# Deploy CCM only on control-plane nodes
+nodeSelector:
+  node-role.kubernetes.io/control-plane: ""

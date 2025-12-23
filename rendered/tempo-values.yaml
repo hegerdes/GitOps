@@ -1,0 +1,72 @@
+minio:
+  enabled: false
+global:
+  extraEnv:
+    - name: AWS_ACCESS_KEY_ID
+      valueFrom:
+        secretKeyRef:
+          name: tempo-s3-creds
+          key: AWS_ACCESS_KEY_ID
+    - name: AWS_SECRET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: tempo-s3-creds
+          key: AWS_SECRET_ACCESS_KEY
+gateway:
+  enabled: true
+  ingress:
+    enabled: false
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-prod-ing-nginx"
+      # # Basic auth for now
+      # nginx.ingress.kubernetes.io/auth-type: "basic"
+      # nginx.ingress.kubernetes.io/auth-secret: "monitoring-auth"
+    hosts:
+      - host: tempo.k8s.henrikgerdes.me
+        paths:
+          - path: /
+    tls:
+      - secretName: tempo-gateway-tls
+        hosts:
+          - tempo.k8s.henrikgerdes.me
+storage:
+  trace:
+    backend: s3
+    s3:
+      bucket: hegerdes-monitoring
+      region: weur
+      endpoint: f8dcb6c50cc8b86dcf6953a50c3bf736.r2.cloudflarestorage.com
+traces:
+  otlp:
+    http:
+      enabled: true
+    grpc:
+      enabled: true
+distributor:
+  config:
+    log_received_spans:
+      enabled: true
+    log_discarded_spans:
+      enabled: true
+extraObjects:
+  - apiVersion: external-secrets.io/v1
+    kind: ExternalSecret
+    metadata:
+      name: tempo-s3-creds
+    spec:
+      refreshInterval: 1h
+      secretStoreRef:
+        kind: ClusterSecretStore
+        name: azure-store
+      target:
+        name: tempo-s3-creds
+        creationPolicy: Owner
+      data:
+        - secretKey: AWS_ACCESS_KEY_ID
+          remoteRef:
+            key: cloudflare-r2-monitoring-key-id
+            decodingStrategy: None # can be None, Base64, Base64URL or Auto
+        - secretKey: AWS_SECRET_ACCESS_KEY
+          remoteRef:
+            key: cloudflare-r2-monitoring-secret-key
+            decodingStrategy: None # can be None, Base64, Base64URL or Auto

@@ -1,0 +1,8 @@
+clusterName: hcloud
+image:
+  pullPolicy: IfNotPresent
+prometheus:
+  metricServer:
+    enabled: false
+    serviceMonitor:
+      enabled: true

@@ -1,0 +1,88 @@
+# Values for ./k8s-cluster-hcloud-critical/argo-argocd.yml
+# See https://github.com/argoproj/argo-helm/blob/main/charts/argo-cd/values.yaml
+global:
+  additionalLabels: {}
+  domain: argocd.k8s.henrikgerdes.me
+  logging:
+    format: text # Either: `text` or `json`
+    level: info # `debug`, `info`, `warn` or `error`
+  tolerations:
+    - key: node.cloudprovider.kubernetes.io/uninitialized
+      operator: Exists
+      effect: NoSchedule
+
+configs:
+  cm:
+    url: "https://argocd.k8s.henrikgerdes.me"
+    exec.enabled: true
+    admin.enabled: false
+
+    dex.config: |
+      connectors:
+        # GitHub OIDC example
+        - type: github
+          id: github
+          name: GitHub
+          config:
+            clientID: $argocd-secret-sso:dex.acme.clientId
+            clientSecret: $argocd-secret-sso:dex.acme.clientSecret
+            orgs:
+            - name: DemeterPlanet
+
+  rbac:
+    policy.default: role:org-admin
+    scopes: "[groups, email]"
+    policy.csv: |
+      p, role:org-admin, applications, *, */*, allow
+      p, role:org-admin, clusters, get, *, allow
+      p, role:org-admin, repositories, get, *, allow
+      p, role:org-admin, repositories, create, *, allow
+      p, role:org-admin, repositories, update, *, allow
+      p, role:org-admin, repositories, delete, *, allow
+      p, role:org-admin, projects, get, *, allow
+      p, role:org-admin, projects, create, *, allow
+      p, role:org-admin, projects, update, *, allow
+      p, role:org-admin, projects, delete, *, allow
+      p, role:org-admin, logs, get, *, allow
+      p, role:org-admin, exec, create, */*, allow
+      g, DemeterPlanet:all, role:org-admin
+
+  secret:
+    createSecret: true
+    extra:
+      webhook.github.secret: $argocd-secret-sso:webhook.github.secret
+  params:
+    controller.sync.timeout.seconds: "300"
+
+## Server
+server:
+  # extraArgs:
+  #   - --insecure
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/enable-opentelemetry: "true"
+      nginx.ingress.kubernetes.io/opentelemetry-trust-incoming-span: "true"
+      cert-manager.io/cluster-issuer: "letsencrypt-prod-ing-nginx"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+
+      nginx.ingress.kubernetes.io/hsts: "true"
+      nginx.ingress.kubernetes.io/hsts-max-age: "63072000" # 2 years
+      nginx.ingress.kubernetes.io/hsts-include-subdomains: "true"
+      nginx.ingress.kubernetes.io/hsts-preload: "true"
+      nginx.ingress.kubernetes.io/proxy-body-size: "1m" # raise if needed
+
+      # OWASP
+      nginx.ingress.kubernetes.io/enable-modsecurity: "true"
+      nginx.ingress.kubernetes.io/enable-owasp-core-rules: "true"
+
+    ingressClassName: "nginx"
+    tls: true
+
+repoServer:
+  dnsConfig:
+    nameservers:
+      - 1.1.1.1
+      - 8.8.8.8

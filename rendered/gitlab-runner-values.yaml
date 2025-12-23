@@ -1,0 +1,38 @@
+gitlabUrl: https://gitlab.com/
+runners:
+  config: ""
+  secret: gitlab-runner-token
+# Certificate for mTLS. Format `<hostname>.auth.[crt/key]`.
+# certsSecretName: gitlab-runner-mtls-cert
+rbac:
+  create: true
+concurrent: 2
+hostAliases: []
+## Configure integrated Prometheus metrics exporter
+## ref: https://docs.gitlab.com/runner/monitoring/#configuration-of-the-metrics-http-server
+metrics:
+  enabled: true
+  portName: metrics
+  port: 9252
+extraObjects:
+  - apiVersion: external-secrets.io/v1
+    kind: ExternalSecret
+    metadata:
+      name: gitlab-runner-token
+    spec:
+      refreshInterval: 5m
+      secretStoreRef:
+        kind: ClusterSecretStore
+        name: azure-store
+      target:
+        name: gitlab-runner-token
+        creationPolicy: Owner
+      data:
+        - secretKey: runner-registration-token
+          remoteRef:
+            key: gitlab-runner-registration-token-gitops
+            decodingStrategy: None # can be None, Base64, Base64URL or Auto
+        - secretKey: runner-token
+          remoteRef:
+            key: gitlab-runner-token-gitops
+            decodingStrategy: None # can be None, Base64, Base64URL or Auto

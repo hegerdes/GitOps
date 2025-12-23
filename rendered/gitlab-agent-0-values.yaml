@@ -1,0 +1,1 @@
+{"replicas": 1, "config": {"kasAddress": "wss://kas.gitlab.com", "secretName": "gitlab-agent-token"}}

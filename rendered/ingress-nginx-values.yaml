@@ -1,0 +1,82 @@
+controller:
+  name: controller
+  kind: DaemonSet # `DaemonSet` or `Deployment`
+  annotations:
+    reloader.stakater.com/auto: "true"
+  podAnnotations:
+    cluster-autoscaler.kubernetes.io/enable-ds-eviction: "true"
+  # hostPort:
+  #   enabled: true
+  service:
+    enabled: true
+    annotations:
+      # See https://github.com/hetznercloud/hcloud-cloud-controller-manager/blob/main/internal/annotation/load_balancer.go#L12
+      load-balancer.hetzner.cloud/name: k8s-worker-ingress-lb
+      load-balancer.hetzner.cloud/location: fsn1
+      load-balancer.hetzner.cloud/use-private-ip: "true"
+      load-balancer.hetzner.cloud/network: "k8s-network"
+      load-balancer.hetzner.cloud/uses-proxyprotocol: "true" # Needs ipMode proxy support from CNI
+    type: LoadBalancer
+    # ipFamilyPolicy: PreferDualStack
+    # ipFamilies: [IPv6] # [IPv4, IPv6]
+    externalTrafficPolicy: Local
+    nodePorts:
+      http: 32080
+      https: 32443
+      tcp: {}
+      udp: {}
+  ingressClassResource:
+    name: nginx
+    enabled: true
+    default: true
+  config:
+    use-proxy-protocol: "true"
+    server-tokens: "false"
+    # Reasonable timeouts
+    proxy-read-timeout: "60"
+    proxy-send-timeout: "60"
+    keep-alive: "75"
+    use-gzip: "true"
+    use-http2: "true"
+    enable-brotli: "true"
+    brotli-level: "5"
+    gzip-types: "application/json application/javascript text/css text/javascript application/xml"
+    strict-validate-path-type: "false"
+    large-client-header-buffers: "4 16k"
+    ssl-protocols: "TLSv1.3"
+    ssl-prefer-server-ciphers: "true"
+    ssl-session-timeout: "10m"
+    ssl-buffer-size: "4k"
+    hsts: "true"
+    enable-ocsp: "true"
+    enable-modsecurity: "true"
+    enable-owasp-modsecurity-crs: "true"
+    enable-opentelemetry: "true"
+    opentelemetry-trust-incoming-span: "true"
+    opentelemetry-operation-name: "HTTP $request_method $service_name $uri"
+    otel-service-name: "nginx-proxy" # Opentelemetry resource name
+    otlp-collector-host: "grafana-metrics-alloy.monitoring.svc.cluster.local"
+    otlp-collector-port: "4317"
+    otel-sampler: "AlwaysOn" # Also: AlwaysOff, TraceIdRatioBased
+    otel-sampler-parent-based: "true"
+    # opentelemetry-config: "/etc/nginx/opentelemetry.toml"
+    # otel-max-queuesize: "2048"
+    # otel-schedule-delay-millis: "5000"
+    # otel-max-export-batch-size: "512"
+    # otel-sampler: "AlwaysOn" # Also: AlwaysOff, TraceIdRatioBased
+    # otel-sampler-ratio: "1.0"
+    # otel-sampler-parent-based: "false"
+
+    log-format-escape-json: "true"
+    log-format-upstream: '{"timestamp": "$time_iso8601", "requestID": "$req_id", "proxyUpstreamName": "$proxy_upstream_name", "upstreamStatus": "$upstream_status", "upstreamAddr": "$upstream_addr", "httpRequest":{"requestMethod": "$request_method", "requestUrl": "$host$request_uri", "status": $status, "requestSize":"$request_length", "responseSize": "$upstream_response_length", "userAgent": "$http_user_agent", "remoteIp": "$remote_addr", "latency": "$upstream_response_time s", "protocol":"$server_protocol"}}'
+  opentelemetry:
+    enabled: true
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+      add: ["NET_BIND_SERVICE"] # only if needed for 80/443
