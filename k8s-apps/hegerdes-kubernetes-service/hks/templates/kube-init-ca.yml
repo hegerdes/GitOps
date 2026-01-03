@@ -231,12 +231,6 @@ rules:
   - apiGroups: [""]
     resources: ["secrets", "configmaps"]
     verbs: ["create"]
-    resourceNames:
-      - kube-encryption
-      - etcd-ca-tls
-      - kube-ca-tls
-      - kube-front-proxy-ca-tls
-      - kube-sa-tls
 ---
 # Bind the Role to the ServiceAccount
 apiVersion: rbac.authorization.k8s.io/v1
