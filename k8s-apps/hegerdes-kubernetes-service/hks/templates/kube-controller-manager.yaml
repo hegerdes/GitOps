@@ -30,6 +30,7 @@ spec:
             - kube-controller-manager
             - --cluster-name={{ .Release.Namespace }}
             - --allocate-node-cidrs=true
+            - --secure-port=10257
             - --cluster-cidr=10.244.0.0/16
             - --service-cluster-ip-range=10.96.0.0/16
             - --root-ca-file=/etc/kubernetes/pki/ca.crt
@@ -45,6 +46,9 @@ spec:
             - --leader-elect=true
             - --profiling=false
             - --tls-min-version=VersionTLS13
+            - --tls-cert-file=/etc/kubernetes/pki/tls.crt
+            - --tls-private-key-file=/etc/kubernetes/pki/tls.key
+            - --client-ca-file=/etc/kubernetes/pki/ca.crt
             - --use-service-account-credentials=true
             - --leader-elect-resource-namespace=default
           ports:
@@ -137,6 +141,13 @@ spec:
                       path: sa.key
                     - key: sa.pub
                       path: sa.pub
+              - secret:
+                  name: kube-controller-manager-serving-tls
+                  items:
+                    - key: tls.crt
+                      path: tls.crt
+                    - key: tls.key
+                      path: tls.key
               - secret:
                   name: kube-front-proxy-ca-tls
                   items:
