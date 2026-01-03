@@ -42,6 +42,11 @@ spec:
               name: share
             - mountPath: /scripts
               name: scripts
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
       containers:
         - name: etcd
           image: registry.k8s.io/etcd:3.6.7-0
