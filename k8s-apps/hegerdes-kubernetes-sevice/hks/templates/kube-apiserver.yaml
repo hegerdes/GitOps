@@ -1,0 +1,249 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kube-apiserver
+    component: kube-apiserver
+    tier: control-plane
+  name: kube-apiserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kube-apiserver
+      component: kube-apiserver
+      tier: control-plane
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: kube-apiserver
+        component: kube-apiserver
+        tier: control-plane
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      containers:
+        - name: kube-apiserver
+          image: registry.k8s.io/kube-apiserver:v1.35.0
+          imagePullPolicy: IfNotPresent
+          command:
+            - kube-apiserver
+            - --secure-port=6443
+            - --profiling=false
+            - --external-hostname={{ .Release.Namespace }}.hks.eu-central.hegerdes.com
+            - --enable-admission-plugins=NodeRestriction
+            - --enable-bootstrap-token-auth=true
+            - --allow-privileged=true
+            - --audit-log-maxage=30
+            - --audit-log-maxbackup=10
+            - --audit-log-maxsize=100
+            - --audit-log-path=/var/log/kube-apiserver/audit.log
+            - --client-ca-file=/etc/kubernetes/pki/ca.crt
+            - --kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.crt
+            - --kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client.key
+            - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+            - --audit-policy-file=/etc/kubernetes/extras/audit-policy.yaml
+            - --authentication-config=/etc/kubernetes/extras/authentication-conf.yaml
+            - --authorization-config=/etc/kubernetes/extras/authorization-conf.yaml
+            - --admission-control-config-file=/etc/kubernetes/extras/admission-control-config.yaml
+            - --encryption-provider-config=/etc/kubernetes/extras/encryption-config.yaml
+            - --encryption-provider-config-automatic-reload=true
+            - --etcd-servers=https://etcd:2379
+            - --etcd-cafile=/etc/kubernetes/etcd/pki/ca.crt
+            - --etcd-certfile=/etc/kubernetes/etcd/pki/apiserver-etcd-client.crt
+            - --etcd-keyfile=/etc/kubernetes/etcd/pki/apiserver-etcd-client.key
+            - --service-account-issuer=https://kubernetes.default.svc.cluster.local
+            - --service-cluster-ip-range=10.96.0.0/16
+            - --service-account-key-file=/etc/kubernetes/pki/sa.pub
+            - --service-account-signing-key-file=/etc/kubernetes/pki/sa.key
+            - --tls-min-version=VersionTLS13
+            - --tls-cert-file=/etc/kubernetes/pki/apiserver.crt
+            - --tls-private-key-file=/etc/kubernetes/pki/apiserver.key
+            - --proxy-client-cert-file=/etc/kubernetes/pki/front-proxy-client.crt
+            - --proxy-client-key-file=/etc/kubernetes/pki/front-proxy-client.key
+            - --requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt
+            - --requestheader-allowed-names=front-proxy-client
+            - --requestheader-extra-headers-prefix=X-Remote-Extra-
+            - --requestheader-group-headers=X-Remote-Group
+            - --requestheader-username-headers=X-Remote-User
+          resources:
+            requests:
+              cpu: 200m
+              memory: 200Mi
+            limits:
+              cpu: 2
+              memory: 4Gi
+          ports:
+            - containerPort: 6443
+              name: kube-api
+              protocol: TCP
+          securityContext:
+            readOnlyRootFilesystem: true
+            # capabilities:
+            #   drop: [all]
+
+          livenessProbe:
+            failureThreshold: 8
+            httpGet:
+              path: /livez
+              port: kube-api
+              scheme: HTTPS
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 15
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /readyz
+              port: kube-api
+              scheme: HTTPS
+            periodSeconds: 1
+            timeoutSeconds: 15
+          startupProbe:
+            failureThreshold: 24
+            httpGet:
+              path: /livez
+              port: kube-api
+              scheme: HTTPS
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 15
+          volumeMounts:
+            - mountPath: /var/log/kube-apiserver/
+              name: audit-log
+            - mountPath: /etc/kubernetes/pki/
+              name: tls-kube
+            - mountPath: /etc/kubernetes/etcd/pki/
+              name: tls-etcd
+            - mountPath: /etc/kubernetes/extras/
+              name: kube-extra-conf
+            # - mountPath: /etc/ssl/certs
+            #   name: ca-certs
+            #   readOnly: true
+            # - mountPath: /etc/ca-certificates
+            #   name: etc-ca-certificates
+            #   readOnly: true
+            # - mountPath: /usr/local/share/ca-certificates
+            #   name: usr-local-share-ca-certificates
+            #   readOnly: true
+            # - mountPath: /usr/share/ca-certificates
+            #   name: usr-share-ca-certificates
+            #   readOnly: true
+      # priority: 2000001000
+      # priorityClassName: system-node-critical
+      volumes:
+        - name: audit-log
+          persistentVolumeClaim:
+            claimName: kube-adit-log
+        - name: kube-extra-conf
+          projected:
+            sources:
+              - configMap:
+                  name: kube-api-configs
+                  items:
+                    - key: admission-control-config.yaml
+                      path: admission-control-config.yaml
+                    - key: authorization-conf.yaml
+                      path: authorization-conf.yaml
+                    - key: authentication-conf.yaml
+                      path: authentication-conf.yaml
+                    - key: audit-policy.yaml
+                      path: audit-policy.yaml
+              - secret:
+                  name: kube-encryption
+                  items:
+                    - key: encryption-config.yaml
+                      path: encryption-config.yaml
+        - name: tls-etcd
+          projected:
+            sources:
+              - secret:
+                  name: kube-apiserver-etcd-client-tls
+                  items:
+                    - key: tls.key
+                      path: apiserver-etcd-client.key
+                    - key: tls.crt
+                      path: apiserver-etcd-client.crt
+                    - key: ca.crt
+                      path: ca.crt
+        - name: tls-kube
+          projected:
+            sources:
+              # Serving cert for server
+              - secret:
+                  name: kube-apiserver-tls
+                  items:
+                    - key: ca.crt
+                      path: ca.crt
+                    - key: tls.crt
+                      path: apiserver.crt
+                    - key: tls.key
+                      path: apiserver.key
+              # Client cert for kubelet auth
+              - secret:
+                  name: kube-apiserver-kubelet-client-tls
+                  items:
+                    - key: tls.crt
+                      path: apiserver-kubelet-client.crt
+                    - key: tls.key
+                      path: apiserver-kubelet-client.key
+              # Client cert for front-proxy auth
+              - secret:
+                  name: kube-front-proxy-client-tls
+                  items:
+                    - key: tls.crt
+                      path: front-proxy-client.crt
+                    - key: tls.key
+                      path: front-proxy-client.key
+                    - key: ca.crt
+                      path: front-proxy-ca.crt
+              # Sign and validate JWTs
+              - secret:
+                  name: kube-sa-tls
+                  items:
+                    - key: tls.key
+                      path: sa.key
+                    - key: sa.pub
+                      path: sa.pub
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kube-apiserver
+    component: kube-apiserver
+    tier: control-plane
+  name: kube-apiserver
+spec:
+  ports:
+    - port: 6443
+      protocol: TCP
+      targetPort: kube-api
+      name: kube-api
+  selector:
+    app: kube-apiserver
+    component: kube-apiserver
+    tier: control-plane
+---
+# persistent volume claim
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kube-adit-log
+  labels:
+    app: kube-apiserver
+    component: kube-apiserver
+    tier: control-plane
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
