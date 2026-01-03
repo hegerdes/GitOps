@@ -26,6 +26,7 @@ spec:
         - name: kube-scheduler
           image: registry.k8s.io/kube-scheduler:v1.35.0
           imagePullPolicy: IfNotPresent
+          # Docs: https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/
           command:
             - kube-scheduler
             - --requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt

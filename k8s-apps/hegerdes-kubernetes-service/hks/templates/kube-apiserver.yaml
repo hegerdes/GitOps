@@ -33,6 +33,7 @@ spec:
         - name: kube-apiserver
           image: registry.k8s.io/kube-apiserver:v1.35.0
           imagePullPolicy: IfNotPresent
+          # Docs: https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/
           command:
             - kube-apiserver
             - --secure-port=6443
