@@ -13,9 +13,6 @@ spec:
     targetRevision: 1.*
     helm:
       releaseName: coredns
-      deployment:
-        annotations:
-          configmap.reloader.stakater.com/reload: coredns
       valuesObject:
         replicaCount: 2
         priorityClassName: system-cluster-critical
@@ -23,6 +20,8 @@ spec:
         customLabels:
           k8s-app: kube-dns
         deployment:
+          annotations:
+            configmap.reloader.stakater.com/reload: coredns
           selector:
             matchLabels:
               k8s-app: kube-dns
