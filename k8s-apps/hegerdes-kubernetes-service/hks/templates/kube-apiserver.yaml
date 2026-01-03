@@ -13,7 +13,12 @@ spec:
       app: kube-apiserver
       component: kube-apiserver
       tier: control-plane
-  strategy: {}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  minReadySeconds: 10
   template:
     metadata:
       labels:
@@ -118,9 +123,9 @@ spec:
           securityContext:
             readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
-            # capabilities:
-            #   drop: [all]
-
+            capabilities:
+              drop: [all]
+              add: ["NET_BIND_SERVICE"]
           livenessProbe:
             failureThreshold: 8
             httpGet:

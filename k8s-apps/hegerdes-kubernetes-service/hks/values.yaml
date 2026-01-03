@@ -1,1 +1,5 @@
+controlplane:
+  pdb:
+    enabled: false
+
 extraObjects: []
