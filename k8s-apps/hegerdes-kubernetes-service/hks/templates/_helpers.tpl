@@ -50,13 +50,16 @@ app.kubernetes.io/name: {{ include "hks.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
+
 {{/*
-Create the name of the service account to use
+Renders a value that contains template.
+Usage:
+{{ include "<CHARTNAME>.render" ( dict "value" .Values.path.to.the.Value "context" $) }}
 */}}
-{{- define "hks.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "hks.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}
+{{- define "<CHARTNAME>.render" -}}
+    {{- if typeIs "string" .value }}
+        {{- tpl .value .context }}
+    {{- else }}
+        {{- tpl (.value | toYaml) .context }}
+    {{- end }}
+{{- end -}}
