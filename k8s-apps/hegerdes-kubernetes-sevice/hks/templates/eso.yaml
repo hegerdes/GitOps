@@ -8,7 +8,7 @@ spec:
   refreshInterval: 1h0m0s
   secretStoreRef:
     kind: SecretStore
-    name: secret-sync
+    name: secret-sync-{{ .Release.Namespace }}
   target:
     name: kubeconfig-credentials-{{ .Release.Namespace }}
     template:
