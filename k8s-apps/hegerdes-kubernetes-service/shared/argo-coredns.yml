@@ -1,0 +1,111 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: coredns
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            hks.hegerdes.com/managed-cluster: "true"
+            hks.hegerdes.com/cluster-type: "downstream"
+  template:
+    metadata:
+      name: "{{.name}}-coredns"
+    spec:
+      project: default
+      destination:
+        server: "{{.server}}"
+        namespace: kube-system
+      source:
+        chart: coredns
+        repoURL: https://coredns.github.io/helm
+        targetRevision: 1.*
+        helm:
+          releaseName: coredns
+          valuesObject:
+            replicaCount: 2
+            priorityClassName: system-cluster-critical
+            isClusterService: false
+            customLabels:
+              k8s-app: kube-dns
+            deployment:
+              annotations:
+                configmap.reloader.stakater.com/reload: coredns
+              selector:
+                matchLabels:
+                  k8s-app: kube-dns
+            prometheus:
+              service:
+                enabled: true
+            # Default zone is what Kubernetes recommends:
+            # https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/#coredns-configmap-options
+            servers:
+              - zones:
+                  - zone: .
+                port: 53
+                # -- expose the service on a different port
+                # servicePort: 5353
+                # If serviceType is nodePort you can specify nodePort here
+                # nodePort: 30053
+                # hostPort: 53
+                plugins:
+                  - name: errors
+                  # Serves a /health endpoint on :8080, required for livenessProbe
+                  - name: health
+                    configBlock: |-
+                      lameduck 10s
+                  # Serves a /ready endpoint on :8181, required for readinessProbe
+                  - name: ready
+                  - name: log
+                    parameters: "."
+                    configBlock: |-
+                      class error
+                  # Required to query kubernetes API for data
+                  - name: kubernetes
+                    parameters: cluster.local in-addr.arpa ip6.arpa
+                    configBlock: |-
+                      pods insecure
+                      fallthrough in-addr.arpa ip6.arpa
+                      ttl 30
+                  # Serves a /metrics endpoint on :9153, required for serviceMonitor
+                  - name: prometheus
+                    parameters: :9153
+                  - name: forward
+                    # parameters: . /etc/resolv.conf
+                    # parameters: . 2a00:1098:2b::1 2a00:1098:2c::1 # nat64
+                    parameters: . tls://1.1.1.1 tls://[2606:4700:4700::1111]:853 tls://1.0.0.1 tls://[2606:4700:4700::1001]:853
+                    configBlock: |-
+                      tls_servername tls.cloudflare-dns.com
+                      health_check 5s
+                      max_concurrent 1000
+                  - name: cache
+                    parameters: 60
+                    configBlock: |-
+                      disable success cluster.local
+                      disable denial cluster.local
+                  - name: loop
+                  - name: reload
+                  - name: loadbalance
+            affinity:
+              podAntiAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                  - topologyKey: "kubernetes.io/hostname"
+                    labelSelector:
+                      matchLabels:
+                        k8s-app: kube-dns
+      info:
+        - name: Chart-Info CoreDNS
+          value: https://github.com/coredns/helm/
+      syncPolicy:
+        automated:
+          prune: false
+          selfHeal: false
+      ignoreDifferences:
+        - kind: Deployment
+          group: apps
+          jqPathExpressions:
+            - .spec.template.spec.containers[].ports[].name
