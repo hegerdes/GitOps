@@ -1,0 +1,17 @@
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TLSRoute
+metadata:
+  name: "{{ .Release.Namespace }}"
+spec:
+  hostnames:
+    - "{{ .Release.Namespace }}.localhost"
+    - "{{ .Release.Namespace }}.hks.eu-central.hegerdes.com"
+  parentRefs:
+    - name: hks-kube-gw
+      namespace: nginx-gateway
+  rules:
+    - backendRefs:
+        - name: kube-apiserver
+          kind: Service
+          namespace: "{{ .Release.Namespace }}"
+          port: 6443
