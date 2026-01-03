@@ -148,6 +148,8 @@ metadata:
     app.kubernetes.io/name: coredns
     app.kubernetes.io/version: "1.13.1"
     k8s-app: kube-dns
+  annotations:
+    configmap.reloader.stakater.com/reload: coredns
 spec:
   replicas: 2
   strategy:

@@ -4,6 +4,8 @@ isClusterService: false
 customLabels:
   k8s-app: kube-dns
 deployment:
+  annotations:
+    configmap.reloader.stakater.com/reload: coredns
   selector:
     matchLabels:
       k8s-app: kube-dns
