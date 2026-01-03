@@ -29,6 +29,36 @@ spec:
           type: RuntimeDefault
       automountServiceAccountToken: false
       enableServiceLinks: false
+      initContainers:
+        - name: etcd-check
+          image: curlimages/curl
+          command:
+            - sh
+            - -c
+            - |
+              set -eu
+              ETCD_ENDPOINT="https://etcd:2379/health"
+              CA_CERT="/etc/kubernetes/etcd/pki/ca.crt"
+              CLIENT_CERT="/etc/kubernetes/etcd/pki/apiserver-etcd-client.crt"
+              CLIENT_KEY="/etc/kubernetes/etcd/pki/apiserver-etcd-client.key"
+              while true; do
+                if curl --silent --show-error --fail --cacert "$CA_CERT" \
+                  --cert "$CLIENT_CERT" --key "$CLIENT_KEY" \
+                  "$ETCD_ENDPOINT" | grep -q '"health":.*"true"'; then
+                  echo "etcd is ready!"
+                  break
+                fi
+                echo "waiting for etcd..."
+                sleep 2
+              done
+          volumeMounts:
+            - mountPath: /etc/kubernetes/etcd/pki/
+              name: tls-etcd
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
       containers:
         - name: kube-apiserver
           image: registry.k8s.io/kube-apiserver:v1.35.0
@@ -87,6 +117,7 @@ spec:
               protocol: TCP
           securityContext:
             readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
             # capabilities:
             #   drop: [all]
 
