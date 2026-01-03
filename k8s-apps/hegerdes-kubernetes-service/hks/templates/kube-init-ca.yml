@@ -37,8 +37,6 @@ spec:
                   - resources:
                       - secrets
                       - configmaps
-                      - *.external-secrets.io
-                      - *.cert-manager.io
                     providers:
                       - aescbc:
                           keys:
