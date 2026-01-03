@@ -34,7 +34,11 @@ spec:
             - --kubeconfig=/etc/kubernetes/kubeconfig.yml
             - --leader-elect=true
             - --profiling=false
+            - --secure-port=10259
             - --tls-min-version=VersionTLS13
+            - --tls-cert-file=/etc/kubernetes/pki/tls.crt
+            - --tls-private-key-file=/etc/kubernetes/pki/tls.key
+            - --client-ca-file=/etc/kubernetes/pki/kube-ca.crt
             - --leader-elect-resource-namespace=default
           ports:
             - containerPort: 10259
@@ -112,6 +116,15 @@ spec:
                   items:
                     - key: ca.crt
                       path: front-proxy-ca.crt
+              - secret:
+                  name: kube-scheduler-serving-tls
+                  items:
+                    - key: ca.crt
+                      path: kube-ca.crt
+                    - key: tls.crt
+                      path: tls.crt
+                    - key: tls.key
+                      path: tls.key
 ---
 apiVersion: v1
 kind: Service

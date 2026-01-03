@@ -43,6 +43,82 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
+  name: kube-scheduler-serving
+spec:
+  secretName: kube-scheduler-serving-tls
+  commonName: kube-scheduler
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  isCA: false
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+
+  privateKey:
+    algorithm: RSA
+    size: 2048
+
+  subject:
+    organizationalUnits:
+      - scheduler-serving
+    organizations:
+      - kubernetes
+
+  dnsNames:
+    - localhost
+    - "kube-scheduler"
+    - "kube-scheduler.{{ .Release.Namespace }}"
+    - "kube-scheduler.{{ .Release.Namespace }}.svc"
+    - "kube-scheduler.{{ .Release.Namespace }}.svc.cluster.local"
+  emailAddresses:
+    - kubernetes-pki@hegerdes.com
+
+  issuerRef:
+    name: ca-kube-controlplane
+    kind: Issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kube-controller-manager-serving
+spec:
+  secretName: kube-controller-manager-serving-tls
+  commonName: kube-controller-manager
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  isCA: false
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+
+  privateKey:
+    algorithm: RSA
+    size: 2048
+
+  subject:
+    organizationalUnits:
+      - kube-controller-manager-serving
+    organizations:
+      - kubernetes
+
+  dnsNames:
+    - localhost
+    - "kube-controller-manager"
+    - "kube-controller-manager.{{ .Release.Namespace }}"
+    - "kube-controller-manager.{{ .Release.Namespace }}.svc"
+    - "kube-controller-manager.{{ .Release.Namespace }}.svc.cluster.local"
+  emailAddresses:
+    - kubernetes-pki@hegerdes.com
+
+  issuerRef:
+    name: ca-kube-controlplane
+    kind: Issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
   name: kube-apiserver-kubelet-client
 spec:
   secretName: kube-apiserver-kubelet-client-tls
