@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hks
+  namespace: argocd
+  labels:
+    name: hks
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/hegerdes/GitOps.git
+    targetRevision: feat/hks
+    path: k8s-apps/hegerdes-kubernetes-sevice/hks
+    helm:
+      valuesObject:
+        extraObjects: []
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: test1
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

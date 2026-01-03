@@ -13,6 +13,12 @@ spec:
     spec:
       serviceAccountName: kube-init-ca-gen
       restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: file-check
           image: hegerdes/debug:hks
@@ -31,10 +37,8 @@ spec:
                   - resources:
                       - secrets
                       - configmaps
-                      - secretstores
-                      - storeconfigs
-                      - passwords
-                      - certificates
+                      - *.external-secrets.io
+                      - *.cert-manager.io
                     providers:
                       - aescbc:
                           keys:
@@ -155,7 +159,10 @@ spec:
               else
                 echo "FOUND: $CA_SA_PATH_KEY"
               fi
-              rm -rf $WORKSPACE || true
+              # Make sure all keys are gone from fs
+              rm -rf $WORKSPACE/* || true
+          securityContext:
+            readOnlyRootFilesystem: true
           volumeMounts:
             - mountPath: /etc/kubernetes/pki
               name: tls-kube
@@ -212,7 +219,7 @@ metadata:
     argocd.argoproj.io/hook: PreSync
     argocd.argoproj.io/sync-wave: "-1"
 ---
-# Role granting create, get, list on secrets & configmaps
+# Role granting create on secrets & configmaps
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -221,9 +228,15 @@ metadata:
     argocd.argoproj.io/hook: PreSync
     argocd.argoproj.io/sync-wave: "-1"
 rules:
-  - apiGroups: [""] # core API group for Secrets & ConfigMaps
+  - apiGroups: [""]
     resources: ["secrets", "configmaps"]
-    verbs: ["create", "get", "list"]
+    verbs: ["create"]
+    resourceNames:
+      - kube-encryption
+      - etcd-ca-tls
+      - kube-ca-tls
+      - kube-front-proxy-ca-tls
+      - kube-sa-tls
 ---
 # Bind the Role to the ServiceAccount
 apiVersion: rbac.authorization.k8s.io/v1

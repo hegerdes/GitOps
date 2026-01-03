@@ -24,10 +24,10 @@ spec:
       source:
         repoURL: https://github.com/hegerdes/GitOps.git
         targetRevision: feat/hks
-        # path: "{{.path.path}}"
         path: k8s-apps/hegerdes-kubernetes-service/hks
-        directory:
-          recurse: false
+        helm:
+          valuesObject:
+            extraObjects: []
       destination:
         server: https://kubernetes.default.svc
         namespace: "{{.path.basename}}"
