@@ -1,0 +1,163 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kube-controller-manager
+    component: kube-controller-manager
+    tier: control-plane
+  name: kube-controller-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kube-controller-manager
+      component: kube-controller-manager
+      tier: control-plane
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: kube-controller-manager
+        component: kube-controller-manager
+        tier: control-plane
+    spec:
+      enableServiceLinks: false
+      containers:
+        - name: kube-controller-manager
+          image: registry.k8s.io/kube-controller-manager:v1.35.0
+          imagePullPolicy: IfNotPresent
+          command:
+            - kube-controller-manager
+            - --cluster-name={{ .Release.Namespace }}
+            - --allocate-node-cidrs=true
+            - --cluster-cidr=10.244.0.0/16
+            - --service-cluster-ip-range=10.96.0.0/16
+            - --root-ca-file=/etc/kubernetes/pki/ca.crt
+            - --client-ca-file=/etc/kubernetes/pki/ca.crt
+            - --cluster-signing-key-file=/etc/kubernetes/pki/ca.key
+            - --cluster-signing-cert-file=/etc/kubernetes/pki/ca.crt
+            - --service-account-private-key-file=/etc/kubernetes/pki/sa.key
+            - --requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt
+            - --authentication-kubeconfig=/etc/kubernetes/kubeconfig.yml
+            - --authorization-kubeconfig=/etc/kubernetes/kubeconfig.yml
+            - --kubeconfig=/etc/kubernetes/kubeconfig.yml
+            - --controllers=*,bootstrapsigner,tokencleaner
+            - --leader-elect=true
+            - --profiling=false
+            - --tls-min-version=VersionTLS13
+            - --use-service-account-credentials=true
+            - --leader-elect-resource-namespace=default
+          ports:
+            - containerPort: 10257
+              name: controller-port
+              protocol: TCP
+          securityContext:
+            readOnlyRootFilesystem: true
+            # capabilities:
+            #   drop: [all]
+          livenessProbe:
+            failureThreshold: 8
+            httpGet:
+              path: /healthz
+              port: controller-port
+              scheme: HTTPS
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 15
+          startupProbe:
+            failureThreshold: 24
+            httpGet:
+              path: /healthz
+              port: controller-port
+              scheme: HTTPS
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 15
+          resources:
+            requests:
+              cpu: 200m
+              memory: 50Mi
+            limits:
+              cpu: 2
+              memory: 2Gi
+          volumeMounts:
+            - mountPath: /etc/kubernetes/pki
+              name: tls-kube
+              readOnly: true
+            - mountPath: /etc/kubernetes
+              name: kubeconfig
+              readOnly: true
+            - mountPath: /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+              name: kubelet-plugins
+              readOnly: true
+      # priority: 2000001000
+      # priorityClassName: system-node-critical
+      automountServiceAccountToken: false
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+      volumes:
+        - name: kubelet-plugins
+          emptyDir:
+            sizeLimit: 100Mi
+        - name: kubeconfig
+          projected:
+            sources:
+              - secret:
+                  name: kube-controller-manager-client-tls
+                  items:
+                    - key: ca.crt
+                      path: ca.crt
+                    - key: tls.crt
+                      path: kube.crt
+                    - key: tls.key
+                      path: kube.key
+              - configMap:
+                  name: kubeconf-template
+                  items:
+                    - key: kubeconfig.yml
+                      path: kubeconfig.yml
+        - name: tls-kube
+          projected:
+            sources:
+              - secret:
+                  name: kube-ca-tls
+                  items:
+                    - key: tls.crt
+                      path: ca.crt
+                    - key: tls.key
+                      path: ca.key
+              - secret:
+                  name: kube-sa-tls
+                  items:
+                    - key: tls.key
+                      path: sa.key
+                    - key: sa.pub
+                      path: sa.pub
+              - secret:
+                  name: kube-front-proxy-ca-tls
+                  items:
+                    - key: tls.crt
+                      path: front-proxy-ca.crt
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kube-controller-manager
+    component: kube-controller-manager
+    tier: control-plane
+  name: kube-controller-manager
+spec:
+  ports:
+    - port: 10257
+      protocol: TCP
+      targetPort: controller-port
+      name: controller-port
+  selector:
+    app: kube-controller-manager
+    component: kube-controller-manager
+    tier: control-plane
