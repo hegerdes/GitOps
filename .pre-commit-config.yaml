@@ -18,7 +18,6 @@ repos:
       - id: check-case-conflict
       - id: check-merge-conflict
       - id: check-toml
-      - id: double-quote-string-fixer
 
   - repo: https://github.com/antonbabenko/pre-commit-terraform
     rev: v1.96.1
