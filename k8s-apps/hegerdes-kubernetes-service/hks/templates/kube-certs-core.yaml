@@ -24,7 +24,7 @@ spec:
       - kubernetes
 
   dnsNames:
-    - "{{ .Release.Namespace }}.hks.eu-central.hegerdes.com"
+    - "{{ .Release.Namespace }}.{{ .Values.controlplane.domainSuffix }}"
     - "kube-apiserver"
     - "kube-apiserver.{{ .Release.Namespace }}"
     - "kube-apiserver.{{ .Release.Namespace }}.svc"

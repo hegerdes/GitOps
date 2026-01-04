@@ -5,7 +5,7 @@ metadata:
 spec:
   hostnames:
     - "{{ .Release.Namespace }}.localhost"
-    - "{{ .Release.Namespace }}.hks.eu-central.hegerdes.com"
+    - "{{ .Release.Namespace }}.{{ .Values.controlplane.domainSuffix }}"
   parentRefs:
     - name: hks-kube-gw
       namespace: nginx-gateway
