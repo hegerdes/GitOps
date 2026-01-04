@@ -24,7 +24,7 @@ spec:
       data:
         server: https://kube-apiserver.{{ .Release.Namespace }}:6443
         name: "{{ .Release.Namespace }}"
-        namespaces: kube-system,cilium,default,kubelet-serving-cert-approver
+        namespaces: kube-system,cilium,cilium-secrets,default,kubelet-serving-cert-approver
         clusterResources: "true"
         config: |
           {
