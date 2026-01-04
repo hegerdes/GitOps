@@ -13,6 +13,9 @@ spec:
     name: kubeconfig-credentials-{{ .Release.Namespace }}
     template:
       metadata:
+        annotations:
+          hks.hegerdes.com/public-host: "{{ .Release.Namespace }}.{{ .Values.controlplane.domainSuffix }}"
+          hks.hegerdes.com/private-host: "kube-apiserver.{{ .Release.Namespace }}"
         labels:
           argocd.argoproj.io/secret-type: cluster
           hks.hegerdes.com/managed-cluster: "true"

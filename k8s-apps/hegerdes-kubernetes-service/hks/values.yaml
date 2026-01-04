@@ -1,4 +1,5 @@
 controlplane:
+  domainSuffix: hks.eu-central.hegerdes.com
   pdb:
     enabled: false
 
