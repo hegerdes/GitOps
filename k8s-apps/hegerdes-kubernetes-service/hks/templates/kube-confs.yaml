@@ -189,7 +189,7 @@ data:
     # This is the configuration file for the etcd server
 
     # Human-readable name for this member.
-    name: $POD_NAME
+    name: ${POD_NAME}
 
     # Path to the data directory.
     data-dir: /var/lib/etcd
@@ -204,10 +204,10 @@ data:
     election-timeout: 1000
 
     # List of comma separated URLs to listen on for peer traffic.
-    listen-peer-urls: https://$POD_IP:2380
+    listen-peer-urls: https://${POD_IP}:2380
 
     # List of comma separated URLs to listen on for client traffic.
-    listen-client-urls: https://$POD_IP:2379
+    listen-client-urls: https://${POD_IP}:2379,https://localhost:2379
 
     # Maximum number of snapshot files to retain (0 is unlimited).
     max-snapshots: 200
@@ -215,11 +215,25 @@ data:
     # Maximum number of wal files to retain (0 is unlimited).
     max-wals: 200
 
+    # Comma separated string of initial cluster configuration for bootstrapping.
+    # Example: initial-cluster: "infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380"
+    initial-cluster: "etcd-0=https://etcd-0.etcd:2380,etcd-1=https://etcd-1.etcd:2380,etcd-2=https://etcd-2.etcd:2380"
+
+    # Initial cluster token for the etcd cluster during bootstrap.
+    initial-cluster-token: 'etcd-cluster'
+
+    # Initial cluster state ('new' or 'existing').
+    initial-cluster-state: 'new'
+
+    # List of this member's peer URLs to advertise to the rest of the cluster.
+    # The URLs needed to be a comma-separated list.
+    initial-advertise-peer-urls: https://${POD_IP}:2380,https://${POD_NAME}.etcd:2380
+
     # List of this member's client URLs to advertise to the public.
     # The URLs needed to be a comma-separated list.
-    advertise-client-urls: https://$POD_IP:2379
+    advertise-client-urls: https://${POD_NAME}.etcd:2379
 
-    listen-metrics-urls: http://$POD_IP:2381
+    listen-metrics-urls: http://${POD_IP}:2381
 
     # Valid values include 'on', 'readonly', 'off'
     proxy: 'off'

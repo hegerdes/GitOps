@@ -8,7 +8,11 @@ metadata:
     tier: control-plane
 spec:
   serviceName: etcd
-  replicas: 1
+  replicas: 3
+  podManagementPolicy: Parallel
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
   selector:
     matchLabels:
       app: etcd
@@ -21,7 +25,6 @@ spec:
         component: etcd
         tier: control-plane
     spec:
-      hostname: etcd
       enableServiceLinks: false
       initContainers:
         - name: create-conf
@@ -33,6 +36,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: CLUSTER_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
             - name: POD_IP
               valueFrom:
                 fieldRef:
@@ -99,15 +106,13 @@ spec:
               name: tls-etcd
             - mountPath: /etc/etcd
               name: share
-      # priority: 2000001000
-      # priorityClassName: system-node-critical
-      # securityContext:
-      #   seccompProfile:
-      #     type: RuntimeDefault
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       volumes:
         - name: share
           emptyDir:
-            sizeLimit: 10Mi
+            sizeLimit: 1Mi
         - name: scripts
           configMap:
             name: etcd-configs
@@ -153,6 +158,7 @@ metadata:
     tier: control-plane
 spec:
   clusterIP: None
+  publishNotReadyAddresses: true
   ports:
     - name: clients
       port: 2379

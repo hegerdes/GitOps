@@ -59,12 +59,15 @@ spec:
 
   dnsNames:
     - "etcd"
-    - "etcd.default"
-    - "etcd.default.svc"
-    - "etcd.default.svc.cluster.local"
     - "etcd.{{ .Release.Namespace }}"
     - "etcd.{{ .Release.Namespace }}.svc"
     - "etcd.{{ .Release.Namespace }}.svc.cluster.local"
+    - "etcd-0.etcd"
+    - "etcd-1.etcd"
+    - "etcd-2.etcd"
+    - "etcd-0.etcd.{{ .Release.Namespace }}"
+    - "etcd-1.etcd.{{ .Release.Namespace }}"
+    - "etcd-2.etcd.{{ .Release.Namespace }}"
   emailAddresses:
     - kubernetes-pki@hegerdes.com
 
