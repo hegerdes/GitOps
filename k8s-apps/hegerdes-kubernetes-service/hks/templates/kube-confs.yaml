@@ -227,11 +227,11 @@ data:
 
     # List of this member's peer URLs to advertise to the rest of the cluster.
     # The URLs needed to be a comma-separated list.
-    initial-advertise-peer-urls: https://${POD_IP}:2380,https://${POD_NAME}.etcd:2380
+    initial-advertise-peer-urls: https://${POD_NAME}.etcd:2380
 
     # List of this member's client URLs to advertise to the public.
     # The URLs needed to be a comma-separated list.
-    advertise-client-urls: https://${POD_NAME}.etcd:2379
+    advertise-client-urls: https://${POD_IP}:2379,https://${POD_NAME}.etcd:2379
 
     listen-metrics-urls: http://${POD_IP}:2381
 
