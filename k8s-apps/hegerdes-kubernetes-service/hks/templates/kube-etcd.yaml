@@ -238,6 +238,10 @@ spec:
                   valueFrom:
                     fieldRef:
                       fieldPath: metadata.namespace
+                - name: ClUSTER_ID
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
                 - name: ETCD_ENDPOINTS
                   value: "https://etcd:2379"
                 - name: HOME
@@ -255,7 +259,7 @@ spec:
                   set -euo pipefail
                   mkdir -p $HOME
                   ts=$(date +%Y%m%d%H%M%S)
-                  SNAP="/backups/etcd-snapshot-${ts}.db"
+                  SNAP="/backups/etcd-snapshot-${ClUSTER_ID}-${ts}.db"
                   # take snapshot
                   etcdctl --endpoints="${ETCD_ENDPOINTS}" \
                     --cacert=/etc/kubernetes/pki/etcd/ca.crt \
@@ -265,13 +269,8 @@ spec:
                   # gzip to save space
                   gzip -f "${SNAP}"
                   # Encrypt
-                  # encrypt (passphrase from env, avoids showing on ps)
                   printf '%s' "$ENCRYPTION_KEY" | gpg --batch --yes --passphrase-fd 0 \
                     --symmetric --cipher-algo AES256 -o "${SNAP}.gz.gpg" "${SNAP}.gz"
-
-                  # decrypt
-                  # printf '%s' "$ENCRYPTION_KEY" | gpg --batch --yes --passphrase-fd 0 \
-                  #   -o /data/myfile --decrypt "${SNAP}.gz.gpg"
 
                   # remove snapshots older than 30 days
                   find /backups -type f -name 'etcd-snapshot-*.db.gz' -mtime +30 -print -delete
