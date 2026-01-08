@@ -220,7 +220,7 @@ data:
     initial-cluster: "etcd-0=https://etcd-0.etcd:2380,etcd-1=https://etcd-1.etcd:2380,etcd-2=https://etcd-2.etcd:2380"
 
     # Initial cluster token for the etcd cluster during bootstrap.
-    initial-cluster-token: 'etcd-cluster'
+    initial-cluster-token: etcd-${CLUSTER_ID}
 
     # Initial cluster state ('new' or 'existing').
     initial-cluster-state: 'new'
