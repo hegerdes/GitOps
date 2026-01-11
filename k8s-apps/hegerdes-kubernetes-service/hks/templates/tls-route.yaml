@@ -4,7 +4,7 @@ metadata:
   name: "{{ .Release.Namespace }}"
 spec:
   hostnames:
-    - "{{ .Release.Namespace }}.localhost"
+    # - "{{ .Release.Namespace }}.localhost"
     - "{{ .Release.Namespace }}.{{ .Values.controlplane.domainSuffix }}"
   parentRefs:
     - name: hks-kube-gw
