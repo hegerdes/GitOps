@@ -1,0 +1,85 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cilium
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            hks.hegerdes.com/managed-cluster: "true"
+            hks.hegerdes.com/cluster-type: "downstream"
+  template:
+    metadata:
+      name: "{{.name}}-cilium"
+    spec:
+      project: default
+      source:
+        chart: cilium
+        repoURL: https://helm.cilium.io/
+        targetRevision: 1.*
+        helm:
+          releaseName: cilium
+          valuesObject:
+            cluster:
+              name: "{{.name}}"
+
+            k8sServiceHost: '{{ index .metadata.annotations "hks.hegerdes.com/public-host" }}'
+            k8sServicePort: 6443
+            kubeProxyReplacement: true
+            rollOutCiliumPods: true
+            annotateK8sNode: true
+
+            l7Proxy: false
+            envoy:
+              enabled: false
+              rollOutPods: true
+            operator:
+              rollOutPods: true
+              replicas: 1
+
+            endpointRoutes:
+              enabled: true
+
+            loadBalancer:
+              algorithm: maglev
+              serviceTopology: true
+
+            hubble:
+              enabled: false
+              rollOutPods: true
+              relay:
+                enabled: false
+                rollOutPods: true
+              ui:
+                enabled: false
+                rollOutPods: true
+            # Needed if tailscale services are routed
+            socketLB:
+              hostNamespaceOnly: true
+
+            ipam:
+              mode: kubernetes
+              operator:
+                clusterPoolIPv4PodCIDRList: [10.244.0.0/16]
+                # clusterPoolIPv6PodCIDRList: ["{{ k8s_pod_network_cidr_ipv6 }}"]
+
+      destination:
+        server: "{{.server}}"
+        namespace: kube-system
+      info:
+        - name: "Source Info"
+          value: "https://artifacthub.io/packages/helm/cilium/cilium"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        retry:
+          limit: 3
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 5m
