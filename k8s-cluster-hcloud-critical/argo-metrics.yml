@@ -17,6 +17,7 @@ spec:
           defaultArgs:
             - --cert-dir=/tmp
             - --kubelet-use-node-status-port
+            - --profiling=false
             - --metric-resolution=15s
             - --kubelet-preferred-address-types=InternalDNS,InternalIP,ExternalDNS,ExternalIP
     # - chart: prometheus-node-exporter
