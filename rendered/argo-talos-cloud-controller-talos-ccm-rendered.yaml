@@ -5,10 +5,10 @@ kind: ServiceAccount
 metadata:
   name: talos-ccm-talos-cloud-controller-manager
   labels:
-    helm.sh/chart: talos-cloud-controller-manager-0.5.2
+    helm.sh/chart: talos-cloud-controller-manager-0.5.4
     app.kubernetes.io/name: talos-cloud-controller-manager
     app.kubernetes.io/instance: talos-ccm
-    app.kubernetes.io/version: "v1.11.0"
+    app.kubernetes.io/version: "v1.12.0"
     app.kubernetes.io/managed-by: Helm
   namespace: default
 ---
@@ -18,10 +18,10 @@ kind: ServiceAccount
 metadata:
   name: talos-ccm-talos-cloud-controller-manager-talos-secrets
   labels:
-    helm.sh/chart: talos-cloud-controller-manager-0.5.2
+    helm.sh/chart: talos-cloud-controller-manager-0.5.4
     app.kubernetes.io/name: talos-cloud-controller-manager
     app.kubernetes.io/instance: talos-ccm
-    app.kubernetes.io/version: "v1.11.0"
+    app.kubernetes.io/version: "v1.12.0"
     app.kubernetes.io/managed-by: Helm
   namespace: default
 spec:
@@ -34,10 +34,10 @@ kind: ConfigMap
 metadata:
   name: talos-ccm-talos-cloud-controller-manager
   labels:
-    helm.sh/chart: talos-cloud-controller-manager-0.5.2
+    helm.sh/chart: talos-cloud-controller-manager-0.5.4
     app.kubernetes.io/name: talos-cloud-controller-manager
     app.kubernetes.io/instance: talos-ccm
-    app.kubernetes.io/version: "v1.11.0"
+    app.kubernetes.io/version: "v1.12.0"
     app.kubernetes.io/managed-by: Helm
   namespace: default
 data:
@@ -50,10 +50,10 @@ kind: ClusterRole
 metadata:
   name: system:talos-ccm-talos-cloud-controller-manager
   labels:
-    helm.sh/chart: talos-cloud-controller-manager-0.5.2
+    helm.sh/chart: talos-cloud-controller-manager-0.5.4
     app.kubernetes.io/name: talos-cloud-controller-manager
     app.kubernetes.io/instance: talos-ccm
-    app.kubernetes.io/version: "v1.11.0"
+    app.kubernetes.io/version: "v1.12.0"
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups:
@@ -158,10 +158,10 @@ kind: Service
 metadata:
   name: talos-ccm-talos-cloud-controller-manager
   labels:
-    helm.sh/chart: talos-cloud-controller-manager-0.5.2
+    helm.sh/chart: talos-cloud-controller-manager-0.5.4
     app.kubernetes.io/name: talos-cloud-controller-manager
     app.kubernetes.io/instance: talos-ccm
-    app.kubernetes.io/version: "v1.11.0"
+    app.kubernetes.io/version: "v1.12.0"
     app.kubernetes.io/managed-by: Helm
   namespace: default
 spec:
@@ -182,10 +182,10 @@ kind: Deployment
 metadata:
   name: talos-ccm-talos-cloud-controller-manager
   labels:
-    helm.sh/chart: talos-cloud-controller-manager-0.5.2
+    helm.sh/chart: talos-cloud-controller-manager-0.5.4
     app.kubernetes.io/name: talos-cloud-controller-manager
     app.kubernetes.io/instance: talos-ccm
-    app.kubernetes.io/version: "v1.11.0"
+    app.kubernetes.io/version: "v1.12.0"
     app.kubernetes.io/managed-by: Helm
   namespace: default
 spec:
@@ -198,6 +198,8 @@ spec:
       app.kubernetes.io/instance: talos-ccm
   template:
     metadata:
+      annotations:
+        checksum/config: 615b45f8deca6a737f4a806b81d0f9a5f2465c527f5a188c787fd9a6e79b372d
       labels:
         app.kubernetes.io/name: talos-cloud-controller-manager
         app.kubernetes.io/instance: talos-ccm
@@ -219,7 +221,7 @@ spec:
               - ALL
             seccompProfile:
               type: RuntimeDefault
-          image: "ghcr.io/siderolabs/talos-cloud-controller-manager:v1.11.0"
+          image: "ghcr.io/siderolabs/talos-cloud-controller-manager:v1.12.0"
           imagePullPolicy: IfNotPresent
           command: ["/talos-cloud-controller-manager"]
           args:

@@ -5,7 +5,7 @@ kind: ServiceAccount
 automountServiceAccountToken: false
 metadata:
   labels:
-    helm.sh/chart: grafana-10.4.3
+    helm.sh/chart: grafana-10.5.5
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
     app.kubernetes.io/version: "12.3.1"
@@ -19,7 +19,7 @@ metadata:
   name: grafana
   namespace: default
   labels:
-    helm.sh/chart: grafana-10.4.3
+    helm.sh/chart: grafana-10.5.5
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
     app.kubernetes.io/version: "12.3.1"
@@ -28,7 +28,7 @@ type: Opaque
 data:
   
   admin-user: "YWRtaW4="
-  admin-password: "RFJtVEx6NWxFWU1zVG1ETjJrVmFOcDhjbjNuY1VwRE9venplNVFPOQ=="
+  admin-password: "eXhhRHMxNE5JRFlIMnFyMGdJM2dBZ3BnUDh5SHhGOVdaenhTelVjVQ=="
   ldap-toml: ""
 ---
 # Source: grafana/templates/configmap.yaml
@@ -38,7 +38,7 @@ metadata:
   name: grafana
   namespace: default
   labels:
-    helm.sh/chart: grafana-10.4.3
+    helm.sh/chart: grafana-10.5.5
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
     app.kubernetes.io/version: "12.3.1"
@@ -75,6 +75,8 @@ data:
     [server]
     domain = grafana.k8s.henrikgerdes.me
     root_url = https://grafana.k8s.henrikgerdes.me
+    [unified_storage]
+    index_path = /var/lib/grafana-search/bleve
   dashboardproviders.yaml: |
     apiVersion: 1
     providers:
@@ -251,7 +253,7 @@ metadata:
   name: grafana-dashboards-default
   namespace: default
   labels:
-    helm.sh/chart: grafana-10.4.3
+    helm.sh/chart: grafana-10.5.5
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
     app.kubernetes.io/version: "12.3.1"
@@ -266,7 +268,7 @@ metadata:
   name: grafana-dashboards-kubernetes-dashboards
   namespace: default
   labels:
-    helm.sh/chart: grafana-10.4.3
+    helm.sh/chart: grafana-10.5.5
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
     app.kubernetes.io/version: "12.3.1"
@@ -279,7 +281,7 @@ kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   labels:
-    helm.sh/chart: grafana-10.4.3
+    helm.sh/chart: grafana-10.5.5
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
     app.kubernetes.io/version: "12.3.1"
@@ -292,7 +294,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: grafana-clusterrolebinding
   labels:
-    helm.sh/chart: grafana-10.4.3
+    helm.sh/chart: grafana-10.5.5
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
     app.kubernetes.io/version: "12.3.1"
@@ -312,7 +314,7 @@ metadata:
   name: grafana
   namespace: default
   labels:
-    helm.sh/chart: grafana-10.4.3
+    helm.sh/chart: grafana-10.5.5
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
     app.kubernetes.io/version: "12.3.1"
@@ -325,7 +327,7 @@ metadata:
   name: grafana
   namespace: default
   labels:
-    helm.sh/chart: grafana-10.4.3
+    helm.sh/chart: grafana-10.5.5
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
     app.kubernetes.io/version: "12.3.1"
@@ -345,7 +347,7 @@ metadata:
   name: grafana
   namespace: default
   labels:
-    helm.sh/chart: grafana-10.4.3
+    helm.sh/chart: grafana-10.5.5
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
     app.kubernetes.io/version: "12.3.1"
@@ -367,7 +369,7 @@ metadata:
   name: grafana
   namespace: default
   labels:
-    helm.sh/chart: grafana-10.4.3
+    helm.sh/chart: grafana-10.5.5
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
     app.kubernetes.io/version: "12.3.1"
@@ -383,15 +385,15 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: grafana-10.4.3
+        helm.sh/chart: grafana-10.5.5
         app.kubernetes.io/name: grafana
         app.kubernetes.io/instance: grafana
         app.kubernetes.io/version: "12.3.1"
       annotations:
-        checksum/config: c1234f99221e0572f9fbe84a3cda71939799a9284ad9c0127974fa8a75623308
-        checksum/dashboards-json-config: a0b46e1bd13a965aa5b866395439e0f0c9031a60b6edc99ca75b021616607b01
+        checksum/config: 8b43527781cc6f46ce8bc7f9a966329a95cebe6612fb5979efe225719b0c57ed
+        checksum/dashboards-json-config: 9c542670290578d7ac83c97211297dba9a5e410a86b66e6ebe9951a97d514447
         checksum/sc-dashboard-provider-config: e70bf6a851099d385178a76de9757bb0bef8299da6d8443602590e44f05fdf24
-        checksum/secret: 6cfe8ef61de511fe4e6b47067b3f189ab74c2ad098e686423c7f0260db93fa33
+        checksum/secret: 73b7238ca6a871668e363860422912738b22e66c73d95184ae3762bed3fd6086
         kubectl.kubernetes.io/default-container: grafana
     spec:
       
@@ -441,6 +443,8 @@ spec:
               subPath: grafana.ini
             - name: storage
               mountPath: "/var/lib/grafana"
+            - name: search
+              mountPath: "/var/lib/grafana-search"
             - name: config
               mountPath: "/etc/grafana/provisioning/dashboards/dashboardproviders.yaml"
               subPath: "dashboardproviders.yaml"
@@ -485,6 +489,8 @@ spec:
               value: /var/lib/grafana/plugins
             - name: GF_PATHS_PROVISIONING
               value: /etc/grafana/provisioning
+            - name: GF_UNIFIED_STORAGE_INDEX_PATH
+              value: /var/lib/grafana-search/bleve
           envFrom:
             - secretRef:
                 name: grafana-secret-sso-entra
@@ -511,6 +517,8 @@ spec:
             name: grafana-dashboards-kubernetes-dashboards
         - name: storage
           emptyDir: {}
+        - name: search
+          emptyDir: {}
 ---
 # Source: grafana/templates/ingress.yaml
 apiVersion: networking.k8s.io/v1
@@ -519,7 +527,7 @@ metadata:
   name: grafana
   namespace: default
   labels:
-    helm.sh/chart: grafana-10.4.3
+    helm.sh/chart: grafana-10.5.5
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
     app.kubernetes.io/version: "12.3.1"
@@ -597,7 +605,7 @@ metadata:
   namespace: default
   labels:
     app: grafana-prometheus
-    helm.sh/chart: grafana-10.4.3
+    helm.sh/chart: grafana-10.5.5
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
     app.kubernetes.io/version: "12.3.1"
@@ -626,7 +634,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
-    helm.sh/chart: grafana-10.4.3
+    helm.sh/chart: grafana-10.5.5
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
     app.kubernetes.io/version: "12.3.1"
@@ -646,7 +654,7 @@ metadata:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
   labels:
-    helm.sh/chart: grafana-10.4.3
+    helm.sh/chart: grafana-10.5.5
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
     app.kubernetes.io/version: "12.3.1"
@@ -665,7 +673,7 @@ kind: Pod
 metadata:
   name: grafana-test
   labels:
-    helm.sh/chart: grafana-10.4.3
+    helm.sh/chart: grafana-10.5.5
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
     app.kubernetes.io/version: "12.3.1"

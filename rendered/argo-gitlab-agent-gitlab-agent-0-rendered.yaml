@@ -6,10 +6,10 @@ metadata:
   name: gitlab-agent-0-ocs-scanning-pod-sa
   namespace: default
   labels:
-    helm.sh/chart: gitlab-agent-2.22.0
+    helm.sh/chart: gitlab-agent-2.22.1
     app.kubernetes.io/name: gitlab-agent
     app.kubernetes.io/instance: gitlab-agent-0
-    app.kubernetes.io/version: "v18.7.0"
+    app.kubernetes.io/version: "v18.7.1"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: gitlab-agent/templates/serviceaccount.yaml
@@ -18,10 +18,10 @@ kind: ServiceAccount
 metadata:
   name: gitlab-agent-0
   labels:
-    helm.sh/chart: gitlab-agent-2.22.0
+    helm.sh/chart: gitlab-agent-2.22.1
     app.kubernetes.io/name: gitlab-agent
     app.kubernetes.io/instance: gitlab-agent-0
-    app.kubernetes.io/version: "v18.7.0"
+    app.kubernetes.io/version: "v18.7.1"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: gitlab-agent/templates/ocs/clusterrole.yaml
@@ -30,10 +30,10 @@ kind: ClusterRole
 metadata:
   name: default:gitlab-agent-0:ocs
   labels:
-    helm.sh/chart: gitlab-agent-2.22.0
+    helm.sh/chart: gitlab-agent-2.22.1
     app.kubernetes.io/name: gitlab-agent
     app.kubernetes.io/instance: gitlab-agent-0
-    app.kubernetes.io/version: "v18.7.0"
+    app.kubernetes.io/version: "v18.7.1"
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups:
@@ -95,10 +95,10 @@ kind: ClusterRoleBinding
 metadata:
   name: default:gitlab-agent-0-cluster-admin
   labels:
-    helm.sh/chart: gitlab-agent-2.22.0
+    helm.sh/chart: gitlab-agent-2.22.1
     app.kubernetes.io/name: gitlab-agent
     app.kubernetes.io/instance: gitlab-agent-0
-    app.kubernetes.io/version: "v18.7.0"
+    app.kubernetes.io/version: "v18.7.1"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -115,10 +115,10 @@ kind: ClusterRoleBinding
 metadata:
   name: default:gitlab-agent-0:ocs
   labels:
-    helm.sh/chart: gitlab-agent-2.22.0
+    helm.sh/chart: gitlab-agent-2.22.1
     app.kubernetes.io/name: gitlab-agent
     app.kubernetes.io/instance: gitlab-agent-0
-    app.kubernetes.io/version: "v18.7.0"
+    app.kubernetes.io/version: "v18.7.1"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -136,10 +136,10 @@ metadata:
   name: gitlab-agent-0:ocs
   namespace: default
   labels:
-    helm.sh/chart: gitlab-agent-2.22.0
+    helm.sh/chart: gitlab-agent-2.22.1
     app.kubernetes.io/name: gitlab-agent
     app.kubernetes.io/instance: gitlab-agent-0
-    app.kubernetes.io/version: "v18.7.0"
+    app.kubernetes.io/version: "v18.7.1"
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups:
@@ -156,10 +156,10 @@ metadata:
   name: gitlab-agent-0:ocs
   namespace: default
   labels:
-    helm.sh/chart: gitlab-agent-2.22.0
+    helm.sh/chart: gitlab-agent-2.22.1
     app.kubernetes.io/name: gitlab-agent
     app.kubernetes.io/instance: gitlab-agent-0
-    app.kubernetes.io/version: "v18.7.0"
+    app.kubernetes.io/version: "v18.7.1"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -176,10 +176,10 @@ kind: Service
 metadata:
   name: gitlab-agent-0-service
   labels:
-    helm.sh/chart: gitlab-agent-2.22.0
+    helm.sh/chart: gitlab-agent-2.22.1
     app.kubernetes.io/name: gitlab-agent
     app.kubernetes.io/instance: gitlab-agent-0
-    app.kubernetes.io/version: "v18.7.0"
+    app.kubernetes.io/version: "v18.7.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -202,10 +202,10 @@ metadata:
   # see https://gitlab.com/gitlab-org/charts/gitlab-agent/-/issues/38 for ctx
   name: gitlab-agent-0-v2
   labels:
-    helm.sh/chart: gitlab-agent-2.22.0
+    helm.sh/chart: gitlab-agent-2.22.1
     app.kubernetes.io/name: gitlab-agent
     app.kubernetes.io/instance: gitlab-agent-0
-    app.kubernetes.io/version: "v18.7.0"
+    app.kubernetes.io/version: "v18.7.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -228,8 +228,8 @@ spec:
         app.kubernetes.io/instance: gitlab-agent-0
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: gitlab-agent
-        app.kubernetes.io/version: v18.7.0
-        helm.sh/chart: gitlab-agent-2.22.0
+        app.kubernetes.io/version: v18.7.1
+        helm.sh/chart: gitlab-agent-2.22.1
     spec:
       automountServiceAccountToken: false
       serviceAccountName: gitlab-agent-0
@@ -239,7 +239,7 @@ spec:
         - name: gitlab-agent
           securityContext:
             {}
-          image: registry.gitlab.com/gitlab-org/cluster-integration/gitlab-agent/agentk:v18.7.0
+          image: registry.gitlab.com/gitlab-org/cluster-integration/gitlab-agent/agentk:v18.7.1
           imagePullPolicy: IfNotPresent
           terminationMessagePolicy: FallbackToLogsOnError
           args:
@@ -281,7 +281,7 @@ spec:
             - name: GITLAB_AGENT_TELEMETRY_installation_method
               value: helm-chart
             - name: GITLAB_AGENT_TELEMETRY_helm_chart_version
-              value: 2.22.0
+              value: 2.22.1
             - name: SERVICE_ACCOUNT_NAME
               valueFrom:
                 fieldRef:

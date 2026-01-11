@@ -1,1 +1,1 @@
-{"nginxGateway": {"replicas": 1}, "gateways": []}
+{"certGenerator": {"enable": true}, "nginxGateway": {"gwAPIExperimentalFeatures": {"enable": true}, "replicas": 1}, "gateways": []}
