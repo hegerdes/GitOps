@@ -1,0 +1,121 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kube-apiserver-etcd-client
+spec:
+  secretName: kube-apiserver-etcd-client-tls
+  commonName: kube-apiserver-etcd-client
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  isCA: false
+  usages:
+    - digital signature
+    - key encipherment
+    - client auth
+
+  privateKey:
+    algorithm: RSA
+    size: 2048
+
+  subject:
+    organizationalUnits:
+      - controlplane-etcd-auth
+    organizations:
+      - kubernetes
+
+  dnsNames: []
+  emailAddresses:
+    - kubernetes-pki@hegerdes.com
+
+  issuerRef:
+    name: ca-etcd
+    kind: Issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kube-etcd-peer
+spec:
+  secretName: etcd-peer-tls
+  commonName: etcd
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  isCA: false
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+    - client auth
+
+  privateKey:
+    algorithm: RSA
+    size: 2048
+
+  subject:
+    organizationalUnits:
+      - etcd-peer
+    organizations:
+      - kubernetes
+
+  dnsNames:
+    - "etcd"
+    - "etcd.{{ .Release.Namespace }}"
+    - "etcd.{{ .Release.Namespace }}.svc"
+    - "etcd.{{ .Release.Namespace }}.svc.cluster.local"
+    - "etcd-0.etcd"
+    - "etcd-1.etcd"
+    - "etcd-2.etcd"
+    - "etcd-0.etcd.{{ .Release.Namespace }}"
+    - "etcd-1.etcd.{{ .Release.Namespace }}"
+    - "etcd-2.etcd.{{ .Release.Namespace }}"
+  emailAddresses:
+    - kubernetes-pki@hegerdes.com
+
+  issuerRef:
+    name: ca-etcd
+    kind: Issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kube-etcd-server
+spec:
+  secretName: etcd-server-tls
+  commonName: etcd
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  isCA: false
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+    - client auth
+
+  privateKey:
+    algorithm: RSA
+    size: 2048
+
+  subject:
+    organizationalUnits:
+      - etcd-server
+    organizations:
+      - kubernetes
+
+  dnsNames:
+    - etcd
+    - etcd-0
+    - etcd-1
+    - etcd-2
+    - localhost
+    - etcd.default
+    - etcd.default.svc
+    - etcd.default.svc.cluster.local
+    - "etcd.{{ .Release.Namespace }}"
+    - "etcd.{{ .Release.Namespace }}.svc"
+    - "etcd.{{ .Release.Namespace }}.svc.cluster.local"
+  emailAddresses:
+    - kubernetes-pki@hegerdes.com
+
+  issuerRef:
+    name: ca-etcd
+    kind: Issuer

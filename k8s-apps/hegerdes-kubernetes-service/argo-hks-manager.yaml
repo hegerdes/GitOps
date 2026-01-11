@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hks-manager
+  namespace: argocd
+  labels:
+    name: hks-manager
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/hegerdes/GitOps.git
+    targetRevision: feat/hks
+    path: k8s-apps/hegerdes-kubernetes-service/hks-manager
+    helm:
+      valuesObject:
+        extraObjects: []
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: hks-manager
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

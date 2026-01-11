@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hks-shared
+  namespace: argocd
+  labels:
+    name: hks
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/hegerdes/GitOps.git
+    targetRevision: feat/hks
+    path: k8s-apps/hegerdes-kubernetes-service/shared
+    directory:
+      recurse: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

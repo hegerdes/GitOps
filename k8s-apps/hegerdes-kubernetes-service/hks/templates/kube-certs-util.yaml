@@ -1,0 +1,32 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: argocd-client
+spec:
+  secretName: argocd-client-tls
+  commonName: argocd-client
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  isCA: false
+  usages:
+    - digital signature
+    - key encipherment
+    - client auth
+
+  privateKey:
+    algorithm: RSA
+    size: 2048
+
+  subject:
+    organizationalUnits:
+      - argocd-auth
+    organizations:
+      - kubernetes
+
+  dnsNames: []
+  emailAddresses:
+    - kubernetes-pki@hegerdes.com
+
+  issuerRef:
+    name: ca-kube-controlplane
+    kind: Issuer

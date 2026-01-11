@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: metrics
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            hks.hegerdes.com/managed-cluster: "true"
+            hks.hegerdes.com/cluster-type: "downstream"
+  template:
+    metadata:
+      name: "{{.name}}-metrics"
+    spec:
+      project: default
+      source:
+        chart: metrics-server
+        repoURL: https://kubernetes-sigs.github.io/metrics-server/
+        targetRevision: 3.*
+        helm:
+          releaseName: metrics-server
+          valuesObject:
+            # serviceAccount:
+            #   create: false
+            #   rbac:
+            #     create: false
+            defaultArgs:
+              - --cert-dir=/tmp
+              - --kubelet-use-node-status-port
+              - --metric-resolution=15s
+              - --profiling=false
+              - --kubelet-preferred-address-types=InternalDNS,InternalIP,ExternalDNS,ExternalIP
+              # - --kubeconfig=TODO
+              # - --kubelet-certificate-authority string      Path to the CA to use to validate the Kubelet's serving certificates.
+              # - --kubelet-client-certificate string         Path to a client cert file for TLS.
+              # - --kubelet-client-key string
+      destination:
+        server: "{{.server}}"
+        namespace: kube-system
+      info:
+        - name: Chart-Info Metrics-Server
+          value: https://artifacthub.io/packages/helm/metrics-server/metrics-server
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
