@@ -178,8 +178,10 @@ spec:
       # priorityClassName: system-node-critical
       volumes:
         - name: audit-log
-          persistentVolumeClaim:
-            claimName: kube-adit-log
+          emptyDir:
+            sizeLimit: 265Mi
+          # persistentVolumeClaim:
+          #   claimName: kube-adit-log
         - name: kube-extra-conf
           projected:
             sources:
