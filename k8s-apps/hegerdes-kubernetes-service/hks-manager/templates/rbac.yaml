@@ -1,0 +1,30 @@
+{{- if .Values.rbac.enabled -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    {{- include "hks-manager.labels" . | nindent 4 }}
+  name: {{ include "hks-manager.fullname" . }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - "*"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "hks-manager.fullname" . }}
+  labels:
+    {{- include "hks-manager.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "hks-manager.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace}}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "hks-manager.fullname" . }}
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}

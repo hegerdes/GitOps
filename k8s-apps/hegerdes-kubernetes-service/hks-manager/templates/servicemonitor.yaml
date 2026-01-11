@@ -1,0 +1,83 @@
+{{- if and (.Capabilities.APIVersions.Has "monitoring.coreos.com/v1") .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "hks-manager.fullname" . }}
+  labels:
+    {{- include "hks-manager.labels" . | nindent 4 }}
+    {{- with .Values.metrics.serviceMonitor.selector }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- with .Values.metrics.serviceMonitor.additionalLabels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.metrics.serviceMonitor.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  endpoints:
+    - port: {{ .Values.metrics.service.portName }}
+      {{- with .Values.metrics.serviceMonitor.interval }}
+      interval: {{ . }}
+      {{- end }}
+      {{- with .Values.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ . }}
+      {{- end }}
+      path: /metrics
+      {{- with .Values.metrics.serviceMonitor.relabelings }}
+      relabelings:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      honorLabels: {{ .Values.metrics.serviceMonitor.honorLabels }}
+      {{- with .Values.metrics.serviceMonitor.scheme }}
+      scheme: {{ . }}
+      {{- end }}
+      {{- with .Values.metrics.serviceMonitor.tlsConfig }}
+      tlsConfig:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+      - {{ include "hks-manager.namespace" . }}
+  selector:
+    matchLabels:
+      {{- include "hks-manager.selectorLabels" (dict "context" . "component" .Values.name "name" (printf "%s-metrics" .Values.name)) | nindent 6 }}
+{{- end }}
+---
+{{- if .Values.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "hks-manager.fullname" . }}-metrics
+  namespace: {{ include "hks-manager.namespace" . }}
+  labels:
+    {{- include "hks-manager.labels" (dict "context" . "component" .Values.name "name" (printf "%s-metrics" .Values.name)) | nindent 4 }}
+    {{- with .Values.metrics.service.labels }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.metrics.prometheusAnnotations.enabled }}
+    prometheus.io/port: {{ .Values.metrics.prometheusAnnotations.port | quote }}
+    prometheus.io/scheme: {{ .Values.metrics.prometheusAnnotations.scheme | quote}}
+    prometheus.io/path: {{ .Values.metrics.prometheusAnnotations.path | quote}}
+    prometheus.io/scrape: "true"
+    {{- end }}
+    {{- range $key, $value := .Values.metrics.service.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  type: {{ .Values.metrics.service.type }}
+  ipFamilyPolicy: {{ .Values.metrics.service.ipFamilyPolicy }}
+  ports:
+  - name: metrics
+    protocol: TCP
+    port: {{ .Values.metrics.service.servicePort }}
+    targetPort: metrics
+  selector:
+    {{- include "hks-manager.selectorLabels" (dict "context" . "name" .Values.name) | nindent 4 }}
+{{- end }}
