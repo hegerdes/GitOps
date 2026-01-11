@@ -7,8 +7,8 @@ spec:
     # - "{{ .Release.Namespace }}.localhost"
     - "{{ .Release.Namespace }}.{{ .Values.controlplane.domainSuffix }}"
   parentRefs:
-    - name: hks-kube-gw
-      namespace: nginx-gateway
+    - name: cilium-gateway
+      namespace: cilium-gateway
   rules:
     - backendRefs:
         - name: kube-apiserver
