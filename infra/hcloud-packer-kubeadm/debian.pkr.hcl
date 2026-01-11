@@ -36,8 +36,6 @@ locals {
     type    = "infra",
     base    = var.base_image,
     version = "${var.k8s_version}",
-    name    = "${local.output_name}-amd64"
-    arch    = "amd64"
     category = "k8s"
   }
 }
@@ -50,7 +48,10 @@ source "hcloud" "k8s-amd64" {
   user_data     = file(var.user_data_path)
   ssh_username  = "root"
   snapshot_name = "${local.output_name}-amd64"
-  snapshot_labels = merge(local.shares_tags, {})
+  snapshot_labels = merge(local.shares_tags, {
+    name    = "${local.output_name}-amd64"
+    arch    = "amd64"
+  })
 }
 source "hcloud" "k8s-arm64" {
   image         = var.base_image
@@ -60,7 +61,10 @@ source "hcloud" "k8s-arm64" {
   user_data     = file(var.user_data_path)
   ssh_username  = "root"
   snapshot_name = "${local.output_name}-arm64"
-  snapshot_labels = merge(local.shares_tags, {})
+  snapshot_labels = merge(local.shares_tags, {
+        name    = "${local.output_name}-arm64"
+    arch    = "arm64"
+  })
 }
 build {
   sources = ["source.hcloud.k8s-amd64", "source.hcloud.k8s-arm64"]
