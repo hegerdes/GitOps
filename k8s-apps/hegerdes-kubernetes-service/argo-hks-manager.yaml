@@ -1,12 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: hks
+  name: hks-manager
   namespace: argocd
   labels:
-    name: hks
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io/background
+    name: hks-manager
 spec:
   project: default
   source:
