@@ -12,7 +12,12 @@ spec:
       helm:
         releaseName: nginx-gateway-fabric
         valuesObject:
+          certGenerator:
+            # Use certmanager for this
+            enable: true
           nginxGateway:
+            gwAPIExperimentalFeatures:
+              enable: true
             replicas: 1
           # A list of Gateway objects. View https://gateway-api.sigs.k8s.io/reference/spec/#gateway
           # https://cert-manager.io/docs/usage/gateway/

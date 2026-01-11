@@ -1,0 +1,59 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: nfg-server-tls
+  namespace: nginx-gateway
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  secretName: server-tls
+  commonName: nginx-gateway
+  subject:
+    countries: [DE]
+    organizations: [hegerdes]
+    organizationalUnits: [k8s]
+  dnsNames:
+    - nginx-gateway-fabric.nginx-gateway.svc
+  issuerRef:
+    name: ca-hegerdes
+    kind: ClusterIssuer
+  duration: 2160h # 90 days
+  renewBefore: 360h # 15 days
+  privateKey:
+    size: 2048
+    algorithm: RSA
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: nfg-agent-tls
+  namespace: nginx-gateway
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+spec:
+  secretName: agent-tls
+  commonName: nginx-gateway
+  subject:
+    countries: [DE]
+    organizations: [hegerdes]
+    organizationalUnits: [k8s]
+  dnsNames:
+    - "*.cluster.local"
+    - "*.nginx-gateway.svc"
+    - "nginx-default-gateway-nginx"
+  issuerRef:
+    name: ca-hegerdes
+    kind: ClusterIssuer
+  duration: 2160h # 90 days
+  renewBefore: 360h # 15 days
+  privateKey:
+    size: 2048
+    algorithm: RSA
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
