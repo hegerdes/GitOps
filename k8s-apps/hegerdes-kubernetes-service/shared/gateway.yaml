@@ -1,0 +1,65 @@
+# https://docs.nginx.com/nginx-gateway-fabric/traffic-management/tls-passthrough/
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: hks-kube-gw
+  namespace: nginx-gateway
+spec:
+  gatewayClassName: nginx
+  infrastructure:
+    annotations:
+      load-balancer.hetzner.cloud/location: nbg1
+      load-balancer.hetzner.cloud/name: k8s-hks-gateway-lb
+      load-balancer.hetzner.cloud/network: k8s-network
+      load-balancer.hetzner.cloud/use-private-ip: "true"
+      load-balancer.hetzner.cloud/uses-proxyprotocol: "true"
+    parametersRef:
+      group: gateway.nginx.org
+      kind: NginxProxy
+      name: ngf-proxy-config
+  listeners:
+    - name: tls
+      protocol: TLS
+      port: 6443
+      hostname: "*.hks.eu-central.hegerdes.com"
+      allowedRoutes:
+        namespaces:
+          from: All
+        kinds:
+          - kind: TLSRoute
+      tls:
+        mode: Passthrough
+        # certificateRefs:
+        #   - kind: Secret
+        #     name: kube-apiserver-tls
+        #     namespace: test1
+    # - name: test1-tls
+    #   protocol: TLS
+    #   port: 443
+    #   hostname: bar.example.com
+    #   tls:
+    #     certificateRefs:
+    #       - kind: Secret
+    #         group: ""
+    #         name: bar-example-com-cert
+# ---
+# apiVersion: gateway.networking.k8s.io/v1alpha2
+# kind: TLSRoute
+# metadata:
+#   name: test1
+#   namespace: test1
+# spec:
+#   hostnames:
+#     - test1.localhost
+#   parentRefs:
+#     - name: hks-kube-gw
+#       namespace: nginx-gateway
+#       # sectionName: test1-tls
+#       # kind: Gateway
+#       # group: gateway.networking.k8s.io
+#   rules:
+#     - backendRefs:
+#         - name: kube-apiserver
+#           kind: Service
+#           namespace: test1
+#           port: 6443
