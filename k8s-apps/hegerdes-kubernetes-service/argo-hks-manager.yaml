@@ -12,13 +12,13 @@ spec:
   source:
     repoURL: https://github.com/hegerdes/GitOps.git
     targetRevision: feat/hks
-    path: k8s-apps/hegerdes-kubernetes-sevice/hks
+    path: k8s-apps/hegerdes-kubernetes-service/hks-manager
     helm:
       valuesObject:
         extraObjects: []
   destination:
     server: https://kubernetes.default.svc
-    namespace: test1
+    namespace: hks-manager
   syncPolicy:
     automated:
       prune: true
