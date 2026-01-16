@@ -4,6 +4,7 @@
 
 # -- Number of replicas for that pod
 replicaCount: 1
+clusterZone: hks.eu-central.hegerdes.com
 
 image:
   # -- The container registry and image to use.

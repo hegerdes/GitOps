@@ -46,6 +46,8 @@ spec:
           {{- with (concat .Values.podEnvs .Values.defaultEnvs) | uniq }}
               {{- toYaml . | nindent 12}}
           {{- end }}
+            - name: HKS_CLUSTER_ZONE
+              value: {{ .Values.clusterZone | quote }}
             - name: PORT
               value: {{ .Values.podContainerPort | quote }}
           ports:
