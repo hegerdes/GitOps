@@ -1,6 +1,20 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
+  name: bootstrap-kubeadm-read
+  namespace: kube-system
+subjects:
+  - kind: Group
+    name: system:bootstrap
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: extension-apiserver-authentication-reader
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
   name: anonymous-read-cluster-info
   namespace: kube-public
 subjects:
@@ -22,3 +36,4 @@ rules:
     resources: ["configmaps"]
     resourceNames: ["cluster-info"]
     verbs: ["get", "list"]
+---
