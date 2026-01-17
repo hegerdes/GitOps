@@ -42,7 +42,7 @@ spec:
               replicas: 1
 
             endpointRoutes:
-              enabled: true
+              enabled: false
 
             loadBalancer:
               algorithm: maglev
