@@ -12,15 +12,44 @@ spec:
           matchLabels:
             hks.hegerdes.com/managed-cluster: "true"
             hks.hegerdes.com/cluster-type: "downstream"
+            # argocd.argoproj.io/kubernetes-version: "1.35"
   template:
     metadata:
       name: "{{.name}}-cluster-conf"
     spec:
       project: default
-      source:
-        repoURL: https://github.com/hegerdes/GitOps.git
-        targetRevision: feat/hks
-        path: k8s-apps/hegerdes-kubernetes-service/clustes-shared
+      sources:
+        - repoURL: https://github.com/hegerdes/GitOps.git
+          targetRevision: feat/hks
+          path: k8s-apps/hegerdes-kubernetes-service/shared/helm-rendering
+          helm:
+            valuesObject:
+              extraObjects:
+                - apiVersion: v1
+                  kind: ConfigMap
+                  metadata:
+                    name: kubeadm-config
+                    namespace: kube-system
+                  data:
+                    ClusterConfiguration: |
+                      apiVersion: kubeadm.k8s.io/v1beta4
+                      kind: ClusterConfiguration
+                      caCertificateValidityPeriod: 87600h0m0s
+                      certificateValidityPeriod: 8760h0m0s
+                      certificatesDir: /etc/kubernetes/pki
+                      clusterName: {{.name}}
+                      controlPlaneEndpoint: {{ index .metadata.annotations "hks.hegerdes.com/public-host" }}:6443
+                      dns: {}
+                      encryptionAlgorithm: RSA-2048
+                      imageRepository: registry.k8s.io
+                      kubernetesVersion: v{{ index .metadata.labels "argocd.argoproj.io/kubernetes-version" }}.0
+                      networking:
+                        dnsDomain: cluster.local
+                        podSubnet: 10.244.0.0/16
+                        serviceSubnet: 10.96.0.0/16
+        - repoURL: https://github.com/hegerdes/GitOps.git
+          targetRevision: feat/hks
+          path: k8s-apps/hegerdes-kubernetes-service/clustes-shared
       destination:
         server: "{{.server}}"
         namespace: kube-system
