@@ -20,6 +20,7 @@ spec:
           argocd.argoproj.io/secret-type: cluster
           hks.hegerdes.com/managed-cluster: "true"
           hks.hegerdes.com/cluster-type: "downstream"
+          argocd.argoproj.io/auto-label-cluster-info: "true"
       type: Opaque
       data:
         server: https://kube-apiserver.{{ .Release.Namespace }}:6443
