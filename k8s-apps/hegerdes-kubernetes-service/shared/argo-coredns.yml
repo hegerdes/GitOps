@@ -35,7 +35,7 @@ spec:
               name: "kube-dns"
             replicaCount: 2
             priorityClassName: system-cluster-critical
-            isClusterService: false
+            isClusterService: true
             customLabels:
               k8s-app: kube-dns
             deployment:
