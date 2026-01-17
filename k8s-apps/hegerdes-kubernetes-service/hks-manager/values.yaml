@@ -10,7 +10,7 @@ image:
   # -- The container registry and image to use.
   repository: hegerdes/debug
   # -- Pull policy of that image.
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   # -- The image tag and/or sha.
   tag: hks-manager
 
@@ -104,7 +104,9 @@ volumes: []
   #         path: log_level
 
 # -- Node selector for pod.
-nodeSelector: {}
+# nodeSelector: {}
+nodeSelector:
+  kubernetes.io/arch: arm64
 
 # -- Tolerations for pod.
 tolerations: []
