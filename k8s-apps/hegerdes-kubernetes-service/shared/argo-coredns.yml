@@ -27,6 +27,9 @@ spec:
         helm:
           releaseName: coredns
           valuesObject:
+            service:
+              clusterIP: "10.96.0.10"
+              name: "kube-dns"
             replicaCount: 2
             priorityClassName: system-cluster-critical
             isClusterService: false
