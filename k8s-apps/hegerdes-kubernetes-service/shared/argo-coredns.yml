@@ -70,6 +70,7 @@ spec:
                     parameters: "."
                     configBlock: |-
                       class error
+                  - name: debug
                   # Required to query kubernetes API for data
                   - name: kubernetes
                     parameters: cluster.local in-addr.arpa ip6.arpa
@@ -97,13 +98,13 @@ spec:
                   - name: loop
                   - name: reload
                   - name: loadbalance
-            affinity:
-              podAntiAffinity:
-                requiredDuringSchedulingIgnoredDuringExecution:
-                  - topologyKey: "kubernetes.io/hostname"
-                    labelSelector:
-                      matchLabels:
-                        k8s-app: kube-dns
+            # affinity:
+            #   podAntiAffinity:
+            #     requiredDuringSchedulingIgnoredDuringExecution:
+            #       - topologyKey: "kubernetes.io/hostname"
+            #         labelSelector:
+            #           matchLabels:
+            #             k8s-app: kube-dns
       info:
         - name: Chart-Info CoreDNS
           value: https://github.com/coredns/helm/
