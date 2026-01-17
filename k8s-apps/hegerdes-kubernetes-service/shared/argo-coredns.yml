@@ -71,7 +71,7 @@ spec:
                   - name: kubernetes
                     parameters: cluster.local in-addr.arpa ip6.arpa
                     configBlock: |-
-                      endpoint 'https://{{ index .metadata.annotations "hks.hegerdes.com/public-host" }}:6443'
+                      endpoint https://{{ index .metadata.annotations "hks.hegerdes.com/public-host" }}:6443
                       pods insecure
                       fallthrough in-addr.arpa ip6.arpa
                       ttl 30
