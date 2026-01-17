@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubelet-config
+  namespace: kube-system
+data:
+  kubelet: |
+    apiVersion: kubelet.config.k8s.io/v1beta1
+    authentication:
+      anonymous:
+        enabled: false
+      webhook:
+        cacheTTL: 0s
+        enabled: true
+      x509:
+        clientCAFile: /etc/kubernetes/pki/ca.crt
+    authorization:
+      mode: Webhook
+      webhook:
+        cacheAuthorizedTTL: 0s
+        cacheUnauthorizedTTL: 0s
+    cgroupDriver: systemd
+    clusterDNS:
+    - 10.96.0.10
+    clusterDomain: cluster.local
+    containerRuntimeEndpoint: unix:///run/containerd/containerd.sock
+    cpuManagerReconcilePeriod: 0s
+    crashLoopBackOff: {}
+    enableDebugFlagsHandler: false
+    enableProfilingHandler: false
+    evictionPressureTransitionPeriod: 0s
+    failCgroupV1: true
+    failSwapOn: true
+    featureGates:
+      ClusterTrustBundle: true
+      ClusterTrustBundleProjection: true
+    fileCheckFrequency: 0s
+    healthzBindAddress: 0.0.0.0
+    healthzPort: 10248
+    httpCheckFrequency: 0s
+    imageMaximumGCAge: 1h0m0s
+    imageMinimumGCAge: 5m0s
+    kind: KubeletConfiguration
+    logging:
+      flushFrequency: 0
+      options:
+        json:
+          infoBufferSize: "0"
+        text:
+          infoBufferSize: "0"
+      verbosity: 0
+    maxParallelImagePulls: 8
+    maxPods: 220
+    memorySwap: {}
+    nodeStatusMaxImages: -1
+    nodeStatusReportFrequency: 0s
+    nodeStatusUpdateFrequency: 0s
+    protectKernelDefaults: true
+    resolvConf: /etc/resolv.conf
+    rotateCertificates: true
+    runtimeRequestTimeout: 0s
+    seccompDefault: true
+    serializeImagePulls: false
+    serverTLSBootstrap: true
+    shutdownGracePeriod: 0s
+    shutdownGracePeriodCriticalPods: 0s
+    staticPodPath: /etc/kubernetes/manifests
+    streamingConnectionIdleTimeout: 0s
+    syncFrequency: 0s
+    volumeStatsAggPeriod: 5m0s
