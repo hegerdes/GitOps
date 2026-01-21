@@ -28,7 +28,7 @@ spec:
             annotations:
               # See https://github.com/hetznercloud/hcloud-cloud-controller-manager/blob/main/internal/annotation/load_balancer.go#L12
               load-balancer.hetzner.cloud/name: k8s-worker-ingress-lb
-              load-balancer.hetzner.cloud/location: fsn1
+              load-balancer.hetzner.cloud/location: nbg1
               load-balancer.hetzner.cloud/use-private-ip: "true"
               load-balancer.hetzner.cloud/network: "k8s-network"
               load-balancer.hetzner.cloud/uses-proxyprotocol: "true" # Needs ipMode proxy support from CNI
