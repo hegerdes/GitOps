@@ -57,6 +57,8 @@ spec:
           helm:
             releaseName: coredns
             valuesObject:
+              image:
+                tag: 1.14.1
               serviceAccount:
                 create: true
                 name: coredns
