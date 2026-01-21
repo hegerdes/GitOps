@@ -146,7 +146,7 @@ metadata:
     app.kubernetes.io/instance: "coredns"
     helm.sh/chart: "coredns-1.45.0"
     app.kubernetes.io/name: coredns
-    app.kubernetes.io/version: "1.13.1"
+    app.kubernetes.io/version: "1.14.1"
     k8s-app: kube-dns
   annotations:
     configmap.reloader.stakater.com/reload: coredns
@@ -181,7 +181,7 @@ spec:
             topologyKey: kubernetes.io/hostname
       containers:
       - name: "coredns"
-        image: "coredns/coredns:1.13.1"
+        image: "coredns/coredns:1.14.1"
         imagePullPolicy: IfNotPresent
         args: [ "-conf", "/etc/coredns/Corefile" ]
         volumeMounts:
