@@ -14,6 +14,8 @@ spec:
     helm:
       releaseName: coredns
       valuesObject:
+        image:
+          tag: 1.14.1
         replicaCount: 2
         priorityClassName: system-cluster-critical
         isClusterService: false
