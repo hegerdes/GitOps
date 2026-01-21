@@ -340,7 +340,7 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    load-balancer.hetzner.cloud/location: "fsn1"
+    load-balancer.hetzner.cloud/location: "nbg1"
     load-balancer.hetzner.cloud/name: "k8s-worker-ingress-lb"
     load-balancer.hetzner.cloud/network: "k8s-network"
     load-balancer.hetzner.cloud/use-private-ip: "true"
