@@ -29,6 +29,14 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: cluster-data
+data:
+  advertiseIP: 10.0.0.1 # placeholder
+  info: hks-managed-cluster
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: kube-api-configs
   labels:
     tier: control-plane

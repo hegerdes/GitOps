@@ -69,12 +69,19 @@ spec:
         - name: kube-apiserver
           image: registry.k8s.io/kube-apiserver:v1.35.0
           imagePullPolicy: IfNotPresent
+          env:
+          - name: ADVERTISE_IP
+            valueFrom:
+              configMapKeyRef:
+                key: advertiseIP
+                name: cluster-data
           # Docs: https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/
           command:
             - kube-apiserver
             - --secure-port=6443
             - --profiling=false
             - --external-hostname={{ .Release.Namespace }}.{{ .Values.controlplane.domainSuffix }}
+            - --advertise-address=$(ADVERTISE_IP)
             - --enable-admission-plugins=NodeRestriction
             - --enable-bootstrap-token-auth=true
             - --allow-privileged=true
