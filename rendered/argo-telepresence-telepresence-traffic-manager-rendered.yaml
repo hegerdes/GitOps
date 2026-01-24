@@ -8,8 +8,8 @@ metadata:
   labels:
     app: traffic-manager
     telepresence: manager
-    helm.sh/chart: telepresence-oss-2.25.2
-    app.kubernetes.io/version: "2.25.2"
+    helm.sh/chart: telepresence-oss-2.26.0
+    app.kubernetes.io/version: "2.26.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/created-by: Helm
 ---
@@ -22,14 +22,14 @@ metadata:
   labels:
     app: traffic-manager
     telepresence: manager
-    helm.sh/chart: telepresence-oss-2.25.2
-    app.kubernetes.io/version: "2.25.2"
+    helm.sh/chart: telepresence-oss-2.26.0
+    app.kubernetes.io/version: "2.26.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/created-by: Helm
 data:
-  ca.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURKRENDQWd5Z0F3SUJBZ0lSQVBWeXZKTzdUYjRIU1FsRGRGYzNZeVF3RFFZSktvWklodmNOQVFFTEJRQXcKSERFYU1CZ0dBMVVFQXhNUllXZGxiblF0YVc1cVpXTjBiM0l0WTJFd0hoY05Nall3TVRJeE1qRXhPREUwV2hjTgpNamN3TVRJeE1qRXhPREUwV2pBY01Sb3dHQVlEVlFRREV4RmhaMlZ1ZEMxcGJtcGxZM1J2Y2kxallUQ0NBU0l3CkRRWUpLb1pJaHZjTkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFLb29UdlAxaTVFeTUvckgvbWxXYm52R1Zva0YKb3NOYWZuZlpWN1dwSHFEMlJXeCtKM25McXNGUW0vQ2JQMUtyY25PM1RlRHNHTnZtM0VJVDROd2hzSmlkMDFRNwpDbkY5ZEg0bkpRNkZCZVc3QUpoZ01PdFlsSVY1K2plcDB1NENXV2JtS0l3ZUptVENLZGh0cjZTaWwxeG5pYm5TCmUxNjdpZEluYTRqWVlGVThHVlFXWEdiNVozOFpGQWlucWdMelVSSnBQWGtXWjk4U0ZwTzc2SE9oaW5pWlZDcnAKOTgvRkh4SGhyUUJBbzN0VG9JeUdSTXdRWElHUlIxdkQ2dlBXeDBFUFNvVGladE1VVHhJTC9QcnF0bTdpb3hjQwpkSVB6UXAvNG04VFY1amtvdy91bmduTzBoV1VqSFZORk9Eb3R1QU5EbG55dVFlazl1Z2lWSmgrbW15OENBd0VBCkFhTmhNRjh3RGdZRFZSMFBBUUgvQkFRREFnS2tNQjBHQTFVZEpRUVdNQlFHQ0NzR0FRVUZCd01CQmdnckJnRUYKQlFjREFqQVBCZ05WSFJNQkFmOEVCVEFEQVFIL01CMEdBMVVkRGdRV0JCUm4wQlRBNkJWejB0U2tJUW4xc3dkNApSUmhzVURBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQW1TL2hZMysyYjlOcEdWQmttbkc4Uy9kdmRyNnlUcFZWClNiK3FhRW9Jb3hxM0lEaDV3eXFSdzJnckZXSUZ6bUl5d1VtUzdnb0RaK2dkaTVjOGZyNG5PZWxEc1NGLzJxbDgKTFIvejF5aXUvYXgyR0hlQnVvazZlalpwcGlmdWo2TkZyN1kveVBMZXl5MWMrOWthQStEVXg2Y2V2RW11VjNEaQp6RGMvMjQxTWxOS0QrLy9FUUxhM1BYTklQLy9EWTI5YmRKODBnTUlqUVV1VEFyMmcwVkpDcDZBbC90R0tJdEZOCndjUlNjWGJvOHhuUGdpZW5naXdCZTdRdHdDQkxqUm10bWY5OFhURlVFNGUzRmM5Z0NybFhTcFk2QWpkOEtLVkoKdmNvc09xMjQwakVUMUxCMU1oNVZVekllRDNac0dWZU96UXJvSjkvemNDQXl3TXpIU1NmYUpRPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
-  tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURZVENDQWttZ0F3SUJBZ0lSQUpkam03ZmozYlJ5WEp1M3pBM3Q1dFV3RFFZSktvWklodmNOQVFFTEJRQXcKSERFYU1CZ0dBMVVFQXhNUllXZGxiblF0YVc1cVpXTjBiM0l0WTJFd0hoY05Nall3TVRJeE1qRXhPREUwV2hjTgpNamN3TVRJeE1qRXhPREUwV2pBWk1SY3dGUVlEVlFRREV3NWhaMlZ1ZEMxcGJtcGxZM1J2Y2pDQ0FTSXdEUVlKCktvWklodmNOQVFFQkJRQURnZ0VQQURDQ0FRb0NnZ0VCQU1sc0VmY1A4K3dGckVrRGhsOTZWZlNFa0ZKR202RTgKZXQ5NFhNbHg2OHptNzZhOVpMNU1wZDI1WFJ0b2cwVTA3by96eWJZQ21jcWlQU1J1WWpwV3FFMXpoQ1dkQ0hROAorekRtVVVmdVNBVWM4N0tNWm1hNm5mZzdCRFhCVExiVTdzR001QVE1OWhDVFpERmJDZXZ0NG9xdzlSL0o2eUZ3CjQyak9Gb09qZWNZeTdOcnRDaS9UYUxwNk44dVBYRmUyNWdGRjVvVWZyZEtDU1lUSkxjZ0Y0WE5QTGM3b2kxcG0KRUkrRDlyZjZOcWZ2SE55ZGtucDZkOU5zYSt4VlVSR2tXVW1acnl3cjNzMHJqRzRoK3hpUVNNTnhmUmNuTVVEKwplYTJpMlROeFB3SGs4U0hDZ1FxU3NnM1RoVEQ5TWxFQkJRSFZKcmZFckV4RHpMUUpRR2NGMmEwQ0F3RUFBYU9CCm9EQ0JuVEFPQmdOVkhROEJBZjhFQkFNQ0JhQXdIUVlEVlIwbEJCWXdGQVlJS3dZQkJRVUhBd0VHQ0NzR0FRVUYKQndNQ01Bd0dBMVVkRXdFQi93UUNNQUF3SHdZRFZSMGpCQmd3Rm9BVVo5QVV3T2dWYzlMVXBDRUo5Yk1IZUVVWQpiRkF3UFFZRFZSMFJCRFl3TklJV1lXZGxiblF0YVc1cVpXTjBiM0l1WkdWbVlYVnNkSUlhWVdkbGJuUXRhVzVxClpXTjBiM0l1WkdWbVlYVnNkQzV6ZG1Nd0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFJdDYrWnlQekJSY1JCU3gKdjBqdzN5dER2T2JDaE45UVJsSjYzUWw1Um9WdFBCV1kvY3ZEYU52S3czL1FBQnBnVlFrWjJQemc4TEpKeUhyWgpxRTZqRjZEeTdFL2xjSlZvWmJscmhlazNITkl4SU00bGNxeHRMVWZ0R3dlUmtQdGZyOURzS09YZVBNc1gwL3JPCmxOSmxKU3hHVWZJWmoxV3lvTkhsOHh5ZTQyVFhKWmFRY1A4RmxQdklZdFpWT0NncXp4QXlST2EwcW1uc0c5OUMKeU9MQ1ZuanE0akxSN2UwWE5sYTh5ZEhqU0lSQlhWRlNTNjMyaE1obWgvYWlidW11bzl2d2g2YWtBWnVkUHNaMApBMlVscVg5bzN0MzVVUmFnbWtjTTBQeU1qUUpiRTFrbmJrd2JtakNJalgwMThnRXptWmJoWEdzdnlxMjVFM1ZvCmtzMVVSZHM9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
-  tls.key: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFcEFJQkFBS0NBUUVBeVd3Ujl3L3o3QVdzU1FPR1gzcFY5SVNRVWthYm9UeDYzM2hjeVhIcnpPYnZwcjFrCnZreWwzYmxkRzJpRFJUVHVqL1BKdGdLWnlxSTlKRzVpT2xhb1RYT0VKWjBJZER6N01PWlJSKzVJQlJ6enNveG0KWnJxZCtEc0VOY0ZNdHRUdXdZemtCRG4yRUpOa01Wc0o2KzNpaXJEMUg4bnJJWERqYU00V2c2TjV4akxzMnUwSwpMOU5vdW5vM3k0OWNWN2JtQVVYbWhSK3Qwb0pKaE1rdHlBWGhjMDh0enVpTFdtWVFqNFAydC9vMnArOGMzSjJTCmVucDMwMnhyN0ZWUkVhUlpTWm12TEN2ZXpTdU1iaUg3R0pCSXczRjlGeWN4UVA1NXJhTFpNM0UvQWVUeEljS0IKQ3BLeURkT0ZNUDB5VVFFRkFkVW10OFNzVEVQTXRBbEFad1haclFJREFRQUJBb0lCQUFhMUxTSDdxNFZjS1FFagpkMm1ka3RnNlErNGhnTlJOUmRCRVcxNndCd2pEVmc3STl0NXBnZ3FRdmp1SDd2c3lpSkZOcnBWN243Q0NWNlByCmN5VDdOczZoZnJDYitxaVlVVXN2R0Z6YllCV2ZnYlFiL2RzRTh2Yk56RldYOHR5UjJjT2pWQUthQllwR3hrcm8KZTd1YUovV3piKzVYbEplQUFXcS9sanRiQ2RhaVUxOXNPY3JSbEFEV0Rkd3c2RWNQdmNXdnJSYkVHejhTUFhkWApIc3Y2NWo2MWl5N3V0WUQ3OFJya0xuY2VpSGhsKzM4L2laakdZczdCSWkyUEFSc010b1podloyN1VESDVuYWZHCnNKU2FnWklwKzVDVGI4OHF2NHJPbnhoeUw1RTZUODAreTJwekUxL2dhM3RmaUVwOFJ4NzFDdk1mcUpSOWtHMW8KNWJ6L1AyY0NnWUVBMWgxaDNxNzFZRGZIM1VuY0ZMMWpDaFRENlE3bVZpaE5vOVI3WFFKM3IvTTVYaThiK3hqWApyNlhLVjJMenZlTUpNQU53NzM1ZVlsTDBTTHgrQ2ROczlrV1FGVUpFbVNTc1hPNEdIQS9kZEZpbzdlaTkwcE1yCnRib1FzdkNISTF4ZUM0U1k4RmFFdjdnblpuMnBDK1NoOWsyUy9jL2hTNWF3RTNXU2pFc0ZHT3NDZ1lFQThOTU8KVjA3NUNFazI3elhIS2toR3ZjbUFNc2VwNHh3YU1VTW1OamkzdjZheldtT1VjY3VBNFFWQmxnZkpIWFl5bDBEYwpUbjZhc2pHWUc5VlRQZHBjQ0lLZ3pBQ3EwSEhxMlQzTHR6eHFqZlhrR09GMi9WNkdKV3NpdXFJK1lsUDJGemxGCjM1MkkxZVZUaE5UZnRzRTZOcnUvQ0hRcGpsSDVxZitjKzhvL3NjY0NnWUVBazdidmx5NUMwRitMUGlvL2IvdDgKUVM4MFBTdnZVbzg1aVFZRkdaU2pON3JuNEFkR0dZUDVBUSt5dVhqbHlTSEJhK05qM1lYajNaZDNPbHIzNVJWOApmYVplRVp5SE1OUHhLYWQ0aFpHWWFUVGxUa1NiK0pOWnUyU2pNcC9ueTBobEJUTTBROUtjZ0p1dWF2SFVWd1VqCmk0WFhHODEzazZ0Z3kvdjMzMXUrSjRNQ2dZRUFscjJsVm1VcVlGTmp2V3ZPRk50VTNHc0tnYjZVeW9IR3ExczYKeWVuS3FuM3YrZjRtNXV2WTZnRGVRc2p3ekM0MkVKTWEwMDlRQ1lZZGpoNkRrazNpR2JtYWFOZHFGRHVhSXcwWgpQTUxtZDZHWWV6SjF4cmFxQlRZQWNRNHBPbWNQdlEydWZRQWdyTEoxQ3Nvc2xqcHc4OTJrLytlbU0xMkFoelptCnp2eVR6ZlVDZ1lBVDZkWm1zdDVoeFM2VjdqRDNQTEExcGIvaDNmNGJwRFdXdjhkZVJWVkZzR1M2a3h5dloySWEKbFVJMUhlK2lDVGRhbHBvNWpaL3VUMXVNOXlkZnpVNkc5YWVndlMrU2ZUNDFINmlhdU5peWpQWVYxWUlxeEVLYwo0aUJ0NXVOOUo1MzNNbVBucGFtV3dyVjJycm1oYzR4REVBUGVzMElNRDk2OThpTXNHSEkwK1E9PQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQo=
+  ca.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURKRENDQWd5Z0F3SUJBZ0lSQU0vdVFRWjlka2U4K3lSaHBRS3VEOHN3RFFZSktvWklodmNOQVFFTEJRQXcKSERFYU1CZ0dBMVVFQXhNUllXZGxiblF0YVc1cVpXTjBiM0l0WTJFd0hoY05Nall3TVRJME1UZzBOREExV2hjTgpNamN3TVRJME1UZzBOREExV2pBY01Sb3dHQVlEVlFRREV4RmhaMlZ1ZEMxcGJtcGxZM1J2Y2kxallUQ0NBU0l3CkRRWUpLb1pJaHZjTkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFPRDhvcEl1SzQ5KzNjRkk3NWlHaExueGJGcmEKR3VhaENqaTgrdTBWenZzS052T3BlNDB5OGtxeEFORVdGYlFzTSswckoydGhDeXhxY0NQTHNYdmxyMStnSDJEVwpMVXIrVVlDM3JtcHJ4LzN6Snh2Yk1mSzdnTGN0U0RHeHJ4bHFmTEhJZjhSQzZqNVJtMkdydUhhNUVYVHFvQXdCCmNSVmc3ZGV6RDA3Z0M0c3FQcXZGcm9FeWw2MG1sTjQ3ZUdKN0ZlQ0hlVlhMd010R1dDOFZZZERSZElZZXFXdm4KSG5ybzFrUEVBK1VkNUp1YzVKSnVLMjZSOHd6UGs4UGtEQnRHb2tJUlFvRlhFYmVkSDdwUjZudHJyczNQS3FhVgp2aGxhT1k2anh2Z0ZOUzFsU0g0eHJEQ0ZUQ1FkYVRBaUxENWdFLzFlR2hrSXMvOUtFVEZYa2NjZDVoMENBd0VBCkFhTmhNRjh3RGdZRFZSMFBBUUgvQkFRREFnS2tNQjBHQTFVZEpRUVdNQlFHQ0NzR0FRVUZCd01CQmdnckJnRUYKQlFjREFqQVBCZ05WSFJNQkFmOEVCVEFEQVFIL01CMEdBMVVkRGdRV0JCVEdrZ1JIZVpvTCtYb0ZwNGZBVUpNMgpPeTd0SkRBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQWZ2VVkrOG5FRlQ0aHdPOCtnUjQ0bXBSdStGTDdObmlWCkM3dFMzanJRc3ByYWxiNkVRUXltcmE0YzllOGR5ZTJ0VVl4dHlNY3UydVdSZ0s0M1IxeG4wUlBCNG9QVUdMLzIKU1JOSk9uWWtzWU9FZzJpVHIxenFIK0h4b3ZwdXBwMlZFNnZOR1Y0S2I1K0Z5LzdnQkpIQlg0SFd1L1NLZm5mRAorcjBXNjhmaG9rcUVsNThqOUdDTzFEeG1ISjR3UHovdE1WK0lEcVFDNHNid3JRYXBCOUQydUwrRStWSElpbmJUCkZneFdqeEZmU2xuaHl0Y2MvT1EwYzRtdHFwQyt2YlNoaGJITlY5ZWl3WmVqYkl1bmllcjg0VXlNZkgycVl1SGgKVk5aM1hKcnRyRVdCM0FlbnlXb1NjaCtUclZKcHUyTjBsWncyRXZuSENabUN0YmhJbWRLTUV3PT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+  tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURZRENDQWtpZ0F3SUJBZ0lRUFV5VFVIenM1QlVreWtoZkVGZWVaREFOQmdrcWhraUc5dzBCQVFzRkFEQWMKTVJvd0dBWURWUVFERXhGaFoyVnVkQzFwYm1wbFkzUnZjaTFqWVRBZUZ3MHlOakF4TWpReE9EUTBNRFZhRncweQpOekF4TWpReE9EUTBNRFZhTUJreEZ6QVZCZ05WQkFNVERtRm5aVzUwTFdsdWFtVmpkRzl5TUlJQklqQU5CZ2txCmhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBNXdEeUNKYlU2TXFla3B6ekV3TnVFTFRQL2MwcG8wS3gKbEVyT2FLd05DdG1IZjZXb1RNcmVIUzQrWDF4SDgvOUVCbVBIb3RvbldaVnB6RUVhV0pTUStwbk51ejFjMDMvQgpHdkJCc1hWZnR2NllKVTB3MjBBdzNJbHhZREUvN0JWQWdIMW9UT0IyT3VJS1B0ZDNmdGVHNWFQcDJGcXFlSWltCmFzcVVuZnViV3BUSUpwdk8vNmN5WlpENkpuS0dXWGcxMTEyMW5WUkp2MmZVeFlkTGVPMGxHaldOQytkSXJ6UCsKRXlDbFVCbXlXck5VUFNrbXpxTkxnek5mUzhxWnFpZ1l0SFhyRFBZbVBFRmF2S0NJS3pzeUpnSWUwdkNPbFhkegovZXN4dGkzNFFnbU41S2dxZDhGQlFlTWtlUW0xTWsraGZDUThIc2hhN3cvSE5xQ09yOU12L1FJREFRQUJvNEdnCk1JR2RNQTRHQTFVZER3RUIvd1FFQXdJRm9EQWRCZ05WSFNVRUZqQVVCZ2dyQmdFRkJRY0RBUVlJS3dZQkJRVUgKQXdJd0RBWURWUjBUQVFIL0JBSXdBREFmQmdOVkhTTUVHREFXZ0JUR2tnUkhlWm9MK1hvRnA0ZkFVSk0yT3k3dApKREE5QmdOVkhSRUVOakEwZ2haaFoyVnVkQzFwYm1wbFkzUnZjaTVrWldaaGRXeDBnaHBoWjJWdWRDMXBibXBsClkzUnZjaTVrWldaaGRXeDBMbk4yWXpBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQVVnYW9SU29iZW4vV2xEc1AKTHhJUytvVEY4RWxxcE9KREZxd3plR0dmVzFzV2h0OHhVZUp5bzlJeGRTKzhkcE85bUtsZnpRb1RwQXp0RTRxcApxdFRnNHo5UW5HY0tNbHFYQi9hbktvVVZvSHFWVmhYNUtKSHFRMTRSYkxveldLaTkwZEV4ZStMOVVuSUtoUVZUCkJvdEdPT0wrUVo1c1Z2T2tRS2FpSWhQRUF2U3dCbkJtZVJnVzl5ZkoyNG5oaHhFK09vaFNqdGtVSnB1eHM0ak0KR2FUQXBqaWV0TkdPU0l4dGZUK0lyN1BwVVQrRTJMVnRqRXJsaFRzcGlxcjdyQ05VczIzbmRiT2RZRjU3V1JLUwp3SVkxZEF1cUxIb0ZNd25SdkhSK3VWRzJCRU0rU2F6azlLWGRGcFJzZVJhRUhxSlIrSmF2amZ1RG1BdFZtNjdlCnBqMW8ydz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+  tls.key: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFb2dJQkFBS0NBUUVBNXdEeUNKYlU2TXFla3B6ekV3TnVFTFRQL2MwcG8wS3hsRXJPYUt3TkN0bUhmNldvClRNcmVIUzQrWDF4SDgvOUVCbVBIb3RvbldaVnB6RUVhV0pTUStwbk51ejFjMDMvQkd2QkJzWFZmdHY2WUpVMHcKMjBBdzNJbHhZREUvN0JWQWdIMW9UT0IyT3VJS1B0ZDNmdGVHNWFQcDJGcXFlSWltYXNxVW5mdWJXcFRJSnB2TwovNmN5WlpENkpuS0dXWGcxMTEyMW5WUkp2MmZVeFlkTGVPMGxHaldOQytkSXJ6UCtFeUNsVUJteVdyTlVQU2ttCnpxTkxnek5mUzhxWnFpZ1l0SFhyRFBZbVBFRmF2S0NJS3pzeUpnSWUwdkNPbFhkei9lc3h0aTM0UWdtTjVLZ3EKZDhGQlFlTWtlUW0xTWsraGZDUThIc2hhN3cvSE5xQ09yOU12L1FJREFRQUJBb0lCQUFUa0Uvdk52Uk1kdG5iMQpERDk1anpNYTJrYlllUnAydWNoTVA0RUtBdHBaTkl3bHY0RzZ1akphSXVJYTA5VFh4dGdFeWxBSmVENVJFblQyClBEN1JESE1iTTdiVWE5cWkyejJTV3kyM20yVWJrRnRGS1FvOHI4YlNRU2N2MFJlUzgvTS9LZE5yaURmNGNRNUMKRDhxM2VQNGVqRCt6WEdYTXdqWHVIL0NWWGNWd2s5enhaZUkvQ2EwWXlsVitIQnZwTFVmenIxRHAxTGVKQlA1YwpCVHVQNk5pSDRoS1V1K2lpZWNzU2ZkUEZMOVRiZk9lZlBPRk1VT1RTaFNVKzgwSVZUL2xmUXUrMGhWN0lhYmk5CnpwaWRwSm1TMVlDeHZkdE9tZWRVSGhKUlNvdmpjTGZLM1gvOXpOeVR4Sk9NU1M2cGRjQVVEd1ZSRUl2dDZNbUwKS0NhdkxVRUNnWUVBOWI4cEtPdVRJc2oxSHFENXdNbGtKL2J2MXRPd3pVYXl1azZPOCs2eWlLeWxXanRzb1lTQwpwWUhVeGhCR1dwWUtpWGNjL0JoS0NiVGpkRXJBb3pPSGY3TjVxbGhIMURhTWF6OGI0eHU1WmdEdVdhUUVkUEdIClBUUWUwOXBJZHVndlR2aWI5QXpRK3lIV1dUZVUwR2w5STFtVHVmMjQ4RThOQ1daK256MzUvTUVDZ1lFQThLUlEKTWlEaVpvT1p5M0x3eUFUWE5uelRDOVVCQkFXaDFYaWMwUE8va2lkS1lTRDhFN2dnMXVQOU9EUW5YRjlVTXhtSgpCYnJvMGF0OVV4M3MyN0MyNFVxT0JjUXJ2eVBsWlJ0c2dZOVJIT1hLOVVqa0NOZXVYMXZweC9CMlM5U0RLUi9RClFuOXNaMU5zUWFCM0pGb2hkT3Nzd1lhUDNWSFBHdFpPMnJRQmRqMENnWUJMV3RMRU9YaGtzanAzcWVUcnVOVjkKYTdzZnBNb1NLQnVtQlhEUVcrRmpCNDJzbll3eCt2QVUwRHJ1Z1E4UnQvQ0ROb01zeWtYcHRBNExHdUQzS2xYaQpVcVo4RlpYdy9Na1NHY2Z6WEF6OXVrdGNNVzhzYk9PTFlQQVRCbHd5R2dCbnR0UWJnZEtUTDAwTERvQVRhRVYzCkVZQzdCNUl1SGc5aFVveUJSLy9nQVFLQmdCclZkOHZmTnQvUGxQckcybXF6ZjN3bjl6QytrOXBxOWx6amtqa0sKdFRZTEE1UkpKVkxkbVd2ZENJT1g3VHV6dGFQdEdRWjJqVGUwTThsczhOaWVvQVlIVmtiMlZScC9XamtvRWJWdwowYzZ6SVNxdzhoeTZVRXQ1NkZ2UFNLRzBGTndsSEFnT1JYeFFKU1k4U296WE1CdmxqWndXOFR2d3YzTnlxbUJnCjZqalJBb0dBU1BBd0M2V1hMNzZCeHRjQXBuVnd1Qm5pSk5INWlEcWhXTHZ3bHdONmxBZ0M5U3UyLzkrbTVxZDgKdjI0K1B6UC96VmtxU2NhWUx0OHhSdnZFTFBJZzBlZ3RCM0R3TS92KzZGcHlEYTF4MlljTGwxRXk4RXhXa3FjcwpPUmUxQkxxUkhyRjBLSjVKNVNIRURnVGNnY0tXZDBnU0NaS0tLODl6aTZ4N0xDZWRaZVE9Ci0tLS0tRU5EIFJTQSBQUklWQVRFIEtFWS0tLS0tCg==
 ---
 # Source: telepresence-oss/templates/trafficManager-configmap.yaml
 apiVersion: v1
@@ -40,8 +40,8 @@ metadata:
   labels:
     app: traffic-manager
     telepresence: manager
-    helm.sh/chart: telepresence-oss-2.25.2
-    app.kubernetes.io/version: "2.25.2"
+    helm.sh/chart: telepresence-oss-2.26.0
+    app.kubernetes.io/version: "2.26.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/created-by: Helm
 data:
@@ -71,8 +71,8 @@ metadata:
   labels:
     app: traffic-manager
     telepresence: manager
-    helm.sh/chart: telepresence-oss-2.25.2
-    app.kubernetes.io/version: "2.25.2"
+    helm.sh/chart: telepresence-oss-2.26.0
+    app.kubernetes.io/version: "2.26.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/created-by: Helm
 rules:
@@ -138,8 +138,8 @@ metadata:
   labels:
     app: traffic-manager
     telepresence: manager
-    helm.sh/chart: telepresence-oss-2.25.2
-    app.kubernetes.io/version: "2.25.2"
+    helm.sh/chart: telepresence-oss-2.26.0
+    app.kubernetes.io/version: "2.26.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/created-by: Helm
 roleRef:
@@ -160,8 +160,8 @@ metadata:
   labels:
     app: traffic-manager
     telepresence: manager
-    helm.sh/chart: telepresence-oss-2.25.2
-    app.kubernetes.io/version: "2.25.2"
+    helm.sh/chart: telepresence-oss-2.26.0
+    app.kubernetes.io/version: "2.26.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/created-by: Helm
 rules:
@@ -180,6 +180,7 @@ rules:
     - list
     - watch
     - patch
+    - update
   resourceNames:
     - traffic-manager
 ---
@@ -192,8 +193,8 @@ metadata:
   labels:
     app: traffic-manager
     telepresence: manager
-    helm.sh/chart: telepresence-oss-2.25.2
-    app.kubernetes.io/version: "2.25.2"
+    helm.sh/chart: telepresence-oss-2.26.0
+    app.kubernetes.io/version: "2.26.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/created-by: Helm
 rules:
@@ -216,8 +217,8 @@ metadata:
   labels:
     app: traffic-manager
     telepresence: manager
-    helm.sh/chart: telepresence-oss-2.25.2
-    app.kubernetes.io/version: "2.25.2"
+    helm.sh/chart: telepresence-oss-2.26.0
+    app.kubernetes.io/version: "2.26.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/created-by: Helm
 roleRef:
@@ -238,8 +239,8 @@ metadata:
   labels:
     app: traffic-manager
     telepresence: manager
-    helm.sh/chart: telepresence-oss-2.25.2
-    app.kubernetes.io/version: "2.25.2"
+    helm.sh/chart: telepresence-oss-2.26.0
+    app.kubernetes.io/version: "2.26.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/created-by: Helm
 roleRef:
@@ -260,8 +261,8 @@ metadata:
   labels:
     app: traffic-manager
     telepresence: manager
-    helm.sh/chart: telepresence-oss-2.25.2
-    app.kubernetes.io/version: "2.25.2"
+    helm.sh/chart: telepresence-oss-2.26.0
+    app.kubernetes.io/version: "2.26.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/created-by: Helm
 spec:
@@ -284,8 +285,8 @@ metadata:
   labels:
     app: traffic-manager
     telepresence: manager
-    helm.sh/chart: telepresence-oss-2.25.2
-    app.kubernetes.io/version: "2.25.2"
+    helm.sh/chart: telepresence-oss-2.26.0
+    app.kubernetes.io/version: "2.26.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/created-by: Helm
 spec:
@@ -305,16 +306,18 @@ metadata:
   name: traffic-manager
   namespace: default
   labels:
+    
     app: traffic-manager
     telepresence: manager
-    helm.sh/chart: telepresence-oss-2.25.2
-    app.kubernetes.io/version: "2.25.2"
+    helm.sh/chart: telepresence-oss-2.26.0
+    app.kubernetes.io/version: "2.26.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/created-by: Helm
 spec:
   replicas: 1
   selector:
     matchLabels:
+      
       app: traffic-manager
       telepresence: manager
   strategy:
@@ -325,18 +328,21 @@ spec:
   template:
     metadata:
       labels:
+        
         app: traffic-manager
         telepresence: manager
     spec:
       securityContext:
+        
         null
       containers:
         - name: traffic-manager
           securityContext:
+            
             readOnlyRootFilesystem: true
             runAsNonRoot: true
             runAsUser: 1000
-          image: "ghcr.io/telepresenceio/tel2:2.25.2"
+          image: "ghcr.io/telepresenceio/tel2:2.26.0"
           imagePullPolicy: IfNotPresent
           env:
           - name: LOG_LEVEL
@@ -360,14 +366,24 @@ spec:
               Deployment
               StatefulSet
               ReplicaSet
+          - name: INTERCEPT_ALLOW_GLOBAL
+            value: "true"
+          - name: INTERCEPT_INACTIVE_BLOCK_TIMEOUT
+            value: 10m
           - name: AGENT_ARRIVAL_TIMEOUT
             value: "30s"
           - name: AGENT_INJECT_POLICY
             value: OnDemand
           - name: AGENT_INJECTOR_NAME
             value:  "agent-injector"
+          - name: AGENT_INJECTOR_MUTATION_AWARE
+            value: "true"
           - name: AGENT_PORT
             value: "9900"
+          - name: AGENT_ENABLE_H2C_PROBING
+            value: "true"
+          - name: AGENT_CONSUMPTION_METRICS
+            value: "true"
           - name: AGENT_MOUNT_POLICIES
             value: '{"/tmp":"Local"}'
           - name: AGENT_INIT_CONTAINER_ENABLED
@@ -393,7 +409,11 @@ spec:
             containerPort: 8081
           - name: https
             containerPort: 8443
-      serviceAccount: traffic-manager
+          startupProbe:
+            grpc:
+              port: 8081
+            periodSeconds: 2
+            failureThreshold: 5
       serviceAccountName: traffic-manager
 ---
 # Source: telepresence-oss/templates/agentInjectorWebhook.yaml
@@ -404,15 +424,15 @@ metadata:
   labels:
     app: traffic-manager
     telepresence: manager
-    helm.sh/chart: telepresence-oss-2.25.2
-    app.kubernetes.io/version: "2.25.2"
+    helm.sh/chart: telepresence-oss-2.26.0
+    app.kubernetes.io/version: "2.26.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/created-by: Helm
 webhooks:
 - admissionReviewVersions:
   - v1
   clientConfig:
-    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURKRENDQWd5Z0F3SUJBZ0lSQVBWeXZKTzdUYjRIU1FsRGRGYzNZeVF3RFFZSktvWklodmNOQVFFTEJRQXcKSERFYU1CZ0dBMVVFQXhNUllXZGxiblF0YVc1cVpXTjBiM0l0WTJFd0hoY05Nall3TVRJeE1qRXhPREUwV2hjTgpNamN3TVRJeE1qRXhPREUwV2pBY01Sb3dHQVlEVlFRREV4RmhaMlZ1ZEMxcGJtcGxZM1J2Y2kxallUQ0NBU0l3CkRRWUpLb1pJaHZjTkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFLb29UdlAxaTVFeTUvckgvbWxXYm52R1Zva0YKb3NOYWZuZlpWN1dwSHFEMlJXeCtKM25McXNGUW0vQ2JQMUtyY25PM1RlRHNHTnZtM0VJVDROd2hzSmlkMDFRNwpDbkY5ZEg0bkpRNkZCZVc3QUpoZ01PdFlsSVY1K2plcDB1NENXV2JtS0l3ZUptVENLZGh0cjZTaWwxeG5pYm5TCmUxNjdpZEluYTRqWVlGVThHVlFXWEdiNVozOFpGQWlucWdMelVSSnBQWGtXWjk4U0ZwTzc2SE9oaW5pWlZDcnAKOTgvRkh4SGhyUUJBbzN0VG9JeUdSTXdRWElHUlIxdkQ2dlBXeDBFUFNvVGladE1VVHhJTC9QcnF0bTdpb3hjQwpkSVB6UXAvNG04VFY1amtvdy91bmduTzBoV1VqSFZORk9Eb3R1QU5EbG55dVFlazl1Z2lWSmgrbW15OENBd0VBCkFhTmhNRjh3RGdZRFZSMFBBUUgvQkFRREFnS2tNQjBHQTFVZEpRUVdNQlFHQ0NzR0FRVUZCd01CQmdnckJnRUYKQlFjREFqQVBCZ05WSFJNQkFmOEVCVEFEQVFIL01CMEdBMVVkRGdRV0JCUm4wQlRBNkJWejB0U2tJUW4xc3dkNApSUmhzVURBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQW1TL2hZMysyYjlOcEdWQmttbkc4Uy9kdmRyNnlUcFZWClNiK3FhRW9Jb3hxM0lEaDV3eXFSdzJnckZXSUZ6bUl5d1VtUzdnb0RaK2dkaTVjOGZyNG5PZWxEc1NGLzJxbDgKTFIvejF5aXUvYXgyR0hlQnVvazZlalpwcGlmdWo2TkZyN1kveVBMZXl5MWMrOWthQStEVXg2Y2V2RW11VjNEaQp6RGMvMjQxTWxOS0QrLy9FUUxhM1BYTklQLy9EWTI5YmRKODBnTUlqUVV1VEFyMmcwVkpDcDZBbC90R0tJdEZOCndjUlNjWGJvOHhuUGdpZW5naXdCZTdRdHdDQkxqUm10bWY5OFhURlVFNGUzRmM5Z0NybFhTcFk2QWpkOEtLVkoKdmNvc09xMjQwakVUMUxCMU1oNVZVekllRDNac0dWZU96UXJvSjkvemNDQXl3TXpIU1NmYUpRPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURKRENDQWd5Z0F3SUJBZ0lSQU0vdVFRWjlka2U4K3lSaHBRS3VEOHN3RFFZSktvWklodmNOQVFFTEJRQXcKSERFYU1CZ0dBMVVFQXhNUllXZGxiblF0YVc1cVpXTjBiM0l0WTJFd0hoY05Nall3TVRJME1UZzBOREExV2hjTgpNamN3TVRJME1UZzBOREExV2pBY01Sb3dHQVlEVlFRREV4RmhaMlZ1ZEMxcGJtcGxZM1J2Y2kxallUQ0NBU0l3CkRRWUpLb1pJaHZjTkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFPRDhvcEl1SzQ5KzNjRkk3NWlHaExueGJGcmEKR3VhaENqaTgrdTBWenZzS052T3BlNDB5OGtxeEFORVdGYlFzTSswckoydGhDeXhxY0NQTHNYdmxyMStnSDJEVwpMVXIrVVlDM3JtcHJ4LzN6Snh2Yk1mSzdnTGN0U0RHeHJ4bHFmTEhJZjhSQzZqNVJtMkdydUhhNUVYVHFvQXdCCmNSVmc3ZGV6RDA3Z0M0c3FQcXZGcm9FeWw2MG1sTjQ3ZUdKN0ZlQ0hlVlhMd010R1dDOFZZZERSZElZZXFXdm4KSG5ybzFrUEVBK1VkNUp1YzVKSnVLMjZSOHd6UGs4UGtEQnRHb2tJUlFvRlhFYmVkSDdwUjZudHJyczNQS3FhVgp2aGxhT1k2anh2Z0ZOUzFsU0g0eHJEQ0ZUQ1FkYVRBaUxENWdFLzFlR2hrSXMvOUtFVEZYa2NjZDVoMENBd0VBCkFhTmhNRjh3RGdZRFZSMFBBUUgvQkFRREFnS2tNQjBHQTFVZEpRUVdNQlFHQ0NzR0FRVUZCd01CQmdnckJnRUYKQlFjREFqQVBCZ05WSFJNQkFmOEVCVEFEQVFIL01CMEdBMVVkRGdRV0JCVEdrZ1JIZVpvTCtYb0ZwNGZBVUpNMgpPeTd0SkRBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQWZ2VVkrOG5FRlQ0aHdPOCtnUjQ0bXBSdStGTDdObmlWCkM3dFMzanJRc3ByYWxiNkVRUXltcmE0YzllOGR5ZTJ0VVl4dHlNY3UydVdSZ0s0M1IxeG4wUlBCNG9QVUdMLzIKU1JOSk9uWWtzWU9FZzJpVHIxenFIK0h4b3ZwdXBwMlZFNnZOR1Y0S2I1K0Z5LzdnQkpIQlg0SFd1L1NLZm5mRAorcjBXNjhmaG9rcUVsNThqOUdDTzFEeG1ISjR3UHovdE1WK0lEcVFDNHNid3JRYXBCOUQydUwrRStWSElpbmJUCkZneFdqeEZmU2xuaHl0Y2MvT1EwYzRtdHFwQyt2YlNoaGJITlY5ZWl3WmVqYkl1bmllcjg0VXlNZkgycVl1SGgKVk5aM1hKcnRyRVdCM0FlbnlXb1NjaCtUclZKcHUyTjBsWncyRXZuSENabUN0YmhJbWRLTUV3PT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
     service:
       name: agent-injector
       namespace: default
@@ -451,8 +471,8 @@ metadata:
   labels:
     app: traffic-manager
     telepresence: manager
-    helm.sh/chart: telepresence-oss-2.25.2
-    app.kubernetes.io/version: "2.25.2"
+    helm.sh/chart: telepresence-oss-2.26.0
+    app.kubernetes.io/version: "2.26.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/created-by: Helm
   annotations:
@@ -474,8 +494,8 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "telepresence-traffic-manager"
-    app.kubernetes.io/version: 2.25.2
-    helm.sh/chart: "telepresence-oss-2.25.2"
+    app.kubernetes.io/version: 2.26.0
+    helm.sh/chart: "telepresence-oss-2.26.0"
   annotations:
     "helm.sh/hook": pre-delete
     "helm.sh/hook-weight": "-5"
@@ -488,7 +508,7 @@ spec:
       labels:
         app.kubernetes.io/managed-by: "Helm"
         app.kubernetes.io/instance: "telepresence-traffic-manager"
-        helm.sh/chart: "telepresence-oss-2.25.2"
+        helm.sh/chart: "telepresence-oss-2.26.0"
     spec:
       securityContext:
         null

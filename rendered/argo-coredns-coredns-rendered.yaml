@@ -8,7 +8,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "coredns"
-    helm.sh/chart: "coredns-1.45.0"
+    helm.sh/chart: "coredns-1.45.2"
     app.kubernetes.io/name: coredns
     k8s-app: kube-dns
 data:
@@ -50,7 +50,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "coredns"
-    helm.sh/chart: "coredns-1.45.0"
+    helm.sh/chart: "coredns-1.45.2"
     app.kubernetes.io/name: coredns
 rules:
 - apiGroups:
@@ -79,7 +79,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "coredns"
-    helm.sh/chart: "coredns-1.45.0"
+    helm.sh/chart: "coredns-1.45.2"
     app.kubernetes.io/name: coredns
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -99,7 +99,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "coredns"
-    helm.sh/chart: "coredns-1.45.0"
+    helm.sh/chart: "coredns-1.45.2"
     app.kubernetes.io/name: coredns
     app.kubernetes.io/component: metrics
     k8s-app: kube-dns
@@ -124,7 +124,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "coredns"
-    helm.sh/chart: "coredns-1.45.0"
+    helm.sh/chart: "coredns-1.45.2"
     app.kubernetes.io/name: coredns
     k8s-app: kube-dns
 spec:
@@ -144,7 +144,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "coredns"
-    helm.sh/chart: "coredns-1.45.0"
+    helm.sh/chart: "coredns-1.45.2"
     app.kubernetes.io/name: coredns
     app.kubernetes.io/version: "1.14.1"
     k8s-app: kube-dns
@@ -167,7 +167,7 @@ spec:
         app.kubernetes.io/instance: "coredns"
         k8s-app: kube-dns
       annotations:
-        checksum/config: 968ecae549c430f89266d44a970e20ca55e3551d76046d06aeed596148268cf0
+        checksum/config: e16ead427bdb1221cc119ff72adbbbbc25afde3db9b61d711a0affed720d4ca9
     spec:
       terminationGracePeriodSeconds: 30
       serviceAccountName: default
@@ -242,7 +242,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "coredns"
-    helm.sh/chart: "coredns-1.45.0"
+    helm.sh/chart: "coredns-1.45.2"
     app.kubernetes.io/name: coredns
 spec:
   namespaceSelector:

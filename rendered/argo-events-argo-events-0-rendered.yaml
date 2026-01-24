@@ -7,7 +7,7 @@ metadata:
   name: argo-events-0-controller-manager
   namespace: "default"
   labels:
-    helm.sh/chart: argo-events-2.4.19
+    helm.sh/chart: argo-events-2.4.20
     app.kubernetes.io/name: argo-events-controller-manager
     app.kubernetes.io/instance: argo-events-0
     app.kubernetes.io/component: controller-manager
@@ -22,7 +22,7 @@ metadata:
   name: argo-events-0-events-webhook
   namespace: "default"
   labels:
-    helm.sh/chart: argo-events-2.4.19
+    helm.sh/chart: argo-events-2.4.20
     app.kubernetes.io/name: argo-events-events-webhook
     app.kubernetes.io/instance: argo-events-0
     app.kubernetes.io/component: events-webhook
@@ -36,7 +36,7 @@ metadata:
   name: argo-events-0-controller-manager
   namespace: "default"
   labels:
-    helm.sh/chart: argo-events-2.4.19
+    helm.sh/chart: argo-events-2.4.20
     app.kubernetes.io/name: argo-events-controller-manager
     app.kubernetes.io/instance: argo-events-0
     app.kubernetes.io/managed-by: Helm
@@ -250,7 +250,7 @@ kind: ClusterRole
 metadata:
   name: argo-events-0-controller-manager
   labels:
-    helm.sh/chart: argo-events-2.4.19
+    helm.sh/chart: argo-events-2.4.20
     app.kubernetes.io/name: argo-events-controller-manager
     app.kubernetes.io/instance: argo-events-0
     app.kubernetes.io/component: controller-manager
@@ -344,7 +344,7 @@ kind: ClusterRoleBinding
 metadata:
   name: argo-events-0-controller-manager
   labels:
-    helm.sh/chart: argo-events-2.4.19
+    helm.sh/chart: argo-events-2.4.20
     app.kubernetes.io/name: argo-events-controller-manager
     app.kubernetes.io/instance: argo-events-0
     app.kubernetes.io/component: controller-manager
@@ -366,13 +366,13 @@ metadata:
   name: argo-events-0-controller-manager
   namespace: "default"
   labels:
-    helm.sh/chart: argo-events-2.4.19
+    helm.sh/chart: argo-events-2.4.20
     app.kubernetes.io/name: argo-events-controller-manager
     app.kubernetes.io/instance: argo-events-0
     app.kubernetes.io/component: controller-manager
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-events
-    app.kubernetes.io/version: "v1.9.9"
+    app.kubernetes.io/version: "v1.9.10"
 spec:
   selector:
     matchLabels:
@@ -383,25 +383,25 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 826e540f4c541679cd6c4be23873f07893aad0ef33aea82ee1ab5bce6d6ce16b
+        checksum/config: 403756f7047174ef0921e8a753ff404a8cfe56b7ad46dbe095d9005d9456f437
       labels:
-        helm.sh/chart: argo-events-2.4.19
+        helm.sh/chart: argo-events-2.4.20
         app.kubernetes.io/name: argo-events-controller-manager
         app.kubernetes.io/instance: argo-events-0
         app.kubernetes.io/component: controller-manager
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/part-of: argo-events
-        app.kubernetes.io/version: "v1.9.9"
+        app.kubernetes.io/version: "v1.9.10"
     spec:
       containers:
       - name: controller-manager
-        image: quay.io/argoproj/argo-events:v1.9.9
+        image: quay.io/argoproj/argo-events:v1.9.10
         imagePullPolicy: IfNotPresent
         args:
         - controller
         env:
         - name: ARGO_EVENTS_IMAGE
-          value: quay.io/argoproj/argo-events:v1.9.9
+          value: quay.io/argoproj/argo-events:v1.9.10
         - name: NAMESPACE
           valueFrom:
             fieldRef:
