@@ -14,3 +14,4 @@ infra/test
 *.log
 k8s-apps/hegerdes-kubernetes-service/generated
 k8s-apps/hegerdes-kubernetes-service/helper/generated
+k8s-apps/hegerdes-kubernetes-service/helper/
