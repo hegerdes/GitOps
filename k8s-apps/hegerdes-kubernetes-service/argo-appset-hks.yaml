@@ -42,3 +42,7 @@ spec:
           group: apps
           jqPathExpressions:
             - .spec.updateStrategy.rollingUpdate.maxUnavailable
+        - kind: ConfigMap
+          name: cluster-data
+          jqPathExpressions:
+            - .data.advertiseIP

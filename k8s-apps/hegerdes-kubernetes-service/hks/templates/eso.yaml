@@ -1,11 +1,4 @@
 ---
-{{- $svc := lookup "v1" "Service" .Values.controlplane.publicIpServiceRef.namespace .Values.controlplane.publicIpServiceRef.namespace -}}
-{{- $ip := "unknown" -}}
-{{- if and $svc $svc.status $svc.status.loadBalancer $svc.status.loadBalancer.ingress (gt (len $svc.status.loadBalancer.ingress) 0) }}
-  {{- $firstIngress := index $svc.status.loadBalancer.ingress 0 -}}
-  {{- $ip = $firstIngress.ip | default "unknown" -}}
-{{- end }}
-
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
@@ -21,7 +14,7 @@ spec:
     template:
       metadata:
         annotations:
-          hks.hegerdes.com/public-ipv4: {{ $ip }}
+          hks.hegerdes.com/public-ipv4: "unknown"
           hks.hegerdes.com/public-host: "{{ .Release.Namespace }}.{{ .Values.controlplane.domainSuffix }}"
           hks.hegerdes.com/private-host: "kube-apiserver.{{ .Release.Namespace }}"
           hks.hegerdes.com/private-port: "6443"

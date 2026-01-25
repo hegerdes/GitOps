@@ -1,11 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: kube-scheduler
   labels:
     component: kube-scheduler
     tier: control-plane
     app: kube-scheduler
-  name: kube-scheduler
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: 1
   selector:

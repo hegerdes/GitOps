@@ -1,11 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: kube-apiserver
   labels:
     app: kube-apiserver
     component: kube-apiserver
     tier: control-plane
-  name: kube-apiserver
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: 1
   selector:

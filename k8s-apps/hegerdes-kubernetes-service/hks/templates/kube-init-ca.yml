@@ -21,7 +21,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: file-check
-          image: hegerdes/debug:hks
+          image: hegerdes/hks:util
           env:
             - name: ENCRYPTION_KEY
               valueFrom:
@@ -208,6 +208,14 @@ spec:
                       path: front-proxy-ca.key
                     - key: tls.crt
                       path: front-proxy-ca.crt
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: "{{ .Release.Namespace }}"
+  labels:
+    hks.hegerdes.com/cluster: "true"
+    hks.hegerdes.com/region: "{{ .Values.controlplane.domainSuffix }}"
 ---
 apiVersion: v1
 kind: ServiceAccount

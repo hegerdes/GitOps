@@ -1,11 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: kube-controller-manager
   labels:
     app: kube-controller-manager
     component: kube-controller-manager
     tier: control-plane
-  name: kube-controller-manager
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: 1
   selector:

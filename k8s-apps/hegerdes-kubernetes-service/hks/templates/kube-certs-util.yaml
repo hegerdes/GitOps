@@ -12,21 +12,17 @@ spec:
     - digital signature
     - key encipherment
     - client auth
-
   privateKey:
     algorithm: RSA
     size: 2048
-
   subject:
     organizationalUnits:
       - argocd-auth
     organizations:
       - kubernetes
-
   dnsNames: []
   emailAddresses:
     - kubernetes-pki@hegerdes.com
-
   issuerRef:
     name: ca-kube-controlplane
     kind: Issuer

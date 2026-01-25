@@ -8,11 +8,11 @@ clusterZone: hks.eu-central.hegerdes.com
 
 image:
   # -- The container registry and image to use.
-  repository: hegerdes/debug
+  repository: hegerdes/hks
   # -- Pull policy of that image.
   pullPolicy: Always
   # -- The image tag and/or sha.
-  tag: hks-manager
+  tag: latest
 
 # -- Any repository secrets needed to pull the image.
 imagePullSecrets: []
