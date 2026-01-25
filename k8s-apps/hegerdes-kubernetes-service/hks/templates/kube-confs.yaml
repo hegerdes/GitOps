@@ -1,0 +1,297 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    tier: control-plane
+  name: kubeconf-template
+data:
+  kubeconfig.yml: |
+    apiVersion: v1
+    kind: Config
+    current-context: kubernetes@default
+    contexts:
+      - context:
+          cluster: default
+          user: default
+        name: kubernetes@default
+    clusters:
+      - cluster:
+          certificate-authority: /etc/kubernetes/ca.crt
+          server: https://kube-apiserver:6443
+        name: default
+    users:
+      - name: default
+        user:
+          client-certificate: /etc/kubernetes/kube.crt
+          client-key: /etc/kubernetes/kube.key
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-data
+data:
+  advertiseIP: 10.0.0.1 # placeholder
+  info: hks-managed-cluster
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kube-api-configs
+  labels:
+    tier: control-plane
+data:
+  authentication-conf.yaml: |
+    # Docs: https://kubernetes.io/docs/reference/access-authn-authz/authentication/#openid-connect-tokens
+    apiVersion: apiserver.config.k8s.io/v1beta1
+    kind: AuthenticationConfiguration
+    anonymous:
+      enabled: true
+      conditions:
+        # kubeadm also needs to read the discovery info:
+        - path: /api/v1/namespaces/kube-public/configmaps/cluster-info
+        # for status checks:
+        - path: /healthz
+        - path: /readyz
+        - path: /livez
+    jwt: []
+  authorization-conf.yaml: |
+    # Docs: https://kubernetes.io/docs/reference/access-authn-authz/authorization/
+    apiVersion: apiserver.config.k8s.io/v1
+    kind: AuthorizationConfiguration
+    authorizers:
+      - type: Node
+        name: node
+      - type: RBAC
+        name: rbac
+  audit-policy.yaml: |
+    apiVersion: audit.k8s.io/v1
+    kind: Policy
+
+    # Don't log the initial RequestReceived stage to cut down on volume
+    omitStages:
+      - RequestReceived
+
+    # The rules are evaluated in order; the first matching rule applies.
+    rules:
+      # The following requests were manually identified as high-volume and low-risk,so drop them.
+      - level: None
+        users: ["system:kube-proxy"]
+        verbs: ["watch", "get"]
+        resources:
+          - group: "" # core
+            resources: ["endpoints", "services", "services/status"]
+      - level: None
+        userGroups: ["system:nodes"]
+        verbs: ["get", "watch"]
+        resources:
+          - group: "" # core
+            resources: ["nodes", "nodes/status"]
+      - level: None
+        users:
+          - system:kube-controller-manager
+          - system:kube-scheduler
+          - system:serviceaccount:kube-system:endpoint-controller
+        verbs: ["get", "update", "watch"]
+        namespaces: ["kube-system"]
+        resources:
+          - group: "" # core
+            resources: ["endpoints"]
+      - level: None
+        users: ["system:apiserver"]
+        verbs: ["get", "watch"]
+        resources:
+          - group: "" # core
+            resources: ["namespaces", "namespaces/status", "namespaces/finalize"]
+      # Don't log HPA fetching metrics.
+      - level: None
+        users:
+          - system:kube-controller-manager
+        verbs: ["get", "list"]
+        resources:
+          - group: "metrics.k8s.io"
+      # Don't log these read-only URLs.
+      - level: None
+        nonResourceURLs:
+          - /healthz*
+          - /version
+          - /swagger*
+          - "/metrics"
+          - "/openapi*"
+      # Don't log events requests.
+      - level: None
+        resources:
+          - group: "" # core
+            resources: ["events"]
+      # Secrets, TokenRequest and TokenReviews can contain sensitive & binary data,
+      # so only log at the Metadata level.
+      - level: Metadata
+        resources:
+          - group: "" # core
+            resources: ["secrets", "serviceaccounts/token"]
+          - group: authentication.k8s.io
+            resources: ["tokenreviews"]
+
+      # Log request+response bodies for any mutating action
+      - level: RequestResponse
+        verbs: ["create", "update", "patch", "delete"]
+        # userGroups: [oidc:]
+
+      # Log metadata only for all other resource requests
+      - level: Metadata
+
+      # (Optional) If you have custom API groups you care about, you can add them here
+      # - level: RequestResponse
+      #   resources:
+      #     - group: "myorg.example.com"
+      #       resources: ["widgets","gadgets"]
+
+  admission-control-config.yaml: |
+    apiVersion: apiserver.config.k8s.io/v1
+    kind: AdmissionConfiguration
+    plugins:
+      - name: PodSecurity # Enable the built-in Pod Security admission plugin
+        configuration:
+          apiVersion: pod-security.admission.config.k8s.io/v1
+          kind: PodSecurityConfiguration
+
+          # --------------------------------------------------------------------
+          # 1. Cluster-wide defaults
+          # --------------------------------------------------------------------
+          defaults:
+            # Reject any pod that violates the baseline profile
+            enforce: "baseline"
+            enforce-version: "latest"
+
+            # Log (audit) and warn on anything that would break the stricter
+            # restricted profile so you can spot future hardening issues early
+            audit: "restricted"
+            audit-version: "latest"
+            warn: "restricted"
+            warn-version: "latest"
+
+          # --------------------------------------------------------------------
+          # 2. Exemptions for critical system components
+          # --------------------------------------------------------------------
+          exemptions:
+            usernames: [] # (add human break-glass accounts if required)
+            runtimeClasses: [] # (e.g. kata-containers, gvisor, etc.)
+            namespaces:
+              - kube-system # Core control-plane add-ons
+              - kube-public # Cluster-info ConfigMap & bootstrap helpers
+              - kube-node-lease # Node heart-beat leases
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: etcd-configs
+  labels:
+    tier: control-plane
+data:
+  generate-conf.sh: |
+    #!/bin/sh
+
+    # This is the configuration file for the etcd server
+    # Full example: https://github.com/etcd-io/etcd/blob/main/etcd.conf.yml.sample
+    cat > /etc/etcd/etcd-conf.yaml <<EOF
+    # This is the configuration file for the etcd server
+
+    # Human-readable name for this member.
+    name: ${POD_NAME}
+
+    # Path to the data directory.
+    data-dir: /var/lib/etcd
+
+    # Number of committed transactions to trigger a snapshot to disk.
+    snapshot-count: 10000
+
+    # Time (in milliseconds) of a heartbeat interval.
+    heartbeat-interval: 100
+
+    # Time (in milliseconds) for an election to timeout.
+    election-timeout: 1000
+
+    # List of comma separated URLs to listen on for peer traffic.
+    listen-peer-urls: https://${POD_IP}:2380
+
+    # List of comma separated URLs to listen on for client traffic.
+    listen-client-urls: https://${POD_IP}:2379,https://localhost:2379
+
+    # Maximum number of snapshot files to retain (0 is unlimited).
+    max-snapshots: 200
+
+    # Maximum number of wal files to retain (0 is unlimited).
+    max-wals: 200
+
+    # Comma separated string of initial cluster configuration for bootstrapping.
+    # Example: initial-cluster: "infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380"
+    initial-cluster: "etcd-0=https://etcd-0.etcd:2380,etcd-1=https://etcd-1.etcd:2380,etcd-2=https://etcd-2.etcd:2380"
+
+    # Initial cluster token for the etcd cluster during bootstrap.
+    initial-cluster-token: etcd-${CLUSTER_ID}
+
+    # Initial cluster state ('new' or 'existing').
+    initial-cluster-state: 'new'
+
+    # List of this member's peer URLs to advertise to the rest of the cluster.
+    # The URLs needed to be a comma-separated list.
+    initial-advertise-peer-urls: https://${POD_NAME}.etcd:2380
+
+    # List of this member's client URLs to advertise to the public.
+    # The URLs needed to be a comma-separated list.
+    advertise-client-urls: https://${POD_IP}:2379,https://${POD_NAME}.etcd:2379
+
+    listen-metrics-urls: http://${POD_IP}:2381
+
+    # Valid values include 'on', 'readonly', 'off'
+    proxy: 'off'
+
+    client-transport-security:
+      # Path to the client server TLS cert file.
+      cert-file: /etc/kubernetes/pki/etcd/server.crt
+
+      # Path to the client server TLS key file.
+      key-file: /etc/kubernetes/pki/etcd/server.key
+
+      # Enable client cert authentication.
+      client-cert-auth: true
+
+      # Path to the client server TLS trusted CA cert file.
+      trusted-ca-file: /etc/kubernetes/pki/etcd/ca.crt
+
+      # Client TLS using generated certificates
+      auto-tls: false
+
+    peer-transport-security:
+      # Path to the peer server TLS cert file.
+      cert-file: /etc/kubernetes/pki/etcd/peer.crt
+
+      # Path to the peer server TLS key file.
+      key-file: /etc/kubernetes/pki/etcd/peer.key
+
+      # Enable peer client cert authentication.
+      client-cert-auth: true
+
+      # Path to the peer server TLS trusted CA cert file.
+      trusted-ca-file: /etc/kubernetes/pki/etcd/ca.crt
+
+      # Peer TLS using generated certificates.
+      auto-tls: false
+
+    # Enable debug-level logging for etcd.
+    log-level: info
+
+    # Specify 'stdout' or 'stderr' to skip journald logging even when running under systemd.
+    log-outputs: [stdout]
+
+    # Force to create a new one member cluster.
+    force-new-cluster: false
+
+    auto-compaction-mode: periodic
+    auto-compaction-retention: "1"
+
+    # Limit etcd to specific TLS protocol versions
+    tls-min-version: 'TLS1.3'
+    EOF
+
+    cat /etc/etcd/etcd-conf.yaml

@@ -1,0 +1,14 @@
+controlplane:
+  domainSuffix: hks.eu-central.hegerdes.com
+  publicIp: "publicIpServiceRef"
+  publicIpServiceRef:
+    namespace: cilium-gateway
+    name: cilium-gateway-cilium-gateway
+  tlsRoute:
+    enabled: true
+    parentRefs:
+
+  pdb:
+    enabled: false
+
+extraObjects: []

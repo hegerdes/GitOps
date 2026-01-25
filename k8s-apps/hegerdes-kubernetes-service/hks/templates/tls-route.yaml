@@ -1,0 +1,19 @@
+{{- if .Values.controlplane.tlsRoute.enabled -}}
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TLSRoute
+metadata:
+  name: "{{ .Release.Namespace }}"
+spec:
+  hostnames:
+    # - "{{ .Release.Namespace }}.localhost"
+    - "{{ .Release.Namespace }}.{{ .Values.controlplane.domainSuffix }}"
+  parentRefs:
+    - name: cilium-gateway
+      namespace: cilium-gateway
+  rules:
+    - backendRefs:
+        - name: kube-apiserver
+          kind: Service
+          namespace: "{{ .Release.Namespace }}"
+          port: 6443
+{{- end }}

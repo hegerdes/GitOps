@@ -1,0 +1,279 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kube-apiserver
+spec:
+  secretName: kube-apiserver-tls
+  commonName: kube-apiserver
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  isCA: false
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+
+  privateKey:
+    algorithm: RSA
+    size: 2048
+
+  subject:
+    organizationalUnits:
+      - controlplane-serving
+    organizations:
+      - kubernetes
+
+  dnsNames:
+    - "{{ .Release.Namespace }}.{{ .Values.controlplane.domainSuffix }}"
+    - "kube-apiserver"
+    - "kube-apiserver.{{ .Release.Namespace }}"
+    - "kube-apiserver.{{ .Release.Namespace }}.svc"
+    - "kube-apiserver.{{ .Release.Namespace }}.svc.cluster.local"
+    - "kubernetes"
+    - "kubernetes.default"
+    - "kubernetes.default.svc"
+    - "kubernetes.default.svc.cluster.local"
+  emailAddresses:
+    - kubernetes-pki@hegerdes.com
+
+  issuerRef:
+    name: ca-kube-controlplane
+    kind: Issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kube-scheduler-serving
+spec:
+  secretName: kube-scheduler-serving-tls
+  commonName: kube-scheduler
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  isCA: false
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+
+  privateKey:
+    algorithm: RSA
+    size: 2048
+
+  subject:
+    organizationalUnits:
+      - scheduler-serving
+    organizations:
+      - kubernetes
+
+  dnsNames:
+    - localhost
+    - "kube-scheduler"
+    - "kube-scheduler.{{ .Release.Namespace }}"
+    - "kube-scheduler.{{ .Release.Namespace }}.svc"
+    - "kube-scheduler.{{ .Release.Namespace }}.svc.cluster.local"
+  emailAddresses:
+    - kubernetes-pki@hegerdes.com
+
+  issuerRef:
+    name: ca-kube-controlplane
+    kind: Issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kube-controller-manager-serving
+spec:
+  secretName: kube-controller-manager-serving-tls
+  commonName: kube-controller-manager
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  isCA: false
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+
+  privateKey:
+    algorithm: RSA
+    size: 2048
+
+  subject:
+    organizationalUnits:
+      - kube-controller-manager-serving
+    organizations:
+      - kubernetes
+
+  dnsNames:
+    - localhost
+    - "kube-controller-manager"
+    - "kube-controller-manager.{{ .Release.Namespace }}"
+    - "kube-controller-manager.{{ .Release.Namespace }}.svc"
+    - "kube-controller-manager.{{ .Release.Namespace }}.svc.cluster.local"
+  emailAddresses:
+    - kubernetes-pki@hegerdes.com
+
+  issuerRef:
+    name: ca-kube-controlplane
+    kind: Issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kube-apiserver-kubelet-client
+spec:
+  secretName: kube-apiserver-kubelet-client-tls
+  commonName: kube-apiserver-kubelet-client
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  isCA: false
+  usages:
+    - digital signature
+    - key encipherment
+    - client auth
+
+  privateKey:
+    algorithm: RSA
+    size: 2048
+
+  subject:
+    organizationalUnits:
+      - controlplane-kubelet-auth
+    organizations:
+      - kubernetes
+
+  dnsNames: []
+  emailAddresses:
+    - kubernetes-pki@hegerdes.com
+
+  issuerRef:
+    name: ca-kube-controlplane
+    kind: Issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kube-front-proxy-client-kube
+spec:
+  secretName: kube-front-proxy-client-tls
+  commonName: front-proxy-client
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  isCA: false
+  usages:
+    - digital signature
+    - key encipherment
+    - client auth
+  privateKey:
+    algorithm: RSA
+    size: 2048
+
+  subject:
+    organizationalUnits:
+      - front-proxy-client
+    organizations:
+      - kubernetes
+
+  dnsNames: []
+  emailAddresses:
+    - kubernetes-pki@hegerdes.com
+
+  issuerRef:
+    name: ca-kube-front-proxy
+    kind: Issuer
+---
+############################ KUBECONF CERTS ############################
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kube-scheduler-client
+spec:
+  secretName: kube-scheduler-client-tls
+  commonName: system:kube-scheduler
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  isCA: false
+  usages:
+    - digital signature
+    - key encipherment
+    - client auth
+  privateKey:
+    algorithm: RSA
+    size: 2048
+
+  subject:
+    organizationalUnits:
+      - scheduler-client
+    organizations:
+      - kubernetes
+
+  dnsNames: []
+  emailAddresses:
+    - kubernetes-pki@hegerdes.com
+
+  issuerRef:
+    name: ca-kube-controlplane
+    kind: Issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kube-controller-manager-client
+spec:
+  secretName: kube-controller-manager-client-tls
+  commonName: system:kube-controller-manager
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  isCA: false
+  usages:
+    - digital signature
+    - key encipherment
+    - client auth
+  privateKey:
+    algorithm: RSA
+    size: 2048
+
+  subject:
+    organizationalUnits:
+      - controller-manager-client
+    organizations:
+      - kubernetes
+
+  dnsNames: []
+  emailAddresses:
+    - kubernetes-pki@hegerdes.com
+
+  issuerRef:
+    name: ca-kube-controlplane
+    kind: Issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kube-super-admin-client
+spec:
+  secretName: kube-super-admin-client-tls
+  commonName: kubernetes-super-admin
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  isCA: false
+  usages:
+    - digital signature
+    - key encipherment
+    - client auth
+  privateKey:
+    algorithm: RSA
+    size: 2048
+
+  subject:
+    organizationalUnits:
+      - super-admin-client
+    organizations:
+      - system:masters
+
+  dnsNames: []
+  emailAddresses:
+    - kubernetes-pki@hegerdes.com
+
+  issuerRef:
+    name: ca-kube-controlplane
+    kind: Issuer

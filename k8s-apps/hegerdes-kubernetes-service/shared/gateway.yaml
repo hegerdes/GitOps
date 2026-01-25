@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cilium-gateway
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: cilium-gateway
+  namespace: cilium-gateway
+spec:
+  gatewayClassName: cilium
+  infrastructure:
+    annotations:
+      load-balancer.hetzner.cloud/location: nbg1
+      load-balancer.hetzner.cloud/name: k8s-hks-gateway-lb
+      load-balancer.hetzner.cloud/network: k8s-network
+      load-balancer.hetzner.cloud/use-private-ip: "true"
+      load-balancer.hetzner.cloud/uses-proxyprotocol: "true"
+      load-balancer.hetzner.cloud/ipv6-disabled: "true"
+  listeners:
+    - name: tls
+      protocol: TLS
+      port: 6443
+      hostname: "*.hks.eu-central.hegerdes.com"
+      allowedRoutes:
+        namespaces:
+          from: All
+        kinds:
+          - kind: TLSRoute
+      tls:
+        mode: Passthrough
+
+    # - name: http
+    #   allowedRoutes:
+    #     namespaces:
+    #       from: All
+    #     kinds:
+    #       - kind: HTTPRoute
+    #   hostname: "manager.hks.eu-central"
+    #   port: 80
+    #   protocol: HTTP
+
+# ---
+# https://docs.nginx.com/nginx-gateway-fabric/traffic-management/tls-passthrough/
+# apiVersion: gateway.networking.k8s.io/v1
+# kind: Gateway
+# metadata:
+#   name: hks-kube-gw
+#   namespace: nginx-gateway
+# spec:
+#   gatewayClassName: nginx
+#   infrastructure:
+#     annotations:
+#       load-balancer.hetzner.cloud/location: nbg1
+#       load-balancer.hetzner.cloud/name: k8s-hks-gateway-lb
+#       load-balancer.hetzner.cloud/network: k8s-network
+#       load-balancer.hetzner.cloud/use-private-ip: "true"
+#       load-balancer.hetzner.cloud/uses-proxyprotocol: "true"
+#     parametersRef:
+#       group: gateway.nginx.org
+#       kind: NginxProxy
+#       name: ngf-proxy-config
+#   listeners:
+#     - name: tls
+#       protocol: TLS
+#       port: 6443
+#       hostname: "*.hks.eu-central.hegerdes.com"
+#       allowedRoutes:
+#         namespaces:
+#           from: All
+#         kinds:
+#           - kind: TLSRoute
+#       tls:
+#         mode: Passthrough
+#         # certificateRefs:
+#         #   - kind: Secret
+#         #     name: kube-apiserver-tls
+#         #     namespace: test1
+#     # - name: test1-tls
+#     #   protocol: TLS
+#     #   port: 443
+#     #   hostname: bar.example.com
+#     #   tls:
+#     #     certificateRefs:
+#     #       - kind: Secret
+#     #         group: ""
+#     #         name: bar-example-com-cert
+# ---

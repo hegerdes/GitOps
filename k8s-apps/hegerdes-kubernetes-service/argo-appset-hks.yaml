@@ -1,0 +1,48 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: hks-appset
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: https://github.com/hegerdes/GitOps.git
+        revision: feat/hks
+        directories:
+          - path: k8s-apps/hegerdes-kubernetes-service/clusters/*
+  template:
+    metadata:
+      name: "hks-{{.path.basename}}"
+      labels:
+        name: hks
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io/background
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/hegerdes/GitOps.git
+        targetRevision: feat/hks
+        path: k8s-apps/hegerdes-kubernetes-service/hks
+        helm:
+          valuesObject:
+            extraObjects: []
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{.path.basename}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      ignoreDifferences:
+        - kind: StatefulSet
+          group: apps
+          jqPathExpressions:
+            - .spec.updateStrategy.rollingUpdate.maxUnavailable
+        - kind: ConfigMap
+          name: cluster-data
+          jqPathExpressions:
+            - .data.advertiseIP
