@@ -17,7 +17,7 @@ PACKAGE_PURGES="python3-pip python3-wheel curl git git-man cron cron-daemon-comm
 HC_NET_UTILS="https://packages.hetzner.com/hcloud/deb/hc-utils_0.0.7-1_all.deb"
 echo "Installing packages..."
 apt-get update -qq && apt-get upgrade -qq --yes --no-install-recommends
-apt-get install -qq --yes --no-install-recommends git python3-pip
+apt-get install -qq --yes --no-install-recommends git python3-pip isc-dhcp-client
 pip3 install --user --break-system-packages --no-warn-script-location --no-cache-dir ansible jmespath
 PATH=~/.local/bin:$PATH
 
