@@ -19,7 +19,6 @@ spec:
   target:
     name: ca-hegerdes
     creationPolicy: Owner
-
   data:
     - secretKey: tls.crt
       remoteRef:

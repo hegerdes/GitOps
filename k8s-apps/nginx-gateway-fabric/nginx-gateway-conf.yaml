@@ -19,3 +19,4 @@ spec:
     service:
       externalTrafficPolicy: Local
       type: LoadBalancer
+# https://docs.nginx.com/nginx-ingress-controller/configuration/policy-resource/#basicauth

@@ -8,7 +8,7 @@ spec:
   sources:
     - chart: opa-kube-mgmt
       repoURL: https://open-policy-agent.github.io/kube-mgmt/charts
-      targetRevision: 9.*
+      targetRevision: 10.*
       helm:
         releaseName: open-policy-agent
         valuesObject:

@@ -10,7 +10,7 @@ spec:
   source:
     chart: n8n
     repoURL: 8gears.container-registry.com/library
-    targetRevision: 1.*
+    targetRevision: 2.*
     helm:
       releaseName: n8n
       valuesObject:

@@ -18,9 +18,9 @@ spec:
     namespace: telepresence
   info:
     - name: Chart-Info
-      value: https://artifacthub.io/packages/helm/nginx-gateway-fabric/nginx-gateway-fabric
+      value: https://artifacthub.io/packages/helm/telepresence-oss/telepresence-oss
     - name: App-Source
-      value: https://github.com/nginxinc/nginx-gateway-fabric/tree/main/charts/nginx-gateway-fabric
+      value: https://github.com/telepresenceio/telepresence
   syncPolicy:
     automated:
       prune: true
