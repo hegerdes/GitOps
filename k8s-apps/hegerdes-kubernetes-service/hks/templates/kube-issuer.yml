@@ -1,0 +1,23 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: ca-kube-controlplane
+spec:
+  ca:
+    secretName: kube-ca-tls
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: ca-etcd
+spec:
+  ca:
+    secretName: etcd-ca-tls
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: ca-kube-front-proxy
+spec:
+  ca:
+    secretName: kube-front-proxy-ca-tls

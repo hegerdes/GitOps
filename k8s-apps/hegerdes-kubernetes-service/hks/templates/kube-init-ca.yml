@@ -1,0 +1,255 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kube-init-ca-gen
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  backoffLimit: 0
+  parallelism: 1
+  template:
+    spec:
+      serviceAccountName: kube-init-ca-gen
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: file-check
+          image: hegerdes/hks:util
+          env:
+            - name: ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: kube-encryption
+                  key: key
+                  optional: true
+            - name: ENCRYPTION_CONFIG_TEMPLATE
+              value: |
+                apiVersion: apiserver.config.k8s.io/v1
+                kind: EncryptionConfiguration
+                resources:
+                  - resources:
+                      - secrets
+                      - configmaps
+                    providers:
+                      - aescbc:
+                          keys:
+                            - name: default-key
+                              secret: $ENCRYPTION_KEY
+                      - identity: {}
+            - name: CA_CP_PATH_KEY
+              value: /etc/kubernetes/pki/kube-ca.key
+            - name: CA_ETCD_PATH_KEY
+              value: /etc/kubernetes/pki/etcd-ca.key
+            - name: CA_SA_PATH_KEY
+              value: /etc/kubernetes/pki/sa.key
+            - name: CA_PROXY_PATH_KEY
+              value: /etc/kubernetes/pki/front-proxy-ca.key
+            - name: CLUSTER_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: CA_VALID_DAYS
+              value: "3560"
+            - name: KEY_SIZE
+              value: "4096"
+            - name: WORKSPACE
+              value: /workspace
+          command:
+            - sh
+            - -c
+            - |
+              set -euo pipefail
+              cd $WORKSPACE
+
+              echo "Checking for ENCRYPTION_KEY"
+              if [ -z ${ENCRYPTION_KEY+x} ]; then
+                echo "ENCRYPTION_KEY is unset"
+                export ENCRYPTION_KEY=$(head -c 32 /dev/urandom | base64)
+                printf '%s' "$ENCRYPTION_CONFIG_TEMPLATE" | \
+                  envsubst '$ENCRYPTION_KEY' > $WORKSPACE/encryption-config.yaml
+
+                echo "KEY GENERATED: ENCRYPTION_KEY"
+                kubectl create secret generic kube-encryption \
+                  --from-file=encryption-config.yaml=$WORKSPACE/encryption-config.yaml \
+                  --from-literal=key=$ENCRYPTION_KEY
+                echo "SECRET CREATE: ENCRYPTION_KEY"
+              else
+                echo "ENCRYPTION_KEY is already set"
+              fi
+
+              echo "Checking for file: $CA_ETCD_PATH_KEY"
+              if [ ! -e "$CA_ETCD_PATH_KEY" ]; then
+                echo "NOT FOUND: $CA_ETCD_PATH_KEY. Generating..."
+                openssl genrsa -out $WORKSPACE/etcd-ca.key $KEY_SIZE
+                openssl req -new -key $WORKSPACE/etcd-ca.key -x509 -days $CA_VALID_DAYS -batch \
+                  -subj "/CN=${CLUSTER_ID}/O=kubernetes/OU=pki/emailAddress=kubernetes-pki@hegerdes.com" \
+                  -out $WORKSPACE/ca.crt
+
+                echo "KEY GENERATED: $CA_ETCD_PATH_KEY"
+                echo "SECRET CREATE: $CA_ETCD_PATH_KEY"
+                kubectl create secret generic etcd-ca-tls --type=kubernetes.io/tls \
+                  --from-file=tls.key=$WORKSPACE/etcd-ca.key \
+                  --from-file=tls.crt=$WORKSPACE/ca.crt
+                echo "SECRET CREATED: $CA_ETCD_PATH_KEY"
+              else
+                echo "FOUND: $CA_ETCD_PATH_KEY"
+              fi
+
+              echo "Checking for file: $CA_CP_PATH_KEY"
+              if [ ! -e "$CA_CP_PATH_KEY" ]; then
+                echo "NOT FOUND: $CA_CP_PATH_KEY. Generating..."
+                openssl genrsa -out $WORKSPACE/kube-ca.key $KEY_SIZE
+                openssl req -new -key $WORKSPACE/kube-ca.key -x509 -days $CA_VALID_DAYS -batch \
+                  -subj "/CN=${CLUSTER_ID}/O=kubernetes/OU=pki/emailAddress=kubernetes-pki@hegerdes.com" \
+                  -out $WORKSPACE/ca.crt
+
+                echo "KEY GENERATED: $CA_CP_PATH_KEY"
+                echo "SECRET CREATE: $CA_CP_PATH_KEY"
+                kubectl create secret generic kube-ca-tls --type=kubernetes.io/tls \
+                  --from-file=tls.key=$WORKSPACE/kube-ca.key \
+                  --from-file=tls.crt=$WORKSPACE/ca.crt
+                echo "SECRET CREATED: $CA_CP_PATH_KEY"
+              else
+                echo "FOUND: $CA_CP_PATH_KEY"
+              fi
+
+              echo "Checking for file: $CA_PROXY_PATH_KEY"
+              if [ ! -e "$CA_PROXY_PATH_KEY" ]; then
+                echo "NOT FOUND: $CA_PROXY_PATH_KEY. Generating..."
+                openssl genrsa -out $WORKSPACE/front-proxy-ca.key $KEY_SIZE
+                openssl req -new -key $WORKSPACE/front-proxy-ca.key -x509 -days $CA_VALID_DAYS -batch \
+                  -subj "/CN=${CLUSTER_ID}/O=kubernetes/OU=pki/emailAddress=kubernetes-pki@hegerdes.com" \
+                  -out $WORKSPACE/front-proxy-ca.crt
+
+                echo "KEY GENERATED: $CA_PROXY_PATH_KEY"
+                echo "SECRET CREATE: $CA_PROXY_PATH_KEY"
+                kubectl create secret generic kube-front-proxy-ca-tls --type=kubernetes.io/tls \
+                  --from-file=tls.key=$WORKSPACE/front-proxy-ca.key \
+                  --from-file=tls.crt=$WORKSPACE/front-proxy-ca.crt
+                echo "SECRET CREATED: $CA_PROXY_PATH_KEY"
+              else
+                echo "FOUND: $CA_PROXY_PATH_KEY"
+              fi
+
+              echo "Checking for file: $CA_SA_PATH_KEY"
+              if [ ! -e "$CA_SA_PATH_KEY" ]; then
+                echo "NOT FOUND: $CA_SA_PATH_KEY. Generating..."
+                openssl genrsa -out $WORKSPACE/sa.key $KEY_SIZE
+                openssl req -new -key $WORKSPACE/sa.key -x509 -days $CA_VALID_DAYS -batch \
+                  -subj "/CN=${CLUSTER_ID}/O=kubernetes/OU=pki/emailAddress=kubernetes-pki@hegerdes.com" \
+                  -out $WORKSPACE/sa.crt
+                openssl rsa -in $WORKSPACE/sa.key -pubout -out $WORKSPACE/sa.pub
+
+                echo "KEY GENERATED: $CA_SA_PATH_KEY"
+                echo "SECRET CREATE: $CA_SA_PATH_KEY"
+                kubectl create secret generic kube-sa-tls --type=kubernetes.io/tls \
+                  --from-file=tls.key=$WORKSPACE/sa.key \
+                  --from-file=tls.crt=$WORKSPACE/sa.crt \
+                  --from-file=$WORKSPACE/sa.pub
+                echo "SECRET CREATED: $CA_SA_PATH_KEY"
+              else
+                echo "FOUND: $CA_SA_PATH_KEY"
+              fi
+              # Make sure all keys are gone from fs
+              rm -rf $WORKSPACE/* || true
+          securityContext:
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /etc/kubernetes/pki
+              name: tls-kube
+              readOnly: true
+            - mountPath: /workspace
+              name: workdir
+      volumes:
+        - name: workdir
+          emptyDir:
+            sizeLimit: 10Mi
+        - name: tls-kube
+          projected:
+            sources:
+              - secret:
+                  name: etcd-ca-tls
+                  optional: true
+                  items:
+                    - key: tls.key
+                      path: etcd-ca.key
+                    - key: tls.crt
+                      path: etcd-ca.crt
+              - secret:
+                  name: kube-ca-tls
+                  optional: true
+                  items:
+                    - key: tls.key
+                      path: kube-ca.key
+                    - key: tls.crt
+                      path: kube-ca.crt
+              - secret:
+                  name: kube-sa-tls
+                  optional: true
+                  items:
+                    - key: tls.key
+                      path: sa.key
+                    - key: tls.crt
+                      path: sa.crt
+                    - key: sa.pub
+                      path: sa.pub
+              - secret:
+                  name: kube-front-proxy-ca-tls
+                  optional: true
+                  items:
+                    - key: tls.key
+                      path: front-proxy-ca.key
+                    - key: tls.crt
+                      path: front-proxy-ca.crt
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: "{{ .Release.Namespace }}"
+  labels:
+    hks.hegerdes.com/cluster: "true"
+    hks.hegerdes.com/region: "{{ .Values.controlplane.domainSuffix }}"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kube-init-ca-gen
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/sync-wave: "-1"
+---
+# Role granting create on secrets & configmaps
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: kube-init-ca-gen
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/sync-wave: "-1"
+rules:
+  - apiGroups: [""]
+    resources: ["secrets", "configmaps"]
+    verbs: ["create"]
+---
+# Bind the Role to the ServiceAccount
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: kube-init-ca-gen-rolebinding
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/sync-wave: "-1"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: kube-init-ca-gen
+subjects:
+  - kind: ServiceAccount
+    name: kube-init-ca-gen

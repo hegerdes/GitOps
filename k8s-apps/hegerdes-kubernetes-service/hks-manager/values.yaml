@@ -1,0 +1,231 @@
+# Default values for hks-manager.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# -- Number of replicas for that pod
+replicaCount: 1
+clusterZone: hks.eu-central.hegerdes.com
+
+image:
+  # -- The container registry and image to use.
+  repository: hegerdes/hks
+  # -- Pull policy of that image.
+  pullPolicy: Always
+  # -- The image tag and/or sha.
+  tag: latest
+
+# -- Any repository secrets needed to pull the image.
+imagePullSecrets: []
+# -- Override the application name.
+nameOverride: ""
+# -- Override full release name.
+fullnameOverride: ""
+
+# -- Labels applied to all manifests.
+commonLabels: {}
+# -- Any additional init containers.
+initContainers: []
+# -- Any additional containers.
+extraContainers: []
+
+serviceAccount:
+  # -- Specifies whether a service account should be created.
+  create: false
+  # -- Annotations to add to the service account.
+  annotations: {}
+  # -- The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template.
+  name: ""
+
+rbac:
+  # -- En able (Cluster)Role and (Cluster)RoleBinding creation.
+  enabled: true
+
+# -- Extra annotations for the pod.
+podAnnotations: {}
+
+# -- App and Container note. Change also in ENVs.
+podContainerPort: 8080
+
+# -- List of ENVs to configure the app.
+podEnvs: []
+  # - name: MY_ENV
+  #   value: "MY_VAL"
+  # - name: ACCESS_TOKEN
+  #   valueFrom:
+  #     secretKeyRef:
+  #       key: token
+  #       name: sec_name
+
+# -- List of default ENVs. No need to change
+defaultEnvs: []
+
+# -- If pod should use user namespaces. Must be supported by CRI. See https://kubernetes.io/docs/tasks/configure-pod-container/user-namespaces/
+useUserNamespaces: false
+
+# -- PodSecurity settings that will be applied to all containers.
+podSecurityContext: {}
+  # fsGroup: 2000
+
+# -- Security settings for the container.
+securityContext: {}
+  # runAsNonRoot: true
+  # runAsUser: 1000
+  # runAsGroup: 1000
+  # allowPrivilegeEscalation: false
+  # capabilities:
+  #   drop: [ALL]
+  # privileged: false
+  # readOnlyRootFilesystem: true
+
+# -- Resources for the container.
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+# -- Volume mount's for container.
+volumeMounts: []
+
+# -- Volumes where data should be persisted.
+volumes: []
+  # - name: config-vol
+  #   configMap:
+  #     name: log-config
+  #     items:
+  #       - key: log_level
+  #         path: log_level
+
+# -- Node selector for pod.
+# nodeSelector: {}
+nodeSelector:
+  kubernetes.io/arch: arm64
+
+# -- Tolerations for pod.
+tolerations: []
+
+# -- Affinity for pod.
+affinity: {}
+
+# -- How the service is exposed.
+service:
+  # -- Service type.
+  type: ClusterIP
+  # -- Service and container port.
+  port: 8080
+  # -- Annotations for the service.
+  annotations: {}
+  # -- Service traffic policy.
+  internalTrafficPolicy: Cluster
+  # -- Service IP family.
+  ipFamilyPolicy: SingleStack
+
+# -- Metrics configuration.
+metrics:
+  # -- If metrics endpoint should be enabled.
+  enabled: false
+  service:
+    # -- Service type.
+    type: ClusterIP
+    # -- Service and container port.
+    port: 8080
+    # -- Annotations for the service.
+    annotations: {}
+    # -- Service IP family
+    ipFamilyPolicy: SingleStack
+    # -- Prometheus service annotations.
+    prometheusAnnotations:
+      enabled: false
+      scheme: http
+      path: /metrics
+      port: 80
+
+  # -- ServiceMonitor configuration.
+  serviceMonitor:
+    enabled: false
+    interval: 30s
+    scrapeTimeout: 30s
+    honorLabels: false
+    scheme: http
+    tlsConfig: {}
+    selector: {}
+    additionalLabels: {}
+    annotations: {}
+    relabelings: []
+    metricRelabelings: []
+
+# -- How the service is exposed via ingress.
+ingress:
+  # -- Ingress enabled.
+  enabled: false
+  # -- Ingress class.
+  className: nginx
+  # -- Ingress annotations.
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    # -- Hostname and path config.
+    - host: ingress.k8s.internal
+      paths:
+        - path: /
+          pathType: Prefix
+  # -- TLS config.
+  tls: []
+  #  - secretName: ingress.k8s.internal
+  #    hosts:
+  #      - ingress.k8s.internal
+
+# -- How the service is exposed via gateway-apis HTTPRoute.
+httpRoute:
+  # -- HTTPRoute enabled.
+  enabled: false
+  # -- HTTPRoute annotations.
+  annotations: {}
+  # -- Which Gateways this Route is attached to
+  parentRefs:
+    - name: cilium-gateway
+      namespace: cilium-gateway
+      sectionName: http
+  # -- Hostnames matching HTTP header.
+  hostnames:
+    - "manager.hks.eu-central"
+  # -- List of rules and filters applied.
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+  #   filters:
+  #   - type: RequestHeaderModifier
+  #     requestHeaderModifier:
+  #       set:
+  #       - name: My-Overwrite-Header
+  #         value: this-is-the-only-value
+  #       remove:
+  #       - User-Agent
+  # - matches:
+  #   - path:
+  #       type: PathPrefix
+  #       value: /echo
+  #     headers:
+  #     - name: version
+  #       value: v2
+
+  # -- Autoscaling
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+# -- Extra manifests
+extraDeploy: []

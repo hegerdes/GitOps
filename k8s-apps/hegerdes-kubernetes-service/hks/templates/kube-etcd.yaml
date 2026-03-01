@@ -1,0 +1,325 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: etcd
+  labels:
+    app: etcd
+    component: etcd
+    tier: control-plane
+spec:
+  serviceName: etcd
+  replicas: 3
+  podManagementPolicy: Parallel
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: etcd
+      component: etcd
+      tier: control-plane
+  template:
+    metadata:
+      labels:
+        app: etcd
+        component: etcd
+        tier: control-plane
+    spec:
+      enableServiceLinks: false
+      automountServiceAccountToken: false
+      # affinity:
+      #   podAntiAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #       - labelSelector:
+      #           matchLabels:
+      #             app: etcd
+      #             component: etcd
+      #             tier: control-plane
+      #         topologyKey: kubernetes.io/hostname
+      initContainers:
+        - name: create-conf
+          image: alpine
+          command:
+            - /scripts/generate-conf.sh
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: CLUSTER_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          volumeMounts:
+            - mountPath: /etc/etcd
+              name: share
+            - mountPath: /scripts
+              name: scripts
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+      containers:
+        - name: etcd
+          image: registry.k8s.io/etcd:3.6.7-0
+          command: [etcd, --config-file=/etc/etcd/etcd-conf.yaml]
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          livenessProbe:
+            failureThreshold: 8
+            httpGet:
+              path: /livez
+              port: metrics
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 15
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /readyz
+              port: metrics
+              scheme: HTTP
+            periodSeconds: 1
+            timeoutSeconds: 15
+          startupProbe:
+            failureThreshold: 24
+            httpGet:
+              path: /readyz
+              port: metrics
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 15
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          ports:
+            - containerPort: 2381
+              name: metrics
+              protocol: TCP
+            - containerPort: 2380
+              name: peer
+              protocol: TCP
+            - containerPort: 2379
+              name: client
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          volumeMounts:
+            - mountPath: /var/lib/etcd
+              name: etcd-data
+            - mountPath: /etc/kubernetes/pki/etcd
+              name: tls-etcd
+            - mountPath: /etc/etcd
+              name: share
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+        - name: share
+          emptyDir:
+            sizeLimit: 1Mi
+        - name: scripts
+          configMap:
+            name: etcd-configs
+            defaultMode: 0755
+        - name: tls-etcd
+          projected:
+            sources:
+              - secret:
+                  name: etcd-ca-tls
+                  items:
+                    - key: tls.crt
+                      path: ca.crt
+              - secret:
+                  name: etcd-server-tls
+                  items:
+                    - key: tls.crt
+                      path: server.crt
+                    - key: tls.key
+                      path: server.key
+              - secret:
+                  name: etcd-peer-tls
+                  items:
+                    - key: tls.crt
+                      path: peer.crt
+                    - key: tls.key
+                      path: peer.key
+  volumeClaimTemplates:
+    - metadata:
+        name: etcd-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 8Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: etcd
+  labels:
+    app: etcd
+    component: etcd
+    tier: control-plane
+spec:
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: client
+      port: 2379
+      targetPort: client
+    - port: 2381
+      name: metrics
+      targetPort: metrics
+    - port: 2380
+      name: peer
+      targetPort: peer
+  selector:
+    app: etcd
+    component: etcd
+    tier: control-plane
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: etcd-backup
+spec:
+  schedule: "0 */2 * * *" # every 2 hours
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          enableServiceLinks: false
+          automountServiceAccountToken: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            fsGroup: 1000
+            runAsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
+          restartPolicy: OnFailure
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app: etcd
+                      component: etcd
+                      tier: control-plane
+                  topologyKey: kubernetes.io/hostname
+
+          containers:
+            - name: etcd-backup
+              image: hegerdes/debug:hks
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: ENCRYPTION_KEY
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+                - name: ClUSTER_ID
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+                - name: ETCD_ENDPOINTS
+                  value: "https://etcd:2379"
+                - name: HOME
+                  value: /backups/home
+              volumeMounts:
+                - name: tls-etcd
+                  mountPath: /etc/kubernetes/pki/etcd
+                  readOnly: true
+                - name: backup
+                  mountPath: /backups
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -euo pipefail
+                  mkdir -p $HOME
+                  ts=$(date +%Y%m%d%H%M%S)
+                  SNAP="/backups/etcd-snapshot-${ClUSTER_ID}-${ts}.db"
+                  # take snapshot
+                  etcdctl --endpoints="${ETCD_ENDPOINTS}" \
+                    --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+                    --cert=/etc/kubernetes/pki/etcd/client.crt \
+                    --key=/etc/kubernetes/pki/etcd/client.key \
+                    snapshot save "${SNAP}"
+                  # gzip to save space
+                  gzip -f "${SNAP}"
+                  # Encrypt
+                  printf '%s' "$ENCRYPTION_KEY" | gpg --batch --yes --passphrase-fd 0 \
+                    --symmetric --cipher-algo AES256 -o "${SNAP}.gz.gpg" "${SNAP}.gz"
+
+                  # remove snapshots older than 30 days
+                  find /backups -type f -name 'etcd-snapshot-*.db.gz' -mtime +30 -print -delete
+                  ls -lh /backups
+
+              # decrypt
+              # printf '%s' "$ENCRYPTION_KEY" | gpg --batch --yes --passphrase-fd 0 \
+              #   -o /data/myfile --decrypt "${SNAP}.gz.gpg"
+
+              # decompress
+              # gzip -d snapshot.db.gz
+
+              # restore
+              # etcdutl snapshot restore snapshot.db \
+              #   --name metcd-0 \
+              #   --initial-cluster etcd-0=https://etcd-0.etcd:2380,etcd-1=https://etcd-1.etcd:2380,etcd-2=https://etcd-2.etcd:2380 \
+              #   --initial-cluster-token etcd-${CLUSTER_ID} \
+              #   --initial-advertise-peer-urls https://${POD_NAME}.etcd:2380
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: [ALL]
+          volumes:
+            - name: tls-etcd
+              projected:
+                sources:
+                  - secret:
+                      name: kube-apiserver-etcd-client-tls
+                      items:
+                        - key: tls.key
+                          path: client.key
+                        - key: tls.crt
+                          path: client.crt
+                        - key: ca.crt
+                          path: ca.crt
+            - name: backup
+              persistentVolumeClaim:
+                claimName: etcd-backups
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: etcd-backups
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi

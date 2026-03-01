@@ -12,3 +12,6 @@ infra/hcloud-tf-k8s-talos/data/k8s-secret-external-secret.yml
 k8s-apps/linkerd/
 infra/test
 *.log
+k8s-apps/hegerdes-kubernetes-service/generated
+k8s-apps/hegerdes-kubernetes-service/helper/generated
+k8s-apps/hegerdes-kubernetes-service/helper/

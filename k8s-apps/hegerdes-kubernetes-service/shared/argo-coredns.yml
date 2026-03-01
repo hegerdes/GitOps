@@ -1,0 +1,146 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: coredns
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            hks.hegerdes.com/managed-cluster: "true"
+            hks.hegerdes.com/cluster-type: "downstream"
+  template:
+    metadata:
+      name: "{{.name}}-coredns"
+    spec:
+      project: default
+      destination:
+        server: "{{.server}}"
+        namespace: kube-system
+      sources:
+        - repoURL: https://github.com/hegerdes/GitOps.git
+          targetRevision: feat/hks
+          path: k8s-apps/hegerdes-kubernetes-service/shared/helm-rendering
+          helm:
+            valuesObject:
+              extraObjects:
+                - apiVersion: v1
+                  kind: ConfigMap
+                  metadata:
+                    name: coredns-kubeconf
+                    namespace: kube-system
+                  data:
+                    kubeconfig: |
+                      kind: Config
+                      apiVersion: v1
+                      current-context: default
+                      contexts:
+                        - name: default
+                          context:
+                            cluster: kubernetes
+                            user: coredns
+                      clusters:
+                        - name: kubernetes
+                          cluster:
+                            server: "https://{{ index .metadata.annotations "hks.hegerdes.com/public-host" }}:6443"
+                            certificate-authority: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+                      users:
+                        - name: coredns
+                          user:
+                            tokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+        - chart: coredns
+          repoURL: https://coredns.github.io/helm
+          targetRevision: 1.*
+          helm:
+            releaseName: coredns
+            valuesObject:
+              image:
+                tag: 1.14.1
+              serviceAccount:
+                create: true
+                name: coredns
+              service:
+                clusterIP: "10.96.0.10"
+                name: "kube-dns"
+              replicaCount: 2
+              extraVolumes:
+                - name: kubeconf-volume
+                  configMap:
+                    name: coredns-kubeconf
+                    defaultMode: 420
+                    items:
+                      - key: kubeconfig
+                        path: kubeconfig
+              extraVolumeMounts:
+                - name: kubeconf-volume
+                  mountPath: /etc/kube-auth
+              priorityClassName: system-cluster-critical
+              isClusterService: true
+              deployment:
+                annotations:
+                  configmap.reloader.stakater.com/reload: coredns
+              prometheus:
+                service:
+                  enabled: true
+              # Default zone is what Kubernetes recommends:
+              # https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/#coredns-configmap-options
+              servers:
+                - zones:
+                    - zone: .
+                  port: 53
+                  plugins:
+                    - name: errors
+                    # Serves a /health endpoint on :8080, required for livenessProbe
+                    - name: health
+                      configBlock: |-
+                        lameduck 10s
+                    # Serves a /ready endpoint on :8181, required for readinessProbe
+                    - name: ready
+                    - name: log
+                      parameters: "."
+                      configBlock: |-
+                        class error
+                    # Required to query kubernetes API for data
+                    - name: kubernetes
+                      parameters: cluster.local in-addr.arpa ip6.arpa
+                      configBlock: |-
+                        kubeconfig /etc/kube-auth/kubeconfig
+                        pods insecure
+                        fallthrough in-addr.arpa ip6.arpa
+                        ttl 30
+                    # Serves a /metrics endpoint on :9153, required for serviceMonitor
+                    - name: prometheus
+                      parameters: :9153
+                    - name: forward
+                      # parameters: . /etc/resolv.conf
+                      # parameters: . 2a00:1098:2b::1 2a00:1098:2c::1 # nat64
+                      parameters: . tls://1.1.1.1 tls://[2606:4700:4700::1111]:853 tls://1.0.0.1 tls://[2606:4700:4700::1001]:853
+                      configBlock: |-
+                        tls_servername tls.cloudflare-dns.com
+                        health_check 5s
+                        max_concurrent 1000
+                    - name: cache
+                      parameters: 60
+                      configBlock: |-
+                        disable success cluster.local
+                        disable denial cluster.local
+                    - name: loop
+                    - name: reload
+                    - name: loadbalance
+              # affinity:
+              #   podAntiAffinity:
+              #     requiredDuringSchedulingIgnoredDuringExecution:
+              #       - topologyKey: "kubernetes.io/hostname"
+              #         labelSelector:
+              #           matchLabels:
+              #             k8s-app: kube-dns
+      info:
+        - name: Chart-Info CoreDNS
+          value: https://github.com/coredns/helm/
+      syncPolicy:
+        automated:
+          prune: false
+          selfHeal: false

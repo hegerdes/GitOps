@@ -1,0 +1,75 @@
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: kubeconfig-credentials-{{ .Release.Namespace }}
+  namespace: argocd
+spec:
+  refreshInterval: 1h0m0s
+  secretStoreRef:
+    kind: SecretStore
+    name: secret-sync-{{ .Release.Namespace }}
+  target:
+    name: kubeconfig-credentials-{{ .Release.Namespace }}
+    template:
+      metadata:
+        annotations:
+          hks.hegerdes.com/public-ipv4: "unknown"
+          hks.hegerdes.com/public-host: "{{ .Release.Namespace }}.{{ .Values.controlplane.domainSuffix }}"
+          hks.hegerdes.com/private-host: "kube-apiserver.{{ .Release.Namespace }}"
+          hks.hegerdes.com/private-port: "6443"
+          hks.hegerdes.com/public-port: "6443"
+        labels:
+          argocd.argoproj.io/secret-type: cluster
+          hks.hegerdes.com/managed-cluster: "true"
+          hks.hegerdes.com/cluster-type: "downstream"
+          argocd.argoproj.io/auto-label-cluster-info: "true"
+      type: Opaque
+      data:
+        server: https://kube-apiserver.{{ .Release.Namespace }}:6443
+        name: "{{ .Release.Namespace }}"
+        namespaces: kube-system,kube-public,default,cilium,cilium-secrets,kubelet-serving-cert-approver
+        clusterResources: "true"
+        config: |
+          {
+            "tlsClientConfig": {
+              "caData": "{{ "{{ .ca | b64enc }}" }}",
+              "certData": "{{ "{{ .clientCert | b64enc }}" }}",
+              "keyData": "{{ "{{ .clientKey | b64enc }}" }}"
+            }
+          }
+  data:
+    - secretKey: ca
+      remoteRef:
+        # key: argocd-client-tls
+        key: kube-super-admin-client-tls
+        property: ca.crt
+    - secretKey: clientCert
+      remoteRef:
+        # key: argocd-client-tls
+        key: kube-super-admin-client-tls
+        property: tls.crt
+    - secretKey: clientKey
+      remoteRef:
+        # key: argocd-client-tls
+        key: kube-super-admin-client-tls
+        property: tls.key
+---
+apiVersion: external-secrets.io/v1
+kind: SecretStore
+metadata:
+  name: secret-sync-{{ .Release.Namespace }}
+  namespace: argocd
+spec:
+  provider:
+    kubernetes:
+      auth:
+        serviceAccount:
+          name: external-secrets
+      remoteNamespace: "{{ .Release.Namespace }}"
+      server:
+        url: "https://kubernetes.default.svc.cluster.local"
+        caProvider:
+          type: ConfigMap
+          name: kube-root-ca.crt
+          key: ca.crt
