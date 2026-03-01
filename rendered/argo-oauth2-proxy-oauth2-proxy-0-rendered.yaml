@@ -5,13 +5,13 @@ kind: ServiceAccount
 metadata:
   labels:
     app: oauth2-proxy    
-    helm.sh/chart: oauth2-proxy-7.18.0
+    helm.sh/chart: oauth2-proxy-10.1.4
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: authentication-proxy
     app.kubernetes.io/part-of: oauth2-proxy
     app.kubernetes.io/name: oauth2-proxy
     app.kubernetes.io/instance: oauth2-proxy-0
-    app.kubernetes.io/version: "7.11.0"
+    app.kubernetes.io/version: "7.14.2"
   name: oauth2-proxy-0
   namespace: default
 automountServiceAccountToken: true
@@ -22,13 +22,13 @@ kind: ConfigMap
 metadata:
   labels:
     app: oauth2-proxy    
-    helm.sh/chart: oauth2-proxy-7.18.0
+    helm.sh/chart: oauth2-proxy-10.1.4
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: authentication-proxy
     app.kubernetes.io/part-of: oauth2-proxy
     app.kubernetes.io/name: oauth2-proxy
     app.kubernetes.io/instance: oauth2-proxy-0
-    app.kubernetes.io/version: "7.11.0"
+    app.kubernetes.io/version: "7.14.2"
   name: oauth2-proxy-0
   namespace: default
 data:
@@ -40,13 +40,13 @@ kind: Service
 metadata:
   labels:
     app: oauth2-proxy    
-    helm.sh/chart: oauth2-proxy-7.18.0
+    helm.sh/chart: oauth2-proxy-10.1.4
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: authentication-proxy
     app.kubernetes.io/part-of: oauth2-proxy
     app.kubernetes.io/name: oauth2-proxy
     app.kubernetes.io/instance: oauth2-proxy-0
-    app.kubernetes.io/version: "7.11.0"
+    app.kubernetes.io/version: "7.14.2"
   name: oauth2-proxy-0
   namespace: default
 spec:
@@ -72,13 +72,13 @@ kind: Deployment
 metadata:
   labels:
     app: oauth2-proxy    
-    helm.sh/chart: oauth2-proxy-7.18.0
+    helm.sh/chart: oauth2-proxy-10.1.4
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: authentication-proxy
     app.kubernetes.io/part-of: oauth2-proxy
     app.kubernetes.io/name: oauth2-proxy
     app.kubernetes.io/instance: oauth2-proxy-0
-    app.kubernetes.io/version: "7.11.0"
+    app.kubernetes.io/version: "7.14.2"
   name: oauth2-proxy-0
   namespace: default
 spec:
@@ -92,25 +92,25 @@ spec:
     metadata:
       annotations:
         checksum/config: 9b187c50a320183a238b481ee2393757a98d8faef4187987e91454be5c373d66
-        checksum/secret: 8fa6fdae65861caa2986544b8860a5205be1937328c8ec2bad6bad076b9e2425
+        checksum/secret: 9eb46bbdefd5cf844a2c4965b1241a7177addaa7c07789e7873ccda6b0104111
         checksum/google-secret: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
         checksum/redis-secret: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
       labels:
         app: oauth2-proxy        
-        helm.sh/chart: oauth2-proxy-7.18.0
+        helm.sh/chart: oauth2-proxy-10.1.4
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: authentication-proxy
         app.kubernetes.io/part-of: oauth2-proxy
         app.kubernetes.io/name: oauth2-proxy
         app.kubernetes.io/instance: oauth2-proxy-0
-        app.kubernetes.io/version: "7.11.0"
+        app.kubernetes.io/version: "7.14.2"
     spec:
       serviceAccountName: oauth2-proxy-0
       enableServiceLinks: true
       automountServiceAccountToken: true
       containers:
       - name: oauth2-proxy
-        image: "quay.io/oauth2-proxy/oauth2-proxy:v7.11.0"
+        image: "quay.io/oauth2-proxy/oauth2-proxy:v7.14.2"
         imagePullPolicy: IfNotPresent
         args:
           - --http-address=0.0.0.0:4180
@@ -185,13 +185,13 @@ kind: Ingress
 metadata:
   labels:
     app: oauth2-proxy    
-    helm.sh/chart: oauth2-proxy-7.18.0
+    helm.sh/chart: oauth2-proxy-10.1.4
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: authentication-proxy
     app.kubernetes.io/part-of: oauth2-proxy
     app.kubernetes.io/name: oauth2-proxy
     app.kubernetes.io/instance: oauth2-proxy-0
-    app.kubernetes.io/version: "7.11.0"
+    app.kubernetes.io/version: "7.14.2"
   name: oauth2-proxy-0
   namespace: default
   annotations:

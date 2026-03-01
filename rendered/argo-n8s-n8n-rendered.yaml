@@ -6,10 +6,10 @@ metadata:
   name: n8n
   namespace: default
   labels:
-    helm.sh/chart: n8n-1.1.0
+    helm.sh/chart: n8n-2.0.1
     app.kubernetes.io/name: n8n
     app.kubernetes.io/instance: n8n
-    app.kubernetes.io/version: "1.116.2"
+    app.kubernetes.io/version: "1.122.4"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: n8n/templates/service.yaml
@@ -19,10 +19,10 @@ metadata:
   name: n8n
   namespace: default
   labels:
-    helm.sh/chart: n8n-1.1.0
+    helm.sh/chart: n8n-2.0.1
     app.kubernetes.io/name: n8n
     app.kubernetes.io/instance: n8n
-    app.kubernetes.io/version: "1.116.2"
+    app.kubernetes.io/version: "1.122.4"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -43,10 +43,10 @@ metadata:
   name: n8n
   namespace: default
   labels:
-    helm.sh/chart: n8n-1.1.0
+    helm.sh/chart: n8n-2.0.1
     app.kubernetes.io/name: n8n
     app.kubernetes.io/instance: n8n
-    app.kubernetes.io/version: "1.116.2"
+    app.kubernetes.io/version: "1.122.4"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -76,7 +76,7 @@ spec:
         - name: n8n
           securityContext:
             {}
-          image: "n8nio/n8n:1.116.2"
+          image: "n8nio/n8n:1.122.4"
           imagePullPolicy: IfNotPresent
           envFrom:
           env: []
@@ -110,10 +110,10 @@ kind: Pod
 metadata:
   name: "n8n-test-connection"
   labels:
-    helm.sh/chart: n8n-1.1.0
+    helm.sh/chart: n8n-2.0.1
     app.kubernetes.io/name: n8n
     app.kubernetes.io/instance: n8n
-    app.kubernetes.io/version: "1.116.2"
+    app.kubernetes.io/version: "1.122.4"
     app.kubernetes.io/managed-by: Helm
   annotations:
     "helm.sh/hook": test

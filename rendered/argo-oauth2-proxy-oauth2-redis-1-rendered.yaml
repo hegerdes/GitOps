@@ -9,8 +9,8 @@ metadata:
     app.kubernetes.io/instance: oauth2-redis-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
-    app.kubernetes.io/version: 7.4.3
-    helm.sh/chart: redis-20.13.4
+    app.kubernetes.io/version: 8.6.1
+    helm.sh/chart: redis-25.3.2
 spec:
   podSelector:
     matchLabels:
@@ -36,8 +36,8 @@ metadata:
     app.kubernetes.io/instance: oauth2-redis-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
-    app.kubernetes.io/version: 7.4.3
-    helm.sh/chart: redis-20.13.4
+    app.kubernetes.io/version: 8.6.1
+    helm.sh/chart: redis-25.3.2
     app.kubernetes.io/component: master
 spec:
   maxUnavailable: 1
@@ -58,8 +58,8 @@ metadata:
     app.kubernetes.io/instance: oauth2-redis-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
-    app.kubernetes.io/version: 7.4.3
-    helm.sh/chart: redis-20.13.4
+    app.kubernetes.io/version: 8.6.1
+    helm.sh/chart: redis-25.3.2
 ---
 # Source: redis/templates/secret.yaml
 apiVersion: v1
@@ -71,11 +71,11 @@ metadata:
     app.kubernetes.io/instance: oauth2-redis-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
-    app.kubernetes.io/version: 7.4.3
-    helm.sh/chart: redis-20.13.4
+    app.kubernetes.io/version: 8.6.1
+    helm.sh/chart: redis-25.3.2
 type: Opaque
 data:
-  redis-password: "dWJtUHhYTEFIMw=="
+  redis-password: "RVM5cDk3Vnp2eg=="
 ---
 # Source: redis/templates/configmap.yaml
 apiVersion: v1
@@ -87,11 +87,14 @@ metadata:
     app.kubernetes.io/instance: oauth2-redis-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
-    app.kubernetes.io/version: 7.4.3
-    helm.sh/chart: redis-20.13.4
+    app.kubernetes.io/version: 8.6.1
+    helm.sh/chart: redis-25.3.2
 data:
   redis.conf: |-
     # User-supplied common configuration:
+    # Enable ReJSON y Redisearch
+    loadmodule /opt/bitnami/redis/lib/redis/modules/redisearch.so
+    loadmodule /opt/bitnami/redis/lib/redis/modules/rejson.so
     # Enable AOF https://redis.io/topics/persistence#append-only-file
     appendonly yes
     # Disable RDB persistence, AOF persistence already enabled.
@@ -121,21 +124,21 @@ metadata:
     app.kubernetes.io/instance: oauth2-redis-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
-    app.kubernetes.io/version: 7.4.3
-    helm.sh/chart: redis-20.13.4
+    app.kubernetes.io/version: 8.6.1
+    helm.sh/chart: redis-25.3.2
 data:
   ping_readiness_local.sh: |-
     #!/bin/bash
 
+    timeout=$1
+    run_redis_command() {
+        local args=("-p" "$REDIS_PORT")
+        timeout -s 15 $timeout redis-cli "${args[@]}" "$@"
+    }
+
     [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
     [[ -n "$REDIS_PASSWORD" ]] && export REDISCLI_AUTH="$REDIS_PASSWORD"
-    response=$(
-      timeout -s 15 $1 \
-      redis-cli \
-        -h localhost \
-        -p $REDIS_PORT \
-        ping
-    )
+    response=$(run_redis_command ping)
     if [ "$?" -eq "124" ]; then
       echo "Timed out"
       exit 1
@@ -144,6 +147,7 @@ data:
       echo "$response"
       exit 1
     fi
+
   ping_liveness_local.sh: |-
     #!/bin/bash
 
@@ -229,8 +233,8 @@ metadata:
     app.kubernetes.io/instance: oauth2-redis-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
-    app.kubernetes.io/version: 7.4.3
-    helm.sh/chart: redis-20.13.4
+    app.kubernetes.io/version: 8.6.1
+    helm.sh/chart: redis-25.3.2
 data:
   start-master.sh: |
     #!/bin/bash
@@ -262,8 +266,8 @@ metadata:
     app.kubernetes.io/instance: oauth2-redis-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
-    app.kubernetes.io/version: 7.4.3
-    helm.sh/chart: redis-20.13.4
+    app.kubernetes.io/version: 8.6.1
+    helm.sh/chart: redis-25.3.2
 spec:
   type: ClusterIP
   clusterIP: None
@@ -285,13 +289,12 @@ metadata:
     app.kubernetes.io/instance: oauth2-redis-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
-    app.kubernetes.io/version: 7.4.3
-    helm.sh/chart: redis-20.13.4
+    app.kubernetes.io/version: 8.6.1
+    helm.sh/chart: redis-25.3.2
     app.kubernetes.io/component: master
 spec:
   type: ClusterIP
   internalTrafficPolicy: Cluster
-  sessionAffinity: None
   ports:
     - name: tcp-redis
       port: 6379
@@ -312,8 +315,8 @@ metadata:
     app.kubernetes.io/instance: oauth2-redis-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
-    app.kubernetes.io/version: 7.4.3
-    helm.sh/chart: redis-20.13.4
+    app.kubernetes.io/version: 8.6.1
+    helm.sh/chart: redis-25.3.2
     app.kubernetes.io/component: master
 spec:
   replicas: 1
@@ -331,14 +334,14 @@ spec:
         app.kubernetes.io/instance: oauth2-redis-1
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: redis
-        app.kubernetes.io/version: 7.4.3
-        helm.sh/chart: redis-20.13.4
+        app.kubernetes.io/version: 8.6.1
+        helm.sh/chart: redis-25.3.2
         app.kubernetes.io/component: master
       annotations:
-        checksum/configmap: 2a9ab4a5432825504d910f022638674ce88eaefe9f9f595ad8bc107377d104fb
-        checksum/health: aff24913d801436ea469d8d374b2ddb3ec4c43ee7ab24663d5f8ff1a1b6991a9
+        checksum/configmap: 95944ee35a19af37cefd156f19d93e157e578c1dc63ac01ce735ae93090b7580
+        checksum/health: a2fc61ae99390643dac0673ed97203805136d4460b2319e7beff10546c1e1140
         checksum/scripts: 0717e77fd3bb941f602860e9be4f2ed87b481cddeadf37be463f8512ecde0c3e
-        checksum/secret: 56899a0179740e5425e36525a9d23bea5e6c89eec46a5f6d09ec6dd235460e7e
+        checksum/secret: 108189f91c7a0ad4e259f15f9f4e890dfbf86c962344bf531aceaaaf5ec52245
     spec:
       
       securityContext:
@@ -367,7 +370,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: redis
-          image: docker.io/bitnami/redis:7.4.3-debian-12-r0
+          image: registry-1.docker.io/bitnami/redis:latest
           imagePullPolicy: "IfNotPresent"
           securityContext:
             allowPrivilegeEscalation: false
@@ -393,6 +396,8 @@ spec:
               value: master
             - name: ALLOW_EMPTY_PASSWORD
               value: "no"
+            - name: OPENSSL_FIPS
+              value: "yes"
             - name: REDIS_PASSWORD_FILE
               value: "/opt/bitnami/redis/secrets/redis-password"
             - name: REDIS_TLS_ENABLED
@@ -413,7 +418,7 @@ spec:
               command:
                 - /bin/bash
                 - -ec
-                - /health/ping_liveness_local.sh 5
+                - "/health/ping_liveness_local.sh 5"
           readinessProbe:
             initialDelaySeconds: 20
             periodSeconds: 5
@@ -424,7 +429,7 @@ spec:
               command:
                 - /bin/bash
                 - -ec
-                - /health/ping_readiness_local.sh 1
+                - "/health/ping_readiness_local.sh 1"
           resources:
             limits:
               cpu: 150m
