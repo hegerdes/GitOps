@@ -7,7 +7,7 @@ terraform {
     }
     talos = {
       source  = "siderolabs/talos"
-      version = "~>0.9"
+      version = "~>0.10"
     }
     helm = {
       source  = "hashicorp/helm"
@@ -19,7 +19,7 @@ terraform {
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "~>6.20"
+      version = "~>6.35"
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
