@@ -7,7 +7,6 @@ locals {
   ipv6_enabled         = true
   subnets              = [for index in range(length(var.node_pools) + 1) : "10.0.${index}.0/24"]
   ssh_keys             = flatten([for pool in var.node_pools : [for key in pool.ssh_key_paths : file(key)]])
-  # node_pool_ips        = flatten([for index, pool in module.node_pools : pool.vm_ips])
 
   # DNS
   dns_records    = { a = module.loadbalancer.lb_ipv4, aaaa = module.loadbalancer.lb_ipv6 }
@@ -28,12 +27,21 @@ locals {
   ]))
 
   # IP map configs
-  talos_apply_use_pvt_ip = true
+  talos_apply_use_pvt_ip = false
   raw_server_list        = flatten([for pool in module.node_pools : [for vm in pool.vms_raw : vm]])
   vm_pvt_ip_map          = { for vm in local.raw_server_list : (vm.network[*].ip)[0] => vm }
   private_ips            = flatten([for pool in local.node_pools : [for ip in pool.private_ip_addresses : ip]])
   private_ips_map        = { for vm in local.raw_server_list : vm.name => (vm.network[*].ip)[0] }
   private_cp_ips         = [for ip, vm in local.vm_pvt_ip_map : ip if contains(keys(vm.labels), "k8s_control_plane")]
+
+  pool_cp_public_ips = {
+    for index, pool in local.node_pools : pool.name =>
+    module.node_pools[pool.name].vm_ips if pool.machine_type == "controlplane"
+  }
+  pool_worker_public_ips = {
+    for index, pool in local.node_pools : pool.name =>
+    module.node_pools[pool.name].vm_ips if pool.machine_type == "worker"
+  }
 
   # Talos endpoints
   talos_endpoint   = local.talos_apply_use_pvt_ip ? local.cp_public_endpoint : null
@@ -44,6 +52,7 @@ locals {
     pool.name => merge(
       pool, {
         user_data            = try(data.talos_machine_configuration.this[pool.name].machine_configuration, "")
+        machine_type         = try(data.talos_machine_configuration.this[pool.name].machine_type)
         ssh_keys             = concat([for key in hcloud_ssh_key.default : key.name], [hcloud_ssh_key.dummy.id])
         network_name         = hcloud_network.k8s_network.name
         location             = try(lower(pool.location), var.location)
@@ -67,13 +76,13 @@ locals {
       },
       nodeConfigs = {
         cas-arm-small = {
-          cloudInit = jsonencode(yamldecode(local.autoscale_node_conf)),
+          cloudInit = local.autoscale_node_conf,
           labels = {
             "node.kubernetes.io/role" = "autoscaler-node"
           }
         }
         cas-amd-small = {
-          cloudInit = jsonencode(yamldecode(local.autoscale_node_conf)),
+          cloudInit = local.autoscale_node_conf,
           labels = {
             "node.kubernetes.io/role" = "autoscaler-node"
           }
@@ -107,6 +116,8 @@ data "talos_machine_configuration" "this" {
       ipv6_enabled                   = local.ipv6_enabled
       extraArgsApiServer             = var.api_server_extra_args
       nodeRole                       = each.value.tags.role
+      external_secret_client_secret  = data.azurerm_key_vault_secret.external_secrets_oauth_client_secret.value
+      extra_ca                       = data.azurerm_key_vault_secret.external_secrets_hegerdes_ca_cert.value
       nodeLabels = {
         "pool"              = each.value.name,
         "openebs.io/engine" = "mayastor"
@@ -129,6 +140,8 @@ resource "talos_cluster_kubeconfig" "this" {
   certificate_renewal_duration = "2h"
   endpoint                     = local.talos_endpoint
   node                         = local.talos_cp_node_ip
+  # endpoint = local.pool_cp_public_ips[0]y
+  # node     = local.pool_cp_public_ips[0]
 
   depends_on = [
     talos_machine_bootstrap.this
@@ -145,7 +158,7 @@ resource "talos_machine_bootstrap" "this" {
 # Ensures that current machine configuration is afer servers are created
 resource "talos_machine_configuration_apply" "this" {
   for_each                    = toset(local.private_ips)
-  endpoint                    = local.cp_public_endpoint
+  endpoint                    = local.talos_apply_use_pvt_ip ? local.cp_public_endpoint : null
   client_configuration        = talos_machine_secrets.this.client_configuration
   machine_configuration_input = data.talos_machine_configuration.this[local.vm_pvt_ip_map[each.key].labels.pool].machine_configuration
 
@@ -316,6 +329,16 @@ resource "aws_route53_record" "api_server" {
 data "azurerm_key_vault" "hegerdes" {
   name                = "hegerdes"
   resource_group_name = "default"
+}
+
+data "azurerm_key_vault_secret" "external_secrets_oauth_client_secret" {
+  name         = "k8s-eso-aad-client-secret"
+  key_vault_id = data.azurerm_key_vault.hegerdes.id
+}
+
+data "azurerm_key_vault_secret" "external_secrets_hegerdes_ca_cert" {
+  name         = "tls-hegerdes-local-crt"
+  key_vault_id = data.azurerm_key_vault.hegerdes.id
 }
 
 data "azurerm_key_vault_secret" "hcloud_token" {

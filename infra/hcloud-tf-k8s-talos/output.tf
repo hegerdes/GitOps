@@ -26,3 +26,9 @@ output "vm_pool_names" {
 output "vm_pool_pvt_ips" {
   value = local.private_ips_map
 }
+output "vm_pool_public_ips" {
+  value = merge(local.pool_cp_public_ips, local.pool_worker_public_ips)
+}
+output "lb_endpoint" {
+  value = local.cp_public_endpoint
+}

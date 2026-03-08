@@ -1,3 +1,4 @@
+version: v1alpha1
 machine:
   kubelet:
     nodeIP:
@@ -59,7 +60,7 @@ machine:
 
   network:
     kubespan:
-      enabled: true
+      enabled: false
     nameservers:
         - 1.1.1.1 # Cloudflare
         - 1.0.0.1 # Cloudflare
@@ -136,9 +137,7 @@ cluster:
     # CRDs
     - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.0/standard-install.yaml
     - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/heads/main/charts/kube-prometheus-stack/charts/crds/crds/crd-podmonitors.yaml
-    - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/heads/main/charts/kube-prometheus-stack/charts/crds/crds/crd-probes.yaml
     - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/heads/main/charts/kube-prometheus-stack/charts/crds/crds/crd-servicemonitors.yaml
-    - https://github.com/prometheus-community/helm-charts/raw/refs/heads/main/charts/kube-prometheus-stack/charts/crds/crds/crd-prometheusrules.yaml
     - https://raw.githubusercontent.com/external-secrets/external-secrets/refs/heads/main/deploy/crds/bundle.yaml
 
     # Apps
@@ -167,4 +166,12 @@ cluster:
       kubernetes: # Kubernetes registry is problematic with KubeSpan, if the control plane endpoint is routed via KubeSpan.
         disabled: true
       service: {}
+%{ endif }
+%{ if extra_ca != null }
+---
+apiVersion: v1alpha1
+kind: TrustedRootsConfig
+name: extra-ca
+certificates: |-
+  ${extra_ca}
 %{ endif }
