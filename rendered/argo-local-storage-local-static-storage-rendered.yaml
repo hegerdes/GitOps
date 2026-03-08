@@ -31,6 +31,7 @@ data:
         - "/scripts/shred.sh"
         - "2"
       volumeMode: Filesystem
+      accessMode: ReadWriteOnce
       fsType: ext4
       namePattern: "*"
 ---
@@ -59,7 +60,7 @@ rules:
   verbs: ["create", "update", "patch"]
 - apiGroups: [""]
   resources: ["nodes"]
-  verbs: ["get"]
+  verbs: ["get", "update"]
 ---
 # Source: local-static-provisioner/templates/rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -106,7 +107,7 @@ spec:
         app.kubernetes.io/name: local-static-provisioner
         app.kubernetes.io/instance: local-static-storage
       annotations:
-        checksum/config: a439d4071316d620936c78a5908d130a2c371a7862d4cb61dac35554e4cf57f7
+        checksum/config: 43ce768f7c272a9263462a2c99bc8116376c90c3c490ef4b16a18f24b7021baa
     spec:
       hostPID: false
       serviceAccountName: local-static-storage-local-static-provisioner
