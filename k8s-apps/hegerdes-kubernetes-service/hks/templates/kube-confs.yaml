@@ -24,7 +24,6 @@ data:
         user:
           client-certificate: /etc/kubernetes/kube.crt
           client-key: /etc/kubernetes/kube.key
-
 ---
 apiVersion: v1
 kind: ConfigMap
