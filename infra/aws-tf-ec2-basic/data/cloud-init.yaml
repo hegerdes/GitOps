@@ -1,0 +1,64 @@
+## template: jinja
+#cloud-config
+
+ssh_pwauth: false
+# disable_root: true
+disable_root_opts: no-port-forwarding,no-agent-forwarding,no-X11-forwarding
+
+groups: [cloud]
+preserve_hostname: false
+hostname: "{{ ds.meta_data.instance_id }}"
+
+users:
+  - name: bootstrap
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, cloud
+    shell: /bin/bash
+    lock_passwd: true
+    ssh_authorized_keys:
+%{ for key in ssh_keys ~}
+      - ${key}
+%{ endfor ~}
+
+package_update: true
+package_upgrade: true
+package_reboot_if_required: true
+packages:
+  - gnupg
+  - lsb-release
+  - ca-certificates
+  - curl
+  - fuse
+  - wget
+  - htop
+  - gpg
+  - cron
+  - apt-listchanges
+  - apt-transport-https
+  - jq # json parsing and validating
+  - yq # yaml parsing and validating
+  - unzip
+
+%{ if extra_disks }
+
+fs_setup:
+  - label: "ebs-volume"
+    filesystem: "ext4"
+    device: "/dev/nvme1n1"
+    overwrite: true
+
+mounts:
+  - ["/dev/nvme1n1", "/mnt/ebs", "ext4", "defaults,nofail", "0", "2"]
+%{ endif }
+
+bootcmd:
+  - mkdir -p /mnt/ebs
+  - mkdir -p /etc/apt/keyrings
+
+runcmd:
+  - chmod -R 777 /mnt/ebs
+  - chmod -R 777 /srv
+  - curl -sL -o amazon-ssm-agent.deb https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb
+  - dpkg -i amazon-ssm-agent.deb
+  - rm -f amazon-ssm-agent.deb
+  - echo "Cloud-Init finished" >> /srv/cloud-init-msg.txt

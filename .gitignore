@@ -9,6 +9,8 @@ infra/hcloud-tf-k8s-talos/backend.tf
 infra/hcloud-tf-k8s-kubeadm/terraform.tfvars.btk.json
 infra/hcloud-tf-k8s-talos/data/controlplane-patch-secrets.yaml
 infra/hcloud-tf-k8s-talos/data/k8s-secret-external-secret.yml
+infra/aws-tf-ec2-basic/data/web-key
+infra/aws-tf-ec2-basic/backend.tf
 k8s-apps/linkerd/
 infra/test
 *.log
