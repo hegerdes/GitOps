@@ -18,6 +18,6 @@ spec:
           gatewayHTTPRoute:
             serviceType: ClusterIP
             parentRefs:
-              - name: envoy-gateway
+              - name: envoy-gw-default
                 namespace: envoy-gateway
                 kind: Gateway

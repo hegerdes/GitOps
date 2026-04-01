@@ -1,0 +1,12 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: default-backend-policy
+  namespace: envoy-gateway
+spec:
+  targetRefs:
+      - name: envoy-gw-default
+        kind: Gateway
+        group: gateway.networking.k8s.io
+  proxyProtocol:
+    version: V2

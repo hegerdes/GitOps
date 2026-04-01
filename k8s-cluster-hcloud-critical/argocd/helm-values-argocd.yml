@@ -57,8 +57,49 @@ configs:
 server:
   # extraArgs:
   #   - --insecure
-  ingress:
+  certificate:
     enabled: true
+    domain: argocd-server.argocd.svc.local
+    additionalHosts:
+      - argocd-server.argocd.svc
+      - argocd-server.argocd
+      - argocd-server
+    issuer:
+      group: cert-manager.io
+      kind: ClusterIssuer
+      name: ca-hegerdes
+
+  certificateSecret:
+    enabled: true
+
+  httproute:
+    enabled: true
+    labels: {}
+    annotations: {}
+    parentRefs:
+      - name: envoy-gw-default
+        namespace: envoy-gateway
+        kind: Gateway
+        group: gateway.networking.k8s.io
+    hostnames:
+      - argocd.k8s.henrikgerdes.me
+  backendTLSPolicy:
+    enabled: true
+    targetRefs:
+      - group: ""
+        kind: Service
+        name: argocd-server
+        sectionName: https
+    validation:
+      hostname: argocd-server
+      # wellKnownCACertificates: System
+      caCertificateRefs:
+        - name: argocd-server-tls
+          group: ''
+          kind: Secret
+
+  ingress:
+    enabled: false
     annotations:
       nginx.ingress.kubernetes.io/enable-opentelemetry: "true"
       nginx.ingress.kubernetes.io/opentelemetry-trust-incoming-span: "true"
