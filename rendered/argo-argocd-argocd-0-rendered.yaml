@@ -33778,9 +33778,9 @@ spec:
             path: profiler.enabled
       dnsPolicy: ClusterFirst
 ---
-# Source: argo-cd/templates/argocd-server/ingress.yaml
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+# Source: argo-cd/templates/argocd-server/backendtlspolicy.yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: BackendTLSPolicy
 metadata:
   name: argocd-0-server
   namespace: default
@@ -33792,37 +33792,84 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argocd
     app.kubernetes.io/version: "v3.3.6"
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod-ing-nginx"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-    nginx.ingress.kubernetes.io/enable-modsecurity: "true"
-    nginx.ingress.kubernetes.io/enable-opentelemetry: "true"
-    nginx.ingress.kubernetes.io/enable-owasp-core-rules: "true"
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/hsts: "true"
-    nginx.ingress.kubernetes.io/hsts-include-subdomains: "true"
-    nginx.ingress.kubernetes.io/hsts-max-age: "63072000"
-    nginx.ingress.kubernetes.io/hsts-preload: "true"
-    nginx.ingress.kubernetes.io/opentelemetry-trust-incoming-span: "true"
-    nginx.ingress.kubernetes.io/proxy-body-size: "1m"
-    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
 spec:
-  ingressClassName: nginx
+  targetRefs:
+    - group: ""
+      kind: Service
+      name: argocd-server
+      sectionName: https
+  validation:
+    caCertificateRefs:
+    - group: ""
+      kind: Secret
+      name: argocd-server-tls
+    hostname: argocd-server
+---
+# Source: argo-cd/templates/argocd-server/certificate.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: argocd-0-server
+  namespace: default
+  labels:
+    helm.sh/chart: argo-cd-9.4.17
+    app.kubernetes.io/name: argocd-server
+    app.kubernetes.io/instance: argocd-0
+    app.kubernetes.io/component: server
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: argocd
+    app.kubernetes.io/version: "v3.3.6"
+spec: 
+  secretName: argocd-server-tls
+  commonName: argocd-server.argocd.svc.local
+  dnsNames:
+    - argocd-server.argocd.svc.local
+    - "argocd-server.argocd.svc"
+    - "argocd-server.argocd"
+    - "argocd-server"
+  issuerRef:
+    group: "cert-manager.io"
+    kind: "ClusterIssuer"
+    name: "ca-hegerdes"
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    rotationPolicy: Never
+    size: 2048
+---
+# Source: argo-cd/templates/argocd-server/httproute.yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: argocd-0-server
+  namespace: default
+  labels:
+    helm.sh/chart: argo-cd-9.4.17
+    app.kubernetes.io/name: argocd-server
+    app.kubernetes.io/instance: argocd-0
+    app.kubernetes.io/component: server
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: argocd
+    app.kubernetes.io/version: "v3.3.6"
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: envoy-gw-default
+      namespace: envoy-gateway
+  hostnames:
+    - argocd.k8s.henrikgerdes.me
   rules:
-    - host: argocd.k8s.henrikgerdes.me
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: argocd-0-server
-                port:
-                  number: 443
-  tls:
-    - hosts:
-      - argocd.k8s.henrikgerdes.me
-      secretName: argocd-server-tls
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - group: ''
+          kind: Service
+          name: argocd-0-server
+          port: 443
+          weight: 1
 ---
 # Source: argo-cd/templates/redis-secret-init/serviceaccount.yaml
 apiVersion: v1
