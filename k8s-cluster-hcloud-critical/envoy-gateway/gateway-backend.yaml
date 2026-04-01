@@ -5,7 +5,7 @@ metadata:
   namespace: envoy-gateway
 spec:
   targetRefs:
-      - name: envoy-gw-default
+      - name: envoy-gw-default-off
         kind: Gateway
         group: gateway.networking.k8s.io
   proxyProtocol:
