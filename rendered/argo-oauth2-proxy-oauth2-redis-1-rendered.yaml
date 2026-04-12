@@ -75,7 +75,7 @@ metadata:
     helm.sh/chart: redis-25.3.10
 type: Opaque
 data:
-  redis-password: "Z3NRdHh6bmRoYw=="
+  redis-password: "bnhTNFV1dFpiYQ=="
 ---
 # Source: redis/templates/configmap.yaml
 apiVersion: v1
@@ -341,7 +341,7 @@ spec:
         checksum/configmap: 95944ee35a19af37cefd156f19d93e157e578c1dc63ac01ce735ae93090b7580
         checksum/health: a2fc61ae99390643dac0673ed97203805136d4460b2319e7beff10546c1e1140
         checksum/scripts: 0717e77fd3bb941f602860e9be4f2ed87b481cddeadf37be463f8512ecde0c3e
-        checksum/secret: 20e5f9447ab1ba8105ee5e5b17352d8caeac4a34b8e0ea7cf60fb54df5db3014
+        checksum/secret: c38cc5c4221336d9dfd23d75385dc0c0f00b11c46676fff9163e0a739be59d8d
     spec:
       
       securityContext:
