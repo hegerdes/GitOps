@@ -52,6 +52,7 @@ configs:
       webhook.github.secret: $argocd-secret-sso:webhook.github.secret
   params:
     controller.sync.timeout.seconds: "300"
+    controller.diff.server.side: "true"
 
 ## Server
 server:
