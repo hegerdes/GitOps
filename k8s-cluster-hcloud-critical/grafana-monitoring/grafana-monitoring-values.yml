@@ -89,7 +89,7 @@ costMetrics:
   collector: alloy-metrics
 hostMetrics:
   windowsHosts:
-    enabled: true
+    enabled: false
   linuxHosts:
     enabled: true
   enabled: true
