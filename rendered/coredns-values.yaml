@@ -1,5 +1,5 @@
 image:
-  tag: 1.14.1
+  tag: 1.14.2
 replicaCount: 2
 priorityClassName: system-cluster-critical
 isClusterService: false
