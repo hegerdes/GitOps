@@ -11,13 +11,16 @@ spec:
       targetRevision: 1.7.1
       helm:
         releaseName: eg
-        skipCrds: true
-        valuesObject: {}
-    - repoURL: https://github.com/envoyproxy/gateway.git
-      targetRevision: HEAD
-      path: charts/gateway-helm/charts/crds/crds/generated/
-      directory:
-        recurse: false
+        # skipCrds: true
+        valuesObject:
+          crds:
+            gatewayAPI:
+              enabled: false
+    # - repoURL: https://github.com/envoyproxy/gateway.git
+    #   targetRevision: HEAD
+    #   path: charts/gateway-helm/charts/crds/crds/generated/
+    #   directory:
+    #     recurse: false
     - repoURL: https://github.com/hegerdes/GitOps.git
       targetRevision: HEAD
       path: k8s-cluster-hcloud-critical/envoy-gateway
