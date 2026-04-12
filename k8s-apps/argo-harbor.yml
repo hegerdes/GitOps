@@ -16,29 +16,9 @@ spec:
       helm:
         releaseName: harbor
         valuesObject:
-          core:
-            nodeSelector:
-              kubernetes.io/arch: amd64
-          registry:
-            nodeSelector:
-              kubernetes.io/arch: amd64
-          jobservice:
-            nodeSelector:
-              kubernetes.io/arch: amd64
-          portal:
-            nodeSelector:
-              kubernetes.io/arch: amd64
           trivy:
             nodeSelector:
               kubernetes.io/arch: amd64
-          database:
-            internal:
-              nodeSelector:
-                kubernetes.io/arch: amd64
-          redis:
-            internal:
-              nodeSelector:
-                kubernetes.io/arch: amd64
           existingSecretAdminPassword: harbor-admin-creds
           existingSecretAdminPasswordKey: HARBOR_ADMIN_PASSWORD
           externalURL: https://harbor.k8s.henrikgerdes.me
@@ -60,11 +40,11 @@ spec:
               labels: {}
               annotations: {}
               parentRefs:
-                - name: nginx-default-gateway
-                  namespace: nginx-gateway
+                - name: envoy-gw-default
+                  namespace: envoy-gateway
                   kind: Gateway
                   group: gateway.networking.k8s.io
-              hosts: [harbor.k8s-gw.henrikgerdes.me]
+              hosts: [harbor.k8s.henrikgerdes.me]
             persistence:
               persistentVolumeClaim:
                 registry:
@@ -102,3 +82,4 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - ServerSideApply=true

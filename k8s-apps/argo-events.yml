@@ -3,8 +3,6 @@ kind: Application
 metadata:
   name: argo-events
   namespace: argocd
-  annotations:
-    argocd.argoproj.io/sync-wave: "4"
 spec:
   project: default
   sources:
@@ -56,3 +54,5 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - SkipDryRunOnMissingResource=true
+      - ServerSideApply=true

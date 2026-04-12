@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-rollouts
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: argo-rollouts
+    repoURL: https://argoproj.github.io/argo-helm
+    targetRevision: 2.*
+    helm:
+      releaseName: argo-rollouts
+      valuesObject:
+        controller:
+          replicas: 1
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo-rollouts
+  info:
+    - name: Chart-Info
+      value: https://artifacthub.io/packages/helm/argo/argo-rollouts
+    - name: App-Source
+      value: https://github.com/argoproj/argo-rollouts
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

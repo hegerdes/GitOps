@@ -8,16 +8,28 @@ spec:
   sources:
     - chart: argo-workflows
       repoURL: https://argoproj.github.io/argo-helm
-      targetRevision: 0.*
+      targetRevision: 1.*
       helm:
         releaseName: argo-workflows
         valuesObject:
+          workflow:
+            serviceAccount:
+              create: true
           crds:
             full: true
           server:
             authModes: [sso]
-            ingress:
+            httproute:
               enabled: true
+              parentRefs:
+                - name: envoy-gw-default
+                  namespace: envoy-gateway
+                  kind: Gateway
+                  group: gateway.networking.k8s.io
+              hostnames:
+                - argo-workflows.k8s.henrikgerdes.me
+            ingress:
+              enabled: false
               annotations:
                 cert-manager.io/cluster-issuer: "letsencrypt-prod-ing-nginx"
 
@@ -28,8 +40,6 @@ spec:
                   hosts: [argo-workflows.k8s.henrikgerdes.me]
             sso:
               enabled: true
-              scopes:
-                - groups
               issuer: https://login.microsoftonline.com/295b5ac3-2e4e-4ade-85d8-7dc31617bc2c/v2.0
               clientId:
                 name: argo-workflows-server-sso
@@ -38,6 +48,7 @@ spec:
                 name: argo-workflows-server-sso
                 key: client-secret
               redirectUrl: https://argo-workflows.k8s.henrikgerdes.me/oauth2/callback
+              scopes: [openid, profile]
           controller:
             persistence:
               archive: true
@@ -79,6 +90,29 @@ spec:
                     remoteRef:
                       key: aad-testing-client-secret
                       decodingStrategy: None # can be None, Base64, Base64URL or Auto
+            - apiVersion: v1
+              kind: ServiceAccount
+              automountServiceAccountToken: true
+              metadata:
+                name: admin-user
+                annotations:
+                  # The rule is an expression used to determine if this service account
+                  # should be used.
+                  # * `groups` - an array of the OIDC groups
+                  # * `iss` - the issuer ("argo-server")
+                  # * `sub` - the subject (typically the username)
+                  # Must evaluate to a boolean.
+                  # If you want an account to be the default to use, this rule can be "true".
+                  # Details of the expression language are available in
+                  # https://expr-lang.org/docs/language-definition.
+                  workflows.argoproj.io/rbac-rule: "'8d6c909a-13ef-44c0-9d3e-053e50d338b5' in groups"
+                  # The precedence is used to determine which service account to use when
+                  # Precedence is an integer. It may be negative. If omitted, it defaults to "0".
+                  # Numerically higher values have higher precedence (not lower, which maybe
+                  # counter-intuitive to you).
+                  # If two rules match and have the same precedence, then which one used will
+                  # be arbitrary.
+                  workflows.argoproj.io/rbac-rule-precedence: "1"
     - repoURL: https://github.com/hegerdes/GitOps.git
       targetRevision: HEAD
       path: k8s-apps/argo-workflow

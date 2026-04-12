@@ -17,7 +17,7 @@ spec:
       releaseName: grafana
       valuesObject:
         ingress:
-          enabled: true
+          enabled: false
           ingressClassName: nginx
           annotations:
             cert-manager.io/cluster-issuer: letsencrypt-prod-ing-nginx
@@ -29,12 +29,10 @@ spec:
         route:
           main:
             enabled: true
-            hostnames: [grafana.k8s-gw.henrikgerdes.me]
+            hostnames: [grafana.k8s.henrikgerdes.me]
             parentRefs:
-              # - name: nginx-default-gateway
-              #   namespace: nginx-gateway
-              - name: cilium-gateway
-                namespace: cilium-gateway
+              - name: envoy-gw-default
+                namespace: envoy-gateway
                 kind: Gateway
                 group: gateway.networking.k8s.io
         envFromSecret: grafana-secret-sso-entra
@@ -85,8 +83,6 @@ spec:
           grafana_net:
             url: https://grafana.net
           server:
-            # domain: grafana.k8s-gw.henrikgerdes.me
-            # root_url: https://grafana.k8s-gw.henrikgerdes.me
             domain: grafana.k8s.henrikgerdes.me
             root_url: https://grafana.k8s.henrikgerdes.me
         dashboardProviders:
@@ -264,3 +260,4 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - ServerSideApply=true
