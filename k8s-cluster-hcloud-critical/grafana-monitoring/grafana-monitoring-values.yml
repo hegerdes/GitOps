@@ -1,3 +1,4 @@
+
 # yaml-language-server: $schema=https://raw.githubusercontent.com/grafana/k8s-monitoring-helm/refs/heads/main/charts/k8s-monitoring/values.schema.json
 # Examples https://github.com/grafana/k8s-monitoring-helm/blob/main/charts/k8s-monitoring/docs/examples/features/cluster-events/default/values.yaml
 cluster:
@@ -6,7 +7,7 @@ global:
   scrapeInterval: 30s
 
 destinations:
-  - name: grafana-com-metrics
+  grafana-com-metrics:
     type: prometheus
     url: https://prometheus-prod-01-eu-west-0.grafana.net/api/prom/push
     auth:
@@ -17,7 +18,7 @@ destinations:
       create: false
       name: grafana-agent-prometheus-cred
       namespace: monitoring
-  - name: grafana-com-loki
+  grafana-com-loki:
     type: loki
     url: https://logs-prod-eu-west-0.grafana.net/loki/api/v1/push
     auth:
@@ -28,7 +29,7 @@ destinations:
       create: false
       name: grafana-agent-loki-cred
       namespace: monitoring
-  - name: grafana-com-tempo
+  grafana-com-tempo:
     type: otlp
     protocol: grpc
     url: https://tempo-eu-west-0.grafana.net:443
@@ -43,7 +44,7 @@ destinations:
       create: false
       name: grafana-agent-tempo-cred
       namespace: monitoring
-  - name: grafana-cloud-otlp-endpoint
+  grafana-cloud-otlp-endpoint:
     type: otlp
     url: https://otlp-gateway-prod-eu-west-0.grafana.net./otlp
     protocol: http
@@ -61,14 +62,13 @@ destinations:
       enabled: true
     traces:
       enabled: true
+
 clusterMetrics:
   enabled: true
-  # https://github.com/sustainable-computing-io/kepler
-  kepler:
-    enabled: false
-  # https://github.com/opencost/opencost
+  collector: alloy-metrics
+telemetryServices:
   opencost:
-    enabled: true
+    deploy: true
     metricsSource: grafana-com-metrics
     opencost:
       exporter:
@@ -77,45 +77,65 @@ clusterMetrics:
         existingSecretName: grafana-agent-prometheus-cred
         external:
           url: https://prometheus-prod-01-eu-west-0.grafana.net/api/prom
-  windows-exporter:
-    deploy: false
   node-exporter:
     deploy: true
     podAnnotations:
       k8s.grafana.com/logs.job: integrations/node_exporter
-      cluster-autoscaler.kubernetes.io/enable-ds-eviction: "true"
+      cluster-autoscaler.kubernetes.io/enable-ds-eviction: 'true'
+  kube-state-metrics:
+    deploy: true
+costMetrics:
+  enabled: true
+  collector: alloy-metrics
+hostMetrics:
+  windowsHosts:
+    enabled: true
+  linuxHosts:
+    enabled: true
+  enabled: true
+  collector: alloy-metrics
 clusterEvents:
   enabled: true
+  collector: alloy-singleton
 nodeLogs:
   enabled: false
-podLogs:
+podLogsViaLoki:
   enabled: true
-alloy-metrics:
-  enabled: true
-alloy-logs:
-  enabled: true
-alloy-singleton:
-  enabled: true
-alloy-receiver:
-  enabled: true
-  alloy:
-    extraPorts:
-      - name: otlp-grpc
-        port: 4317
-        targetPort: 4317
-        protocol: TCP
-      - name: otlp-http
-        port: 4318
-        targetPort: 4318
-        protocol: TCP
-      - name: zipkin
-        port: 9411
-        targetPort: 9411
-        protocol: TCP
-      - name: jaeger-grpc
-        port: 14250
-        targetPort: 14250
-        protocol: TCP
+  collector: alloy-logs
+
+collectors:
+  alloy-metrics:
+    presets:
+      - clustered
+      - statefulset
+  alloy-logs:
+    presets:
+      - filesystem-log-reader
+      - daemonset
+  alloy-singleton:
+    presets:
+      - singleton
+  alloy-receiver:
+    presets:
+      - deployment
+    alloy:
+      extraPorts:
+        - name: otlp-grpc
+          port: 4317
+          targetPort: 4317
+          protocol: TCP
+        - name: otlp-http
+          port: 4318
+          targetPort: 4318
+          protocol: TCP
+        - name: zipkin
+          port: 9411
+          targetPort: 9411
+          protocol: TCP
+        - name: jaeger-grpc
+          port: 14250
+          targetPort: 14250
+          protocol: TCP
 prometheusOperatorObjects:
   enabled: true
   crds:
@@ -124,6 +144,7 @@ prometheusOperatorObjects:
     enabled: true
   serviceMonitors:
     enabled: true
+  collector: alloy-metrics
 applicationObservability:
   enabled: true
   connectors:
@@ -144,4 +165,5 @@ applicationObservability:
     zipkin:
       enabled: true
       port: 9411
+  collector: alloy-receiver
 extraObjects: []
