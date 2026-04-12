@@ -37,6 +37,7 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - SkipDryRunOnMissingResource=true
       - ServerSideApply=true
     retry:
       limit: 8
