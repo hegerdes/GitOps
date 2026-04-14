@@ -63,10 +63,11 @@ spec:
                   secretName: hcloud
     - chart: hcloud-exporter
       repoURL: https://promhippie.github.io/charts
-      targetRevision: 3.*
+      targetRevision: 4.*
       helm:
         releaseName: hcloud-exporter
         valuesObject:
+          # yaml-language-server: $schema=https://github.com/promhippie/charts/raw/refs/heads/master/stable/hcloud-exporter/values.schema.json
           collector:
             floatingIps: false
             pricing: false
@@ -96,22 +97,6 @@ spec:
             limits:
               cpu: 250m
               memory: 256Mi
-    # - chart: hetzner-load-balancer-exporter
-    #   repoURL: https://wacken89.github.io/hetzner-load-balancer-prometheus-exporter
-    #   targetRevision: 1.*
-    #   helm:
-    #     releaseName: hcloud-lb-exporter
-    #     valuesObject:
-    #       env:
-    #         - name: LOAD_BALANCER_IDS
-    #           value: "all"
-    #         - name: SCRAPE_INTERVAL
-    #           value: "30"
-    #         - name: ACCESS_TOKEN
-    #           valueFrom:
-    #             secretKeyRef:
-    #               key: token
-    #               name: hcloud
     - repoURL: https://github.com/hegerdes/GitOps.git
       targetRevision: HEAD
       path: k8s-cluster-hcloud-critical/hcloud
@@ -128,8 +113,6 @@ spec:
       value: https://github.com/hetznercloud/csi-driver
     - name: Chart-Info Hetzner-Exporter
       value: https://github.com/promhippie/charts/tree/master/stable/hcloud-exporter
-    # - name: Chart-Info Hetzner-LB-Exporter
-    #   value: https://github.com/wacken89/hetzner-load-balancer-prometheus-exporter
   syncPolicy:
     automated:
       prune: true
