@@ -3,7 +3,7 @@ preUpgradeChecker:
 longhornUI:
   replicas: 1
 ingress:
-  enabled: true
+  enabled: false
   host: longhorn.k8s.henrikgerdes.me
   ingressClassName: nginx
   tls: true

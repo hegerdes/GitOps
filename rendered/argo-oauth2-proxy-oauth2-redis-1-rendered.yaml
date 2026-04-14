@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
     app.kubernetes.io/version: 8.6.2
-    helm.sh/chart: redis-25.3.10
+    helm.sh/chart: redis-25.3.11
 spec:
   podSelector:
     matchLabels:
@@ -37,7 +37,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
     app.kubernetes.io/version: 8.6.2
-    helm.sh/chart: redis-25.3.10
+    helm.sh/chart: redis-25.3.11
     app.kubernetes.io/component: master
 spec:
   maxUnavailable: 1
@@ -59,7 +59,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
     app.kubernetes.io/version: 8.6.2
-    helm.sh/chart: redis-25.3.10
+    helm.sh/chart: redis-25.3.11
 ---
 # Source: redis/templates/secret.yaml
 apiVersion: v1
@@ -72,10 +72,10 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
     app.kubernetes.io/version: 8.6.2
-    helm.sh/chart: redis-25.3.10
+    helm.sh/chart: redis-25.3.11
 type: Opaque
 data:
-  redis-password: "dlhXWkZ0ZmZVbQ=="
+  redis-password: "QTBsenlyR1hPWg=="
 ---
 # Source: redis/templates/configmap.yaml
 apiVersion: v1
@@ -88,7 +88,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
     app.kubernetes.io/version: 8.6.2
-    helm.sh/chart: redis-25.3.10
+    helm.sh/chart: redis-25.3.11
 data:
   redis.conf: |-
     # User-supplied common configuration:
@@ -125,7 +125,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
     app.kubernetes.io/version: 8.6.2
-    helm.sh/chart: redis-25.3.10
+    helm.sh/chart: redis-25.3.11
 data:
   ping_readiness_local.sh: |-
     #!/bin/bash
@@ -234,7 +234,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
     app.kubernetes.io/version: 8.6.2
-    helm.sh/chart: redis-25.3.10
+    helm.sh/chart: redis-25.3.11
 data:
   start-master.sh: |
     #!/bin/bash
@@ -267,7 +267,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
     app.kubernetes.io/version: 8.6.2
-    helm.sh/chart: redis-25.3.10
+    helm.sh/chart: redis-25.3.11
 spec:
   type: ClusterIP
   clusterIP: None
@@ -290,7 +290,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
     app.kubernetes.io/version: 8.6.2
-    helm.sh/chart: redis-25.3.10
+    helm.sh/chart: redis-25.3.11
     app.kubernetes.io/component: master
 spec:
   type: ClusterIP
@@ -316,7 +316,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: redis
     app.kubernetes.io/version: 8.6.2
-    helm.sh/chart: redis-25.3.10
+    helm.sh/chart: redis-25.3.11
     app.kubernetes.io/component: master
 spec:
   replicas: 1
@@ -335,13 +335,13 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: redis
         app.kubernetes.io/version: 8.6.2
-        helm.sh/chart: redis-25.3.10
+        helm.sh/chart: redis-25.3.11
         app.kubernetes.io/component: master
       annotations:
         checksum/configmap: 95944ee35a19af37cefd156f19d93e157e578c1dc63ac01ce735ae93090b7580
         checksum/health: a2fc61ae99390643dac0673ed97203805136d4460b2319e7beff10546c1e1140
         checksum/scripts: 0717e77fd3bb941f602860e9be4f2ed87b481cddeadf37be463f8512ecde0c3e
-        checksum/secret: f4aab44a6c7558017386144bc45496e661a4f9158d8c80c6f8d489d9719d26d9
+        checksum/secret: 8e7cad35608933d6288a6c2caed022ec9106c624ade5ac34536fdba690698ca6
     spec:
       
       securityContext:

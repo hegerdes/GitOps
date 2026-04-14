@@ -4637,39 +4637,6 @@ spec:
         name: var-run
       priorityClassName: "longhorn-critical"
 ---
-# Source: longhorn/templates/ingress.yaml
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: longhorn-ingress
-  namespace: default
-  labels:
-    app.kubernetes.io/name: longhorn
-    helm.sh/chart: longhorn-1.11.1
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/instance: longhorn
-    app.kubernetes.io/version: v1.11.1
-    app: longhorn-ingress
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod-nginx"
-spec:
-  ingressClassName: nginx
-  rules:
-  - host: longhorn.k8s.henrikgerdes.me
-    http:
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-          backend:
-            service:
-              name: longhorn-frontend
-              port:
-                number: 80
-  tls:
-  - hosts:
-    - longhorn.k8s.henrikgerdes.me
-    secretName: longhorn-ui-public
----
 # Source: longhorn/templates/validate-psp-install.yaml
 #
 ---

@@ -49,6 +49,15 @@ rules:
   - apiGroups: ["gateway.networking.k8s.io"]
     resources: ["httproutes"]
     verbs: ["get","watch","list"]
+  - apiGroups: ["gateway.networking.k8s.io"]
+    resources: ["grpcroutes"]
+    verbs: ["get","watch","list"]
+  - apiGroups: ["gateway.networking.k8s.io"]
+    resources: ["tlsroutes"]
+    verbs: ["get","watch","list"]
+  - apiGroups: ["gateway.networking.k8s.io"]
+    resources: ["tcproutes"]
+    verbs: ["get","watch","list"]
   - apiGroups:
     - gateway.networking.k8s.io
     resources:
@@ -164,6 +173,9 @@ spec:
             - --source=service
             - --source=ingress
             - --source=gateway-httproute
+            - --source=gateway-grpcroute
+            - --source=gateway-tlsroute
+            - --source=gateway-tcproute
             - --policy=upsert-only
             - --registry=txt
             - --provider=aws

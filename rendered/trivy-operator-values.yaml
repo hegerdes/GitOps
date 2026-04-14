@@ -1,0 +1,8 @@
+# targetNamespaces: ns1,ns2,ns3
+operator:
+  metricsVulnIdEnabled: true
+  metricsExposedSecretInfo: true
+  metricsImageInfo: true
+  scanJobTimeout: 30m
+  scanJobsConcurrentLimit: 5
+  revisionHistoryLimit: 0
