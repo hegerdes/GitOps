@@ -7,19 +7,21 @@ metadata:
     - resources-finalizer.argocd.argoproj.io/background
 spec:
   project: default
-  sources:
-    - chart: trivy-operator
-      repoURL: https://aquasecurity.github.io/helm-charts/
-      targetRevision: 0.*
-      helm:
-        releaseName: trivy-operator
-        valuesObject:
-          # targetNamespaces: ns1,ns2,ns3
-          operator:
-            metricsVulnIdEnabled: true
-            metricsExposedSecretInfo: true
-            metricsImageInfo: true
-            scanJobTimeout: 30m
+  source:
+    chart: trivy-operator
+    repoURL: https://aquasecurity.github.io/helm-charts/
+    targetRevision: 0.*
+    helm:
+      releaseName: trivy-operator
+      valuesObject:
+        # targetNamespaces: ns1,ns2,ns3
+        operator:
+          metricsVulnIdEnabled: true
+          metricsExposedSecretInfo: true
+          metricsImageInfo: true
+          scanJobTimeout: 30m
+          scanJobsConcurrentLimit: 5
+          revisionHistoryLimit: 0
 
   destination:
     server: https://kubernetes.default.svc

@@ -3,8 +3,6 @@ kind: Application
 metadata:
   name: longhorn
   namespace: argocd
-  annotations:
-    argocd.argoproj.io/sync-wave: "4"
 spec:
   project: default
   source:
@@ -19,7 +17,7 @@ spec:
         longhornUI:
           replicas: 1
         ingress:
-          enabled: true
+          enabled: false
           host: longhorn.k8s.henrikgerdes.me
           ingressClassName: nginx
           tls: true

@@ -5,93 +5,93 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  sources:
-    - repoURL: ghcr.io/akuity/kargo-charts
-      chart: kargo
-      targetRevision: 1.*
-      helm:
-        releaseName: kargo
-        valuesObject:
-          api:
-            host: kargo.k8s.henrikgerdes.me
-            adminAccount:
-              enabled: false
-            tls:
-              selfSignedCert: false
-              secretName: kargo-server-tls
-            oidc:
-              enabled: true
-              additionalScopes: []
-              admins:
-                claims:
-                  groups:
-                    - 8d6c909a-13ef-44c0-9d3e-053e50d338b5 # k8s-admin-dev
-              users:
-                claims:
-                  groups:
-                    - 8d6c909a-13ef-44c0-9d3e-053e50d338b5 # k8s-admin-dev
-              clientID: f22d000d-54d2-4162-a9d8-5e7b74f7a0e7
-              issuerURL: https://login.microsoftonline.com/295b5ac3-2e4e-4ade-85d8-7dc31617bc2c/v2.0
-          extraObjects:
-            - apiVersion: gateway.networking.k8s.io/v1
-              kind: HTTPRoute
-              metadata:
-                name: kargo-api
-              spec:
-                hostnames:
-                  - kargo.k8s.henrikgerdes.me
-                parentRefs:
-                  - group: gateway.networking.k8s.io
-                    kind: Gateway
-                    name: envoy-gw-default
-                    namespace: envoy-gateway
-                rules:
-                  - backendRefs:
-                      - group: ""
-                        kind: Service
-                        name: kargo-api
-                        port: 443
-                        weight: 1
-                    matches:
-                      - path:
-                          type: PathPrefix
-                          value: /
-            - apiVersion: cert-manager.io/v1
-              kind: Certificate
-              metadata:
-                name: kargo-server
-              spec:
-                commonName: kargo-api.argocd.svc.local
-                dnsNames:
-                  - kargo-api.argocd.svc.local
-                  - kargo-api.argocd.svc
-                  - kargo-api.argocd
-                  - kargo-api
-                issuerRef:
-                  group: cert-manager.io
-                  kind: ClusterIssuer
-                  name: ca-hegerdes
-                privateKey:
-                  algorithm: RSA
-                  encoding: PKCS1
-                  rotationPolicy: Never
-                  size: 2048
-                secretName: kargo-server-tls
-            - apiVersion: gateway.networking.k8s.io/v1
-              kind: BackendTLSPolicy
-              metadata:
-                name: kargo-server
-              spec:
-                targetRefs:
-                  - group: ""
-                    kind: Service
-                    name: kargo-api
-                validation:
-                  caCertificateRefs:
+  source:
+    repoURL: ghcr.io/akuity/kargo-charts
+    chart: kargo
+    targetRevision: 1.*
+    helm:
+      releaseName: kargo
+      valuesObject:
+        api:
+          host: kargo.k8s.henrikgerdes.me
+          adminAccount:
+            enabled: false
+          tls:
+            selfSignedCert: false
+            secretName: kargo-server-tls
+          oidc:
+            enabled: true
+            additionalScopes: []
+            admins:
+              claims:
+                groups:
+                  - 8d6c909a-13ef-44c0-9d3e-053e50d338b5 # k8s-admin-dev
+            users:
+              claims:
+                groups:
+                  - 8d6c909a-13ef-44c0-9d3e-053e50d338b5 # k8s-admin-dev
+            clientID: f22d000d-54d2-4162-a9d8-5e7b74f7a0e7
+            issuerURL: https://login.microsoftonline.com/295b5ac3-2e4e-4ade-85d8-7dc31617bc2c/v2.0
+        extraObjects:
+          - apiVersion: gateway.networking.k8s.io/v1
+            kind: HTTPRoute
+            metadata:
+              name: kargo-api
+            spec:
+              hostnames:
+                - kargo.k8s.henrikgerdes.me
+              parentRefs:
+                - group: gateway.networking.k8s.io
+                  kind: Gateway
+                  name: envoy-gw-default
+                  namespace: envoy-gateway
+              rules:
+                - backendRefs:
                     - group: ""
-                      kind: Secret
-                      name: kargo-server-tls
-                  hostname: kargo-api
+                      kind: Service
+                      name: kargo-api
+                      port: 443
+                      weight: 1
+                  matches:
+                    - path:
+                        type: PathPrefix
+                        value: /
+          - apiVersion: cert-manager.io/v1
+            kind: Certificate
+            metadata:
+              name: kargo-server
+            spec:
+              commonName: kargo-api.argocd.svc.local
+              dnsNames:
+                - kargo-api.argocd.svc.local
+                - kargo-api.argocd.svc
+                - kargo-api.argocd
+                - kargo-api
+              issuerRef:
+                group: cert-manager.io
+                kind: ClusterIssuer
+                name: ca-hegerdes
+              privateKey:
+                algorithm: RSA
+                encoding: PKCS1
+                rotationPolicy: Never
+                size: 2048
+              secretName: kargo-server-tls
+          - apiVersion: gateway.networking.k8s.io/v1
+            kind: BackendTLSPolicy
+            metadata:
+              name: kargo-server
+            spec:
+              targetRefs:
+                - group: ""
+                  kind: Service
+                  name: kargo-api
+              validation:
+                caCertificateRefs:
+                  - group: ""
+                    kind: Secret
+                    name: kargo-server-tls
+                hostname: kargo-api
 
   destination:
     server: https://kubernetes.default.svc
