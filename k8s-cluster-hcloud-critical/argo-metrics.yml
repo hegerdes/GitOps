@@ -7,19 +7,19 @@ metadata:
     argocd.argoproj.io/sync-wave: "4"
 spec:
   project: default
-  sources:
-    - chart: metrics-server
-      repoURL: https://kubernetes-sigs.github.io/metrics-server/
-      targetRevision: 3.*
-      helm:
-        releaseName: metrics-server
-        valuesObject:
-          defaultArgs:
-            - --cert-dir=/tmp
-            - --kubelet-use-node-status-port
-            - --profiling=false
-            - --metric-resolution=15s
-            - --kubelet-preferred-address-types=InternalDNS,InternalIP,ExternalDNS,ExternalIP
+  source:
+    chart: metrics-server
+    repoURL: https://kubernetes-sigs.github.io/metrics-server/
+    targetRevision: 3.*
+    helm:
+      releaseName: metrics-server
+      valuesObject:
+        defaultArgs:
+          - --cert-dir=/tmp
+          - --kubelet-use-node-status-port
+          - --profiling=false
+          - --metric-resolution=15s
+          - --kubelet-preferred-address-types=InternalDNS,InternalIP,ExternalDNS,ExternalIP
     # - chart: prometheus-node-exporter
     #   repoURL: https://prometheus-community.github.io/helm-charts
     #   targetRevision: 4.*
@@ -29,34 +29,12 @@ spec:
     #       prometheus:
     #         monitor:
     #           enabled: true
-    # - chart: kubernetes-dashboard
-    #   repoURL: https://kubernetes.github.io/dashboard/
-    #   targetRevision: 7.*
-    #   helm:
-    #     releaseName: kubernetes-dashboard
-    #     valuesObject:
-    #       app:
-    #         ingress:
-    #           enabled: true
-    #           hosts: [dashboard.k8s.henrikgerdes.me]
-    #           ingressClassName: nginx
-    #           issuer:
-    #             name: letsencrypt-prod-nginx
-    #             scope: cluster
-    #           annotations:
-    #             nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.oauth-proxy.svc.cluster.local/oauth2/auth
-    #             nginx.ingress.kubernetes.io/auth-signin: https://oauth.k8s.henrikgerdes.me/oauth2/start?rd=https://$host$request_uri
-    #       kong:
-    #         manager:
-    #           enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system
   info:
     - name: Chart-Info Metrics-Server
       value: https://artifacthub.io/packages/helm/metrics-server/metrics-server
-    - name: Chart-Info Kubernetes-Dashboard
-      value: https://artifacthub.io/packages/helm/k8s-dashboard/kubernetes-dashboard
   syncPolicy:
     automated:
       prune: true
