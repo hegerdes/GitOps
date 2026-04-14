@@ -20,7 +20,7 @@ spec:
       project: default
       sources:
         - repoURL: https://github.com/hegerdes/GitOps.git
-          targetRevision: feat/hks
+          targetRevision: HEAD
           path: k8s-apps/hegerdes-kubernetes-service/shared/helm-rendering
           helm:
             valuesObject:
@@ -42,14 +42,15 @@ spec:
                       dns: {}
                       encryptionAlgorithm: RSA-2048
                       imageRepository: registry.k8s.io
-                      kubernetesVersion: v{{ index .metadata.labels "argocd.argoproj.io/kubernetes-version" }}.0
+                      # https://argo-cd.readthedocs.io/en/latest/operator-manual/upgrading/3.3-3.4/
+                      kubernetesVersion: {{ index .metadata.labels "argocd.argoproj.io/kubernetes-version" }}
                       networking:
                         dnsDomain: cluster.local
                         podSubnet: 10.244.0.0/16
                         serviceSubnet: 10.96.0.0/16
         - repoURL: https://github.com/hegerdes/GitOps.git
-          targetRevision: feat/hks
-          path: k8s-apps/hegerdes-kubernetes-service/clustes-shared
+          targetRevision: HEAD
+          path: k8s-apps/hegerdes-kubernetes-service/clusters-shared
       destination:
         server: "{{.server}}"
         namespace: kube-system
