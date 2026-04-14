@@ -16,13 +16,15 @@ spec:
         valuesObject:
           provider:
             name: aws
-          extraArgs: [--exclude-target-net=10.0.0.0/8]
+          extraArgs:
+            - --exclude-target-net=10.0.0.0/8
           sources:
             - service
             - ingress
             - gateway-httproute
-            # - gateway-tlsroute
-            # - gateway-tcproute
+            - gateway-grpcroute
+            - gateway-tlsroute
+            - gateway-tcproute
             # - gateway-udproute
           rbac:
             create: true
