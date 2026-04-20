@@ -16,34 +16,27 @@ spec:
       load-balancer.hetzner.cloud/uses-proxyprotocol: "true"
       # load-balancer.hetzner.cloud/ipv6-disabled: "true"
   listeners:
-    # - name: grafana
-    #   allowedRoutes:
-    #     namespaces:
-    #       from: All
-    #   hostname: grafana.k8s-gw.henrikgerdes.me
-    #   port: 443
-    #   protocol: HTTPS
-    #   tls:
-    #     mode: Terminate
-    #     certificateRefs:
-    #       - name: grafana-tls-gw-cert
-    #         group: ""
-    #         kind: Secret
-    # - name: harbor
-    #   allowedRoutes:
-    #     namespaces:
-    #       from: All
-    #   hostname: harbor.k8s-gw.henrikgerdes.me
-    #   port: 443
-    #   protocol: HTTPS
-    #   tls:
-    #     certificateRefs:
-    #       - name: harbor-tls-gw-cert
-    #         group: ""
-    #         kind: Secret
-    #     mode: Terminate
-
     # Fallbacks
+    # - name: demo-https
+    #   port: 443
+    #   hostname: "demo.k8s-gw.henrikgerdes.me"
+    #   protocol: HTTPS
+    #   tls:
+    #     mode: Terminate
+    #     certificateRefs:
+    #       - kind: Secret
+    #         group: ""
+    #         name: tls-gw-cilium-certs-demo
+    #   allowedRoutes:
+    #     namespaces:
+    #       from: All
+    # - name: demo-http
+    #   allowedRoutes:
+    #     namespaces:
+    #       from: All
+    #   hostname: "demo.k8s-gw.henrikgerdes.me"
+    #   port: 80
+    #   protocol: HTTP
     - name: https
       port: 443
       hostname: "*.k8s-gw.henrikgerdes.me"
@@ -53,7 +46,7 @@ spec:
         certificateRefs:
           - kind: Secret
             group: ""
-            name: tls-gw-certs
+            name: tls-gw-cilium-certs
       allowedRoutes:
         namespaces:
           from: All
@@ -64,3 +57,30 @@ spec:
       hostname: "*.k8s-gw.henrikgerdes.me"
       port: 80
       protocol: HTTP
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumGatewayClassConfig
+metadata:
+  name: nodeport-gateway-config
+  namespace: cilium-gateway
+spec:
+  service:
+    ipFamilyPolicy: PreferDualStack
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  annotations:
+    meta.helm.sh/release-name: cilium
+    meta.helm.sh/release-namespace: kube-system
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  name: cilium
+spec:
+  controllerName: io.cilium/gateway-controller
+  description: The default Cilium GatewayClass
+  parametersRef:
+    group: cilium.io
+    kind: CiliumGatewayClassConfig
+    name: nodeport-gateway-config
+    namespace: cilium-gateway
