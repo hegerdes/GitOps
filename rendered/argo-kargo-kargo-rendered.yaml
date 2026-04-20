@@ -5,10 +5,10 @@ kind: Namespace
 metadata:
   name: "kargo-cluster-secrets"
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: kargo/templates/shared-resources-namespace/namespace.yaml
@@ -17,10 +17,10 @@ kind: Namespace
 metadata:
   name: kargo-shared-resources
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: kargo/templates/system-resources-namespace/namespace.yaml
@@ -29,10 +29,10 @@ kind: Namespace
 metadata:
   name: "kargo-system-resources"
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: kargo/templates/api/service-account.yaml
@@ -42,10 +42,10 @@ metadata:
   name: kargo-api
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: api
 ---
@@ -56,10 +56,10 @@ metadata:
   name: kargo-controller
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
 ---
@@ -70,10 +70,10 @@ metadata:
   name: kargo-external-webhooks-server
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: external-webhooks-server
 ---
@@ -84,10 +84,10 @@ metadata:
   name: kargo-garbage-collector
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: garbage-collector
 ---
@@ -98,10 +98,10 @@ metadata:
   name: kargo-webhooks-server
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
 ---
@@ -112,10 +112,10 @@ metadata:
   name: kargo-management-controller
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: management-controller
 ---
@@ -126,10 +126,10 @@ metadata:
   name: kargo-admin
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     rbac.kargo.akuity.io/system-role: "true"
   annotations:
@@ -142,10 +142,10 @@ metadata:
   name: kargo-project-creator
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     rbac.kargo.akuity.io/system-role: "true"
 ---
@@ -156,10 +156,10 @@ metadata:
   name: kargo-user
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     rbac.kargo.akuity.io/system-role: "true"
   annotations:
@@ -172,10 +172,10 @@ metadata:
   name: kargo-viewer
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     rbac.kargo.akuity.io/system-role: "true"
 ---
@@ -187,10 +187,10 @@ metadata:
   name: kargo-api
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: api
 stringData: {}
@@ -202,10 +202,10 @@ metadata:
   name: kargo-api
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: api
 data:
@@ -234,10 +234,10 @@ metadata:
   name: kargo-controller
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
 data:
@@ -250,10 +250,14 @@ data:
   ALLOW_CREDENTIALS_OVER_HTTP: "false"
   GITCLIENT_NAME: "Kargo"
   GITCLIENT_EMAIL: "no-reply@kargo.io"
+  GIT_PUSH_INTEGRATION_POLICY: "AlwaysRebase"
   GITCLIENT_SIGNING_KEY_TYPE: "gpg"
+  GITHUB_PUSH_MAX_REVISIONS: "10"
+  GITHUB_PUSH_VERIFY_UNTRUSTED_COMMITS: "false"
   CACHE_BY_TAG_POLICY: "Allow"
   MAX_IMAGE_CACHE_ENTRIES: "100000"
   IMAGE_REGISTRY_RATE_LIMIT: "20"
+  MAX_OCI_PUSH_ARTIFACT_SIZE: "1073741824"
   ARGOCD_INTEGRATION_ENABLED: "true"
   ARGOCD_NAMESPACE: argocd
   ARGOCD_WATCH_ARGOCD_NAMESPACE_ONLY: "false"
@@ -272,10 +276,10 @@ metadata:
   name: kargo-external-webhooks-server
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: external-webhooks-server
 data:
@@ -295,10 +299,10 @@ metadata:
   name: kargo-garbage-collector
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: garbage-collector
 data:
@@ -317,10 +321,10 @@ metadata:
   name: kargo-webhooks-server
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
 data:
@@ -328,6 +332,7 @@ data:
   LOG_LEVEL: "INFO"
   LOG_FORMAT: "CONSOLE"
   CONTROLPLANE_USER_REGEX: ^system:serviceaccount:default:(kargo-api|kargo-controller|kargo-garbage-collector|kargo-management-controller)$
+  MANAGEMENT_CONTROLLER_USERNAME: system:serviceaccount:default:kargo-management-controller
   CACHE_BY_TAG_POLICY: "Allow"
 ---
 # Source: kargo/templates/management-controller/configmap.yaml
@@ -337,10 +342,10 @@ metadata:
   name: kargo-management-controller
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: management-controller
 data:
@@ -413,6 +418,44 @@ spec:
           spec:
             description: Spec describes the configuration of a cluster.
             properties:
+              gitClient:
+                description: |-
+                  GitClient describes cluster-level configuration for Kargo's Git client,
+                  including committer identity and an optional signing key. If set, these
+                  values take precedence over any configuration provided at install time
+                  via the Helm chart.
+                properties:
+                  email:
+                    description: Email is the email address used for Git commits made
+                      by Kargo.
+                    format: email
+                    minLength: 1
+                    type: string
+                  name:
+                    description: Name is the name used for Git commits made by Kargo.
+                    minLength: 1
+                    type: string
+                  signingKeySecret:
+                    description: |-
+                      SigningKeySecret references a Secret in the system namespace containing
+                      a GPG signing key for commit signing. The Secret must contain a data
+                      key named "signingKey" with the GPG private key material.
+                    properties:
+                      name:
+                        default: ""
+                        description: |-
+                          Name of the referent.
+                          This field is effectively required, but due to backwards compatibility is
+                          allowed to be empty. Instances of this type with an empty value here are
+                          almost certainly wrong.
+                          More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                        type: string
+                    type: object
+                    x-kubernetes-map-type: atomic
+                required:
+                - email
+                - name
+                type: object
               webhookReceivers:
                 description: |-
                   WebhookReceivers describes cluster-scoped webhook receivers used for
@@ -6041,7 +6084,8 @@ spec:
                             type: object
                           type: array
                         repoURL:
-                          description: RepoURL is the repository URL of the GitSubscription.
+                          description: |
+                            RepoURL is the repository URL of the GitSubscription.
                           minLength: 1
                           pattern: (?:^(ssh|https?)://(?:([\w-]+)(:(.+))?@)?([\w-]+(?:\.[\w-]+)*)(?::(\d{1,5}))?(/.*)$)|(?:^([\w-]+)@([\w+]+(?:\.[\w-]+)*):(/?.*))
                           type: string
@@ -6204,10 +6248,10 @@ kind: ClusterRole
 metadata:
   name: kargo-api
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: api
 rules:
@@ -6305,6 +6349,7 @@ rules:
   - apiGroups:
       - rbac.authorization.k8s.io
     resources:
+      - clusterroles
       - rolebindings
       - roles
     verbs:
@@ -6325,10 +6370,10 @@ kind: ClusterRole
 metadata:
   name: kargo-api-rollouts
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: api
 rules:
@@ -6351,10 +6396,10 @@ kind: ClusterRole
 metadata:
   name: kargo-project-admin
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups:
@@ -6393,10 +6438,10 @@ kind: ClusterRole
 metadata:
   name: kargo-project-secrets-reader
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups:
@@ -6414,10 +6459,10 @@ kind: ClusterRole
 metadata:
   name: kargo-controller
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
 rules:
@@ -6439,6 +6484,7 @@ rules:
 - apiGroups:
   - kargo.akuity.io
   resources:
+  - clusterconfigs
   - projects
   - projectconfigs
   verbs:
@@ -6448,13 +6494,23 @@ rules:
 - apiGroups:
   - kargo.akuity.io
   resources:
-  - freights
   - promotions
   verbs:
   - create
   - get
   - list
   - watch
+- apiGroups:
+  - kargo.akuity.io
+  resources:
+  - freights
+  verbs:
+  - create
+  - get
+  - list
+  - watch
+  - patch
+  - update
 - apiGroups:
   - kargo.akuity.io
   resources:
@@ -6492,10 +6548,10 @@ kind: ClusterRole
 metadata:
   name: kargo-controller-read-secrets
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
 rules:
@@ -6514,10 +6570,10 @@ kind: ClusterRole
 metadata:
   name: kargo-controller-argocd
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
 rules:
@@ -6537,10 +6593,10 @@ kind: ClusterRole
 metadata:
   name: kargo-controller-rollouts
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
 rules:
@@ -6578,10 +6634,10 @@ kind: ClusterRole
 metadata:
   name: kargo-external-webhooks-server
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: external-webhooks-server
 rules:
@@ -6610,10 +6666,10 @@ kind: ClusterRole
 metadata:
   name: kargo-garbage-collector
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: garbage-collector
 rules:
@@ -6660,10 +6716,10 @@ kind: ClusterRole
 metadata:
   name: kargo-webhooks-server
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
 rules:
@@ -6739,10 +6795,10 @@ kind: ClusterRole
 metadata:
   name: kargo-webhooks-server-ns-controller
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
 rules:
@@ -6765,10 +6821,10 @@ kind: ClusterRole
 metadata:
   name: kargo-webhooks-server-generic-gc
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
 rules:
@@ -6785,10 +6841,10 @@ kind: ClusterRole
 metadata:
   name: kargo-management-controller
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: management-controller
 rules:
@@ -6863,10 +6919,10 @@ kind: ClusterRole
 metadata:
   name: kargo-admin
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups:
@@ -6953,10 +7009,10 @@ kind: ClusterRole
 metadata:
   name: kargo-project-creator
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups:
@@ -7000,10 +7056,10 @@ kind: ClusterRole
 metadata:
   name: kargo-user
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups:
@@ -7039,10 +7095,10 @@ kind: ClusterRole
 metadata:
   name: kargo-viewer
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups:
@@ -7097,10 +7153,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-api
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: api
 roleRef:
@@ -7118,10 +7174,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-api-rollouts
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: api
 roleRef:
@@ -7139,10 +7195,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-controller
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
 roleRef:
@@ -7160,10 +7216,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-controller-argocd
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
 roleRef:
@@ -7181,10 +7237,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-controller-rollouts
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
 roleRef:
@@ -7202,10 +7258,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-external-webhooks-server
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: external-webhooks-server
 roleRef:
@@ -7223,10 +7279,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-garbage-collector
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: garbage-collector
 roleRef:
@@ -7244,10 +7300,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-webhooks-server
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
 roleRef:
@@ -7265,10 +7321,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-webhooks-server-ns-controller
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
 roleRef:
@@ -7286,10 +7342,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-webhooks-server-generic-gc
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
 roleRef:
@@ -7307,10 +7363,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-management-controller
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: management-controller
 roleRef:
@@ -7328,10 +7384,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-admin
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -7348,10 +7404,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-project-creator
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -7368,10 +7424,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-user
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -7388,10 +7444,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-viewer
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -7408,10 +7464,10 @@ kind: Role
 metadata:
   name: kargo-api
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups:
@@ -7428,10 +7484,10 @@ metadata:
   name: kargo-cluster-secrets-reader
   namespace: kargo-cluster-secrets
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups:
@@ -7450,10 +7506,10 @@ metadata:
   name: kargo-cluster-secrets-admin
   namespace: kargo-cluster-secrets
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups:
@@ -7470,10 +7526,10 @@ metadata:
   name: kargo-shared-resources-reader
   namespace: kargo-shared-resources
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups:
@@ -7492,10 +7548,10 @@ metadata:
   name: kargo-shared-resources-admin
   namespace: kargo-shared-resources
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups:
@@ -7513,10 +7569,10 @@ metadata:
   name: kargo-system-resources-reader
   namespace: kargo-system-resources
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups:
@@ -7535,10 +7591,10 @@ metadata:
   name: kargo-system-resources-admin
   namespace: kargo-system-resources
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups:
@@ -7554,10 +7610,10 @@ kind: Role
 metadata:
   name: kargo-admin
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups:
@@ -7573,10 +7629,10 @@ kind: RoleBinding
 metadata:
   name: kargo-api
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -7594,10 +7650,10 @@ metadata:
   name: kargo-cluster-secrets-reader
   namespace: kargo-cluster-secrets
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -7618,10 +7674,10 @@ metadata:
   name: kargo-cluster-secrets-admin
   namespace: kargo-cluster-secrets
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -7642,10 +7698,10 @@ metadata:
   name: kargo-shared-resources-reader
   namespace: kargo-shared-resources
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -7669,10 +7725,10 @@ metadata:
   name: kargo-shared-resources-admin
   namespace: kargo-shared-resources
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -7696,10 +7752,10 @@ metadata:
   name: kargo-system-resources-reader
   namespace: kargo-system-resources
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -7720,10 +7776,10 @@ metadata:
   name: kargo-system-resources-admin
   namespace: kargo-system-resources
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -7743,10 +7799,10 @@ kind: RoleBinding
 metadata:
   name: kargo-admin
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -7764,10 +7820,10 @@ metadata:
   name: kargo-api
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: api
 spec:
@@ -7788,10 +7844,10 @@ metadata:
   name: kargo-external-webhooks-server
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: external-webhooks-server
 spec:
@@ -7812,10 +7868,10 @@ metadata:
   name: kargo-webhooks-server
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
 spec:
@@ -7836,10 +7892,10 @@ metadata:
   name: kargo-api
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: api
 spec:
@@ -7854,10 +7910,10 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: kargo-1.9.6
+        helm.sh/chart: kargo-1.10.0
         app.kubernetes.io/name: kargo
         app.kubernetes.io/instance: kargo
-        app.kubernetes.io/version: "v1.9.6"
+        app.kubernetes.io/version: "v1.10.0"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: api
       annotations:
@@ -7867,7 +7923,7 @@ spec:
       serviceAccount: kargo-api
       containers:
         - name: api
-          image: ghcr.io/akuity/kargo:v1.9.6
+          image: ghcr.io/akuity/kargo:v1.10.0
           imagePullPolicy: IfNotPresent
           command: ["/usr/local/bin/kargo", "api"]
           env:
@@ -7892,6 +7948,15 @@ spec:
             - name: h2c
               containerPort: 8080
               protocol: TCP
+          startupProbe:
+            exec:
+              command:
+                - /usr/local/bin/grpc_health_probe
+                - -addr=:8080
+                - -tls
+                - -tls-no-verify
+            failureThreshold: 30
+            initialDelaySeconds: 10
           livenessProbe:
             exec:
               command:
@@ -7899,7 +7964,6 @@ spec:
                 - -addr=:8080
                 - -tls
                 - -tls-no-verify
-            initialDelaySeconds: 10
           readinessProbe:
             exec:
               command:
@@ -7933,10 +7997,10 @@ metadata:
   name: kargo-controller
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
 spec:
@@ -7951,19 +8015,19 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: kargo-1.9.6
+        helm.sh/chart: kargo-1.10.0
         app.kubernetes.io/name: kargo
         app.kubernetes.io/instance: kargo
-        app.kubernetes.io/version: "v1.9.6"
+        app.kubernetes.io/version: "v1.10.0"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: controller
       annotations:
-        configmap/checksum: e33615dc3ec63fb12b5e508e76170dcf2e93ed18d08caaaa6e6887f45231ebe5
+        configmap/checksum: f7164e774616516b7141a6832a8a8f460cf01f4ed2f58160475ed27b095e1776
     spec:
       serviceAccount: kargo-controller
       containers:
       - name: controller
-        image: ghcr.io/akuity/kargo:v1.9.6
+        image: ghcr.io/akuity/kargo:v1.10.0
         imagePullPolicy: IfNotPresent
         command: ["/sbin/tini", "--", "/usr/local/bin/kargo"]
         args: ["controller"]
@@ -7999,10 +8063,10 @@ metadata:
   name: kargo-external-webhooks-server
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: external-webhooks-server
 spec:
@@ -8017,10 +8081,10 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: kargo-1.9.6
+        helm.sh/chart: kargo-1.10.0
         app.kubernetes.io/name: kargo
         app.kubernetes.io/instance: kargo
-        app.kubernetes.io/version: "v1.9.6"
+        app.kubernetes.io/version: "v1.10.0"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: external-webhooks-server
       annotations:
@@ -8029,7 +8093,7 @@ spec:
       serviceAccount: kargo-external-webhooks-server
       containers:
       - name: webhooks-server
-        image: ghcr.io/akuity/kargo:v1.9.6
+        image: ghcr.io/akuity/kargo:v1.10.0
         imagePullPolicy: IfNotPresent
         command: ["/sbin/tini", "--", "/usr/local/bin/kargo"]
         args: ["external-webhooks-server"]
@@ -8090,10 +8154,10 @@ metadata:
   name: kargo-webhooks-server
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
 spec:
@@ -8108,19 +8172,19 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: kargo-1.9.6
+        helm.sh/chart: kargo-1.10.0
         app.kubernetes.io/name: kargo
         app.kubernetes.io/instance: kargo
-        app.kubernetes.io/version: "v1.9.6"
+        app.kubernetes.io/version: "v1.10.0"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: kubernetes-webhooks-server
       annotations:
-        configmap/checksum: 7342dde82a307ee17e744ec652e4c6907037a9b924cf2e6e86c85f7dab7d1f90
+        configmap/checksum: e98b3a1f27c4092b609cec367290f1855eb77278092952db94dc7163557f88e5
     spec:
       serviceAccount: kargo-webhooks-server
       containers:
       - name: webhooks-server
-        image: ghcr.io/akuity/kargo:v1.9.6
+        image: ghcr.io/akuity/kargo:v1.10.0
         imagePullPolicy: IfNotPresent
         command: ["/sbin/tini", "--", "/usr/local/bin/kargo"]
         args: ["kubernetes-webhooks-server"]
@@ -8163,10 +8227,10 @@ metadata:
   name: kargo-management-controller
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: management-controller
 spec:
@@ -8181,10 +8245,10 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: kargo-1.9.6
+        helm.sh/chart: kargo-1.10.0
         app.kubernetes.io/name: kargo
         app.kubernetes.io/instance: kargo
-        app.kubernetes.io/version: "v1.9.6"
+        app.kubernetes.io/version: "v1.10.0"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: management-controller
       annotations:
@@ -8193,7 +8257,7 @@ spec:
       serviceAccount: kargo-management-controller
       containers:
       - name: management-controller
-        image: ghcr.io/akuity/kargo:v1.9.6
+        image: ghcr.io/akuity/kargo:v1.10.0
         imagePullPolicy: IfNotPresent
         command: ["/sbin/tini", "--", "/usr/local/bin/kargo"]
         args: ["management-controller"]
@@ -8223,10 +8287,10 @@ metadata:
   name: kargo-garbage-collector
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: garbage-collector
 spec:
@@ -8235,10 +8299,10 @@ spec:
   jobTemplate:
     metadata:
       labels:
-        helm.sh/chart: kargo-1.9.6
+        helm.sh/chart: kargo-1.10.0
         app.kubernetes.io/name: kargo
         app.kubernetes.io/instance: kargo
-        app.kubernetes.io/version: "v1.9.6"
+        app.kubernetes.io/version: "v1.10.0"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: garbage-collector
       annotations:
@@ -8247,10 +8311,10 @@ spec:
       template:
         metadata:
           labels:
-            helm.sh/chart: kargo-1.9.6
+            helm.sh/chart: kargo-1.10.0
             app.kubernetes.io/name: kargo
             app.kubernetes.io/instance: kargo
-            app.kubernetes.io/version: "v1.9.6"
+            app.kubernetes.io/version: "v1.10.0"
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/component: garbage-collector
           annotations:
@@ -8259,7 +8323,7 @@ spec:
           serviceAccountName: kargo-garbage-collector
           containers:
           - name: garbage-collector
-            image: ghcr.io/akuity/kargo:v1.9.6
+            image: ghcr.io/akuity/kargo:v1.10.0
             imagePullPolicy: IfNotPresent
             command: ["/sbin/tini", "--", "/usr/local/bin/kargo"]
             args: ["garbage-collector"]
@@ -8307,16 +8371,17 @@ metadata:
   name: kargo-external-webhooks-server
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: external-webhooks-server
 spec:
   dnsNames:
   - "localhost"
   issuerRef:
+    group: cert-manager.io
     kind: Issuer
     name: kargo-selfsigned-cert-issuer
   secretName:  kargo-external-webhooks-server-cert
@@ -8354,6 +8419,7 @@ spec:
   dnsNames:
   - kargo-webhooks-server.default.svc
   issuerRef:
+    group: cert-manager.io
     kind: Issuer
     name: kargo-selfsigned-cert-issuer
   secretName: kargo-webhooks-server-cert
@@ -8398,10 +8464,10 @@ kind: MutatingWebhookConfiguration
 metadata:
   name: kargo
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
   annotations:
@@ -8474,10 +8540,10 @@ kind: ValidatingWebhookConfiguration
 metadata:
   name: kargo
   labels:
-    helm.sh/chart: kargo-1.9.6
+    helm.sh/chart: kargo-1.10.0
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.9.6"
+    app.kubernetes.io/version: "v1.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
   annotations:
@@ -8618,3 +8684,49 @@ webhooks:
     resources: ["warehouses"]
     operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
+- name: replicated-resource-mutate.kargo.akuity.io
+  admissionReviewVersions: ["v1"]
+  sideEffects: None
+  clientConfig:
+    service:
+      namespace: default
+      name: kargo-webhooks-server
+      path: /validate-v1-replicated-resource
+  rules:
+  - scope: Namespaced
+    apiGroups: [""]
+    apiVersions: ["v1"]
+    resources: ["secrets", "configmaps"]
+    operations: ["CREATE", "UPDATE"]
+  objectSelector:
+    matchExpressions:
+    - key: kargo.akuity.io/replicated-from
+      operator: Exists
+  namespaceSelector:
+    matchExpressions:
+    - key: kargo.akuity.io/project
+      operator: Exists
+  failurePolicy: Fail
+- name: replicated-resource-delete.kargo.akuity.io
+  admissionReviewVersions: ["v1"]
+  sideEffects: None
+  clientConfig:
+    service:
+      namespace: default
+      name: kargo-webhooks-server
+      path: /validate-v1-replicated-resource
+  rules:
+  - scope: Namespaced
+    apiGroups: [""]
+    apiVersions: ["v1"]
+    resources: ["secrets", "configmaps"]
+    operations: ["DELETE"]
+  objectSelector:
+    matchExpressions:
+    - key: kargo.akuity.io/replicated-from
+      operator: Exists
+  namespaceSelector:
+    matchExpressions:
+    - key: kargo.akuity.io/project
+      operator: Exists
+  failurePolicy: Ignore

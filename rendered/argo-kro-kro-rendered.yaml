@@ -1,0 +1,240 @@
+---
+# Source: kro/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kro
+  namespace: default
+  labels:
+    
+    helm.sh/chart: kro-v0.9.1
+    app.kubernetes.io/name: kro
+    app.kubernetes.io/instance: kro
+    app.kubernetes.io/version: "v0.9.1"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/part-of: kro
+---
+# Source: kro/templates/cluster-role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    kubernetes.io/description: |
+      This ClusterRole grants access for the kro controller.
+
+      The kro installation comes with enough for the controller to run, and start watching the relevant resources
+      (e.g. ResourceGraphDefinitions), but in order to allow kro to create and manage other types of resources you
+      must manually grant access to those separately.
+
+      The easiest way to accomplish this is to create a new ClusterRole with the label `rbac.kro.run/aggregate-to-controller: "true"`
+      which will be automatically aggregated into this one.
+  name: kro-cluster-role
+  labels:
+    
+    helm.sh/chart: kro-v0.9.1
+    app.kubernetes.io/name: kro
+    app.kubernetes.io/instance: kro
+    app.kubernetes.io/version: "v0.9.1"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/part-of: kro
+rules:
+- apiGroups:
+  - "*"
+  resources:
+  - "*"
+  verbs:
+  - '*'
+---
+# Source: kro/templates/cluster-role-binding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kro-cluster-role-binding
+  labels:
+    
+    helm.sh/chart: kro-v0.9.1
+    app.kubernetes.io/name: kro
+    app.kubernetes.io/instance: kro
+    app.kubernetes.io/version: "v0.9.1"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/part-of: kro
+roleRef:
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+  name: kro-cluster-role
+subjects:
+- kind: ServiceAccount
+  name: kro
+  namespace: default
+---
+# Source: kro/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kro
+  namespace: default
+  labels:
+    
+    helm.sh/chart: kro-v0.9.1
+    app.kubernetes.io/name: kro
+    app.kubernetes.io/instance: kro
+    app.kubernetes.io/version: "v0.9.1"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/part-of: kro
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kro
+      app.kubernetes.io/instance: kro
+  template:
+    metadata:
+      labels:
+        
+        helm.sh/chart: kro-v0.9.1
+        app.kubernetes.io/name: kro
+        app.kubernetes.io/instance: kro
+        app.kubernetes.io/version: "v0.9.1"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: controller
+        app.kubernetes.io/part-of: kro
+    spec:
+      serviceAccountName: kro
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: kro
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            runAsNonRoot: true
+            runAsUser: 1000
+          image: "registry.k8s.io/kro/kro:v0.9.1"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: metricsport
+              containerPort: 8078
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1024Mi
+            requests:
+              cpu: 256m
+              memory: 128Mi
+          env:
+            - name: KRO_METRICS_BIND_ADDRESS
+              value: ":8078"
+            - name: KRO_HEALTH_PROBE_BIND_ADDRESS
+              value: ":8079"
+            - name: KRO_RESOURCE_GROUP_CONCURRENT_RECONCILES
+              value: "1"
+            - name: KRO_GRAPH_REVISION_CONCURRENT_RECONCILES
+              value: "1"
+            - name: KRO_DYNAMIC_CONTROLLER_CONCURRENT_RECONCILES
+              value: "1"
+            - name: KRO_LOG_LEVEL
+              value: "info"
+            - name: KRO_DYNAMIC_CONTROLLER_DEFAULT_RESYNC_PERIOD
+              value: "36000"
+            - name: KRO_DYNAMIC_CONTROLLER_DEFAULT_QUEUE_MAX_RETRIES
+              value: "20"
+            - name: KRO_DYNAMIC_CONTROLLER_RATE_LIMITER_MIN_DELAY
+              value: "200ms"
+            - name: KRO_DYNAMIC_CONTROLLER_RATE_LIMITER_MAX_DELAY
+              value: "1000s"
+            - name: KRO_GRACEFUL_SHUTDOWN_TIMEOUT
+              value: "60s"
+            - name: KRO_INSTANCE_REQUEUE_INTERVAL
+              value: "3s"
+            - name: KRO_CLIENT_QPS
+              value: "100"
+            - name: KRO_CLIENT_BURST
+              value: "150"
+            - name: KRO_DYNAMIC_CONTROLLER_RATE_LIMITER_RATE_LIMIT
+              value: "10"
+            - name: KRO_DYNAMIC_CONTROLLER_RATE_LIMITER_BURST_LIMIT
+              value: "100"
+            - name: KRO_RGD_MAX_COLLECTION_SIZE
+              value: "1000"
+            - name: KRO_RGD_MAX_COLLECTION_DIMENSION_SIZE
+              value: "10"
+            - name: KRO_RGD_MAX_GRAPH_REVISIONS
+              value: "5"
+            - name: KRO_RGD_PROGRESS_REQUEUE_DELAY
+              value: "3s"
+            - name: KRO_LEADER_ELECTION_LEASE_DURATION
+              value: "15s"
+            - name: KRO_LEADER_ELECTION_RENEW_DEADLINE
+              value: "10s"
+            - name: KRO_LEADER_ELECTION_RETRY_PERIOD
+              value: "2s"
+          args:
+            - --metrics-bind-address
+            - "$(KRO_METRICS_BIND_ADDRESS)"
+            - --health-probe-bind-address
+            - "$(KRO_HEALTH_PROBE_BIND_ADDRESS)"
+            - --resource-graph-definition-concurrent-reconciles
+            - "$(KRO_RESOURCE_GROUP_CONCURRENT_RECONCILES)"
+            - --graph-revision-concurrent-reconciles
+            - "$(KRO_GRAPH_REVISION_CONCURRENT_RECONCILES)"
+            - --dynamic-controller-concurrent-reconciles
+            - "$(KRO_DYNAMIC_CONTROLLER_CONCURRENT_RECONCILES)"
+            - --zap-log-level
+            - "$(KRO_LOG_LEVEL)"
+            - --graceful-shutdown-timeout
+            - "$(KRO_GRACEFUL_SHUTDOWN_TIMEOUT)"
+            - --instance-requeue-interval
+            - "$(KRO_INSTANCE_REQUEUE_INTERVAL)"
+            - --dynamic-controller-default-resync-period
+            - "$(KRO_DYNAMIC_CONTROLLER_DEFAULT_RESYNC_PERIOD)"
+            - --dynamic-controller-default-queue-max-retries
+            - "$(KRO_DYNAMIC_CONTROLLER_DEFAULT_QUEUE_MAX_RETRIES)"
+            - --dynamic-controller-rate-limiter-min-delay
+            - "$(KRO_DYNAMIC_CONTROLLER_RATE_LIMITER_MIN_DELAY)"
+            - --dynamic-controller-rate-limiter-max-delay
+            - "$(KRO_DYNAMIC_CONTROLLER_RATE_LIMITER_MAX_DELAY)"
+            - --client-qps
+            - "$(KRO_CLIENT_QPS)"
+            - --client-burst
+            - "$(KRO_CLIENT_BURST)"
+            - --dynamic-controller-rate-limiter-rate-limit
+            - "$(KRO_DYNAMIC_CONTROLLER_RATE_LIMITER_RATE_LIMIT)"
+            - --dynamic-controller-rate-limiter-burst-limit
+            - "$(KRO_DYNAMIC_CONTROLLER_RATE_LIMITER_BURST_LIMIT)"
+            - --rgd-max-collection-size
+            - "$(KRO_RGD_MAX_COLLECTION_SIZE)"
+            - --rgd-max-collection-dimension-size
+            - "$(KRO_RGD_MAX_COLLECTION_DIMENSION_SIZE)"
+            - --rgd-max-graph-revisions
+            - "$(KRO_RGD_MAX_GRAPH_REVISIONS)"
+            - --rgd-progress-requeue-delay
+            - "$(KRO_RGD_PROGRESS_REQUEUE_DELAY)"
+            - --leader-election-lease-duration
+            - "$(KRO_LEADER_ELECTION_LEASE_DURATION)"
+            - --leader-election-renew-deadline
+            - "$(KRO_LEADER_ELECTION_RENEW_DEADLINE)"
+            - --leader-election-retry-period
+            - "$(KRO_LEADER_ELECTION_RETRY_PERIOD)"
+            - --leader-elect
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8079
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8079
+            initialDelaySeconds: 10
+            periodSeconds: 10
+      nodeSelector:
+        kubernetes.io/os: linux
