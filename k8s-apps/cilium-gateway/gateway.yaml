@@ -14,11 +14,7 @@ spec:
       load-balancer.hetzner.cloud/network: k8s-network
       load-balancer.hetzner.cloud/use-private-ip: "true"
       load-balancer.hetzner.cloud/uses-proxyprotocol: "true"
-      load-balancer.hetzner.cloud/ipv6-disabled: "true"
-    # parametersRef:
-    #   group: gateway.nginx.org
-    #   kind: NginxProxy
-    #   name: ngf-proxy-config
+      # load-balancer.hetzner.cloud/ipv6-disabled: "true"
   listeners:
     # - name: grafana
     #   allowedRoutes:
@@ -50,7 +46,7 @@ spec:
     # Fallbacks
     - name: https
       port: 443
-      hostname: "*.k8s.henrikgerdes.me"
+      hostname: "*.k8s-gw.henrikgerdes.me"
       protocol: HTTPS
       tls:
         mode: Terminate
@@ -65,6 +61,6 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
-      hostname: "*.gw.henrikgerdes.me"
+      hostname: "*.k8s-gw.henrikgerdes.me"
       port: 80
       protocol: HTTP
