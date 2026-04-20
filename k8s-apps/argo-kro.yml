@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kro
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: kro
+    repoURL: registry.k8s.io/kro/charts
+    targetRevision: 0.*
+    helm:
+      releaseName: kro
+      valuesObject: {}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kro-system
+  info:
+    - name: Chart-Info
+      value: https://artifacthub.io/packages/helm/gitlab/gitlab-runner
+    - name: Code-Info
+      value: https://kro.run/docs/
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
