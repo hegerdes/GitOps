@@ -1,1 +1,1 @@
-{"crds": {"enabled": true}, "extraArgs": ["--enable-gateway-api"], "prometheus": {"servicemonitor": {"enabled": true}}}
+{"config": {"enableGatewayAPI": true, "enableGatewayAPIListenerSet": true, "featureGates": {"ListenerSets": true}}, "crds": {"enabled": true}, "prometheus": {"servicemonitor": {"enabled": true}}}

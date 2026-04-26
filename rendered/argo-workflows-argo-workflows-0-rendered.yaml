@@ -6,7 +6,7 @@ metadata:
   name: argo-workflows-0-workflow-controller
   namespace: "default"
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-workflow-controller
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: workflow-controller
@@ -20,7 +20,7 @@ kind: ServiceAccount
 metadata:
   name: argo-workflow
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-workflow-controller
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: workflow-controller
@@ -47,7 +47,7 @@ metadata:
   name: argo-workflows-0-server
   namespace: "default"
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-server
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: server
@@ -62,7 +62,7 @@ metadata:
   name: argo-workflows-0-workflow-controller-configmap
   namespace: "default"
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-cm
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: workflow-controller
@@ -114,7 +114,7 @@ kind: ClusterRole
 metadata:
   name: argo-workflows-0-view
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-workflow-controller
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: workflow-controller
@@ -153,7 +153,7 @@ kind: ClusterRole
 metadata:
   name: argo-workflows-0-edit
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-server
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: server
@@ -197,7 +197,7 @@ kind: ClusterRole
 metadata:
   name: argo-workflows-0-admin
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-server
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: server
@@ -241,7 +241,7 @@ kind: ClusterRole
 metadata:
   name: argo-workflows-0-workflow-controller
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-workflow-controller
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: workflow-controller
@@ -398,7 +398,7 @@ kind: ClusterRole
 metadata:
   name: argo-workflows-0-workflow-controller-cluster-template
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-workflow-controller
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: workflow-controller
@@ -422,7 +422,7 @@ kind: ClusterRole
 metadata:
   name: argo-workflows-0-server
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-server
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: server
@@ -524,7 +524,7 @@ kind: ClusterRole
 metadata:
   name: argo-workflows-0-server-cluster-template
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-server
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: server
@@ -551,7 +551,7 @@ kind: ClusterRoleBinding
 metadata:
   name: argo-workflows-0-workflow-controller
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-workflow-controller
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: workflow-controller
@@ -573,7 +573,7 @@ kind: ClusterRoleBinding
 metadata:
   name: argo-workflows-0-workflow-controller-cluster-template
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-workflow-controller
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: workflow-controller
@@ -595,7 +595,7 @@ kind: ClusterRoleBinding
 metadata:
   name: argo-workflows-0-server
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-server
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: server
@@ -617,7 +617,7 @@ kind: ClusterRoleBinding
 metadata:
   name: argo-workflows-0-server-cluster-template
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-server
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: server
@@ -639,7 +639,7 @@ kind: Role
 metadata:
   name: argo-workflows-0-workflow
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-workflow-controller
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: workflow-controller
@@ -662,7 +662,7 @@ kind: RoleBinding
 metadata:
   name: argo-workflows-0-workflow
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-workflow-controller
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: workflow-controller
@@ -686,14 +686,14 @@ metadata:
   name: argo-workflows-0-server
   namespace: "default"
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-server
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: server
     app: server
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-workflows
-    app.kubernetes.io/version: "v4.0.4"
+    app.kubernetes.io/version: "v4.0.5"
 spec:
   ports:
   - port: 2746
@@ -711,17 +711,19 @@ metadata:
   name: argo-workflows-0-workflow-controller
   namespace: "default"
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-workflow-controller
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: workflow-controller
     app: workflow-controller
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-workflows
-    app.kubernetes.io/version: "v4.0.4"
+    app.kubernetes.io/version: "v4.0.5"
 spec:
   replicas: 1
   revisionHistoryLimit: 10
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app.kubernetes.io/name: argo-workflows-workflow-controller
@@ -729,26 +731,26 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: argo-workflows-1.0.10
+        helm.sh/chart: argo-workflows-1.0.13
         app.kubernetes.io/name: argo-workflows-workflow-controller
         app.kubernetes.io/instance: argo-workflows-0
         app.kubernetes.io/component: workflow-controller
         app: workflow-controller
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/part-of: argo-workflows
-        app.kubernetes.io/version: "v4.0.4"
+        app.kubernetes.io/version: "v4.0.5"
     spec:
       serviceAccountName: argo-workflows-0-workflow-controller
       containers:
         - name: controller
-          image: "quay.io/argoproj/workflow-controller:v4.0.4"
+          image: "quay.io/argoproj/workflow-controller:v4.0.5"
           imagePullPolicy: Always
           command: [ "workflow-controller" ]
           args:
           - "--configmap"
           - "argo-workflows-0-workflow-controller-configmap"
           - "--executor-image"
-          - "quay.io/argoproj/argoexec:v4.0.4"
+          - "quay.io/argoproj/argoexec:v4.0.5"
           - "--loglevel"
           - "info"
           - "--gloglevel"
@@ -799,14 +801,14 @@ metadata:
   name: argo-workflows-0-server
   namespace: "default"
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-server
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: server
     app: server
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-workflows
-    app.kubernetes.io/version: "v4.0.4"
+    app.kubernetes.io/version: "v4.0.5"
 spec:
   replicas: 1
   revisionHistoryLimit: 10
@@ -817,21 +819,21 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: argo-workflows-1.0.10
+        helm.sh/chart: argo-workflows-1.0.13
         app.kubernetes.io/name: argo-workflows-server
         app.kubernetes.io/instance: argo-workflows-0
         app.kubernetes.io/component: server
         app: server
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/part-of: argo-workflows
-        app.kubernetes.io/version: "v4.0.4"
+        app.kubernetes.io/version: "v4.0.5"
       annotations:
-        checksum/cm: eb02a938f2008867d122996e765b13603e29e30af35d4e067d4955ecf2eeaa52
+        checksum/cm: 867a0ac86f069dba2ff3ea91f084d2c4920b07d7237c30ddc825bbca64414adf
     spec:
       serviceAccountName: argo-workflows-0-server
       containers:
         - name: argo-server
-          image: "quay.io/argoproj/argocli:v4.0.4"
+          image: "quay.io/argoproj/argocli:v4.0.5"
           imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
@@ -913,7 +915,7 @@ metadata:
   name: argo-workflows-0-server
   namespace: "default"
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-server
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: server
@@ -947,7 +949,7 @@ metadata:
   name: argo-workflows-0-crd-install
   namespace: default
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-crd-install
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: crds
@@ -965,7 +967,7 @@ kind: ClusterRole
 metadata:
   name: argo-workflows-0-crd-install
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-crd-install
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: crds
@@ -987,7 +989,7 @@ kind: ClusterRoleBinding
 metadata:
   name: argo-workflows-0-crd-install
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-crd-install
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: crds
@@ -1014,7 +1016,7 @@ metadata:
   name: argo-workflows-0-crd-install
   namespace: default
   labels:
-    helm.sh/chart: argo-workflows-1.0.10
+    helm.sh/chart: argo-workflows-1.0.13
     app.kubernetes.io/name: argo-workflows-crd-install
     app.kubernetes.io/instance: argo-workflows-0
     app.kubernetes.io/component: crds
@@ -1029,7 +1031,7 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: argo-workflows-1.0.10
+        helm.sh/chart: argo-workflows-1.0.13
         app.kubernetes.io/name: argo-workflows-crd-install
         app.kubernetes.io/instance: argo-workflows-0
         app.kubernetes.io/component: crds
@@ -1040,7 +1042,7 @@ spec:
       serviceAccountName: argo-workflows-0-crd-install
       containers:
         - name: apply
-          image: "registry.k8s.io/kubectl:v1.35.4"
+          image: "registry.k8s.io/kubectl:v1.36.0"
           env:
           command:
             - kubectl
@@ -1051,20 +1053,20 @@ spec:
             # the names of the full CRDs to install. It's either this or hard
             # code the names, and this would burn us in the future.
             - -f
-            - "https://raw.githubusercontent.com/argoproj/argo-helm/argo-workflows-1.0.10/charts/argo-workflows/files/crds/full/argoproj.io_clusterworkflowtemplates.yaml"
+            - "https://raw.githubusercontent.com/argoproj/argo-helm/argo-workflows-1.0.13/charts/argo-workflows/files/crds/full/argoproj.io_clusterworkflowtemplates.yaml"
             - -f
-            - "https://raw.githubusercontent.com/argoproj/argo-helm/argo-workflows-1.0.10/charts/argo-workflows/files/crds/full/argoproj.io_cronworkflows.yaml"
+            - "https://raw.githubusercontent.com/argoproj/argo-helm/argo-workflows-1.0.13/charts/argo-workflows/files/crds/full/argoproj.io_cronworkflows.yaml"
             - -f
-            - "https://raw.githubusercontent.com/argoproj/argo-helm/argo-workflows-1.0.10/charts/argo-workflows/files/crds/full/argoproj.io_workflowartifactgctasks.yaml"
+            - "https://raw.githubusercontent.com/argoproj/argo-helm/argo-workflows-1.0.13/charts/argo-workflows/files/crds/full/argoproj.io_workflowartifactgctasks.yaml"
             - -f
-            - "https://raw.githubusercontent.com/argoproj/argo-helm/argo-workflows-1.0.10/charts/argo-workflows/files/crds/full/argoproj.io_workfloweventbindings.yaml"
+            - "https://raw.githubusercontent.com/argoproj/argo-helm/argo-workflows-1.0.13/charts/argo-workflows/files/crds/full/argoproj.io_workfloweventbindings.yaml"
             - -f
-            - "https://raw.githubusercontent.com/argoproj/argo-helm/argo-workflows-1.0.10/charts/argo-workflows/files/crds/full/argoproj.io_workflows.yaml"
+            - "https://raw.githubusercontent.com/argoproj/argo-helm/argo-workflows-1.0.13/charts/argo-workflows/files/crds/full/argoproj.io_workflows.yaml"
             - -f
-            - "https://raw.githubusercontent.com/argoproj/argo-helm/argo-workflows-1.0.10/charts/argo-workflows/files/crds/full/argoproj.io_workflowtaskresults.yaml"
+            - "https://raw.githubusercontent.com/argoproj/argo-helm/argo-workflows-1.0.13/charts/argo-workflows/files/crds/full/argoproj.io_workflowtaskresults.yaml"
             - -f
-            - "https://raw.githubusercontent.com/argoproj/argo-helm/argo-workflows-1.0.10/charts/argo-workflows/files/crds/full/argoproj.io_workflowtasksets.yaml"
+            - "https://raw.githubusercontent.com/argoproj/argo-helm/argo-workflows-1.0.13/charts/argo-workflows/files/crds/full/argoproj.io_workflowtasksets.yaml"
             - -f
-            - "https://raw.githubusercontent.com/argoproj/argo-helm/argo-workflows-1.0.10/charts/argo-workflows/files/crds/full/argoproj.io_workflowtemplates.yaml"
+            - "https://raw.githubusercontent.com/argoproj/argo-helm/argo-workflows-1.0.13/charts/argo-workflows/files/crds/full/argoproj.io_workflowtemplates.yaml"
       restartPolicy: Never
   backoffLimit: 3
