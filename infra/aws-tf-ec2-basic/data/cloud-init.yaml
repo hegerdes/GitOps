@@ -58,7 +58,21 @@ bootcmd:
 runcmd:
   - chmod -R 777 /mnt/ebs
   - chmod -R 777 /srv
-  - curl -sL -o amazon-ssm-agent.deb https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb
-  - dpkg -i amazon-ssm-agent.deb
-  - rm -f amazon-ssm-agent.deb
+  - |
+      set -e
+      ARCH="$(dpkg --print-architecture)"
+      case "$ARCH" in
+        amd64)
+          URL="https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_amd64/amazon-ssm-agent.deb"
+          ;;
+        arm64)
+          URL="https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/debian_arm64/amazon-ssm-agent.deb"
+          ;;
+        *)
+          echo "Unsupported architecture: $ARCH"
+          ;;
+      esac
+      curl -fsSL -o /tmp/amazon-ssm-agent.deb "$URL"
+      dpkg -i /tmp/amazon-ssm-agent.deb
+      rm -f amazon-ssm-agent.deb
   - echo "Cloud-Init finished" >> /srv/cloud-init-msg.txt

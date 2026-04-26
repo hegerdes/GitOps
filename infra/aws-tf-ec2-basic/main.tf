@@ -20,11 +20,11 @@ resource "aws_instance" "web" {
   ebs_optimized = true
   launch_template {
     id      = aws_launch_template.web.id
-    version = "$Latest"
+    version = aws_launch_template.web.latest_version
   }
   root_block_device {
-    throughput  = 600
-    iops        = 30000
+    throughput  = 500
+    iops        = 15000
     volume_type = "gp3"
     volume_size = 80
   }
