@@ -11,4 +11,5 @@ controlplane:
   pdb:
     enabled: false
 
+extensions: {}
 extraObjects: []

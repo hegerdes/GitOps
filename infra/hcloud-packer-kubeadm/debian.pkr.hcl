@@ -19,7 +19,7 @@ variable "output_name" {
 }
 variable "k8s_version" {
   type    = string
-  default = "1.35.4"
+  default = "1.36.0"
 }
 variable "user_data_path" {
   type    = string
