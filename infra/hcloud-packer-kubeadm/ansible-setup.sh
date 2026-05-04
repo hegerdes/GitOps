@@ -46,8 +46,14 @@ k8s_absent_packages:
   - "vim-tiny"
   - "vim"
   - "vim-runtime"
-  - "libsodium23"
   - "vim-common"
+  - "dmidecode"
+  - "libsodium23"
+  - "apt-utils"
+  - "at"
+  - "bsdextrautils"
+  - "debconf-i18n"
+  - "btrfs-progs"
   - "file"
   - "traceroute"
   - "perl"
@@ -140,7 +146,7 @@ else
   journalctl --rotate
   journalctl --vacuum-time=1s
   systemctl stop systemd-journald
-  rm -rf /var/cache/apt/* /var/cache/apparmor/* /var/lib/apt/lists/* /var/cache/debconf/* /var/cache/dpkg/* /var/cache/ansible/* /var/log/*.log* /tmp/* /var/tmp/* /usr/share/doc/* /usr/share/man/* /var/log/journal/* /run/log/journal/* /usr/lib/python3.13/__pycache__/*
+  rm -rf /var/cache/apt/* /var/cache/apparmor/* /var/lib/apt/lists/* /var/cache/debconf/* /var/cache/dpkg/* /var/cache/ansible/* /var/log/*.log* /tmp/* /var/tmp/* /usr/share/doc/* /usr/share/man/* /var/log/journal/* /run/log/journal/* /usr/lib/python3.13/__pycache__/* /usr/share/bash-completion/completions/*
   find /usr/lib/python3 -type f -name "*.pyc" -delete
   find /usr/share/locale/ -maxdepth 1 -type d ! -name 'en' ! -name 'en_US' ! -name 'en_US.UTF-8' -exec rm -rf {} +
 
