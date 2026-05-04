@@ -14,7 +14,7 @@ packer {
 ######################## INPUT ########################
 variable "talos_version" {
   type    = string
-  default = "v1.12.6"
+  default = "v1.13.0"
 }
 variable "talos_extensions" {
   type    = list(string)
@@ -22,8 +22,7 @@ variable "talos_extensions" {
 }
 variable "talos_kernel_args" {
   type    = list(string)
-  default = []
-  # default = ["security=apparmor"]
+  default = [] # example: ["security=apparmor"]
 }
 variable "location" {
   type    = string
