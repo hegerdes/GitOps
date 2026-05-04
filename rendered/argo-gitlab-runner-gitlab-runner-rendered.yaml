@@ -7,7 +7,7 @@ metadata:
   namespace: "default"
   labels:
     app: gitlab-runner
-    chart: gitlab-runner-0.88.1
+    chart: gitlab-runner-0.88.2
     release: "gitlab-runner"
     heritage: "Helm"
 ---
@@ -19,7 +19,7 @@ metadata:
   namespace: "default"
   labels:
     app: gitlab-runner
-    chart: gitlab-runner-0.88.1
+    chart: gitlab-runner-0.88.2
     release: "gitlab-runner"
     heritage: "Helm"
 data:
@@ -162,7 +162,7 @@ metadata:
   name: gitlab-runner
   labels:
     app: gitlab-runner
-    chart: gitlab-runner-0.88.1
+    chart: gitlab-runner-0.88.2
     release: "gitlab-runner"
     heritage: "Helm"
   namespace: "default"
@@ -178,7 +178,7 @@ metadata:
   name: gitlab-runner
   labels:
     app: gitlab-runner
-    chart: gitlab-runner-0.88.1
+    chart: gitlab-runner-0.88.2
     release: "gitlab-runner"
     heritage: "Helm"
   namespace: "default"
@@ -199,7 +199,7 @@ metadata:
   namespace: "default"
   labels:
     app: gitlab-runner
-    chart: gitlab-runner-0.88.1
+    chart: gitlab-runner-0.88.2
     release: "gitlab-runner"
     heritage: "Helm"
 spec:
@@ -211,11 +211,11 @@ spec:
     metadata:
       labels:
         app: gitlab-runner
-        chart: gitlab-runner-0.88.1
+        chart: gitlab-runner-0.88.2
         release: "gitlab-runner"
         heritage: "Helm"
       annotations:
-        checksum/configmap: e52b1d313e77c6295d05cbcbddd3dcebb8acb92bf496ce9629fd9fc3a56082a6
+        checksum/configmap: d1083e276dbe9bc0e50fb7a7edd5ecbda40adbfc40fe8b28db56df59400b5225
         checksum/secrets: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
         prometheus.io/scrape: 'true'
         prometheus.io/port: "9252"
@@ -227,7 +227,7 @@ spec:
       serviceAccountName: "gitlab-runner"
       containers:
       - name: gitlab-runner
-        image: registry.gitlab.com/gitlab-org/gitlab-runner:alpine-v18.11.1
+        image: registry.gitlab.com/gitlab-org/gitlab-runner:alpine-v18.11.2
         imagePullPolicy: "IfNotPresent"
         securityContext: 
           allowPrivilegeEscalation: false

@@ -5,10 +5,10 @@ kind: ServiceAccount
 metadata:
   name: hcloud-exporter-2
   labels:
-    helm.sh/chart: hcloud-exporter-4.12.1
+    helm.sh/chart: hcloud-exporter-4.13.0
     app.kubernetes.io/name: hcloud-exporter
     app.kubernetes.io/instance: hcloud-exporter-2
-    app.kubernetes.io/version: "3.12.1"
+    app.kubernetes.io/version: "3.13.0"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: hcloud-exporter/templates/secret.yaml
@@ -17,10 +17,10 @@ kind: Secret
 metadata:
   name: hcloud-exporter-2
   labels:
-    helm.sh/chart: hcloud-exporter-4.12.1
+    helm.sh/chart: hcloud-exporter-4.13.0
     app.kubernetes.io/name: hcloud-exporter
     app.kubernetes.io/instance: hcloud-exporter-2
-    app.kubernetes.io/version: "3.12.1"
+    app.kubernetes.io/version: "3.13.0"
     app.kubernetes.io/managed-by: Helm
 type: Opaque
 data:
@@ -32,10 +32,10 @@ kind: Service
 metadata:
   name: hcloud-exporter-2
   labels:
-    helm.sh/chart: hcloud-exporter-4.12.1
+    helm.sh/chart: hcloud-exporter-4.13.0
     app.kubernetes.io/name: hcloud-exporter
     app.kubernetes.io/instance: hcloud-exporter-2
-    app.kubernetes.io/version: "3.12.1"
+    app.kubernetes.io/version: "3.13.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -54,13 +54,13 @@ kind: Deployment
 metadata:
   name: hcloud-exporter-2
   labels:
-    helm.sh/chart: hcloud-exporter-4.12.1
+    helm.sh/chart: hcloud-exporter-4.13.0
     app.kubernetes.io/name: hcloud-exporter
     app.kubernetes.io/instance: hcloud-exporter-2
-    app.kubernetes.io/version: "3.12.1"
+    app.kubernetes.io/version: "3.13.0"
     app.kubernetes.io/managed-by: Helm
   annotations:
-    checksum/secret: 1709a8ad5512ed428e56987f65425be5e6088784d5305a337de58b35775f31c1
+    checksum/secret: 8df4117799ca5232c45929f7f518e341e29a61f43f6539716cb936a190f998eb
 spec:
   replicas: 1
   selector:
@@ -72,18 +72,18 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: hcloud-exporter-4.12.1
+        helm.sh/chart: hcloud-exporter-4.13.0
         app.kubernetes.io/name: hcloud-exporter
         app.kubernetes.io/instance: hcloud-exporter-2
-        app.kubernetes.io/version: "3.12.1"
+        app.kubernetes.io/version: "3.13.0"
         app.kubernetes.io/managed-by: Helm
       annotations:
-        checksum/secret: 1709a8ad5512ed428e56987f65425be5e6088784d5305a337de58b35775f31c1
+        checksum/secret: 8df4117799ca5232c45929f7f518e341e29a61f43f6539716cb936a190f998eb
     spec:
       serviceAccountName: hcloud-exporter-2
       containers:
         - name: hcloud-exporter
-          image: "quay.io/promhippie/hcloud-exporter:3.12.1"
+          image: "quay.io/promhippie/hcloud-exporter:3.13.0"
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
@@ -151,10 +151,10 @@ kind: ServiceMonitor
 metadata:
   name: hcloud-exporter-2
   labels:
-    helm.sh/chart: hcloud-exporter-4.12.1
+    helm.sh/chart: hcloud-exporter-4.13.0
     app.kubernetes.io/name: hcloud-exporter
     app.kubernetes.io/instance: hcloud-exporter-2
-    app.kubernetes.io/version: "3.12.1"
+    app.kubernetes.io/version: "3.13.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   endpoints:
@@ -168,10 +168,10 @@ spec:
     - default
   selector:
     matchLabels:
-      helm.sh/chart: hcloud-exporter-4.12.1
+      helm.sh/chart: hcloud-exporter-4.13.0
       app.kubernetes.io/name: hcloud-exporter
       app.kubernetes.io/instance: hcloud-exporter-2
-      app.kubernetes.io/version: "3.12.1"
+      app.kubernetes.io/version: "3.13.0"
       app.kubernetes.io/managed-by: Helm
 ---
 # Source: hcloud-exporter/templates/tests/test-connection.yaml
@@ -180,10 +180,10 @@ kind: Pod
 metadata:
   name: "hcloud-exporter-2-test-connection"
   labels:
-    helm.sh/chart: hcloud-exporter-4.12.1
+    helm.sh/chart: hcloud-exporter-4.13.0
     app.kubernetes.io/name: hcloud-exporter
     app.kubernetes.io/instance: hcloud-exporter-2
-    app.kubernetes.io/version: "3.12.1"
+    app.kubernetes.io/version: "3.13.0"
     app.kubernetes.io/managed-by: Helm
   annotations:
     "helm.sh/hook": test-success

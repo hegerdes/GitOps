@@ -6,10 +6,10 @@ metadata:
   name: external-dns-aws-0
   namespace: default
   labels:
-    helm.sh/chart: external-dns-1.20.0
+    helm.sh/chart: external-dns-1.21.1
     app.kubernetes.io/name: external-dns
     app.kubernetes.io/instance: external-dns-aws-0
-    app.kubernetes.io/version: "0.20.0"
+    app.kubernetes.io/version: "0.21.0"
     app.kubernetes.io/managed-by: Helm
 automountServiceAccountToken: true
 ---
@@ -19,10 +19,10 @@ kind: ClusterRole
 metadata:
   name: external-dns-aws-0
   labels:
-    helm.sh/chart: external-dns-1.20.0
+    helm.sh/chart: external-dns-1.21.1
     app.kubernetes.io/name: external-dns
     app.kubernetes.io/instance: external-dns-aws-0
-    app.kubernetes.io/version: "0.20.0"
+    app.kubernetes.io/version: "0.21.0"
     app.kubernetes.io/managed-by: Helm
 rules:
   - apiGroups: [""]
@@ -77,10 +77,10 @@ kind: ClusterRoleBinding
 metadata:
   name: external-dns-aws-0-viewer
   labels:
-    helm.sh/chart: external-dns-1.20.0
+    helm.sh/chart: external-dns-1.21.1
     app.kubernetes.io/name: external-dns
     app.kubernetes.io/instance: external-dns-aws-0
-    app.kubernetes.io/version: "0.20.0"
+    app.kubernetes.io/version: "0.21.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -98,10 +98,10 @@ metadata:
   name: external-dns-aws-0
   namespace: default
   labels:
-    helm.sh/chart: external-dns-1.20.0
+    helm.sh/chart: external-dns-1.21.1
     app.kubernetes.io/name: external-dns
     app.kubernetes.io/instance: external-dns-aws-0
-    app.kubernetes.io/version: "0.20.0"
+    app.kubernetes.io/version: "0.21.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -121,10 +121,10 @@ metadata:
   name: external-dns-aws-0
   namespace: default
   labels:
-    helm.sh/chart: external-dns-1.20.0
+    helm.sh/chart: external-dns-1.21.1
     app.kubernetes.io/name: external-dns
     app.kubernetes.io/instance: external-dns-aws-0
-    app.kubernetes.io/version: "0.20.0"
+    app.kubernetes.io/version: "0.21.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -159,7 +159,7 @@ spec:
             runAsGroup: 65532
             runAsNonRoot: true
             runAsUser: 65532
-          image: registry.k8s.io/external-dns/external-dns:v0.20.0
+          image: registry.k8s.io/external-dns/external-dns:v0.21.0
           imagePullPolicy: IfNotPresent
           env:
             - name: AWS_CONFIG_FILE
@@ -179,7 +179,7 @@ spec:
             - --policy=upsert-only
             - --registry=txt
             - --provider=aws
-            - --exclude-target-net=10.0.0.0/8
+            - "--exclude-target-net=10.0.0.0/8"
           ports:
             - name: http
               protocol: TCP

@@ -6,10 +6,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.5.4
+    helm.sh/chart: alloy-operator-0.5.6
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.7.0"
+    app.kubernetes.io/version: "1.8.0"
     app.kubernetes.io/managed-by: Helm
 automountServiceAccountToken: true
 ---
@@ -19,7 +19,7 @@ kind: ServiceAccount
 automountServiceAccountToken: true
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-7.2.2
+    helm.sh/chart: kube-state-metrics-7.3.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -891,25 +891,16 @@ data:
           retry_on_http_429 = true
           sample_age_limit = "0s"
         }
-    
-        write_relabel_config {
-          source_labels = ["cluster"]
-          regex = ""
-          replacement = "hetzner-k8s"
-          target_label = "cluster"
-        }
-        write_relabel_config {
-          source_labels = ["k8s_cluster_name"]
-          regex = ""
-          replacement = "hetzner-k8s"
-          target_label = "k8s_cluster_name"
-        }
       }
     
       wal {
         truncate_frequency = "2h"
         min_keepalive_time = "5m"
         max_keepalive_time = "8h"
+      }
+      external_labels = {
+        "cluster" = "hetzner-k8s",
+        "k8s_cluster_name" = "hetzner-k8s",
       }
     }
     
@@ -1595,25 +1586,16 @@ data:
           retry_on_http_429 = true
           sample_age_limit = "0s"
         }
-    
-        write_relabel_config {
-          source_labels = ["cluster"]
-          regex = ""
-          replacement = "hetzner-k8s"
-          target_label = "cluster"
-        }
-        write_relabel_config {
-          source_labels = ["k8s_cluster_name"]
-          regex = ""
-          replacement = "hetzner-k8s"
-          target_label = "k8s_cluster_name"
-        }
       }
     
       wal {
         truncate_frequency = "2h"
         min_keepalive_time = "5m"
         max_keepalive_time = "8h"
+      }
+      external_labels = {
+        "cluster" = "hetzner-k8s",
+        "k8s_cluster_name" = "hetzner-k8s",
       }
     }
     
@@ -1633,7 +1615,7 @@ data:
   self-reporting-metric.prom: |+
     # HELP grafana_kubernetes_monitoring_build_info A metric to report the version of the Kubernetes Monitoring Helm chart
     # TYPE grafana_kubernetes_monitoring_build_info gauge
-    grafana_kubernetes_monitoring_build_info{version="4.0.3", namespace="default"} 1
+    grafana_kubernetes_monitoring_build_info{version="4.0.4", namespace="default"} 1
     # HELP grafana_kubernetes_monitoring_feature_info A metric to report the enabled features of the Kubernetes Monitoring Helm chart
     # TYPE grafana_kubernetes_monitoring_feature_info gauge
     grafana_kubernetes_monitoring_feature_info{feature="applicationObservability", protocols="otlpgrpc,otlphttp,jaegergrpc,zipkin", version="1.0.0"} 1
@@ -1657,10 +1639,10 @@ kind: ClusterRole
 metadata:
   name: grafana-monitoring-0-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: alloy-operator-0.5.4
+    helm.sh/chart: alloy-operator-0.5.6
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.7.0"
+    app.kubernetes.io/version: "1.8.0"
     app.kubernetes.io/managed-by: Helm
 rules:
   - apiGroups:
@@ -1687,34 +1669,40 @@ rules:
   # Rules which allow the management of ConfigMaps, ServiceAccounts, and Services.
   - apiGroups: [""]
     resources: ["configmaps", "secrets", "serviceaccounts", "services"]
-    verbs: ["*"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
   # Rules which allow the management of DaemonSets, Deployments, and StatefulSets.
   - apiGroups: ["apps"]
     resources: ["daemonsets", "deployments", "statefulsets"]
-    verbs: ["*"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
   # Rules which allow the management of Horizontal Pod Autoscalers.
   - apiGroups: ["autoscaling"]
     resources: ["horizontalpodautoscalers"]
-    verbs: ["*"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
   # Rules which allow the management of Ingresses and NetworkPolicies.
   - apiGroups: ["networking.k8s.io"]
     resources: ["ingresses", "networkpolicies"]
-    verbs: ["*"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
   # Rules which allow the management of PodDisruptionBudgets.
   - apiGroups: ["policy"]
     resources: ["poddisruptionbudgets"]
-    verbs: ["*"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
   # Rules which allow the management of ClusterRoles, ClusterRoleBindings, Roles, and RoleBindings.
+  # `bind` and `escalate` are required so the operator can create ClusterRoles/Roles for the Alloy
+  # instances it manages. Kubernetes' privilege-escalation prevention requires the creator to either
+  # already hold every permission it grants, or to have `escalate` (for roles) and `bind` (for
+  # rolebindings). The operator's role doesn't enumerate every permission Alloy ever needs, so these
+  # two verbs are required for the operator to function. `impersonate` and other dangerous verbs are
+  # intentionally omitted.
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources: ["clusterroles", "clusterrolebindings", "roles", "rolebindings"]
-    verbs: ["*"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete", "bind", "escalate"]
 ---
 # Source: k8s-monitoring/charts/telemetryServices/charts/kube-state-metrics/templates/role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-7.2.2
+    helm.sh/chart: kube-state-metrics-7.3.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -1958,10 +1946,10 @@ kind: ClusterRoleBinding
 metadata:
   name: grafana-monitoring-0-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: alloy-operator-0.5.4
+    helm.sh/chart: alloy-operator-0.5.6
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.7.0"
+    app.kubernetes.io/version: "1.8.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -1978,10 +1966,10 @@ kind: ClusterRoleBinding
 metadata:
   name: grafana-monitoring-0-alloy-operator
   labels:
-    helm.sh/chart: alloy-operator-0.5.4
+    helm.sh/chart: alloy-operator-0.5.6
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.7.0"
+    app.kubernetes.io/version: "1.8.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -1997,7 +1985,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-7.2.2
+    helm.sh/chart: kube-state-metrics-7.3.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -2043,10 +2031,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator-leader-election-role
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.5.4
+    helm.sh/chart: alloy-operator-0.5.6
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.7.0"
+    app.kubernetes.io/version: "1.8.0"
     app.kubernetes.io/managed-by: Helm
 rules:
   - apiGroups:
@@ -2088,10 +2076,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator-leader-election-rolebinding
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.5.4
+    helm.sh/chart: alloy-operator-0.5.6
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.7.0"
+    app.kubernetes.io/version: "1.8.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -2109,10 +2097,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.5.4
+    helm.sh/chart: alloy-operator-0.5.6
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.7.0"
+    app.kubernetes.io/version: "1.8.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -2136,7 +2124,7 @@ metadata:
   name: grafana-monitoring-0-kube-state-metrics
   namespace: default
   labels:    
-    helm.sh/chart: kube-state-metrics-7.2.2
+    helm.sh/chart: kube-state-metrics-7.3.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -2344,10 +2332,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.5.4
+    helm.sh/chart: alloy-operator-0.5.6
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.7.0"
+    app.kubernetes.io/version: "1.8.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -2358,10 +2346,10 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: alloy-operator-0.5.4
+        helm.sh/chart: alloy-operator-0.5.6
         app.kubernetes.io/name: alloy-operator
         app.kubernetes.io/instance: grafana-monitoring-0
-        app.kubernetes.io/version: "1.7.0"
+        app.kubernetes.io/version: "1.8.0"
         app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: grafana-monitoring-0-alloy-operator
@@ -2369,7 +2357,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: alloy-operator
-          image: "ghcr.io/grafana/alloy-operator:1.7.0"
+          image: "ghcr.io/grafana/alloy-operator:1.8.0"
           imagePullPolicy: IfNotPresent
           args:
             - --health-probe-bind-address=:8081
@@ -2415,7 +2403,7 @@ metadata:
   name: grafana-monitoring-0-kube-state-metrics
   namespace: default
   labels:    
-    helm.sh/chart: kube-state-metrics-7.2.2
+    helm.sh/chart: kube-state-metrics-7.3.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -2435,7 +2423,7 @@ spec:
   template:
     metadata:
       labels:        
-        helm.sh/chart: kube-state-metrics-7.2.2
+        helm.sh/chart: kube-state-metrics-7.3.0
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: metrics
         app.kubernetes.io/part-of: kube-state-metrics
@@ -2954,7 +2942,7 @@ metadata:
   labels:
     app.kubernetes.io/name: grafana-monitoring-0-k8s-monitoring-add-finalizer
     app.kubernetes.io/instance: grafana-monitoring-0
-    helm.sh/chart: k8s-monitoring-4.0.3
+    helm.sh/chart: k8s-monitoring-4.0.4
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "15"
@@ -3007,7 +2995,7 @@ metadata:
   labels:
     app.kubernetes.io/name: grafana-monitoring-0-k8s-monitoring-remove-alloy-and-finalizer
     app.kubernetes.io/instance: grafana-monitoring-0
-    helm.sh/chart: k8s-monitoring-4.0.3
+    helm.sh/chart: k8s-monitoring-4.0.4
   annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
