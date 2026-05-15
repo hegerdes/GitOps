@@ -6,10 +6,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.5.6
+    helm.sh/chart: alloy-operator-0.5.7
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/managed-by: Helm
 automountServiceAccountToken: true
 ---
@@ -37,7 +37,7 @@ metadata:
   name: grafana-monitoring-0-node-exporter
   namespace: default
   labels:
-    helm.sh/chart: node-exporter-4.53.1
+    helm.sh/chart: node-exporter-4.55.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: node-exporter
@@ -82,7 +82,7 @@ data:
           role = "pod"
           field = "spec.nodeName=" + sys.env("HOSTNAME")
         }
-      }
+      } // discovery.kubernetes "pods"
     
       discovery.relabel "filtered_pods" {
         targets = discovery.kubernetes.pods.targets
@@ -91,27 +91,28 @@ data:
           action = "replace"
           target_label = "namespace"
         }
+        rule {  // Drop anything with a "falsy" annotation value
+          source_labels = ["__meta_kubernetes_pod_annotation_logs_grafana_com_pods_enabled"]
+          regex = "(false|no|skip)"
+          action = "drop"
+        }
         rule {
           source_labels = ["__meta_kubernetes_pod_name"]
-          action = "replace"
           target_label = "pod"
         }
         rule {
           source_labels = ["__meta_kubernetes_pod_container_name"]
-          action = "replace"
           target_label = "container"
         }
         rule {
           source_labels = ["__meta_kubernetes_namespace", "__meta_kubernetes_pod_container_name"]
           separator = "/"
-          action = "replace"
           replacement = "$1"
           target_label = "job"
         }
     
         // set the container runtime as a label
         rule {
-          action = "replace"
           source_labels = ["__meta_kubernetes_pod_container_id"]
           regex = "^(\\S+):\\/\\/.+$"
           replacement = "$1"
@@ -126,7 +127,6 @@ data:
         // - pod.label[app.kubernetes.io/name]
         // - k8s.container.name
         rule {
-          action = "replace"
           source_labels = [
             "__meta_kubernetes_pod_annotation_resource_opentelemetry_io_service_name",
             "__meta_kubernetes_pod_label_app_kubernetes_io_name",
@@ -144,7 +144,6 @@ data:
         // - pod.annotation[resource.opentelemetry.io/service.namespace]
         // - pod.namespace
         rule {
-          action = "replace"
           source_labels = [
             "__meta_kubernetes_pod_annotation_resource_opentelemetry_io_service_namespace",
             "namespace",
@@ -191,7 +190,6 @@ data:
         rule {
           source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
           separator = "/"
-          action = "replace"
           replacement = "/var/log/pods/*$1/*.log"
           target_label = "__path__"
         }
@@ -202,21 +200,20 @@ data:
           source_labels = ["__meta_kubernetes_pod_annotation_kubernetes_io_config_mirror", "__meta_kubernetes_pod_container_name"]
           separator = "/"
           regex = "(.+/.+)"
-          action = "replace"
           replacement = "/var/log/pods/*$1/*.log"
           target_label = "__path__"
         }
-      }
+      } // discovery.relabel "filtered_pods"
     
       local.file_match "pod_logs" {
         path_targets = discovery.relabel.filtered_pods.output
-      }
+      } // local.file_match "pod_logs"
     
       loki.source.file "pod_logs" {
         targets    = local.file_match.pod_logs.targets
         tail_from_end = true
         forward_to = [loki.process.pod_logs.receiver]
-      }
+      } // loki.source.file "pod_logs"
     
       loki.process "pod_logs" {
         stage.match {
@@ -266,8 +263,8 @@ data:
         }
     
         forward_to = argument.logs_destinations.value
-      }
-    }
+      } // loki.secretfilter "pod_logs"
+    } // declare "pod_logs_via_loki"
     pod_logs_via_loki "feature" {
       logs_destinations = [
         loki.write.grafana_com_loki.receiver,
@@ -277,10 +274,11 @@ data:
     
     
     
+    
     // Destination: grafana-com-loki (loki)
     otelcol.exporter.loki "grafana_com_loki" {
       forward_to = [loki.write.grafana_com_loki.receiver]
-    }
+    } // otelcol.exporter.loki "grafana_com_loki"
     
     loki.write "grafana_com_loki" {
       endpoint {
@@ -305,12 +303,12 @@ data:
         "cluster" = "hetzner-k8s",
         "k8s_cluster_name" = "hetzner-k8s",
       }
-    }
+    } // loki.write "grafana_com_loki"
     
     remote.kubernetes.secret "grafana_com_loki" {
       name      = "grafana-agent-loki-cred"
       namespace = "monitoring"
-    }
+    } // remote.kubernetes.secret "grafana_com_loki"
 ---
 # Source: k8s-monitoring/templates/alloy-config.yaml
 apiVersion: v1
@@ -327,7 +325,7 @@ data:
       }
       discovery.kubernetes "nodes" {
         role = "node"
-      }
+      } // discovery.kubernetes "nodes"
     
       discovery.relabel "nodes" {
         targets = discovery.kubernetes.nodes.targets
@@ -340,12 +338,12 @@ data:
           replacement = "kubernetes"
           target_label = "source"
         }
-      }
+      } // discovery.relabel "nodes"
     
       // Kubelet
       discovery.relabel "kubelet" {
         targets = discovery.relabel.nodes.output
-      }
+      } // discovery.relabel "kubelet"
     
       prometheus.scrape "kubelet" {
         targets  = discovery.relabel.kubelet.output
@@ -356,6 +354,7 @@ data:
         scrape_protocols = ["OpenMetricsText1.0.0","OpenMetricsText0.0.1","PrometheusText0.0.4"]
         scrape_classic_histograms = false
         scrape_native_histograms = false
+        convert_classic_histograms_to_nhcb = false
         bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
     
         tls_config {
@@ -369,7 +368,7 @@ data:
         }
     
         forward_to = [prometheus.relabel.kubelet.receiver]
-      }
+      } // prometheus.scrape "kubelet"
     
       prometheus.relabel "kubelet" {
         max_cache_size = 100000
@@ -380,7 +379,7 @@ data:
         }
     
         forward_to = argument.metrics_destinations.value
-      }
+      } // prometheus.relabel "kubelet"
     
       // Kubelet Resources
       discovery.relabel "kubelet_resources" {
@@ -389,7 +388,7 @@ data:
           replacement   = "/metrics/resource"
           target_label  = "__metrics_path__"
         }
-      }
+      } // discovery.relabel "kubelet_resources"
     
       prometheus.scrape "kubelet_resources" {
         targets = discovery.relabel.kubelet_resources.output
@@ -400,6 +399,7 @@ data:
         scrape_protocols = ["OpenMetricsText1.0.0","OpenMetricsText0.0.1","PrometheusText0.0.4"]
         scrape_classic_histograms = false
         scrape_native_histograms = false
+        convert_classic_histograms_to_nhcb = false
         bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
     
         tls_config {
@@ -413,7 +413,7 @@ data:
         }
     
         forward_to = [prometheus.relabel.kubelet_resources.receiver]
-      }
+      } // prometheus.scrape "kubelet_resources"
     
       prometheus.relabel "kubelet_resources" {
         max_cache_size = 100000
@@ -424,7 +424,7 @@ data:
         }
     
         forward_to = argument.metrics_destinations.value
-      }
+      } // prometheus.relabel "kubelet_resources"
     
       // cAdvisor
       discovery.relabel "cadvisor" {
@@ -433,7 +433,7 @@ data:
           replacement   = "/metrics/cadvisor"
           target_label  = "__metrics_path__"
         }
-      }
+      } // discovery.relabel "cadvisor"
     
       prometheus.scrape "cadvisor" {
         targets = discovery.relabel.cadvisor.output
@@ -444,6 +444,7 @@ data:
         scrape_protocols = ["OpenMetricsText1.0.0","OpenMetricsText0.0.1","PrometheusText0.0.4"]
         scrape_classic_histograms = false
         scrape_native_histograms = false
+        convert_classic_histograms_to_nhcb = false
         bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
     
         tls_config {
@@ -457,7 +458,7 @@ data:
         }
     
         forward_to = [prometheus.relabel.cadvisor.receiver]
-      }
+      } // prometheus.scrape "cadvisor"
     
       prometheus.relabel "cadvisor" {
         max_cache_size = 100000
@@ -535,7 +536,7 @@ data:
           replacement = ""
         }
         forward_to = argument.metrics_destinations.value
-      }
+      } // prometheus.relabel "cadvisor"
       discovery.kubernetes "kube_state_metrics" {
         role = "endpoints"
     
@@ -546,7 +547,7 @@ data:
         namespaces {
           names = ["default"]
         }
-      }
+      } // discovery.kubernetes "kube_state_metrics"
     
       discovery.relabel "kube_state_metrics" {
         targets = discovery.kubernetes.kube_state_metrics.targets
@@ -557,7 +558,7 @@ data:
           target_label = "source"
         }
     
-      }
+      } // discovery.relabel "kube_state_metrics"
     
       prometheus.scrape "kube_state_metrics" {
         targets = discovery.relabel.kube_state_metrics.output
@@ -567,6 +568,7 @@ data:
         scrape_protocols = ["OpenMetricsText1.0.0","OpenMetricsText0.0.1","PrometheusText0.0.4"]
         scrape_classic_histograms = false
         scrape_native_histograms = false
+        convert_classic_histograms_to_nhcb = false
         scheme = "http"
         bearer_token_file = ""
         tls_config {
@@ -577,7 +579,7 @@ data:
           enabled = true
         }
         forward_to = [prometheus.relabel.kube_state_metrics.receiver]
-      }
+      } // prometheus.scrape "kube_state_metrics"
     
       prometheus.relabel "kube_state_metrics" {
         max_cache_size = 100000
@@ -587,8 +589,8 @@ data:
           action = "keep"
         }
         forward_to = argument.metrics_destinations.value
-      }
-    }
+      } // prometheus.relabel "kube_state_metrics"
+    } // declare "cluster_metrics"
     cluster_metrics "feature" {
       metrics_destinations = [
         prometheus.remote_write.grafana_com_metrics.receiver,
@@ -609,7 +611,7 @@ data:
         namespaces {
           names = ["default"]
         }
-      }
+      } // discovery.kubernetes "opencost"
     
       discovery.relabel "opencost" {
         targets = discovery.kubernetes.opencost.targets
@@ -618,7 +620,7 @@ data:
           action = "replace"
           target_label = "instance"
         }
-      }
+      } // discovery.relabel "opencost"
     
       prometheus.scrape "opencost" {
         targets      = discovery.relabel.opencost.output
@@ -629,11 +631,12 @@ data:
         scrape_protocols = ["OpenMetricsText1.0.0","OpenMetricsText0.0.1","PrometheusText0.0.4"]
         scrape_classic_histograms = false
         scrape_native_histograms = false
+        convert_classic_histograms_to_nhcb = false
         clustering {
           enabled = true
         }
         forward_to = [prometheus.relabel.opencost.receiver]
-      }
+      } // prometheus.scrape "opencost"
     
       prometheus.relabel "opencost" {
         max_cache_size = 100000
@@ -643,8 +646,8 @@ data:
           action = "keep"
         }
         forward_to = argument.metrics_destinations.value
-      }
-    }
+      } // prometheus.relabel "opencost"
+    } // declare "cost_metrics"
     cost_metrics "feature" {
       metrics_destinations = [
         prometheus.remote_write.grafana_com_metrics.receiver,
@@ -659,7 +662,6 @@ data:
       // Linux hosts via Node Exporter
       discovery.kubernetes "node_exporter" {
         role = "pod"
-    
         selectors {
           role = "pod"
           label = "release=grafana-monitoring-0,app.kubernetes.io/name=node-exporter"
@@ -668,7 +670,7 @@ data:
           names = ["default"]
         }
     
-      }
+      } // discovery.kubernetes "node_exporter"
     
       discovery.relabel "node_exporter" {
         targets = discovery.kubernetes.node_exporter.targets
@@ -760,7 +762,7 @@ data:
           target_label = "source"
         }
     
-      }
+      } // discovery.relabel "node_exporter"
     
       prometheus.scrape "node_exporter" {
         targets = discovery.relabel.node_exporter.output
@@ -770,6 +772,7 @@ data:
         scrape_protocols = ["OpenMetricsText1.0.0","OpenMetricsText0.0.1","PrometheusText0.0.4"]
         scrape_classic_histograms = false
         scrape_native_histograms = false
+        convert_classic_histograms_to_nhcb = false
         scheme = "http"
         tls_config {
           insecure_skip_verify = true
@@ -779,7 +782,7 @@ data:
           enabled = true
         }
         forward_to = [prometheus.relabel.node_exporter.receiver]
-      }
+      } // prometheus.scrape "node_exporter"
     
       prometheus.relabel "node_exporter" {
         max_cache_size = 100000
@@ -796,8 +799,8 @@ data:
           action = "drop"
         }
         forward_to = argument.metrics_destinations.value
-      }
-    }
+      } // prometheus.relabel "node_exporter"
+    } // declare "host_metrics"
     host_metrics "feature" {
       metrics_destinations = [
         prometheus.remote_write.grafana_com_metrics.receiver,
@@ -817,9 +820,10 @@ data:
         scrape {
           default_scrape_interval = "30s"
           default_scrape_timeout = "10s"
+          scrape_native_histograms = false
         }
         forward_to = argument.metrics_destinations.value
-      }
+      } // prometheus.relabel "podmonitors"
     
       // Prometheus Operator Probe objects
       prometheus.operator.probes "probes" {
@@ -829,9 +833,10 @@ data:
         scrape {
           default_scrape_interval = "30s"
           default_scrape_timeout = "10s"
+          scrape_native_histograms = false
         }
         forward_to = argument.metrics_destinations.value
-      }
+      } // prometheus.relabel "probes"
     
       // Prometheus Operator ServiceMonitor objects
       prometheus.operator.servicemonitors "service_monitors" {
@@ -842,10 +847,11 @@ data:
         scrape {
           default_scrape_interval = "30s"
           default_scrape_timeout = "10s"
+          scrape_native_histograms = false
         }
         forward_to = argument.metrics_destinations.value
-      }
-    }
+      } // prometheus.relabel "servicemonitors"
+    } // declare "prometheus_operator_objects"
     prometheus_operator_objects "feature" {
       metrics_destinations = [
         prometheus.remote_write.grafana_com_metrics.receiver,
@@ -855,12 +861,13 @@ data:
     
     
     
+    
     // Destination: grafana-com-metrics (prometheus)
     otelcol.exporter.prometheus "grafana_com_metrics" {
       add_metric_suffixes = true
       resource_to_telemetry_conversion = false
       forward_to = [prometheus.remote_write.grafana_com_metrics.receiver]
-    }
+    } // otelcol.exporter.prometheus "grafana_com_metrics"
     
     prometheus.remote_write "grafana_com_metrics" {
       endpoint {
@@ -902,12 +909,12 @@ data:
         "cluster" = "hetzner-k8s",
         "k8s_cluster_name" = "hetzner-k8s",
       }
-    }
+    } // prometheus.remote_write "grafana_com_metrics"
     
     remote.kubernetes.secret "grafana_com_metrics" {
       name      = "grafana-agent-prometheus-cred"
       namespace = "monitoring"
-    }
+    } // remote.kubernetes.secret "grafana_com_metrics"
 ---
 # Source: k8s-monitoring/templates/alloy-config.yaml
 apiVersion: v1
@@ -953,7 +960,7 @@ data:
           logs = [otelcol.processor.resourcedetection.default.input]
           traces = [otelcol.processor.resourcedetection.default.input]
         }
-      }
+      } // otelcol.receiver.otlp "receiver"
     
       // Jaeger Receiver
       otelcol.receiver.jaeger "receiver" {
@@ -969,7 +976,7 @@ data:
         output {
           traces = [otelcol.processor.resourcedetection.default.input]
         }
-      }
+      } // otelcol.receiver.jaeger "receiver"
     
       // Zipkin Receiver
       otelcol.receiver.zipkin "receiver" {
@@ -980,7 +987,7 @@ data:
         output {
           traces = [otelcol.processor.resourcedetection.default.input]
         }
-      }
+      } // otelcol.receiver.zipkin "receiver"
     
       // Resource Detection Processor
       otelcol.processor.resourcedetection "default" {
@@ -1075,7 +1082,7 @@ data:
           traces = argument.traces_destinations.value
         }
       }
-    }
+    } // declare "application_observability"
     application_observability "feature" {
       metrics_destinations = [
         otelcol.processor.attributes.grafana_cloud_otlp_endpoint.input,
@@ -1092,24 +1099,25 @@ data:
     
     
     
+    
     // Destination: grafana-cloud-otlp-endpoint (otlp)
     otelcol.receiver.prometheus "grafana_cloud_otlp_endpoint" {
       output {
         metrics = [otelcol.processor.attributes.grafana_cloud_otlp_endpoint.input]
       }
-    }
+    } // otelcol.receiver.prometheus "grafana_cloud_otlp_endpoint"
     otelcol.receiver.loki "grafana_cloud_otlp_endpoint" {
       output {
         logs = [otelcol.processor.attributes.grafana_cloud_otlp_endpoint.input]
       }
-    }
+    } // otelcol.receiver.loki "grafana_cloud_otlp_endpoint"
     otelcol.processor.attributes "grafana_cloud_otlp_endpoint" {
       output {
         metrics = [otelcol.processor.transform.grafana_cloud_otlp_endpoint.input]
         logs = [otelcol.processor.transform.grafana_cloud_otlp_endpoint.input]
         traces = [otelcol.processor.transform.grafana_cloud_otlp_endpoint.input]
       }
-    }
+    } // otelcol.processor.attributes "grafana_cloud_otlp_endpoint"
     
     otelcol.processor.transform "grafana_cloud_otlp_endpoint" {
       error_mode = "ignore"
@@ -1239,7 +1247,7 @@ data:
         logs = [otelcol.processor.batch.grafana_cloud_otlp_endpoint.input]
         traces = [otelcol.processor.batch.grafana_cloud_otlp_endpoint.input]
       }
-    }
+    } // otelcol.processor.transform "grafana_cloud_otlp_endpoint"
     
     otelcol.processor.batch "grafana_cloud_otlp_endpoint" {
       timeout = "2s"
@@ -1251,7 +1259,7 @@ data:
         logs = [otelcol.exporter.otlphttp.grafana_cloud_otlp_endpoint.input]
         traces = [otelcol.exporter.otlphttp.grafana_cloud_otlp_endpoint.input]
       }
-    }
+    } // otelcol.processor.batch "grafana_cloud_otlp_endpoint"
     otelcol.exporter.otlphttp "grafana_cloud_otlp_endpoint" {
       client {
         endpoint = "https://otlp-gateway-prod-eu-west-0.grafana.net./otlp"
@@ -1278,17 +1286,17 @@ data:
       sending_queue {
         enabled = true
       }
-    }
+    } // otelcol.exporter.otlphttp "grafana_cloud_otlp_endpoint"
     
     otelcol.auth.basic "grafana_cloud_otlp_endpoint" {
       username = convert.nonsensitive(remote.kubernetes.secret.grafana_cloud_otlp_endpoint.data["username"])
       password = remote.kubernetes.secret.grafana_cloud_otlp_endpoint.data["password"]
-    }
+    } // otelcol.auth.basic "grafana_cloud_otlp_endpoint"
     
     remote.kubernetes.secret "grafana_cloud_otlp_endpoint" {
       name      = "grafana-agent-otl-cred"
       namespace = "monitoring"
-    }
+    } // remote.kubernetes.secret "grafana_cloud_otlp_endpoint"
     
     
     // Destination: grafana-com-tempo (otlp)
@@ -1296,7 +1304,7 @@ data:
       output {
         traces = [otelcol.processor.transform.grafana_com_tempo.input]
       }
-    }
+    } // otelcol.processor.attributes "grafana_com_tempo"
     
     otelcol.processor.transform "grafana_com_tempo" {
       error_mode = "ignore"
@@ -1328,7 +1336,7 @@ data:
       output {
         traces = [otelcol.processor.batch.grafana_com_tempo.input]
       }
-    }
+    } // otelcol.processor.transform "grafana_com_tempo"
     
     otelcol.processor.batch "grafana_com_tempo" {
       timeout = "2s"
@@ -1338,7 +1346,7 @@ data:
       output {
         traces = [otelcol.exporter.otlp.grafana_com_tempo.input]
       }
-    }
+    } // otelcol.processor.batch "grafana_com_tempo"
     otelcol.exporter.otlp "grafana_com_tempo" {
       client {
         endpoint = "https://tempo-eu-west-0.grafana.net:443"
@@ -1365,17 +1373,17 @@ data:
       sending_queue {
         enabled = true
       }
-    }
+    } // otelcol.exporter.otlp "grafana_com_tempo"
     
     otelcol.auth.basic "grafana_com_tempo" {
       username = convert.nonsensitive(remote.kubernetes.secret.grafana_com_tempo.data["username"])
       password = remote.kubernetes.secret.grafana_com_tempo.data["password"]
-    }
+    } // otelcol.auth.basic "grafana_com_tempo"
     
     remote.kubernetes.secret "grafana_com_tempo" {
       name      = "grafana-agent-tempo-cred"
       namespace = "monitoring"
-    }
+    } // remote.kubernetes.secret "grafana_com_tempo"
 ---
 # Source: k8s-monitoring/templates/alloy-config.yaml
 apiVersion: v1
@@ -1395,7 +1403,7 @@ data:
         job_name   = "integrations/kubernetes/eventhandler"
         log_format = "logfmt"
         forward_to = [loki.process.cluster_events.receiver]
-      }
+      } // loki.source.kubernetes_events "cluster_events"
     
       loki.process "cluster_events" {
     
@@ -1461,8 +1469,8 @@ data:
         }
     
         forward_to = argument.logs_destinations.value
-      }
-    }
+      } // loki.process "cluster_events"
+    } // declare "cluster_events"
     cluster_events "feature" {
       logs_destinations = [
         loki.write.grafana_com_loki.receiver,
@@ -1474,7 +1482,7 @@ data:
       textfile {
         directory = "/etc/release-info"
       }
-    }
+    } // prometheus.exporter.unix "kubernetes_monitoring_telemetry"
     
     discovery.relabel "kubernetes_monitoring_telemetry" {
       targets = prometheus.exporter.unix.kubernetes_monitoring_telemetry.targets
@@ -1488,7 +1496,7 @@ data:
         action = "replace"
         replacement = "integrations/kubernetes/kubernetes_monitoring_telemetry"
       }
-    }
+    } // discovery.relabel "kubernetes_monitoring_telemetry"
     
     prometheus.scrape "kubernetes_monitoring_telemetry" {
       job_name   = "integrations/kubernetes/kubernetes_monitoring_telemetry"
@@ -1498,7 +1506,7 @@ data:
         enabled = true
       }
       forward_to = [prometheus.relabel.kubernetes_monitoring_telemetry.receiver]
-    }
+    } // prometheus.scrape "kubernetes_monitoring_telemetry"
     
     prometheus.relabel "kubernetes_monitoring_telemetry" {
       rule {
@@ -1509,7 +1517,8 @@ data:
       forward_to = [
         prometheus.remote_write.grafana_com_metrics.receiver,
       ]
-    }
+    } // prometheus.relabel "kubernetes_monitoring_telemetry"
+    
     
     
     
@@ -1517,7 +1526,7 @@ data:
     // Destination: grafana-com-loki (loki)
     otelcol.exporter.loki "grafana_com_loki" {
       forward_to = [loki.write.grafana_com_loki.receiver]
-    }
+    } // otelcol.exporter.loki "grafana_com_loki"
     
     loki.write "grafana_com_loki" {
       endpoint {
@@ -1542,12 +1551,12 @@ data:
         "cluster" = "hetzner-k8s",
         "k8s_cluster_name" = "hetzner-k8s",
       }
-    }
+    } // loki.write "grafana_com_loki"
     
     remote.kubernetes.secret "grafana_com_loki" {
       name      = "grafana-agent-loki-cred"
       namespace = "monitoring"
-    }
+    } // remote.kubernetes.secret "grafana_com_loki"
     
     
     // Destination: grafana-com-metrics (prometheus)
@@ -1555,7 +1564,7 @@ data:
       add_metric_suffixes = true
       resource_to_telemetry_conversion = false
       forward_to = [prometheus.remote_write.grafana_com_metrics.receiver]
-    }
+    } // otelcol.exporter.prometheus "grafana_com_metrics"
     
     prometheus.remote_write "grafana_com_metrics" {
       endpoint {
@@ -1597,12 +1606,12 @@ data:
         "cluster" = "hetzner-k8s",
         "k8s_cluster_name" = "hetzner-k8s",
       }
-    }
+    } // prometheus.remote_write "grafana_com_metrics"
     
     remote.kubernetes.secret "grafana_com_metrics" {
       name      = "grafana-agent-prometheus-cred"
       namespace = "monitoring"
-    }
+    } // remote.kubernetes.secret "grafana_com_metrics"
 ---
 # Source: k8s-monitoring/templates/release-info.yaml
 apiVersion: v1
@@ -1615,7 +1624,7 @@ data:
   self-reporting-metric.prom: |+
     # HELP grafana_kubernetes_monitoring_build_info A metric to report the version of the Kubernetes Monitoring Helm chart
     # TYPE grafana_kubernetes_monitoring_build_info gauge
-    grafana_kubernetes_monitoring_build_info{version="4.0.4", namespace="default"} 1
+    grafana_kubernetes_monitoring_build_info{version="4.1.3", namespace="default"} 1
     # HELP grafana_kubernetes_monitoring_feature_info A metric to report the enabled features of the Kubernetes Monitoring Helm chart
     # TYPE grafana_kubernetes_monitoring_feature_info gauge
     grafana_kubernetes_monitoring_feature_info{feature="applicationObservability", protocols="otlpgrpc,otlphttp,jaegergrpc,zipkin", version="1.0.0"} 1
@@ -1639,10 +1648,10 @@ kind: ClusterRole
 metadata:
   name: grafana-monitoring-0-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: alloy-operator-0.5.6
+    helm.sh/chart: alloy-operator-0.5.7
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/managed-by: Helm
 rules:
   - apiGroups:
@@ -1946,10 +1955,10 @@ kind: ClusterRoleBinding
 metadata:
   name: grafana-monitoring-0-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: alloy-operator-0.5.6
+    helm.sh/chart: alloy-operator-0.5.7
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -1966,10 +1975,10 @@ kind: ClusterRoleBinding
 metadata:
   name: grafana-monitoring-0-alloy-operator
   labels:
-    helm.sh/chart: alloy-operator-0.5.6
+    helm.sh/chart: alloy-operator-0.5.7
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -2031,10 +2040,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator-leader-election-role
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.5.6
+    helm.sh/chart: alloy-operator-0.5.7
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/managed-by: Helm
 rules:
   - apiGroups:
@@ -2076,10 +2085,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator-leader-election-rolebinding
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.5.6
+    helm.sh/chart: alloy-operator-0.5.7
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -2097,10 +2106,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.5.6
+    helm.sh/chart: alloy-operator-0.5.7
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -2152,7 +2161,7 @@ metadata:
   name: grafana-monitoring-0-node-exporter
   namespace: default
   labels:
-    helm.sh/chart: node-exporter-4.53.1
+    helm.sh/chart: node-exporter-4.55.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: node-exporter
@@ -2203,7 +2212,7 @@ metadata:
   name: grafana-monitoring-0-node-exporter
   namespace: default
   labels:
-    helm.sh/chart: node-exporter-4.53.1
+    helm.sh/chart: node-exporter-4.55.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: node-exporter
@@ -2228,7 +2237,7 @@ spec:
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
         k8s.grafana.com/logs.job: integrations/node_exporter
       labels:
-        helm.sh/chart: node-exporter-4.53.1
+        helm.sh/chart: node-exporter-4.55.0
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: metrics
         app.kubernetes.io/part-of: node-exporter
@@ -2332,10 +2341,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.5.6
+    helm.sh/chart: alloy-operator-0.5.7
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -2346,10 +2355,10 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: alloy-operator-0.5.6
+        helm.sh/chart: alloy-operator-0.5.7
         app.kubernetes.io/name: alloy-operator
         app.kubernetes.io/instance: grafana-monitoring-0
-        app.kubernetes.io/version: "1.8.0"
+        app.kubernetes.io/version: "1.8.1"
         app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: grafana-monitoring-0-alloy-operator
@@ -2357,7 +2366,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: alloy-operator
-          image: "ghcr.io/grafana/alloy-operator:1.8.0"
+          image: "ghcr.io/grafana/alloy-operator:1.8.1"
           imagePullPolicy: IfNotPresent
           args:
             - --health-probe-bind-address=:8081
@@ -2616,7 +2625,9 @@ spec:
               value: "true"
             # Add any additional provided variables
             - name: CLOUD_PROVIDER_API_KEY
-              value: "AIzaSyD29bGxmHAVEOBYtgd8sYM2gM2ekfxQX4U"
+              value: "disabled"
+            - name: CONFIG_PATH
+              value: "/tmp"
             - name: CURRENT_CLUSTER_ID_FILTER_ENABLED
               value: "true"
             - name: PROM_CLUSTER_ID_LABEL
@@ -2942,7 +2953,7 @@ metadata:
   labels:
     app.kubernetes.io/name: grafana-monitoring-0-k8s-monitoring-add-finalizer
     app.kubernetes.io/instance: grafana-monitoring-0
-    helm.sh/chart: k8s-monitoring-4.0.4
+    helm.sh/chart: k8s-monitoring-4.1.3
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "15"
@@ -2995,7 +3006,7 @@ metadata:
   labels:
     app.kubernetes.io/name: grafana-monitoring-0-k8s-monitoring-remove-alloy-and-finalizer
     app.kubernetes.io/instance: grafana-monitoring-0
-    helm.sh/chart: k8s-monitoring-4.0.4
+    helm.sh/chart: k8s-monitoring-4.1.3
   annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
