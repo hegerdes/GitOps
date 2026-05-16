@@ -75,7 +75,7 @@ metadata:
     helm.sh/chart: redis-25.5.3
 type: Opaque
 data:
-  redis-password: "ZmQ5UktCSkh4WQ=="
+  redis-password: "WDJnOUNVRHl2Yw=="
 ---
 # Source: redis/templates/configmap.yaml
 apiVersion: v1
