@@ -32673,6 +32673,8 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  annotations:
+    secret.reloader.stakater.com/reload: "argocd-server-tls"
   name: argocd-0-server
   namespace: default
   labels:
