@@ -61,6 +61,11 @@ spec:
           env:
             - name: HCLOUD_INSTANCES_ADDRESS_FAMILY
               value: dualstack
+            - name: HCLOUD_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: token
+                  name: hcloud
             - name: HCLOUD_TOKEN_FILE
               value: /var/run/secrets/hcloud/token
             - name: ROBOT_PASSWORD
