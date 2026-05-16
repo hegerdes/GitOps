@@ -25,9 +25,8 @@ spec:
   target:
     name: harbor-admin-creds
     creationPolicy: Owner
-  data:
-    - secretKey: HARBOR_ADMIN_PASSWORD
-      sourceRef:
+  dataFrom:
+    - sourceRef:
         generatorRef:
           kind: ClusterGenerator
           name: password-generator-default
