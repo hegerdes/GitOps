@@ -8,8 +8,8 @@ spec:
     # - "{{ .Release.Namespace }}.localhost"
     - "{{ .Release.Namespace }}.{{ .Values.controlplane.domainSuffix }}"
   parentRefs:
-    - name: cilium-gateway
-      namespace: cilium-gateway
+    - name: {{ .Values.controlplane.tlsRoute.gatewayName }}
+      namespace: {{ .Values.controlplane.tlsRoute.gatewayNamespace }}
   rules:
     - backendRefs:
         - name: kube-apiserver
