@@ -4,6 +4,9 @@ metadata:
   name: hks-gateway
   namespace: envoy-gateway
 spec:
+  allowedListeners:
+    namespaces:
+      from: All
   gatewayClassName: envoy
   infrastructure:
     annotations:
