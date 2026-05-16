@@ -9,7 +9,7 @@ controlplane:
     name: cilium-gateway-cilium-gateway
   tlsRoute:
     enabled: true
-    gatewayName: envoy-gateway
+    gatewayName: hks-gateway
     gatewayNamespace: envoy-gateway
   pdb:
     enabled: false

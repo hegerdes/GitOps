@@ -23,7 +23,7 @@ spec:
       project: default
       source:
         repoURL: https://github.com/hegerdes/GitOps.git
-        targetRevision: feat/hks
+        targetRevision: HEAD
         path: k8s-apps/hegerdes-kubernetes-service/hks
         helm:
           valuesObject:
