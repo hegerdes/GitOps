@@ -9,7 +9,7 @@ spec:
   generators:
     - git:
         repoURL: https://github.com/hegerdes/GitOps.git
-        revision: feat/hks
+        revision: HEAD
         directories:
           - path: k8s-apps/hegerdes-kubernetes-service/clusters/*
   template:
