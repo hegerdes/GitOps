@@ -11,7 +11,7 @@ spec:
       load-balancer.hetzner.cloud/name: k8s-hks-gateway-lb
       load-balancer.hetzner.cloud/network: k8s-network
       load-balancer.hetzner.cloud/use-private-ip: "true"
-      load-balancer.hetzner.cloud/uses-proxyprotocol: "true"
+      # load-balancer.hetzner.cloud/uses-proxyprotocol: "true"
       load-balancer.hetzner.cloud/ipv6-disabled: "true"
   listeners:
     - name: tls
