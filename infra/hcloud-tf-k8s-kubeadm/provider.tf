@@ -3,7 +3,7 @@ terraform {
   required_providers {
     hcloud = {
       source  = "hetznercloud/hcloud"
-      version = "~>1.60"
+      version = "~>1.63"
     }
     random = {
       source  = "hashicorp/random"
@@ -15,11 +15,11 @@ terraform {
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>4.62"
+      version = "~>4.73"
     }
     tls = {
       source  = "hashicorp/tls"
-      version = "~>4.2"
+      version = "~>4.3"
     }
   }
 }
