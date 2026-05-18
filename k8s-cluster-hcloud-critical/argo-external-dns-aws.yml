@@ -30,14 +30,7 @@ spec:
             create: true
             additionalPermissions:
               - apiGroups: ["gateway.networking.k8s.io"]
-                resources:
-                  [
-                    "gateways",
-                    "httproutes",
-                    "tlsroutes",
-                    "tcproutes",
-                    "udproutes",
-                  ]
+                resources: ["gateways", "httproutes", "tlsroutes", "tcproutes", "udproutes"]
                 verbs: ["get", "watch", "list"]
           extraVolumes:
             - name: secrets

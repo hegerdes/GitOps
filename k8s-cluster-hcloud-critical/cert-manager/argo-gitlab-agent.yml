@@ -3,8 +3,6 @@ kind: Application
 metadata:
   name: gitlab-agent
   namespace: argocd
-  annotations:
-    argocd.argoproj.io/sync-wave: "4"
 spec:
   project: default
   sources:

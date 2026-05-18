@@ -23,7 +23,6 @@ spec:
             enabled: true
             clusterCIDR: 10.244.0.0/16
           env:
-            # HCLOUD_TOKEN: null
             HCLOUD_INSTANCES_ADDRESS_FAMILY:
               value: dualstack # ipv4 (default), ipv6 or dualstack
             HCLOUD_TOKEN_FILE:
