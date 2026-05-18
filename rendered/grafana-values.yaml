@@ -35,7 +35,8 @@ grafana.ini:
     allowed_organizations: 295b5ac3-2e4e-4ade-85d8-7dc31617bc2c
     role_attribute_strict: false
     allow_assign_grafana_admin: true
-    skip_org_role_sync: false
+    skip_org_role_sync: true
+    role_attribute_path: contains(groups[*], '8d6c909a-13ef-44c0-9d3e-053e50d338b5') && 'Admin' || 'Viewer'
     use_pkce: true
   # auth.github:
   #   enabled: true
