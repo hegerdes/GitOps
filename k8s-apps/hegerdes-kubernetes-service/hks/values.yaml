@@ -1,5 +1,6 @@
 kubernetesVersion: v1.36.1
 etcdVersion: 3.6.11-0
+namespaceLabels: {}
 
 controlplane:
   domainSuffix: hks.eu-central.hegerdes.com
