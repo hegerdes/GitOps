@@ -28,8 +28,7 @@ data:
             ttl 30
         }
         prometheus :9153
-        forward . tls://1.1.1.1 tls://[2606:4700:4700::1111]:853 tls://1.0.0.1 tls://[2606:4700:4700::1001]:853 {
-            tls_servername tls.cloudflare-dns.com
+        forward . 1.1.1.1 8.8.8.8 {
             health_check 5s
             max_concurrent 1000
         }
@@ -167,7 +166,7 @@ spec:
         app.kubernetes.io/instance: "coredns"
         k8s-app: kube-dns
       annotations:
-        checksum/config: e16ead427bdb1221cc119ff72adbbbbc25afde3db9b61d711a0affed720d4ca9
+        checksum/config: e861d56dd4a1eef89172369bd0b2c7ca70b2bede7dd09e935dcd13d74fae812b
     spec:
       terminationGracePeriodSeconds: 30
       serviceAccountName: default

@@ -14,16 +14,16 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
 type: Opaque
 data:
   secretKey: "bm90LWEtc2VjdXJlLWtleQ=="
-  secret: "ckVIZHkxbW14OEEzZlRYSA=="
-  tls.key: "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFb3dJQkFBS0NBUUVBd0pHRU9OOXhCdUxyelVqMVptV3FidEg1TEpIOHR6bUJmMGlVNlJPaTV3MVJsYnF0CnVObVpZQmVpbFg1WHdtSVBEbE96SDhBYjFMU2RLV21KaUY5eTJoVGNaT2Y0QWlXRVR3eHdicUxVUWZBQXZpTkYKSDRmM2U4Y2JNSUg0UkRPWU9RMkVVaWRJcy9OWGJXY09lR2hOekdSNlV1b0lhekdiOHZtNkFwenVxTkl1d1lnUAo3ZHpPVDRqOUd6UkVWb0x0QTgzYkhZK3VZUmVYZ3poRHEvcnUrSTQ2WFdjeUNwUFgyS1BxcEZXWGw3TnR3MXlhCjFqQ0p5bytKaGU3SzRhQ2s3SmQ1TURrSUcxWjRqWjUwR3NGT1dDUkhMMnJFVlBpVWNTVjNwd1JpVkFQblhnOEYKczRMSk1IZkZJSmNTcDZ2NHBJQTIyQk0vVnhxdldheTQrNlkyUXdJREFRQUJBb0lCQUI2Nk9aQi9xdi92enJPYgpuRGppS1I5MDF0OVRUakdJZGc3eTdId0NtNkJsd2lwenRzdkR3Uk1Sd21vN1ZsS1lwaEZocnJmMnhob2JWZWFwClJmNWlTS2ZlNDBvZ3I3VGIrckJJYWxwbEZoeU5hUGp1Rk5ZU3NwMW9LSUVGaERHUjBBenVpTG81TllNdFpicDUKMHRmSXdQMUgzVE1FMENJV3NPMUZCdmJxeHJSZVNwdFdacWJzZDNwWFlzaTloVXJYMnFScGxKMXphL1VCY1pVWApBNExjaVNqYkpsQVQxMEsxSUxtOVA5VVllYW1mM1ZjZFV2UkdYWDNZRUFtQlE2ZUtaWkFMZFIrRkNBY3JVMk9YCmQ5VStVWXdwalY0NkJLUnNBV3NLSXRWaUZoR25RMXJSMGNoQkV4SmJzWHhKazZOdk5qNU82Q2dxbGJOK05aNUkKd2hBZ01CMENnWUVBNWg4ZmViZEtQRWJCOW8vOFRWNUxqQU1iVkNjWFZyK2lqeTdIbGhnTjRlTzZQcGoyMm5DMgo4Rjh0azdXV0RMZ3BPZzM2VVpyc09tdnkxRGU0WUFwdGMyK2lxSUdpM1JuLzRMeTdBOFpnTlJMaEwweFhUZHVhCmtsQ1NKZmk2V3UzMm53cnhrU0ZqN3lRV0dCZXJ6ajFraStCN1pJWHZOSmVWamRCUkVNRkZBNjBDZ1lFQTFqbEsKZzJlUkFaSHVJUjBpL0FwUTA0YXIwYW13QXgxNXQrTTYyQTNERVR1K1puSWU5bGMwM05ReXVWVjd3RHk4RkxlaAp6MkV6L05GWlIrY08vUVFGakRtTXpyK2xPTmdCM2I3RzFmRHB4cUJjc3QwQi9MeUFCdmtqQlI1NGpldytTcFpJCnRZYloyTWJzMlVoeGROWWVBelVRWUlMcFRpMHVPV0ZaTTF6NTM2OENnWUFUMWVEdnErWGhOalFuM1pkZ3o5engKTDU5ZWJKUXRiUTFGREVJMTVOTGxncXllRXE5TWV1UzU2V3BUVGhhbCtBWE50RUM4WWY4MHRmTlRhWTRoOFNRbwpEQnBZTGZ4czFIM2kwRUhLZklIMGNURXAwNG0rODB2cWlybGVQb2RKcVROVjJDcWtXTjExVW9YNUE2bFNlS1kvCkRGVjJmN2p6cnBFOGpSVS92WGtHYlFLQmdCb3Q3QzQ4MU5xMVE3Mm1PdVZFT1had0tjVTRrSHNBK2lQL3ord2gKV21wYnU3djNURk5jZXVoVndsRWw0amF1OVdrdXU4YUZJWDVPOHpNM1NIeWhKakJweEF4c0hUdmlJZkJBWlRvMQo4OHZEUXpEVWsyNllkcWpqZjJVYndTM081aG5sWGNOWlZId0thMTF1WGZjaVI0NnF5SEtTN1FJUndXbGZ2Uy9xCnQ5cWZBb0dCQU1PM1JiVzhKTzNLVFQ2VlY5a0RVTld6ZWNSU1RzcXNSTncxYXFCSnVCcksxZFlhSUxwaS9jbWYKQlJnbmdDQm53WGJmSUxPTEl6UElKUjNhZHZMbEhqeTNUZFZKWkZCSUdhZGp5WUdqNDRhL0x5TGN3aGo1V0dHcQplbVVVUTVldGZKZ2JOU2U4OVBjN2NuZC9VM2FiU0pOcDduRUNJUWd2M1M0bVA1M3JHSjh0Ci0tLS0tRU5EIFJTQSBQUklWQVRFIEtFWS0tLS0tCg=="
-  tls.crt: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURJRENDQWdpZ0F3SUJBZ0lSQUxEN0lCQmdSclVDaHVTb2N0Z2NEN2t3RFFZSktvWklodmNOQVFFTEJRQXcKR2pFWU1CWUdBMVVFQXhNUGFHRnlZbTl5TFhSdmEyVnVMV05oTUI0WERUSTJNRFV4T0RFM016RXhORm9YRFRJMwpNRFV4T0RFM016RXhORm93R2pFWU1CWUdBMVVFQXhNUGFHRnlZbTl5TFhSdmEyVnVMV05oTUlJQklqQU5CZ2txCmhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBd0pHRU9OOXhCdUxyelVqMVptV3FidEg1TEpIOHR6bUIKZjBpVTZST2k1dzFSbGJxdHVObVpZQmVpbFg1WHdtSVBEbE96SDhBYjFMU2RLV21KaUY5eTJoVGNaT2Y0QWlXRQpUd3h3YnFMVVFmQUF2aU5GSDRmM2U4Y2JNSUg0UkRPWU9RMkVVaWRJcy9OWGJXY09lR2hOekdSNlV1b0lhekdiCjh2bTZBcHp1cU5JdXdZZ1A3ZHpPVDRqOUd6UkVWb0x0QTgzYkhZK3VZUmVYZ3poRHEvcnUrSTQ2WFdjeUNwUFgKMktQcXBGV1hsN050dzF5YTFqQ0p5bytKaGU3SzRhQ2s3SmQ1TURrSUcxWjRqWjUwR3NGT1dDUkhMMnJFVlBpVQpjU1YzcHdSaVZBUG5YZzhGczRMSk1IZkZJSmNTcDZ2NHBJQTIyQk0vVnhxdldheTQrNlkyUXdJREFRQUJvMkV3Clh6QU9CZ05WSFE4QkFmOEVCQU1DQXFRd0hRWURWUjBsQkJZd0ZBWUlLd1lCQlFVSEF3RUdDQ3NHQVFVRkJ3TUMKTUE4R0ExVWRFd0VCL3dRRk1BTUJBZjh3SFFZRFZSME9CQllFRkZISlZvWnpBKzV0dnNESkpmOVlwTlFxbXRQUwpNQTBHQ1NxR1NJYjNEUUVCQ3dVQUE0SUJBUUFTWkxIYVA3b0dYeStqbUh6WVdPc0ZzdmdFT054L3N2WkZ6eDJ6Cko3Kys3K25DWFUxQnRpVlNTbGhsV21ZRFl5ZWV6Nkx0SW1kaFV1ajZWcnVUa0pYVDc5cmpJbTV3K0dBaVpPWDYKdmtKRnZUMVh2SytJcUxHRlNSVENvblBZbCsvajI4b21Qdk9tdlI0dVQ4S3B3Q1JyZi9XTE8vbE1vSGd4QTJLdAplSkpzV3ZXVHNWS05wcVFnZXdGUlZLaTgrNmhxc0NaWmFLcVdQZ0ZMMXdlNUJPRHdwK2N2R0RZM2xMeXRlOEtvCk9PRi9vQjE1RzlVL2ttK1N3UmdKVG5CZ3hOQzV0ajdJdi9WL1UxSFpqSEtRbjR2bWNyS0JrQnlieXpYbzhxaUcKNGhWajk2MnR1ZEIwdzIrV21ybnllbmZLeTVqTkJTckRzMFE0dHRYbm5lci9YTGwvCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+  secret: "S1BPbHNKTHNlM01ldldTSw=="
+  tls.key: "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFcFFJQkFBS0NBUUVBeTVHa3UyMC84UzBEZGErcENtK0huRjhSemg3RHFhRW5Zemc4eXVwWVY1OE9EK0hDCkRKZ1ZEdGI5Zm1BSkgxemJBb1BjUXBZMWpBMTdDRG16M1NSOW5vVEtWVEV1WXEyKy9HUi9sMC9VR0VNQXdtdmQKcDEvMld1cVFDWDI0YmNMWkFVamswcHhCVkVDYm80L3Ezd2xZWGpSTFQ3dk9QcmFmTUZ0amhzLzJYVlB6UXlkaQpNNjE3UXNCNmtBZmZBbEgrRXcvS3YwWXhNekEzUVd4NVFHZmR1QXdkbUdYdXRJT2dueGEzMmh6bUk5aTIrSDRhCmFHZDRqRzdCMXB4TzY4M3FjZ05GTHIwM0tZR0haa0hqaEpFVGNieGcrRzJxTnh1UFhoTmVNbWpLRXV6TDJudlQKOVZSaXZQVEdMYTBVcFRQYXNuV3BHbjdpWUNGWFp5SS9LSkNTNHdJREFRQUJBb0lCQUJDWFVOM0FZYk1UcXNjdgpYSSthZ2hXZk5LR2YrdTBhL1UxN2lvNDBoZmxlTlQ4d3lkS2lSOVVWeTBNKzFkVFYzemtDbGpPM0dsWWllSGMxCjBoQkwrN3V0QnZDUDVEL3IrVGVJMlZLZVp2Z3pQY253RUtOUTV1WGNzdHM5MW9lR1FlUWc2aHExaHRMZkVTV2IKZ29EN0QxWUkzUS9QNFZkVjBGT1luekZLOGNGWldQcEFlY1A5dGxFYWZLQnVJdDFrbFFKd24rWTZPN1YxY0haawozTVlWdW1LZUZ1bDV4aXBRUXV3YVdGWk1MaHM4RUFxdHdFVlRsYXlRTno5bUVBcUNqWEpHaHh3WDJzam4zdHdlCk5sNm5sYjVnYUVYVHRHQ2lYaTVtUGYwU2Z1NFdwUVFCc0VCVzR5TWZEY2c4SzhDVGZBYXRpbEg0bXlxandvRUkKL3hPc3B3RUNnWUVBMk45MEFxQzZlVkZValZnREUxdEJ1ZkZ2MzRRbXlGa29uT1p3NHF3YXpXMEpKVFYyOFBLRwo5VGNKb3cxVHA2dksvTUFYNTlrZGM5TEgzRDNCK3VQWXptdVYzN2FEUHZ3ZjJMajBRNStWYlNFYmlZeG9sOTdzCmNqTU1pOHp6SittRjBydUI3d3lVM3FNTlRYL3JDc0VDRjZab1FURGpjTENJcUJLeHFTQ1QzaE1DZ1lFQThFdTcKR3RyTmN2dDYzSGJFbXd0S3IrdXMxOXZ1WGI5RFF1RHRIekZpcEFYWU5YL3B4Sy9wNHV2ejBXb0hoL3lkV3M3Twp1eXJHWENPVURlQUxETkI5L29hT2JxeU10eFllK2thdmlNaVViT1lmOHBvWWhVcXlUVkNsV1hWcGpqSVU1alRFCkFyZ1lMUmhrcmlMK0M1Uzc5U3dPb3RzR1RScmhDSkRhWit5VjBmRUNnWUVBeVRLRTdlc3ZGRjNmazBHVG1PR1EKbUhEazJQaEJBcDIwajlzNTN4REx6TWpiTXlubXJxSlJraXo5UThlWlZIU01YTy9aUGI2dkZFVDRKZHNsbXh6RwpocnBJME1NQi8rem5ucWYzOU1TWVhDWGE1a0RjeUFpSVUyb0l1YW5wNjUwNkNjYnJSRnJud2FTRE11TDVxNEJqCjhJenhLNG12ZDF4UGE1M3NOSHVFc3dFQ2dZRUFpMUdOR0tQVlRCNEwvTGlMZ3MwSUwzajN6R3RDQjI1MTQ5ZWYKQTEvUnJnR0plbk5BS1A1Skgzem43dm1IaGt0clBCUDlmanp0cHN3bDhlbDgzcUFlL0t3czluUHFYZGhnZTREeQpFdDhnVndjUmJNbjAvNHJ3VjYwelFPdTNHRzltK0pXTk0zcGk0ZnByblI3Q3BocEU0My80dUdrK2ZRUGhodUxkCkRqWDRJekVDZ1lFQXJqVVhnenFNak5ZV1RqWWdEVDVkUFRZd1UzY0t4UTRGSUtxYVczS2hRK0xTSjk5Y21CVUMKT2M4c0dDdEdyNWdkUnFPYmMxdncva1lxTWViZ01sRmc4YkRLeitBTzY1YkFzbTZPN2FFYmIzRXVVenBBUkd4dgpSa1pUc0NYU1cxUW9uOUw3MDhTZHBKN2FnRThKOWtPUTdJVjRLR0tsMGNQQVhGaE1aV1VVV2ZZPQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQo="
+  tls.crt: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURJRENDQWdpZ0F3SUJBZ0lSQUttYVZtWmpXOTg1TEJ3TGJ1Mm1hNU13RFFZSktvWklodmNOQVFFTEJRQXcKR2pFWU1CWUdBMVVFQXhNUGFHRnlZbTl5TFhSdmEyVnVMV05oTUI0WERUSTJNRFV6TVRFeU5EUXdOVm9YRFRJMwpNRFV6TVRFeU5EUXdOVm93R2pFWU1CWUdBMVVFQXhNUGFHRnlZbTl5TFhSdmEyVnVMV05oTUlJQklqQU5CZ2txCmhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBeTVHa3UyMC84UzBEZGErcENtK0huRjhSemg3RHFhRW4KWXpnOHl1cFlWNThPRCtIQ0RKZ1ZEdGI5Zm1BSkgxemJBb1BjUXBZMWpBMTdDRG16M1NSOW5vVEtWVEV1WXEyKwovR1IvbDAvVUdFTUF3bXZkcDEvMld1cVFDWDI0YmNMWkFVamswcHhCVkVDYm80L3Ezd2xZWGpSTFQ3dk9QcmFmCk1GdGpocy8yWFZQelF5ZGlNNjE3UXNCNmtBZmZBbEgrRXcvS3YwWXhNekEzUVd4NVFHZmR1QXdkbUdYdXRJT2cKbnhhMzJoem1JOWkyK0g0YWFHZDRqRzdCMXB4TzY4M3FjZ05GTHIwM0tZR0haa0hqaEpFVGNieGcrRzJxTnh1UApYaE5lTW1qS0V1ekwybnZUOVZSaXZQVEdMYTBVcFRQYXNuV3BHbjdpWUNGWFp5SS9LSkNTNHdJREFRQUJvMkV3Clh6QU9CZ05WSFE4QkFmOEVCQU1DQXFRd0hRWURWUjBsQkJZd0ZBWUlLd1lCQlFVSEF3RUdDQ3NHQVFVRkJ3TUMKTUE4R0ExVWRFd0VCL3dRRk1BTUJBZjh3SFFZRFZSME9CQllFRkVUbHFZZnhmaXJuNi9OWWZXc20yNGhTREFGWgpNQTBHQ1NxR1NJYjNEUUVCQ3dVQUE0SUJBUUNDaUFaS051MktFejEvZTljK2pOMThGZllpVjE4czdNZGo3aThjCkhkcnNGUDlDdlNqNDBDMHZDcFU3SFlBRzlpL2VodWVEOU1MWjlUblVZdkFPa2sraXJjSmRES01NcXd1a1NXTy8KVXcwc0p4cFNiTkdEaS9KdWI2d2FqNDE1U2lkeGlkQW9DZTZwWFlRWXg2MkdZYVRWTGx4MXJrZHhBSlJ5SWw1Vgp6ckNSTVFlU1cvVFl1RnUyRzNQY2p6OWZ5ZFYxSmNiaHNMN3BOMS91NzhFYUVkSEI3RkI1WVRWeTJFTzlUTWJZCk05TkRTMFdsYXdCbGtIOE8yeFVhbUZjOTB4UURXTzIveWsxMzZUNXhMQlZVZkliMEpNc0NPOFBGMmRGVWxJR1cKVkhiS0o1Y0V6eHJsTVIvQzlqSmRmR21ma3hRak1UK0F0QktuVTN0bVBZMlRpS1lWCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
   POSTGRESQL_PASSWORD: "Y2hhbmdlaXQ="
   REGISTRY_CREDENTIAL_PASSWORD: "aGFyYm9yX3JlZ2lzdHJ5X3Bhc3N3b3Jk"
-  CSRF_KEY: "M0cwVXlzMFpkZUlBakVON0NMT1A2djZyb2NwV3BtVks="
+  CSRF_KEY: "V0lpcE4weHF2aG41b0FxODVKTkhQUHNSaEZraDZROTg="
 ---
 # Source: harbor/templates/database/database-secret.yaml
 apiVersion: v1
@@ -40,7 +40,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
 type: Opaque
 data:
   POSTGRES_PASSWORD: "Y2hhbmdlaXQ="
@@ -60,10 +60,10 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
 type: Opaque
 data:
-  JOBSERVICE_SECRET: "NFNvV2Fna014WDFROHQ1dA=="
+  JOBSERVICE_SECRET: "UFJ3bEJSMzJjMXNRc3kySQ=="
   REGISTRY_CREDENTIAL_PASSWORD: "aGFyYm9yX3JlZ2lzdHJ5X3Bhc3N3b3Jk"
 ---
 # Source: harbor/templates/registry/registry-secret.yaml
@@ -81,10 +81,10 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
 type: Opaque
 data:
-  REGISTRY_HTTP_SECRET: "dnlCTGo4VEZTa0xtMGZrWQ=="
+  REGISTRY_HTTP_SECRET: "NUdiT2liSW94dzZwVG1SdQ=="
   REGISTRY_REDIS_PASSWORD: ""
 ---
 # Source: harbor/templates/registry/registry-secret.yaml
@@ -102,10 +102,10 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
 type: Opaque
 data:
-  REGISTRY_HTPASSWD: "aGFyYm9yX3JlZ2lzdHJ5X3VzZXI6JDJhJDEwJENzaUxxRVNuWTRiRFpBMEkyVlFzWC55Z1h6ZDIySWQuaFhzMEsxS2NOWFU5YTh6L2U0cUMu"
+  REGISTRY_HTPASSWD: "aGFyYm9yX3JlZ2lzdHJ5X3VzZXI6JDJhJDEwJFpBTGV0Um5uaTJYZEJ0ZzJnTGZPeHVUbGhELkdMOUpBT1ZIWDVRdDdEWjEzODlMcjUwM2pl"
 ---
 # Source: harbor/templates/registry/registryctl-secret.yaml
 apiVersion: v1
@@ -122,7 +122,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
 type: Opaque
 data:
 ---
@@ -141,7 +141,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
 type: Opaque
 data:
   redisURL: cmVkaXM6Ly9oYXJib3ItMC1yZWRpczo2Mzc5LzU/aWRsZV90aW1lb3V0X3NlY29uZHM9MzA=
@@ -162,7 +162,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
 data:
   app.conf: |+
     appname = Harbor
@@ -219,7 +219,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
 data:
   CORE_URL: "http://harbor-0-core:80"
   TOKEN_SERVICE_URL: "http://harbor-0-core:80/service/token"
@@ -251,7 +251,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
 data:
   config.yml: |+
     #Server listening port
@@ -302,7 +302,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
 data:
   nginx.conf: |+
     worker_processes auto;
@@ -354,7 +354,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
 data:
   config.yml: |+
     version: 0.1
@@ -428,7 +428,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
 data:
 ---
 # Source: harbor/templates/jobservice/jobservice-pvc.yaml
@@ -448,7 +448,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
     component: jobservice
     app.kubernetes.io/component: jobservice
 spec:
@@ -475,7 +475,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
     component: registry
     app.kubernetes.io/component: registry
 spec:
@@ -500,7 +500,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
 spec:
   ports:
     - name: http-web
@@ -526,7 +526,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
 spec:
   ports:
     - port: 5432
@@ -550,7 +550,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
 spec:
   ports:
     - name: http-jobservice
@@ -576,7 +576,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
 spec:
   ports:
     - port: 80
@@ -601,7 +601,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
 spec:
   ports:
     - port: 6379
@@ -625,7 +625,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
 spec:
   ports:
     - name: http-registry
@@ -653,7 +653,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
 spec:
   ports:
     - name: http-trivy
@@ -679,7 +679,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
     component: core
     app.kubernetes.io/component: core
 spec:
@@ -701,13 +701,13 @@ spec:
         app.kubernetes.io/name: harbor
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/part-of: harbor
-        app.kubernetes.io/version: "2.15.0"
+        app.kubernetes.io/version: "2.15.1"
         component: core
         app.kubernetes.io/component: core
       annotations:
-        checksum/configmap: 2d076b9933fe07fabe51e96e9cc39b9e3201d3861722e4f3dd9c00e4c6c6ab0a
-        checksum/secret: 722bb1d4c9273d1d998a2fb5d8fa98e575f13265f742b5a2fba13b0008d154d7
-        checksum/secret-jobservice: 477167e5d67b98ba3b9edf07f5cb58f241838635821ed26973280c89e1d34879
+        checksum/configmap: ccb5cab1fbb41900081cfbc61652c8bdfb1891fbddd099cdf83983cb77be0293
+        checksum/secret: d660ed59cd4541a66861eeb021c6ff56f64e0f04d43fe1aed6e75944f55d49ab
+        checksum/secret-jobservice: 182b7c9970ffa9c2f96b96d459e07ab9928153099478937d878e167b2ee0adc1
     spec:
       securityContext:
         runAsUser: 10000
@@ -716,7 +716,7 @@ spec:
       terminationGracePeriodSeconds: 120
       containers:
       - name: core
-        image: docker.io/goharbor/harbor-core:v2.15.0
+        image: docker.io/goharbor/harbor-core:v2.15.1
         imagePullPolicy: IfNotPresent
         startupProbe:
           httpGet:
@@ -826,7 +826,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
     component: jobservice
     app.kubernetes.io/component: jobservice
 spec:
@@ -850,14 +850,14 @@ spec:
         app.kubernetes.io/name: harbor
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/part-of: harbor
-        app.kubernetes.io/version: "2.15.0"
+        app.kubernetes.io/version: "2.15.1"
         component: jobservice
         app.kubernetes.io/component: jobservice
       annotations:
-        checksum/configmap: 6ac78ea1befe73604e06db1e0f151053603c5c87d17e8869e1c1c0c18d16bf87
-        checksum/configmap-env: e9e4dc1bdfe63d182ed73dfd9a6973f76c7a92999eab981d826d60e1633704fe
-        checksum/secret: a6b0485e7672a5c31db9a74b1a5b2d90eeddf4e8f2d602a84c5e23c9f4744ed7
-        checksum/secret-core: 5ea6ecf2770f8ed0ccb8457d302c4453564c25ec442a45c04d09877f3f8aa590
+        checksum/configmap: 3c43986be0fd6674e1b9fb19e459ef575b2a99ad4b3654db8b1299e68922a181
+        checksum/configmap-env: edb2dcc4fe341875deabc4290e473bf4437f01d7046156e169100ace62417a3e
+        checksum/secret: adc688a10be56fb9105419808fe5fec7e37856e5df48880652169340c0891ebd
+        checksum/secret-core: 8f85b7877c62739c144eec1f76462dfd6ef9d3445c2c5c90d9188ebd3808a7c1
     spec:
       securityContext:
         runAsUser: 10000
@@ -866,7 +866,7 @@ spec:
       terminationGracePeriodSeconds: 120
       containers:
       - name: jobservice
-        image: docker.io/goharbor/harbor-jobservice:v2.15.0
+        image: docker.io/goharbor/harbor-jobservice:v2.15.1
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
@@ -940,7 +940,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
     component: portal
     app.kubernetes.io/component: portal
 spec:
@@ -962,11 +962,11 @@ spec:
         app.kubernetes.io/name: harbor
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/part-of: harbor
-        app.kubernetes.io/version: "2.15.0"
+        app.kubernetes.io/version: "2.15.1"
         component: portal
         app.kubernetes.io/component: portal
       annotations:
-        checksum/configmap: c331c05afc229324c4a05ad39c853a9162aa4de7d4a4a4b9dc609cc4f69ad1c9
+        checksum/configmap: 75fd37564a41fff36980c64097875287e8ccd4667702b866ce6d2a864aa2431a
     spec:
       securityContext:
         runAsUser: 10000
@@ -974,7 +974,7 @@ spec:
       automountServiceAccountToken: false
       containers:
       - name: portal
-        image: docker.io/goharbor/harbor-portal:v2.15.0
+        image: docker.io/goharbor/harbor-portal:v2.15.1
         imagePullPolicy: IfNotPresent
         securityContext: 
           allowPrivilegeEscalation: false
@@ -1031,7 +1031,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
     component: registry
     app.kubernetes.io/component: registry
 spec:
@@ -1055,14 +1055,14 @@ spec:
         app.kubernetes.io/name: harbor
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/part-of: harbor
-        app.kubernetes.io/version: "2.15.0"
+        app.kubernetes.io/version: "2.15.1"
         component: registry
         app.kubernetes.io/component: registry
       annotations:
-        checksum/configmap: d0f0c869aeea4881c2312c16abd2a4cf6dd0478ed4085b8d6e5d01422e78352f
-        checksum/secret: 1e5c3b9901af68135d7e3556d3586933889e4ee8059b618a4c81fbb16fd156f6
-        checksum/secret-jobservice: af430838224da9cbc87c841c0b1adb2afeab00e40acf8c79d08ea2707c22e99a
-        checksum/secret-core: fb57e2010995f42605637d38741972abede7e6eeb1e547a05276c3ff6f7da3c8
+        checksum/configmap: fd02d7ffd9f11f2a828f6e7386662bff50347081d1b474e9ef49189b26450461
+        checksum/secret: 7ea997f498ef12f15941676421967fff1392adb82fb9b4797796386696dea088
+        checksum/secret-jobservice: 2365544050b798507bf363a7bdf3b614b9c8e61e6e684290bfce214ba5a88632
+        checksum/secret-core: 38cef2606e7f4e10599a1de26adb128ff5d9b5396a15df11efa29cb29ccddb91
     spec:
       securityContext:
         runAsUser: 10000
@@ -1072,7 +1072,7 @@ spec:
       terminationGracePeriodSeconds: 120
       containers:
       - name: registry
-        image: docker.io/goharbor/registry-photon:v2.15.0
+        image: docker.io/goharbor/registry-photon:v2.15.1
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
@@ -1121,7 +1121,7 @@ spec:
           mountPath: /etc/registry/config.yml
           subPath: config.yml
       - name: registryctl
-        image: docker.io/goharbor/harbor-registryctl:v2.15.0
+        image: docker.io/goharbor/harbor-registryctl:v2.15.1
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
@@ -1212,7 +1212,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
     component: database
     app.kubernetes.io/component: database
 spec:
@@ -1234,11 +1234,11 @@ spec:
         app.kubernetes.io/name: harbor
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/part-of: harbor
-        app.kubernetes.io/version: "2.15.0"
+        app.kubernetes.io/version: "2.15.1"
         component: database
         app.kubernetes.io/component: database
       annotations:
-        checksum/secret: 30682a81689ec7c72fc7fb9cfeb10b34399ebe2a55fad24ddeca2b7eaa3a703f
+        checksum/secret: 11a1af8400cae2a7c5095cdbef4296148ddf7afccad71d71e29d7a32ea5314ad
     spec:
       securityContext:
         runAsUser: 999
@@ -1251,7 +1251,7 @@ spec:
       # use this init container to correct the permission
       # as "fsGroup" applied before the init container running, the container has enough permission to execute the command
       - name: "data-permissions-ensurer"
-        image: docker.io/goharbor/harbor-db:v2.15.0
+        image: docker.io/goharbor/harbor-db:v2.15.1
         imagePullPolicy: IfNotPresent
         securityContext: 
           allowPrivilegeEscalation: false
@@ -1270,7 +1270,7 @@ spec:
             subPath: 
       containers:
       - name: database
-        image: docker.io/goharbor/harbor-db:v2.15.0
+        image: docker.io/goharbor/harbor-db:v2.15.1
         imagePullPolicy: IfNotPresent
         securityContext: 
           allowPrivilegeEscalation: false
@@ -1350,7 +1350,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
     component: redis
     app.kubernetes.io/component: redis
 spec:
@@ -1372,7 +1372,7 @@ spec:
         app.kubernetes.io/name: harbor
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/part-of: harbor
-        app.kubernetes.io/version: "2.15.0"
+        app.kubernetes.io/version: "2.15.1"
         component: redis
         app.kubernetes.io/component: redis
     spec:
@@ -1383,7 +1383,7 @@ spec:
       terminationGracePeriodSeconds: 120
       containers:
       - name: redis
-        image: docker.io/goharbor/redis-photon:v2.15.0
+        image: docker.io/goharbor/redis-photon:v2.15.1
         imagePullPolicy: IfNotPresent
         securityContext: 
           allowPrivilegeEscalation: false
@@ -1446,7 +1446,7 @@ metadata:
     app.kubernetes.io/name: harbor
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: harbor
-    app.kubernetes.io/version: "2.15.0"
+    app.kubernetes.io/version: "2.15.1"
     component: trivy
     app.kubernetes.io/component: trivy
 spec:
@@ -1468,11 +1468,11 @@ spec:
         app.kubernetes.io/name: harbor
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/part-of: harbor
-        app.kubernetes.io/version: "2.15.0"
+        app.kubernetes.io/version: "2.15.1"
         component: trivy
         app.kubernetes.io/component: trivy
       annotations:
-        checksum/secret: dbf1130add04cc598a0c91bd2ec3b86f17587268d5ca64381027990876912448
+        checksum/secret: 54f47ee333bea17fec669d317a3e9f64e3692dc6330201304ffdb2bc68923d5d
     spec:
       securityContext:
         runAsUser: 10000
@@ -1480,7 +1480,7 @@ spec:
       automountServiceAccountToken: false
       containers:
         - name: trivy
-          image: docker.io/goharbor/trivy-adapter-photon:v2.15.0
+          image: docker.io/goharbor/trivy-adapter-photon:v2.15.1
           imagePullPolicy: IfNotPresent
           securityContext: 
             allowPrivilegeEscalation: false
