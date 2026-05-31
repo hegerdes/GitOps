@@ -1,3 +1,5 @@
+# Potential workaround for ipv6 proxy prot verification fail
+# https://github.com/cilium/cilium/pull/43505/changes
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
