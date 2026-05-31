@@ -5,6 +5,7 @@ metadata:
 spec:
   controllerName: gateway.envoyproxy.io/gatewayclass-controller
 ---
+# TODO: https://gateway.envoyproxy.io/docs/tasks/extensibility/dynamic-modules/
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:

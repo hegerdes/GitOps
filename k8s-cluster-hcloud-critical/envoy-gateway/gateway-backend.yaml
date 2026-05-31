@@ -1,11 +1,11 @@
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: ClientTrafficPolicy
 metadata:
-  name: enable-proxy-protocol-policy
+  name: enable-proxy-protocol-policy-default
   namespace: envoy-gateway
 spec:
   targetRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
       name: envoy-gw-default
-  enableProxyProtocol: true
+  proxyProtocol: true
