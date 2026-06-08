@@ -34,7 +34,6 @@ packages:
   - gpg
   - cron
   - apt-listchanges
-  - apt-transport-https
   - jq # json parsing and validating
   - yq # yaml parsing and validating
   - unzip

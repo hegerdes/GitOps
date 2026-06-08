@@ -28,7 +28,6 @@ packages:
   - ca-certificates
   - curl
   - fuse
-  - apt-transport-https
   - jq # json parsing and validating
   - yq # yaml parsing and validating
   - unzip

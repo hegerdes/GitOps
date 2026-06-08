@@ -56,8 +56,6 @@ packages:
   - isal # even faster decompress for container image
   - cryptsetup # support LUKS disk encryptio
   - apparmor
-  - apparmor-profiles-extra
-  - apt-transport-https
   - jq # json parsing and validating
   - yq # yaml parsing and validating
   - unzip
@@ -69,7 +67,6 @@ packages:
   - auditd
   - fuse
   - dbus
-  - libyajl2 # Needed for youki wasm
 
   # Only needed on Cp nodes
   - python3-kubernetes
@@ -90,6 +87,10 @@ packages:
 #     playbook_name: pb_k8s_local.yml
 
 runcmd:
+  - journalctl --sync
+  - journalctl --flush
+  - journalctl --rotate
+  - journalctl --vacuum-time=1s
   - echo "10.0.0.8 k8s-controlplane.local" >> /etc/hosts
   - echo "Cloud-Init finished" >> /srv/cloud-init-msg.txt
 
