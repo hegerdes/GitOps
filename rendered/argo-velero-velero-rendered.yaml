@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.0.1
+    helm.sh/chart: velero-12.0.2
 automountServiceAccountToken: true
 ---
 # Source: velero/templates/secret.yaml
@@ -22,7 +22,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.0.1
+    helm.sh/chart: velero-12.0.2
 type: Opaque
 data:
 ---
@@ -36,7 +36,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.0.1
+    helm.sh/chart: velero-12.0.2
 data:
   global: |
     {
@@ -53,7 +53,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.0.1
+    helm.sh/chart: velero-12.0.2
 subjects:
   - kind: ServiceAccount
     namespace: default
@@ -74,7 +74,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.0.1
+    helm.sh/chart: velero-12.0.2
 rules:
 - apiGroups:
     - "*"
@@ -94,7 +94,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.0.1
+    helm.sh/chart: velero-12.0.2
 subjects:
   - kind: ServiceAccount
     namespace: default
@@ -114,7 +114,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.0.1
+    helm.sh/chart: velero-12.0.2
 spec:
   type: ClusterIP
   ports:
@@ -136,8 +136,8 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/version: 1.18.0
-    helm.sh/chart: velero-12.0.1
+    app.kubernetes.io/version: 1.18.1
+    helm.sh/chart: velero-12.0.2
     component: velero
 spec:
   replicas: 1
@@ -154,8 +154,8 @@ spec:
         app.kubernetes.io/name: velero
         app.kubernetes.io/instance: velero
         app.kubernetes.io/managed-by: Helm
-        app.kubernetes.io/version: 1.18.0
-        helm.sh/chart: velero-12.0.1
+        app.kubernetes.io/version: 1.18.1
+        helm.sh/chart: velero-12.0.2
       annotations:
         prometheus.io/path: /metrics
         prometheus.io/port: "8085"
@@ -168,7 +168,7 @@ spec:
       terminationGracePeriodSeconds: 3600
       containers:
         - name: velero
-          image: "docker.io/velero/velero:v1.18.0"
+          image: "docker.io/velero/velero:v1.18.1"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http-monitoring
@@ -246,7 +246,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.0.1
+    helm.sh/chart: velero-12.0.2
 spec:
   credential:
   provider: 
@@ -264,7 +264,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.0.1
+    helm.sh/chart: velero-12.0.2
 spec:
   credential:
   provider:
@@ -283,7 +283,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.0.1
+    helm.sh/chart: velero-12.0.2
 automountServiceAccountToken: true
 ---
 # Source: velero/templates/upgrade-crds/clusterrole-upgrade.yaml
@@ -300,7 +300,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.0.1
+    helm.sh/chart: velero-12.0.2
 rules:
 - apiGroups: 
     - "apiextensions.k8s.io"
@@ -323,7 +323,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.0.1
+    helm.sh/chart: velero-12.0.2
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade,pre-rollback
     "helm.sh/hook-weight": "-3"
@@ -351,7 +351,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.0.1
+    helm.sh/chart: velero-12.0.2
 spec:
   backoffLimit: 3
   template:
@@ -362,7 +362,7 @@ spec:
       automountServiceAccountToken: true
       containers:
         - name: velero
-          image: "docker.io/velero/velero:v1.18.0"
+          image: "docker.io/velero/velero:v1.18.1"
           imagePullPolicy: IfNotPresent
           command:
             - /velero
