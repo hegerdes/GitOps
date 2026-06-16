@@ -21,6 +21,7 @@ apt-get install -qq --yes --no-install-recommends git python3-pip isc-dhcp-clien
 pip3 install --user --break-system-packages --no-warn-script-location --no-cache-dir ansible jmespath
 PATH=~/.local/bin:$PATH
 
+systemctl stop systemd-journald
 if [ ! -d "playbooks" ]; then
   git clone --depth 1 https://github.com/hegerdes/ansible-playbooks.git playbooks
   cd playbooks
@@ -33,9 +34,11 @@ echo "Running playbook..."
 cd playbooks
 echo "Vars:"
 cat <<EOF >hostvars.yaml
-k8s_crun_with_wasm: true
-k8s_youki_with_wasm: true
-k8s_cri: crun
+k8s_install_gvisor: false
+k8s_install_wasi: false
+k8s_install_youki: false
+k8s_install_crun: false
+k8s_install_spin: false
 k8s_ensure_min_kernel_version: "{{ k8s_ensure_min_kernel_version_map[ansible_facts.lsb.codename] }}"
 k8s_external_cp_host: kubernetes.k8s.henrikgerdes.me
 k8s_shared_api_server_endpoint: k8s-controlplane.local
@@ -66,9 +69,7 @@ k8s_absent_packages:
   - "htop"
   - "libgdbm-compat4"
   - "libgdbm6"
-  - "libperl5.36"
   - "rsync"
-  - "perl-modules-5.36"
   - "acl"
   - "netcat-traditional"
   - "python3-reportbug"
@@ -79,7 +80,17 @@ k8s_absent_packages:
   - "keyboard-configuration"
   - "console-setup"
   - "sudo"
+  - "perl-modules-5.40"
+  - "libperl5.40"
+  - "task-english"
+  - "tasksel"
+  - "tasksel-data"
+  - "inetutils-telnet"
+  - "ncurses-term"
+  - "bind9-host"
 EOF
+  # - "acpid"
+  # - "ifupdown"
 
 # Purge older kernel versions
 if [ "$(grep VERSION_CODENAME /etc/os-release)" == "VERSION_CODENAME=bookworm" ]; then
@@ -104,26 +115,33 @@ cat <<EOF >pb_k8s_local.yml
 EOF
 
 # Run playbook
-ansible-playbook pb_k8s_local.yml --extra-vars "@hostvars.yaml" -v && cd
+ansible-playbook pb_k8s_local.yml --extra-vars "@hostvars.yaml" -v --diff && cd
+systemctl stop systemd-journald
 
 # Check if a reboot is required and reboot if necessary
 if [ -f /var/run/reboot-required ]; then
   echo "Reboot required. Rebooting now..."
   rm -rf /var/run/reboot-required
+  systemctl start systemd-journald
   journalctl --sync
   journalctl --flush
+  journalctl --vacuum-time=1s
   reboot && exit 0
 else
   echo "Cleanup..."
+  systemctl stop systemd-journald
 
   # Package cleanup
   rm -rf ~/.local/lib/python3.* ~/.local/bin/ ~/.ansible ~/.cache/* ~/playbooks
   pip3 list -v
+  # Remove unneeded packages and generic kernel
   apt-get purge --yes $PACKAGE_PURGES
+  apt-get purge --yes linux-image-$(uname -r | sed 's/-cloud//')
   apt-get autoremove --yes
   apt list --installed
-  python3 -c "import urllib.request; urllib.request.urlretrieve(\"$HC_NET_UTILS\", \"/tmp/hc-utils.deb\")"
-  apt-get install -qq --yes --no-install-recommends /tmp/hc-utils.deb
+  # Instal hc-utils
+  # python3 -c "import urllib.request; urllib.request.urlretrieve(\"$HC_NET_UTILS\", \"/tmp/hc-utils.deb\")"
+  # apt-get install -qq --yes --no-install-recommends /tmp/hc-utils.deb
   apt-get clean && apt-get autoclean
   rm -rf /usr/bin/crictl /usr/bin/runsc-metric-server
 
@@ -137,7 +155,24 @@ else
   rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/bluetooth/*
   rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/media/*
   rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/net/wireless/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/net/usb/*
   rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/gpu/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/video/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/cdrom/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/comedi/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/gpio/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/hid/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/hwmon/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/iio/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/input/joystick/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/input/serio/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/input/mouse/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/input/touchscreen/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/leds/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/thermal/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/usb/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/drivers/platform/*
+  rm -rvf /usr/lib/modules/$(uname -r)/kernel/net/bluetooth/*
   depmod -a $(uname -r)
 
   # Caches cleanup
@@ -146,19 +181,17 @@ else
   journalctl --rotate
   journalctl --vacuum-time=1s
   systemctl stop systemd-journald
-  rm -rf /var/cache/apt/* /var/cache/apparmor/* /var/lib/apt/lists/* /var/cache/debconf/* /var/cache/dpkg/* /var/cache/ansible/* /var/log/*.log* /tmp/* /var/tmp/* /usr/share/doc/* /usr/share/man/* /var/log/journal/* /run/log/journal/* /usr/lib/python3.13/__pycache__/* /usr/share/bash-completion/completions/*
+  rm -rvf /var/cache/apt/* /var/cache/apparmor/* /var/lib/apt/lists/* /var/cache/debconf/* /var/cache/dpkg/* /var/cache/ansible/* /var/log/*.log* /tmp/* /var/tmp/* /usr/share/doc/* /usr/share/man/* /var/log/journal/* /run/log/journal/* /usr/lib/python3.13/__pycache__/* /usr/share/bash-completion/completions/* /usr/share/mime/*
+  rm -rvf /usr/lib/openssh/sftp-server
   find /usr/lib/python3 -type f -name "*.pyc" -delete
   find /usr/share/locale/ -maxdepth 1 -type d ! -name 'en' ! -name 'en_US' ! -name 'en_US.UTF-8' -exec rm -rf {} +
+  find /usr/share/i18n/locales/ -maxdepth 1 -type f ! -name 'iso14651_t1_common' ! -name 'en_US' -delete
 
   echo "Zeroing out free space..."
   dd if=/dev/zero of=/mnt/zero.fill bs=1M || true
   rm -rf /mnt/zero.fill
-  systemctl start systemd-journald
-  journalctl --sync
-  journalctl --flush
-  journalctl --rotate
-  journalctl --vacuum-time=1s
   df -h
+  ls -lh /boot
   sync
 fi
 

@@ -1,5 +1,9 @@
 #cloud-config
 
+preserve_hostname: false
+hostname: k8s-generic-node
+create_hostname_file: true
+
 ssh_pwauth: false
 disable_root_opts: no-port-forwarding,no-agent-forwarding,no-X11-forwarding
 
@@ -14,8 +18,6 @@ packages:
   - isal # even faster decompress for container image
   - cryptsetup # support LUKS disk encryptio
   - apparmor
-  - apparmor-profiles-extra
-  - apt-transport-https
   - python3-debian
   - jq # json parsing and validating
   - yq # yaml parsing and validating
@@ -28,7 +30,7 @@ packages:
   - ipvsadm
   - auditd
   - dbus
-  - libyajl2 # Needed for youki wasm
+  - libjson-c5
   # - policycoreutils
   # - selinux-basics
   # - selinux-policy-default
