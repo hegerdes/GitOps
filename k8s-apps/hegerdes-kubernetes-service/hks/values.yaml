@@ -1,4 +1,4 @@
-kubernetesVersion: v1.36.1
+kubernetesVersion: v1.36.2
 etcdVersion: 3.6.11-0
 namespaceLabels: {}
 
