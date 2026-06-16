@@ -6,10 +6,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.5.8
+    helm.sh/chart: alloy-operator-0.5.9
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.8.2"
+    app.kubernetes.io/version: "1.9.0"
     app.kubernetes.io/managed-by: Helm
 automountServiceAccountToken: true
 ---
@@ -54,10 +54,10 @@ metadata:
   name: grafana-monitoring-0-opencost
   namespace: default
   labels:
-    helm.sh/chart: opencost-2.5.21
+    helm.sh/chart: opencost-2.5.23
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.120.2"
+    app.kubernetes.io/version: "1.120.3"
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/managed-by: Helm
 automountServiceAccountToken: true
@@ -1624,7 +1624,7 @@ data:
   self-reporting-metric.prom: |+
     # HELP grafana_kubernetes_monitoring_build_info A metric to report the version of the Kubernetes Monitoring Helm chart
     # TYPE grafana_kubernetes_monitoring_build_info gauge
-    grafana_kubernetes_monitoring_build_info{version="4.1.4", namespace="default"} 1
+    grafana_kubernetes_monitoring_build_info{version="4.1.5", namespace="default"} 1
     # HELP grafana_kubernetes_monitoring_feature_info A metric to report the enabled features of the Kubernetes Monitoring Helm chart
     # TYPE grafana_kubernetes_monitoring_feature_info gauge
     grafana_kubernetes_monitoring_feature_info{feature="applicationObservability", protocols="otlpgrpc,otlphttp,jaegergrpc,zipkin", version="1.0.0"} 1
@@ -1648,10 +1648,10 @@ kind: ClusterRole
 metadata:
   name: grafana-monitoring-0-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: alloy-operator-0.5.8
+    helm.sh/chart: alloy-operator-0.5.9
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.8.2"
+    app.kubernetes.io/version: "1.9.0"
     app.kubernetes.io/managed-by: Helm
 rules:
   - apiGroups:
@@ -1870,10 +1870,10 @@ kind: ClusterRole
 metadata:
   name: grafana-monitoring-0-opencost
   labels:
-    helm.sh/chart: opencost-2.5.21
+    helm.sh/chart: opencost-2.5.23
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.120.2"
+    app.kubernetes.io/version: "1.120.3"
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/managed-by: Helm
 rules:
@@ -1955,10 +1955,10 @@ kind: ClusterRoleBinding
 metadata:
   name: grafana-monitoring-0-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: alloy-operator-0.5.8
+    helm.sh/chart: alloy-operator-0.5.9
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.8.2"
+    app.kubernetes.io/version: "1.9.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -1975,10 +1975,10 @@ kind: ClusterRoleBinding
 metadata:
   name: grafana-monitoring-0-alloy-operator
   labels:
-    helm.sh/chart: alloy-operator-0.5.8
+    helm.sh/chart: alloy-operator-0.5.9
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.8.2"
+    app.kubernetes.io/version: "1.9.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -2018,10 +2018,10 @@ kind: ClusterRoleBinding
 metadata:
   name: grafana-monitoring-0-opencost
   labels:
-    helm.sh/chart: opencost-2.5.21
+    helm.sh/chart: opencost-2.5.23
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.120.2"
+    app.kubernetes.io/version: "1.120.3"
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/managed-by: Helm
 roleRef:
@@ -2040,10 +2040,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator-leader-election-role
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.5.8
+    helm.sh/chart: alloy-operator-0.5.9
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.8.2"
+    app.kubernetes.io/version: "1.9.0"
     app.kubernetes.io/managed-by: Helm
 rules:
   - apiGroups:
@@ -2085,10 +2085,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator-leader-election-rolebinding
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.5.8
+    helm.sh/chart: alloy-operator-0.5.9
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.8.2"
+    app.kubernetes.io/version: "1.9.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -2106,10 +2106,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.5.8
+    helm.sh/chart: alloy-operator-0.5.9
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.8.2"
+    app.kubernetes.io/version: "1.9.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -2189,10 +2189,10 @@ metadata:
   name: grafana-monitoring-0-opencost
   namespace: default
   labels:
-    helm.sh/chart: opencost-2.5.21
+    helm.sh/chart: opencost-2.5.23
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.120.2"
+    app.kubernetes.io/version: "1.120.3"
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -2341,10 +2341,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.5.8
+    helm.sh/chart: alloy-operator-0.5.9
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.8.2"
+    app.kubernetes.io/version: "1.9.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -2355,10 +2355,10 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: alloy-operator-0.5.8
+        helm.sh/chart: alloy-operator-0.5.9
         app.kubernetes.io/name: alloy-operator
         app.kubernetes.io/instance: grafana-monitoring-0
-        app.kubernetes.io/version: "1.8.2"
+        app.kubernetes.io/version: "1.9.0"
         app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: grafana-monitoring-0-alloy-operator
@@ -2366,7 +2366,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: alloy-operator
-          image: "ghcr.io/grafana/alloy-operator:1.8.2"
+          image: "ghcr.io/grafana/alloy-operator:1.9.0"
           imagePullPolicy: IfNotPresent
           args:
             - --health-probe-bind-address=:8081
@@ -2508,10 +2508,10 @@ metadata:
   name: grafana-monitoring-0-opencost
   namespace: default
   labels:
-    helm.sh/chart: opencost-2.5.21
+    helm.sh/chart: opencost-2.5.23
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.120.2"
+    app.kubernetes.io/version: "1.120.3"
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/managed-by: Helm
   annotations:
@@ -2545,7 +2545,7 @@ spec:
       initContainers:
       containers:
         - name: grafana-monitoring-0-opencost
-          image: ghcr.io/opencost/opencost:1.120.2@sha256:5f37f689557dbb6737a9182b70625bba55bbba843a2caaba5a79746945a56cc6
+          image: ghcr.io/opencost/opencost:1.120.3@sha256:9f282400e59a4fc886e5fa3bca3c777b9dcae866b781641ca1d1271525d15f72
           imagePullPolicy: IfNotPresent
           args:
           ports:
@@ -2626,14 +2626,19 @@ spec:
             # Add any additional provided variables
             - name: CLOUD_PROVIDER_API_KEY
               value: "disabled"
-            - name: CONFIG_PATH
-              value: "/tmp"
             - name: CURRENT_CLUSTER_ID_FILTER_ENABLED
               value: "true"
             - name: PROM_CLUSTER_ID_LABEL
               value: "cluster"
             - name: MCP_SERVER_ENABLED
               value: "false"
+          volumeMounts:
+            - mountPath: /var/configs
+              name: configs
+              readOnly: false
+      volumes:
+        - emptyDir: {}
+          name: configs
 ---
 # Source: k8s-monitoring/templates/alloy.yaml
 apiVersion: collectors.grafana.com/v1alpha1
@@ -2953,7 +2958,7 @@ metadata:
   labels:
     app.kubernetes.io/name: grafana-monitoring-0-k8s-monitoring-add-finalizer
     app.kubernetes.io/instance: grafana-monitoring-0
-    helm.sh/chart: k8s-monitoring-4.1.4
+    helm.sh/chart: k8s-monitoring-4.1.5
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "15"
@@ -3006,7 +3011,7 @@ metadata:
   labels:
     app.kubernetes.io/name: grafana-monitoring-0-k8s-monitoring-remove-alloy-and-finalizer
     app.kubernetes.io/instance: grafana-monitoring-0
-    helm.sh/chart: k8s-monitoring-4.1.4
+    helm.sh/chart: k8s-monitoring-4.1.5
   annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
