@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/instance: "k8s-scaler-0"
     app.kubernetes.io/name: "hetzner-cluster-autoscaler"
     app.kubernetes.io/managed-by: "Helm"
-    helm.sh/chart: "cluster-autoscaler-9.57.0"
+    helm.sh/chart: "cluster-autoscaler-9.58.0"
   name: k8s-scaler-0-hetzner-cluster-autoscaler
   namespace: default
 spec:
@@ -25,7 +25,7 @@ metadata:
     app.kubernetes.io/instance: "k8s-scaler-0"
     app.kubernetes.io/name: "hetzner-cluster-autoscaler"
     app.kubernetes.io/managed-by: "Helm"
-    helm.sh/chart: "cluster-autoscaler-9.57.0"
+    helm.sh/chart: "cluster-autoscaler-9.58.0"
   name: cluster-autoscaler
   namespace: default
 automountServiceAccountToken: true
@@ -38,7 +38,7 @@ metadata:
     app.kubernetes.io/instance: "k8s-scaler-0"
     app.kubernetes.io/name: "hetzner-cluster-autoscaler"
     app.kubernetes.io/managed-by: "Helm"
-    helm.sh/chart: "cluster-autoscaler-9.57.0"
+    helm.sh/chart: "cluster-autoscaler-9.58.0"
   name: k8s-scaler-0-hetzner-cluster-autoscaler
 rules:
   - apiGroups:
@@ -210,7 +210,7 @@ metadata:
     app.kubernetes.io/instance: "k8s-scaler-0"
     app.kubernetes.io/name: "hetzner-cluster-autoscaler"
     app.kubernetes.io/managed-by: "Helm"
-    helm.sh/chart: "cluster-autoscaler-9.57.0"
+    helm.sh/chart: "cluster-autoscaler-9.58.0"
   name: k8s-scaler-0-hetzner-cluster-autoscaler
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -229,7 +229,7 @@ metadata:
     app.kubernetes.io/instance: "k8s-scaler-0"
     app.kubernetes.io/name: "hetzner-cluster-autoscaler"
     app.kubernetes.io/managed-by: "Helm"
-    helm.sh/chart: "cluster-autoscaler-9.57.0"
+    helm.sh/chart: "cluster-autoscaler-9.58.0"
   name: k8s-scaler-0-hetzner-cluster-autoscaler
   namespace: default
 rules:
@@ -258,7 +258,7 @@ metadata:
     app.kubernetes.io/instance: "k8s-scaler-0"
     app.kubernetes.io/name: "hetzner-cluster-autoscaler"
     app.kubernetes.io/managed-by: "Helm"
-    helm.sh/chart: "cluster-autoscaler-9.57.0"
+    helm.sh/chart: "cluster-autoscaler-9.58.0"
   name: k8s-scaler-0-hetzner-cluster-autoscaler
   namespace: default
 roleRef:
@@ -278,7 +278,7 @@ metadata:
     app.kubernetes.io/instance: "k8s-scaler-0"
     app.kubernetes.io/name: "hetzner-cluster-autoscaler"
     app.kubernetes.io/managed-by: "Helm"
-    helm.sh/chart: "cluster-autoscaler-9.57.0"
+    helm.sh/chart: "cluster-autoscaler-9.58.0"
   name: k8s-scaler-0-hetzner-cluster-autoscaler
   namespace: default
 spec:
@@ -302,7 +302,7 @@ metadata:
     app.kubernetes.io/instance: "k8s-scaler-0"
     app.kubernetes.io/name: "hetzner-cluster-autoscaler"
     app.kubernetes.io/managed-by: "Helm"
-    helm.sh/chart: "cluster-autoscaler-9.57.0"
+    helm.sh/chart: "cluster-autoscaler-9.58.0"
   name: k8s-scaler-0-hetzner-cluster-autoscaler
   namespace: default
 spec:

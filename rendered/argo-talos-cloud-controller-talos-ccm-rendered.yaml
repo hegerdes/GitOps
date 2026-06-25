@@ -169,8 +169,8 @@ spec:
   type: ClusterIP
   ports:
     - name: metrics
-      port: 50258
-      targetPort: 50258
+      port: 10458
+      targetPort: 10458
       protocol: TCP
   selector:
         app.kubernetes.io/name: talos-cloud-controller-manager
@@ -231,7 +231,7 @@ spec:
             - --controllers=node-csr-approval
             - --leader-elect-resource-name=cloud-controller-manager-talos
             - --use-service-account-credentials
-            - --secure-port=50258
+            - --secure-port=10458
             - --authorization-always-allow-paths=/healthz,/livez,/readyz,/metrics
           env:
             - name: SERVICE_ACCOUNT
@@ -240,7 +240,7 @@ spec:
                   fieldPath: spec.serviceAccountName
           ports:
             - name: metrics
-              containerPort: 50258
+              containerPort: 10458
               protocol: TCP
           livenessProbe:
             httpGet:

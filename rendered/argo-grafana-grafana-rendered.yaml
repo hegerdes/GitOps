@@ -5,10 +5,10 @@ kind: ServiceAccount
 automountServiceAccountToken: false
 metadata:
   labels:
-    helm.sh/chart: grafana-12.4.6
+    helm.sh/chart: grafana-12.7.1
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
-    app.kubernetes.io/version: "13.0.2"
+    app.kubernetes.io/version: "13.1.0"
   name: grafana
   namespace: default
 ---
@@ -19,16 +19,16 @@ metadata:
   name: grafana
   namespace: default
   labels:
-    helm.sh/chart: grafana-12.4.6
+    helm.sh/chart: grafana-12.7.1
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
-    app.kubernetes.io/version: "13.0.2"
+    app.kubernetes.io/version: "13.1.0"
     app.kubernetes.io/component: admin-secret
 type: Opaque
 data:
   
   admin-user: "YWRtaW4="
-  admin-password: "VnRwWENlYWhHOHNnemkxNUFCUGlHU0NzaDFxbHJqQUI3UE5wdTJuYQ=="
+  admin-password: "VTQwcUJvYllnMmVCUG82dXkwYXp6UzRRS2VVQTh6MjRMUnVBYmE3cg=="
   ldap-toml: ""
 ---
 # Source: grafana/templates/configmap.yaml
@@ -38,10 +38,10 @@ metadata:
   name: grafana
   namespace: default
   labels:
-    helm.sh/chart: grafana-12.4.6
+    helm.sh/chart: grafana-12.7.1
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
-    app.kubernetes.io/version: "13.0.2"
+    app.kubernetes.io/version: "13.1.0"
 data:
   
   plugins: digrich-bubblechart-panel,grafana-clock-panel
@@ -254,10 +254,10 @@ metadata:
   name: grafana-dashboards-default
   namespace: default
   labels:
-    helm.sh/chart: grafana-12.4.6
+    helm.sh/chart: grafana-12.7.1
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
-    app.kubernetes.io/version: "13.0.2"
+    app.kubernetes.io/version: "13.1.0"
     dashboard-provider: default
 data:
   {}
@@ -269,10 +269,10 @@ metadata:
   name: grafana-dashboards-kubernetes-dashboards
   namespace: default
   labels:
-    helm.sh/chart: grafana-12.4.6
+    helm.sh/chart: grafana-12.7.1
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
-    app.kubernetes.io/version: "13.0.2"
+    app.kubernetes.io/version: "13.1.0"
     dashboard-provider: kubernetes-dashboards
 data:
   {}
@@ -282,10 +282,10 @@ kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   labels:
-    helm.sh/chart: grafana-12.4.6
+    helm.sh/chart: grafana-12.7.1
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
-    app.kubernetes.io/version: "13.0.2"
+    app.kubernetes.io/version: "13.1.0"
   name: grafana-clusterrole
 rules: []
 ---
@@ -295,10 +295,10 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: grafana-clusterrolebinding
   labels:
-    helm.sh/chart: grafana-12.4.6
+    helm.sh/chart: grafana-12.7.1
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
-    app.kubernetes.io/version: "13.0.2"
+    app.kubernetes.io/version: "13.1.0"
 subjects:
   - kind: ServiceAccount
     name: grafana
@@ -315,10 +315,10 @@ metadata:
   name: grafana
   namespace: default
   labels:
-    helm.sh/chart: grafana-12.4.6
+    helm.sh/chart: grafana-12.7.1
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
-    app.kubernetes.io/version: "13.0.2"
+    app.kubernetes.io/version: "13.1.0"
 spec:
   type: ClusterIP
   ports:
@@ -337,10 +337,10 @@ metadata:
   name: grafana
   namespace: default
   labels:
-    helm.sh/chart: grafana-12.4.6
+    helm.sh/chart: grafana-12.7.1
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
-    app.kubernetes.io/version: "13.0.2"
+    app.kubernetes.io/version: "13.1.0"
 spec:
   replicas: 1
   revisionHistoryLimit: 10
@@ -353,15 +353,15 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: grafana-12.4.6
+        helm.sh/chart: grafana-12.7.1
         app.kubernetes.io/name: grafana
         app.kubernetes.io/instance: grafana
-        app.kubernetes.io/version: "13.0.2"
+        app.kubernetes.io/version: "13.1.0"
       annotations:
         checksum/config: fa30a09b932df921f573e8476aef753cd8364afa9f133ccfec5403fe4851ea1f
-        checksum/dashboards-json-config: fe8ccd154ad33b7aca3d3b6e39c57463cabe6e41f7658fbb614d691acca9edf3
+        checksum/dashboards-json-config: ca4430094fa9eaff5b35671080f269c78389e5a446830e9c9a321cc9e2fde471
         checksum/sc-dashboard-provider-config: e70bf6a851099d385178a76de9757bb0bef8299da6d8443602590e44f05fdf24
-        checksum/secret: 725018e5119b0c096b477524a5145c7d601ef0b21018328888ef926ed799e1c6
+        checksum/secret: cbbae7305f02b39d1f9ce565ca5fc9a12dfd2aa84038525561fb329dfce7a027
         kubectl.kubernetes.io/default-container: grafana
     spec:
       
@@ -375,7 +375,7 @@ spec:
         runAsUser: 472
       initContainers:
         - name: download-dashboards
-          image: "docker.io/curlimages/curl:8.20.0"
+          image: "docker.io/curlimages/curl:8.21.0"
           imagePullPolicy: IfNotPresent
           command: ["/bin/sh"]
           args: [ "-c", "mkdir -p /var/lib/grafana/dashboards/default && /bin/sh -x /etc/grafana/download_dashboards.sh" ]
@@ -396,7 +396,7 @@ spec:
       enableServiceLinks: true
       containers:
         - name: grafana
-          image: "docker.io/grafana/grafana:13.0.2"
+          image: "docker.io/grafana/grafana:13.1.0"
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
@@ -542,10 +542,10 @@ metadata:
   name: grafana
   namespace: default
   labels:
-    helm.sh/chart: grafana-12.4.6
+    helm.sh/chart: grafana-12.7.1
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
-    app.kubernetes.io/version: "13.0.2"
+    app.kubernetes.io/version: "13.1.0"
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
