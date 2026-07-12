@@ -27,7 +27,7 @@ variable "user_data_path" {
 }
 variable "location" {
   type    = string
-  default = "fsn1"
+  default = "nbg1"
 }
 
 locals {
