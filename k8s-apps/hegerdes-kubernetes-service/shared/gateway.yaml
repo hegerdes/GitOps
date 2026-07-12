@@ -34,7 +34,7 @@ spec:
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: ClientTrafficPolicy
 metadata:
-  name: enable-proxy-protocol-policy-default
+  name: enable-proxy-protocol-policy-hks
   namespace: envoy-gateway
 spec:
   targetRefs:
