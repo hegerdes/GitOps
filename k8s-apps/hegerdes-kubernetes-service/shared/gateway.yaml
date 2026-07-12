@@ -41,4 +41,5 @@ spec:
     - group: gateway.networking.k8s.io
       kind: Gateway
       name: hks-gateway
-  proxyProtocol: true
+  proxyProtocol:
+    optional: false
