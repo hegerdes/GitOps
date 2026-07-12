@@ -30,6 +30,17 @@ spec:
           - kind: TLSRoute
       tls:
         mode: Passthrough
+    - name: konnectivity
+      protocol: TLS
+      port: 8091
+      hostname: "*.hks.eu-central.hegerdes.com"
+      allowedRoutes:
+        namespaces:
+          from: All
+        kinds:
+          - kind: TLSRoute
+      tls:
+        mode: Passthrough
 ---
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: ClientTrafficPolicy

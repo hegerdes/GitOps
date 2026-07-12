@@ -10,10 +10,31 @@ spec:
   parentRefs:
     - name: {{ .Values.controlplane.tlsRoute.gatewayName }}
       namespace: {{ .Values.controlplane.tlsRoute.gatewayNamespace }}
+      sectionName: tls
   rules:
     - backendRefs:
         - name: kube-apiserver
           kind: Service
           namespace: "{{ .Release.Namespace }}"
           port: 6443
+{{- end }}
+{{- if .Values.controlplane.konnectivityServer.enabled -}}
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TLSRoute
+metadata:
+  name: "{{ .Release.Namespace }}-konnectivity"
+spec:
+  hostnames:
+    - "{{ .Release.Namespace }}.{{ .Values.controlplane.domainSuffix }}"
+  parentRefs:
+    - name: {{ .Values.controlplane.tlsRoute.gatewayName }}
+      namespace: {{ .Values.controlplane.tlsRoute.gatewayNamespace }}
+      sectionName: konnectivity
+  rules:
+    - backendRefs:
+        - name: kube-api-konnectivity-server
+          kind: Service
+          namespace: "{{ .Release.Namespace }}"
+          port: 8091
 {{- end }}
