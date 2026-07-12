@@ -210,7 +210,6 @@ spec:
           livenessProbe:
             httpGet:
               scheme: HTTP
-              host: 127.0.0.1
               port: 8092
               path: /healthz
             initialDelaySeconds: 10
