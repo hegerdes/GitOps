@@ -1,0 +1,5 @@
+image:
+  tag: v0.4.6
+namespace:
+  create: false
+  name: agent-sandbox
