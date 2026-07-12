@@ -177,8 +177,12 @@ spec:
               name: tls-etcd
             - mountPath: /etc/kubernetes/extras/
               name: kube-extra-conf
+              {{ if .Values.controlplane.konnectivityServer.enabled -}}
+            - name: connect-server
+              mountPath: /mnt/kubernetes/services/
+              {{- end }}
         {{ if .Values.controlplane.konnectivityServer.enabled -}}
-        - name: konnectivity-server-container
+        - name: konnectivity-server
           image: registry.k8s.io/kas-network-proxy/proxy-server:v0.{{ $version.Minor }}.0
           resources:
             requests:
