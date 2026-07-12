@@ -11,14 +11,14 @@ data:
     current-context: kubernetes@default
     contexts:
       - context:
-          cluster: default
+          cluster: {{ .Values.name }}
           user: default
         name: kubernetes@default
     clusters:
       - cluster:
           certificate-authority: /etc/kubernetes/ca.crt
           server: https://kube-apiserver:6443
-        name: default
+        name: {{ .Values.name }}
     users:
       - name: default
         user:
@@ -32,6 +32,22 @@ metadata:
 data:
   advertiseIP: 10.0.0.1 # placeholder
   info: hks-managed-cluster
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-egress-config
+data:
+  egress-configuration.yaml: |
+    apiVersion: apiserver.k8s.io/v1beta1
+    kind: EgressSelectorConfiguration
+    egressSelections:
+    - name: cluster
+      connection:
+        proxyProtocol: GRPC
+        transport:
+          uds:
+            udsName: /mnt/kubernetes/services/konnectivity-servekonnectivity-server.socket
 ---
 apiVersion: v1
 kind: ConfigMap

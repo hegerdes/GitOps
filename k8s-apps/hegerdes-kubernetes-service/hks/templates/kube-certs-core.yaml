@@ -277,3 +277,37 @@ spec:
   issuerRef:
     name: ca-kube-controlplane
     kind: Issuer
+{{- if .Values.controlplane.konnectivityServer.enabled -}}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: konnectivity-server
+spec:
+  secretName: konnectivity-server-tls
+  commonName: system:konnectivity-server
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  isCA: false
+  usages:
+    - digital signature
+    - key encipherment
+    - client auth
+  privateKey:
+    algorithm: RSA
+    size: 2048
+
+  subject:
+    organizationalUnits:
+      - konnectivity-server
+    organizations:
+      - system:konnectivity-server
+
+  dnsNames: []
+  emailAddresses:
+    - kubernetes-pki@hegerdes.com
+
+  issuerRef:
+    name: ca-kube-controlplane
+    kind: Issuer
+{{- end }}

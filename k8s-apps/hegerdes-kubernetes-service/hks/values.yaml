@@ -1,6 +1,7 @@
 kubernetesVersion: v1.36.2
-etcdVersion: 3.6.11-0
+etcdVersion: 3.7.0-0
 namespaceLabels: {}
+name: default
 
 controlplane:
   domainSuffix: hks.eu-central.hegerdes.com
@@ -14,6 +15,8 @@ controlplane:
     gatewayNamespace: envoy-gateway
   pdb:
     enabled: false
+  konnectivityServer:
+    enabled: true
 
 extensions: {}
 extraObjects: []

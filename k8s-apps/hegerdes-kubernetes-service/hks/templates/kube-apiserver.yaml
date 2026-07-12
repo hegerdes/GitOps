@@ -1,3 +1,4 @@
+{{- $version := semver .Values.kubernetesVersion -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -37,6 +38,7 @@ spec:
           type: RuntimeDefault
       automountServiceAccountToken: false
       enableServiceLinks: false
+      # priorityClassName: system-node-critical
       initContainers:
         - name: etcd-check
           image: curlimages/curl
@@ -90,11 +92,12 @@ spec:
             - --audit-log-maxage=30
             - --audit-log-maxbackup=10
             - --audit-log-maxsize=100
+            - --enable-admission-plugins=NodeRestriction,DenyServiceExternalIPs
             - --audit-log-path=/var/log/kube-apiserver/audit.log
             - --client-ca-file=/etc/kubernetes/pki/ca.crt
             - --kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.crt
             - --kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client.key
-            - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+            - --kubelet-preferred-address-types=Hostname,InternalIP,ExternalIP
             - --audit-policy-file=/etc/kubernetes/extras/audit-policy.yaml
             - --authentication-config=/etc/kubernetes/extras/authentication-conf.yaml
             - --authorization-config=/etc/kubernetes/extras/authorization-conf.yaml
@@ -119,6 +122,9 @@ spec:
             - --requestheader-extra-headers-prefix=X-Remote-Extra-
             - --requestheader-group-headers=X-Remote-Group
             - --requestheader-username-headers=X-Remote-User
+            {{ if .Values.controlplane.konnectivityServer.enabled -}}
+            - --egress-selector-config-file=/etc/kubernetes/extras/egress-configuration.yaml
+            {{- end }}
           resources:
             requests:
               cpu: 200m
@@ -171,21 +177,67 @@ spec:
               name: tls-etcd
             - mountPath: /etc/kubernetes/extras/
               name: kube-extra-conf
-            # - mountPath: /etc/ssl/certs
-            #   name: ca-certs
-            #   readOnly: true
-            # - mountPath: /etc/ca-certificates
-            #   name: etc-ca-certificates
-            #   readOnly: true
-            # - mountPath: /usr/local/share/ca-certificates
-            #   name: usr-local-share-ca-certificates
-            #   readOnly: true
-            # - mountPath: /usr/share/ca-certificates
-            #   name: usr-share-ca-certificates
-            #   readOnly: true
-      # priority: 2000001000
-      # priorityClassName: system-node-critical
+        {{ if .Values.controlplane.konnectivityServer.enabled -}}
+        - name: konnectivity-server-container
+          image: registry.k8s.io/kas-network-proxy/proxy-server:v0.{{ $version.Minor }}.0
+          resources:
+            requests:
+              cpu: 5m
+          env:
+            - name: PROXY_SERVER_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.uid
+          command: [ "/proxy-server"]
+          args:
+            - --logtostderr=true
+            - --uds-name=/mnt/kubernetes/services/konnectivity-servekonnectivity-server.socket
+            - --delete-existing-uds-file
+            - --cluster-cert=/etc/kubernetes/pki/apiserver.crt
+            - --cluster-key=/etc/kubernetes/pki/apiserver.key
+            - --server-port=0
+            - --agent-port=8091
+            - --health-port=8092
+            - --admin-port=8093
+            - --keepalive-time=1h
+            - --mode=grpc
+            - --tls-min-version=VersionTLS13
+            - --enable-profiling=false
+            - --agent-namespace=kube-system
+            - --agent-service-account=konnectivity-agent
+            - --kubeconfig=/srv/kubernetes/kubeconfig.yml
+            - --authentication-audience=system:konnectivity-server
+          livenessProbe:
+            httpGet:
+              scheme: HTTP
+              host: 127.0.0.1
+              port: 8092
+              path: /healthz
+            initialDelaySeconds: 10
+            timeoutSeconds: 60
+          ports:
+          - name: serverport
+            containerPort: 8090 # unused on uds
+          - name: agentport
+            containerPort: 8091
+          - name: healthport
+            containerPort: 8092
+          - name: adminport
+            containerPort: 8093
+          volumeMounts:
+          - name: tls-kube
+            mountPath: /etc/kubernetes/pki
+            readOnly: true
+          - name: kubeconfig-konnectivity-server
+            mountPath: /srv/kubernetes
+            readOnly: true
+          - name: connect-server
+            mountPath: /mnt/kubernetes/services/
+        {{- end }}
       volumes:
+        - name: connect-server
+          emptyDir:
+            sizeLimit: 32Mi
         - name: audit-log
           emptyDir:
             sizeLimit: 265Mi
@@ -194,6 +246,13 @@ spec:
         - name: kube-extra-conf
           projected:
             sources:
+              {{ if .Values.controlplane.konnectivityServer.enabled -}}
+              - configMap:
+                  name: cluster-egress-config
+                  items:
+                    - key: egress-configuration.yaml
+                      path: egress-configuration.yaml
+              {{- end }}
               - configMap:
                   name: kube-api-configs
                   items:
@@ -261,6 +320,25 @@ spec:
                       path: sa.key
                     - key: sa.pub
                       path: sa.pub
+        {{ if .Values.controlplane.konnectivityServer.enabled -}}
+        - name: kubeconfig-konnectivity-server
+          projected:
+            sources:
+              - secret:
+                  name: konnectivity-server-tls
+                  items:
+                    - key: ca.crt
+                      path: ca.crt
+                    - key: tls.crt
+                      path: kube.crt
+                    - key: tls.key
+                      path: kube.key
+              - configMap:
+                  name: kubeconf-template
+                  items:
+                    - key: kubeconfig.yml
+                      path: kubeconfig.yml
+              {{- end }}
 ---
 apiVersion: v1
 kind: Service
@@ -281,6 +359,27 @@ spec:
     component: kube-apiserver
     tier: control-plane
 ---
+{{ if .Values.controlplane.konnectivityServer.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kube-apiserver
+    component: konnectivity-server
+    tier: control-plane
+  name: kube-api-konnectivity-server
+spec:
+  ports:
+    - port: 8091
+      protocol: TCP
+      targetPort: agentport
+      name: agentport
+  selector:
+    app: kube-apiserver
+    component: kube-apiserver
+    tier: control-plane
+---
+{{- end }}
 # persistent volume claim
 apiVersion: v1
 kind: PersistentVolumeClaim
