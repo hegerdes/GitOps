@@ -18,7 +18,7 @@ spec:
           namespace: "{{ .Release.Namespace }}"
           port: 6443
 {{- end }}
-{{- if .Values.controlplane.konnectivityServer.enabled -}}
+{{ if .Values.controlplane.konnectivityServer.enabled -}}
 ---
 apiVersion: gateway.networking.k8s.io/v1alpha2
 kind: TLSRoute
