@@ -22,7 +22,7 @@ spec:
         namespace: kube-system
       sources:
         - repoURL: https://github.com/hegerdes/GitOps.git
-          targetRevision: feat/hks
+          targetRevision: HEAD
           path: k8s-apps/hegerdes-kubernetes-service/shared/helm-rendering
           helm:
             valuesObject:
@@ -58,7 +58,7 @@ spec:
             releaseName: coredns
             valuesObject:
               image:
-                tag: 1.14.1
+                tag: 1.14.6
               serviceAccount:
                 create: true
                 name: coredns
