@@ -205,7 +205,7 @@ spec:
             - --enable-profiling=false
             - --agent-namespace=kube-system
             - --agent-service-account=konnectivity-agent
-            - --kubeconfig=/srv/kubernetes/kubeconfig.yml
+            - --kubeconfig=/etc/kubernetes/kubeconfig.yml
             - --authentication-audience=system:konnectivity-server
           livenessProbe:
             httpGet:
@@ -228,7 +228,7 @@ spec:
             mountPath: /etc/kubernetes/pki
             readOnly: true
           - name: kubeconfig-konnectivity-server
-            mountPath: /srv/kubernetes
+            mountPath: /etc/kubernetes
             readOnly: true
           - name: connect-server
             mountPath: /mnt/kubernetes/services/
