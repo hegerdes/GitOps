@@ -6,7 +6,7 @@ metadata:
   name: grafana-monitoring-0-alloy-operator
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.5.10
+    helm.sh/chart: alloy-operator-0.5.11
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
     app.kubernetes.io/version: "1.10.0"
@@ -54,10 +54,10 @@ metadata:
   name: grafana-monitoring-0-opencost
   namespace: default
   labels:
-    helm.sh/chart: opencost-2.5.23
+    helm.sh/chart: opencost-2.5.25
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.120.3"
+    app.kubernetes.io/version: "1.120.4"
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/managed-by: Helm
 automountServiceAccountToken: true
@@ -690,23 +690,19 @@ data:
         // Set the instance label to the node name
         rule {
           source_labels = ["__meta_kubernetes_pod_node_name"]
-          action = "replace"
           target_label = "instance"
         }
     
-        // set the namespace label
         rule {
           source_labels = ["__meta_kubernetes_namespace"]
           target_label  = "namespace"
         }
     
-        // set the pod label
         rule {
           source_labels = ["__meta_kubernetes_pod_name"]
           target_label  = "pod"
         }
     
-        // set the container label
         rule {
           source_labels = ["__meta_kubernetes_pod_container_name"]
           target_label  = "container"
@@ -728,9 +724,13 @@ data:
           target_label  = "workload"
         }
     
-        // set the app name if specified as metadata labels "app:" or "app.kubernetes.io/name:" or "k8s-app:"
+        // Set the app label.
+        //
+        // Choose the first value found from the following ordered list:
+        // - pod.label[app.kubernetes.io/name]
+        // - pod.label[k8s-app]
+        // - pod.label[app]
         rule {
-          action = "replace"
           source_labels = [
             "__meta_kubernetes_pod_label_app_kubernetes_io_name",
             "__meta_kubernetes_pod_label_k8s_app",
@@ -742,9 +742,13 @@ data:
           target_label = "app"
         }
     
-        // set the component if specified as metadata labels "component:" or "app.kubernetes.io/component:" or "k8s-component:"
+        // Set the component label.
+        //
+        // Choose the first value found from the following ordered list:
+        // - pod.label[app.kubernetes.io/component]
+        // - pod.label[k8s-component]
+        // - pod.label[component]
         rule {
-          action = "replace"
           source_labels = [
             "__meta_kubernetes_pod_label_app_kubernetes_io_component",
             "__meta_kubernetes_pod_label_k8s_component",
@@ -755,11 +759,9 @@ data:
           target_label = "component"
         }
     
-        // set a source label
         rule {
-          action = "replace"
-          replacement = "kubernetes"
           target_label = "source"
+          replacement = "kubernetes"
         }
     
       } // discovery.relabel "node_exporter"
@@ -866,6 +868,7 @@ data:
     otelcol.exporter.prometheus "grafana_com_metrics" {
       add_metric_suffixes = true
       resource_to_telemetry_conversion = false
+      keep_identifying_resource_attributes = true
       forward_to = [prometheus.remote_write.grafana_com_metrics.receiver]
     } // otelcol.exporter.prometheus "grafana_com_metrics"
     
@@ -1103,9 +1106,47 @@ data:
     // Destination: grafana-cloud-otlp-endpoint (otlp)
     otelcol.receiver.prometheus "grafana_cloud_otlp_endpoint" {
       output {
-        metrics = [otelcol.processor.attributes.grafana_cloud_otlp_endpoint.input]
+        metrics = [otelcol.processor.transform.grafana_cloud_otlp_endpoint_scrape_normalize.input]
       }
     } // otelcol.receiver.prometheus "grafana_cloud_otlp_endpoint"
+    
+    // Repairs artifacts of the Prometheus-to-OTLP conversion performed by
+    // otelcol.receiver.prometheus. Only metrics that came from a Prometheus scrape pass
+    // through this component; OTLP-native telemetry enters the pipeline further down.
+    otelcol.processor.transform "grafana_cloud_otlp_endpoint_scrape_normalize" {
+      error_mode = "ignore"
+      metric_statements {
+        context = "resource"
+        statements = [
+          // The conversion sets service.name to the full Prometheus job label (e.g.
+          // "namespace/workload"). When the scrape target declares its identity explicitly
+          // with a service_name label on its own target_info metric (e.g. Grafana Beyla),
+          // prefer that value and drop the duplicate.
+          `set(attributes["service.name"], attributes["service_name"]) where attributes["service_name"] != nil and attributes["service_name"] != ""`,
+          `delete_key(attributes, "service_name") where attributes["service_name"] == attributes["service.name"]`,
+          // The same conversion turns other flat target_info labels into resource attributes.
+          // Promote them to their OpenTelemetry counterparts and drop the flat duplicates, so
+          // the OTLP endpoint does not receive two conflicting spellings of the same attribute.
+          `set(attributes["service.namespace"], attributes["service_namespace"]) where (attributes["service.namespace"] == nil or attributes["service.namespace"] == "") and attributes["service_namespace"] != nil and attributes["service_namespace"] != ""`,
+          `delete_key(attributes, "service_namespace") where attributes["service_namespace"] == attributes["service.namespace"]`,
+          `set(attributes["deployment.environment"], attributes["deployment_environment"]) where (attributes["deployment.environment"] == nil or attributes["deployment.environment"] == "") and attributes["deployment_environment"] != nil and attributes["deployment_environment"] != ""`,
+          `delete_key(attributes, "deployment_environment") where attributes["deployment_environment"] == attributes["deployment.environment"]`,
+          `set(attributes["deployment.environment.name"], attributes["deployment_environment_name"]) where (attributes["deployment.environment.name"] == nil or attributes["deployment.environment.name"] == "") and attributes["deployment_environment_name"] != nil and attributes["deployment_environment_name"] != ""`,
+          `delete_key(attributes, "deployment_environment_name") where attributes["deployment_environment_name"] == attributes["deployment.environment.name"]`,
+        ]
+      }
+      metric_statements {
+        context = "datapoint"
+        statements = [
+          // Same correction for scrape targets that put service_name on every series
+          // instead of exposing a target_info metric.
+          `set(resource.attributes["service.name"], attributes["service_name"]) where attributes["service_name"] != nil and attributes["service_name"] != ""`,
+        ]
+      }
+      output {
+        metrics = [otelcol.processor.attributes.grafana_cloud_otlp_endpoint.input]
+      }
+    } // otelcol.processor.transform "grafana_cloud_otlp_endpoint_scrape_normalize"
     otelcol.receiver.loki "grafana_cloud_otlp_endpoint" {
       output {
         logs = [otelcol.processor.attributes.grafana_cloud_otlp_endpoint.input]
@@ -1142,6 +1183,11 @@ data:
           `delete_key(attributes, "container.image.repo_digests")`,
           `delete_key(attributes, "os.description")`,
           `delete_key(attributes, "os.build_id")`,
+          // Scrape targets that expose their own target_info metric (e.g. Grafana Beyla) can
+          // carry a flat k8s_cluster_name resource attribute, which conflicts with the
+          // k8s.cluster.name attribute set above and gets ";"-joined by the Prometheus OTLP
+          // endpoint. Drop the flat copy when the values match.
+          `delete_key(attributes, "k8s_cluster_name") where attributes["k8s_cluster_name"] == attributes["k8s.cluster.name"]`,
         ]
       }
     
@@ -1563,6 +1609,7 @@ data:
     otelcol.exporter.prometheus "grafana_com_metrics" {
       add_metric_suffixes = true
       resource_to_telemetry_conversion = false
+      keep_identifying_resource_attributes = true
       forward_to = [prometheus.remote_write.grafana_com_metrics.receiver]
     } // otelcol.exporter.prometheus "grafana_com_metrics"
     
@@ -1624,7 +1671,7 @@ data:
   self-reporting-metric.prom: |+
     # HELP grafana_kubernetes_monitoring_build_info A metric to report the version of the Kubernetes Monitoring Helm chart
     # TYPE grafana_kubernetes_monitoring_build_info gauge
-    grafana_kubernetes_monitoring_build_info{version="4.1.6", namespace="default"} 1
+    grafana_kubernetes_monitoring_build_info{version="4.2.1", namespace="default"} 1
     # HELP grafana_kubernetes_monitoring_feature_info A metric to report the enabled features of the Kubernetes Monitoring Helm chart
     # TYPE grafana_kubernetes_monitoring_feature_info gauge
     grafana_kubernetes_monitoring_feature_info{feature="applicationObservability", protocols="otlpgrpc,otlphttp,jaegergrpc,zipkin", version="1.0.0"} 1
@@ -1648,7 +1695,7 @@ kind: ClusterRole
 metadata:
   name: grafana-monitoring-0-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: alloy-operator-0.5.10
+    helm.sh/chart: alloy-operator-0.5.11
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
     app.kubernetes.io/version: "1.10.0"
@@ -1870,10 +1917,10 @@ kind: ClusterRole
 metadata:
   name: grafana-monitoring-0-opencost
   labels:
-    helm.sh/chart: opencost-2.5.23
+    helm.sh/chart: opencost-2.5.25
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.120.3"
+    app.kubernetes.io/version: "1.120.4"
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/managed-by: Helm
 rules:
@@ -1955,7 +2002,7 @@ kind: ClusterRoleBinding
 metadata:
   name: grafana-monitoring-0-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: alloy-operator-0.5.10
+    helm.sh/chart: alloy-operator-0.5.11
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
     app.kubernetes.io/version: "1.10.0"
@@ -1975,7 +2022,7 @@ kind: ClusterRoleBinding
 metadata:
   name: grafana-monitoring-0-alloy-operator
   labels:
-    helm.sh/chart: alloy-operator-0.5.10
+    helm.sh/chart: alloy-operator-0.5.11
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
     app.kubernetes.io/version: "1.10.0"
@@ -2018,10 +2065,10 @@ kind: ClusterRoleBinding
 metadata:
   name: grafana-monitoring-0-opencost
   labels:
-    helm.sh/chart: opencost-2.5.23
+    helm.sh/chart: opencost-2.5.25
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.120.3"
+    app.kubernetes.io/version: "1.120.4"
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/managed-by: Helm
 roleRef:
@@ -2040,7 +2087,7 @@ metadata:
   name: grafana-monitoring-0-alloy-operator-leader-election-role
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.5.10
+    helm.sh/chart: alloy-operator-0.5.11
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
     app.kubernetes.io/version: "1.10.0"
@@ -2085,7 +2132,7 @@ metadata:
   name: grafana-monitoring-0-alloy-operator-leader-election-rolebinding
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.5.10
+    helm.sh/chart: alloy-operator-0.5.11
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
     app.kubernetes.io/version: "1.10.0"
@@ -2106,7 +2153,7 @@ metadata:
   name: grafana-monitoring-0-alloy-operator
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.5.10
+    helm.sh/chart: alloy-operator-0.5.11
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
     app.kubernetes.io/version: "1.10.0"
@@ -2189,10 +2236,10 @@ metadata:
   name: grafana-monitoring-0-opencost
   namespace: default
   labels:
-    helm.sh/chart: opencost-2.5.23
+    helm.sh/chart: opencost-2.5.25
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.120.3"
+    app.kubernetes.io/version: "1.120.4"
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -2341,7 +2388,7 @@ metadata:
   name: grafana-monitoring-0-alloy-operator
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.5.10
+    helm.sh/chart: alloy-operator-0.5.11
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
     app.kubernetes.io/version: "1.10.0"
@@ -2355,7 +2402,7 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: alloy-operator-0.5.10
+        helm.sh/chart: alloy-operator-0.5.11
         app.kubernetes.io/name: alloy-operator
         app.kubernetes.io/instance: grafana-monitoring-0
         app.kubernetes.io/version: "1.10.0"
@@ -2508,10 +2555,10 @@ metadata:
   name: grafana-monitoring-0-opencost
   namespace: default
   labels:
-    helm.sh/chart: opencost-2.5.23
+    helm.sh/chart: opencost-2.5.25
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.120.3"
+    app.kubernetes.io/version: "1.120.4"
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/managed-by: Helm
   annotations:
@@ -2545,7 +2592,7 @@ spec:
       initContainers:
       containers:
         - name: grafana-monitoring-0-opencost
-          image: ghcr.io/opencost/opencost:1.120.3@sha256:9f282400e59a4fc886e5fa3bca3c777b9dcae866b781641ca1d1271525d15f72
+          image: ghcr.io/opencost/opencost:1.120.4@sha256:5467eaac8d301be69cc4a3f69f063ad5da7d57130d1126a4eb75b0d8f79839e1
           imagePullPolicy: IfNotPresent
           args:
           ports:
@@ -2958,7 +3005,7 @@ metadata:
   labels:
     app.kubernetes.io/name: grafana-monitoring-0-k8s-monitoring-add-finalizer
     app.kubernetes.io/instance: grafana-monitoring-0
-    helm.sh/chart: k8s-monitoring-4.1.6
+    helm.sh/chart: k8s-monitoring-4.2.1
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "15"
@@ -3011,7 +3058,7 @@ metadata:
   labels:
     app.kubernetes.io/name: grafana-monitoring-0-k8s-monitoring-remove-alloy-and-finalizer
     app.kubernetes.io/instance: grafana-monitoring-0
-    helm.sh/chart: k8s-monitoring-4.1.6
+    helm.sh/chart: k8s-monitoring-4.2.1
   annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
