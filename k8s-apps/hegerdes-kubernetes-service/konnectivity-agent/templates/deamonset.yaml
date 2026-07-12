@@ -15,24 +15,38 @@ spec:
       labels:
         k8s-app: konnectivity-agent
     spec:
+      nodeSelector:
+        kubernetes.io/os: linux
       priorityClassName: system-cluster-critical
       containers:
         - image: registry.k8s.io/kas-network-proxy/proxy-agent:v0.{{ $version.Minor }}.0
           name: konnectivity-agent
           command: ["/proxy-agent"]
-          args: [
-                  "--logtostderr=true",
-                  "--ca-cert=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
-                  "--proxy-server-host={{ .Values.serverHost
-                  }}",
-                  "--proxy-server-port=8132",
-                  "--admin-server-port=8133",
-                  "--health-server-port=8134",
-                  "--service-account-token-path=/var/run/secrets/tokens/konnectivity-agent-token"
-                  ]
+          args:
+            - "--logtostderr=true"
+            - "--ca-cert=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+            - "--proxy-server-host={{ .Values.serverHost
+            }}"
+            - "--proxy-server-port=8091"
+            - "--health-server-port=8134"
+            - "--sync-interval=5s"
+            - "--service-account-token-path=/var/run/secrets/tokens/konnectivity-agent-token"
           volumeMounts:
             - mountPath: /var/run/secrets/tokens
               name: konnectivity-agent-token
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
           livenessProbe:
             httpGet:
               port: 8134
