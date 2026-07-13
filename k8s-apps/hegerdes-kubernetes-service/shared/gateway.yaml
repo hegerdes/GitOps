@@ -19,7 +19,7 @@ spec:
       load-balancer.hetzner.cloud/uses-proxyprotocol: "true"
       load-balancer.hetzner.cloud/ipv6-disabled: "true"
   listeners:
-    - name: tls
+    - name: kubeapi
       protocol: TLS
       port: 6443
       hostname: "*.hks.eu-central.hegerdes.com"

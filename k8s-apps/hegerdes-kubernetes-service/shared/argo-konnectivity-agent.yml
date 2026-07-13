@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: konnectivity-agent
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            hks.hegerdes.com/managed-cluster: "true"
+            hks.hegerdes.com/cluster-type: "downstream"
+            hks.hegerdes.com/konnectivity-agent: "true"
+  template:
+    metadata:
+      name: "{{.name}}-konnectivity-agent"
+    spec:
+      project: default
+      destination:
+        server: "{{.server}}"
+        namespace: kube-system
+      sources:
+        - repoURL: https://github.com/hegerdes/GitOps.git
+          targetRevision: HEAD
+          path: k8s-apps/hegerdes-kubernetes-service/konnectivity-agent
+          helm:
+            valuesObject:
+              serverHost: '{{ index .metadata.annotations "hks.hegerdes.com/public-host" }}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true

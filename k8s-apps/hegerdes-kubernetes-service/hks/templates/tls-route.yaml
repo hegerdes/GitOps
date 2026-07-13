@@ -10,7 +10,7 @@ spec:
   parentRefs:
     - name: {{ .Values.controlplane.tlsRoute.gatewayName }}
       namespace: {{ .Values.controlplane.tlsRoute.gatewayNamespace }}
-      sectionName: tls
+      sectionName: kubeapi
   rules:
     - backendRefs:
         - name: kube-apiserver

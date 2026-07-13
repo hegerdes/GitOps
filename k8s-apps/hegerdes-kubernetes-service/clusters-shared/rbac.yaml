@@ -1,16 +1,4 @@
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: kubeadm:get-nodes
-rules:
-  - apiGroups:
-      - ""
-    resources:
-      - nodes
-    verbs:
-      - get
----
-apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: kubeadm:node-autoapprove-bootstrap
@@ -21,10 +9,10 @@ roleRef:
 subjects:
   - apiGroup: rbac.authorization.k8s.io
     kind: Group
-    name: system:bootstrappers:kubeadm:default-node-token
+    name: system:bootstrappers
   - apiGroup: rbac.authorization.k8s.io
-    kind: User
-    name: system:bootstrap:319380
+    kind: Group
+    name: system:bootstrappers:kubeadm:default-node-token
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -37,10 +25,10 @@ roleRef:
 subjects:
   - apiGroup: rbac.authorization.k8s.io
     kind: Group
-    name: system:bootstrappers:kubeadm:default-node-token
+    name: system:bootstrappers
   - apiGroup: rbac.authorization.k8s.io
-    kind: User
-    name: system:bootstrap:319380
+    kind: Group
+    name: system:bootstrappers:kubeadm:default-node-token
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -53,10 +41,10 @@ roleRef:
 subjects:
   - apiGroup: rbac.authorization.k8s.io
     kind: Group
-    name: system:bootstrappers:kubeadm:default-node-token
+    name: system:bootstrappers
   - apiGroup: rbac.authorization.k8s.io
-    kind: User
-    name: system:bootstrap:319380
+    kind: Group
+    name: system:bootstrappers:kubeadm:default-node-token
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -70,7 +58,18 @@ subjects:
   - apiGroup: rbac.authorization.k8s.io
     kind: Group
     name: system:nodes
-
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kubeadm:get-nodes
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+    verbs:
+      - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -84,10 +83,10 @@ roleRef:
 subjects:
   - apiGroup: rbac.authorization.k8s.io
     kind: Group
-    name: system:bootstrappers:kubeadm:default-node-token
+    name: system:bootstrappers
   - apiGroup: rbac.authorization.k8s.io
-    kind: User
-    name: system:bootstrap:319380
+    kind: Group
+    name: system:bootstrappers:kubeadm:default-node-token
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -101,13 +100,13 @@ roleRef:
 subjects:
   - apiGroup: rbac.authorization.k8s.io
     kind: Group
-    name: system:bootstrappers:kubeadm:default-node-token
+    name: system:bootstrappers
   - apiGroup: rbac.authorization.k8s.io
     kind: Group
     name: system:nodes
   - apiGroup: rbac.authorization.k8s.io
-    kind: User
-    name: system:bootstrap:319380
+    kind: Group
+    name: system:bootstrappers:kubeadm:default-node-token
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -124,10 +123,27 @@ subjects:
     name: system:nodes
   - apiGroup: rbac.authorization.k8s.io
     kind: Group
-    name: system:bootstrappers:kubeadm:default-node-token
+    name: system:bootstrappers
   - apiGroup: rbac.authorization.k8s.io
-    kind: User
-    name: system:bootstrap:319380
+    kind: Group
+    name: system:bootstrappers:kubeadm:default-node-token
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: anonymous-read-cluster-info
+  namespace: kube-public
+roleRef:
+  kind: Role
+  name: read-cluster-info
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: Group
+    name: system:bootstrappers:kubeadm:default-node-token
+  - kind: User
+    name: system:anonymous
+    apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -143,35 +159,6 @@ rules:
       - configmaps
     verbs:
       - get
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: kubeadm:kubelet-config
-  namespace: kube-system
-rules:
-  - apiGroups:
-      - ""
-    resourceNames:
-      - kubelet-config
-    resources:
-      - configmaps
-    verbs:
-      - get
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: anonymous-read-cluster-info
-  namespace: kube-public
-subjects:
-  - kind: User
-    name: system:anonymous
-    apiGroup: rbac.authorization.k8s.io
-roleRef:
-  kind: Role
-  name: read-cluster-info
-  apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -196,5 +183,20 @@ rules:
       - kubeadm-certs
     resources:
       - secrets
+    verbs:
+      - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: kubeadm:kubelet-config
+  namespace: kube-system
+rules:
+  - apiGroups:
+      - ""
+    resourceNames:
+      - kubelet-config
+    resources:
+      - configmaps
     verbs:
       - get
