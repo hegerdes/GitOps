@@ -48,6 +48,12 @@ data:
         transport:
           uds:
             udsName: /mnt/kubernetes/services/konnectivity-server.socket
+    - name: cluster
+      connection:
+        proxyProtocol: GRPC
+        transport:
+          uds:
+            udsName: /mnt/kubernetes/services/konnectivity-server.socket
 ---
 apiVersion: v1
 kind: ConfigMap
