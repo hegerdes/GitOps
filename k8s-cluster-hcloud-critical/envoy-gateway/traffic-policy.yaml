@@ -1,0 +1,25 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: ClientTrafficPolicy
+metadata:
+  name: enable-proxy-protocol-policy-default
+  namespace: envoy-gateway
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: envoy-gw-default
+  proxyProtocol:
+    optional: false
+  headers:
+    lateResponseHeaders:
+      add:
+        - name: Strict-Transport-Security
+          value: max-age=300; includeSubDomains; preload # max-age should be 31536000 (1y) for prod
+        # - name: Content-Security-Policy
+        #   value: default-src 'self'
+        - name: X-Frame-Options
+          value: DENY
+        - name: X-Content-Type-Options
+          value: nosniff
+        - name: Referrer-Policy
+          value: no-referrer
