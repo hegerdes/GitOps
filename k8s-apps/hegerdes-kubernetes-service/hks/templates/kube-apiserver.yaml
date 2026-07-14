@@ -195,7 +195,7 @@ spec:
           command: [ "/proxy-server"]
           args:
             - --logtostderr=true
-            - --uds-name=/mnt/kubernetes/services/konnectivity-servekonnectivity-server.socket
+            - --uds-name=/mnt/kubernetes/services/konnectivity-server.socket
             - --delete-existing-uds-file
             - --cluster-cert=/etc/kubernetes/pki/apiserver.crt
             - --cluster-key=/etc/kubernetes/pki/apiserver.key
