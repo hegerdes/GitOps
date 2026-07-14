@@ -29,6 +29,7 @@ spec:
             }}"
             - "--proxy-server-port=8091"
             - "--health-server-port=8134"
+            # - "--agent-identifiers"
             - "--sync-interval=5s"
             - "--service-account-token-path=/var/run/secrets/tokens/konnectivity-agent-token"
           volumeMounts:
@@ -47,6 +48,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.hostIP
+            - name: PROXY_AGENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
           livenessProbe:
             httpGet:
               port: 8134
