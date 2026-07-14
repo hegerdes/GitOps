@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: haproxy
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: haproxy
+  template:
+    metadata:
+      labels:
+        app: haproxy
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+        - name: haproxy
+          image: haproxy:2.9
+          args:
+            - "-f"
+            - "/usr/local/etc/haproxy/haproxy.cfg"
+            - "-db"
+          ports:
+            - name: tcp-6443
+              containerPort: 6443
+              hostPort: 6443
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /usr/local/etc/haproxy/haproxy.cfg
+              subPath: haproxy.cfg
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 99
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+      volumes:
+        - name: config
+          configMap:
+            name: haproxy-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: haproxy-config
+  namespace: kube-system
+data:
+  haproxy.cfg: |
+    global
+      log stdout format raw local0
+      maxconn 2000
+
+    defaults
+      log global
+      mode tcp
+      option tcplog
+      timeout connect 5s
+      timeout client  1m
+      timeout server  1m
+
+    frontend kube_apiserver
+      bind *:6443
+      default_backend apiserver_upstream
+
+    backend apiserver_upstream
+      mode tcp
+      server upstream test1.hks.eu-central.hegerdes.com:6443 ssl verify none sni str(test1.hks.eu-central.hegerdes.com)
