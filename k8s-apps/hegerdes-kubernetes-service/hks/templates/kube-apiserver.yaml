@@ -196,6 +196,7 @@ spec:
           args:
             - --logtostderr=true
             - --uds-name=/mnt/kubernetes/services/konnectivity-server.socket
+            - --proxy-strategies=destHost,defaultRoute,default
             - --delete-existing-uds-file
             - --cluster-cert=/etc/kubernetes/pki/apiserver.crt
             - --cluster-key=/etc/kubernetes/pki/apiserver.key
