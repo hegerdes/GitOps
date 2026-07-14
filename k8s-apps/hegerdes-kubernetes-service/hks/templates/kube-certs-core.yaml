@@ -263,21 +263,18 @@ spec:
   privateKey:
     algorithm: RSA
     size: 2048
-
   subject:
     organizationalUnits:
       - super-admin-client
     organizations:
       - system:masters
-
   dnsNames: []
   emailAddresses:
     - kubernetes-pki@hegerdes.com
-
   issuerRef:
     name: ca-kube-controlplane
     kind: Issuer
-{{- if .Values.controlplane.konnectivityServer.enabled -}}
+{{ if .Values.controlplane.konnectivityServer.enabled -}}
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
