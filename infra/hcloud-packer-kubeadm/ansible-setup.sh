@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -o pipefail
+set -xo pipefail
 
 # Done when this file exists
 if [ -f /root/ansible-setup.done ]; then
@@ -9,7 +9,16 @@ fi
 
 # Wait for cloud-init to finish
 echo "Waiting for cloud-init to finish..."
-cloud-init status --wait
+cloud-init status --wait # exit 0 and 2 ok
+rc=$?
+
+echo "cloud-init exit code: ${rc}"
+if [ "$rc" -eq 1 ]; then
+  echo "cloud-init failed with exit code 1"
+  exit 1
+fi
+
+set -e
 systemctl stop systemd-journald
 
 # Setup requirements
@@ -34,10 +43,10 @@ echo "Running playbook..."
 cd playbooks
 echo "Vars:"
 cat <<EOF >hostvars.yaml
-k8s_install_gvisor: false
+k8s_install_gvisor: true
 k8s_install_wasi: false
-k8s_install_youki: false
-k8s_install_crun: false
+k8s_install_youki: true
+k8s_install_crun: true
 k8s_install_spin: false
 k8s_ensure_min_kernel_version: "{{ k8s_ensure_min_kernel_version_map[ansible_facts.lsb.codename] }}"
 k8s_external_cp_host: kubernetes.k8s.henrikgerdes.me
@@ -116,7 +125,6 @@ EOF
 
 # Run playbook
 ansible-playbook pb_k8s_local.yml --extra-vars "@hostvars.yaml" -v --diff && cd
-systemctl stop systemd-journald
 
 # Check if a reboot is required and reboot if necessary
 if [ -f /var/run/reboot-required ]; then
@@ -126,10 +134,11 @@ if [ -f /var/run/reboot-required ]; then
   journalctl --sync
   journalctl --flush
   journalctl --vacuum-time=1s
-  reboot && exit 0
+  sync
+  systemctl reboot
+  exit 0
 else
   echo "Cleanup..."
-  systemctl stop systemd-journald
 
   # Package cleanup
   rm -rf ~/.local/lib/python3.* ~/.local/bin/ ~/.ansible ~/.cache/* ~/playbooks
@@ -140,8 +149,8 @@ else
   apt-get autoremove --yes
   apt list --installed
   # Instal hc-utils
-  # python3 -c "import urllib.request; urllib.request.urlretrieve(\"$HC_NET_UTILS\", \"/tmp/hc-utils.deb\")"
-  # apt-get install -qq --yes --no-install-recommends /tmp/hc-utils.deb
+  python3 -c "import urllib.request; urllib.request.urlretrieve(\"$HC_NET_UTILS\", \"/tmp/hc-utils.deb\")"
+  apt-get install -qq --yes --no-install-recommends /tmp/hc-utils.deb
   apt-get clean && apt-get autoclean
   rm -rf /usr/bin/crictl /usr/bin/runsc-metric-server
 
