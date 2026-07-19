@@ -13955,6 +13955,10 @@ spec:
                 fieldPath: metadata.namespace
       nodeSelector:
         kubernetes.io/os: "linux"
+      tolerations:
+        - effect: NoSchedule
+          key: node.cloudprovider.kubernetes.io/uninitialized
+          operator: Exists
 ---
 # Source: cert-manager/templates/webhook-mutating-webhook.yaml
 apiVersion: admissionregistration.k8s.io/v1

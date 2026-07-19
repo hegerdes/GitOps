@@ -7,10 +7,10 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.41.0
+    helm.sh/chart: argo-rollouts-2.41.1
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
-    app.kubernetes.io/version: "v1.9.0"
+    app.kubernetes.io/version: "v1.9.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-rollouts
 ---
@@ -22,10 +22,10 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.41.0
+    helm.sh/chart: argo-rollouts-2.41.1
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
-    app.kubernetes.io/version: "v1.9.0"
+    app.kubernetes.io/version: "v1.9.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-rollouts
 data:
@@ -38,10 +38,10 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.41.0
+    helm.sh/chart: argo-rollouts-2.41.1
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
-    app.kubernetes.io/version: "v1.9.0"
+    app.kubernetes.io/version: "v1.9.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-rollouts
 data:
@@ -18448,10 +18448,10 @@ metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-view: "true"
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.41.0
+    helm.sh/chart: argo-rollouts-2.41.1
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
-    app.kubernetes.io/version: "v1.9.0"
+    app.kubernetes.io/version: "v1.9.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-rollouts
 rules:
@@ -18477,10 +18477,10 @@ metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.41.0
+    helm.sh/chart: argo-rollouts-2.41.1
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
-    app.kubernetes.io/version: "v1.9.0"
+    app.kubernetes.io/version: "v1.9.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-rollouts
 rules:
@@ -18512,10 +18512,10 @@ metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.41.0
+    helm.sh/chart: argo-rollouts-2.41.1
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
-    app.kubernetes.io/version: "v1.9.0"
+    app.kubernetes.io/version: "v1.9.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-rollouts
 rules:
@@ -18546,10 +18546,10 @@ metadata:
   name: argo-rollouts
   labels:
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.41.0
+    helm.sh/chart: argo-rollouts-2.41.1
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
-    app.kubernetes.io/version: "v1.9.0"
+    app.kubernetes.io/version: "v1.9.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-rollouts
 rules:
@@ -18836,10 +18836,10 @@ metadata:
   name: argo-rollouts
   labels:
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.41.0
+    helm.sh/chart: argo-rollouts-2.41.1
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
-    app.kubernetes.io/version: "v1.9.0"
+    app.kubernetes.io/version: "v1.9.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-rollouts
 roleRef:
@@ -18859,10 +18859,10 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.41.0
+    helm.sh/chart: argo-rollouts-2.41.1
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
-    app.kubernetes.io/version: "v1.9.0"
+    app.kubernetes.io/version: "v1.9.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-rollouts
 spec:
@@ -18878,7 +18878,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/cm: 9d8b7feaa2a34818748d57fc325d9dc56c40b16b63fbac09e8f663e7e0584cbd
+        checksum/cm: 242f5257186f3ac0253da8d87ad34c0ffe6d55d8f249e7270673622362b328b0
       labels:
         app.kubernetes.io/name: argo-rollouts
         app.kubernetes.io/instance: argo-rollouts
@@ -18886,7 +18886,7 @@ spec:
     spec:
       serviceAccountName: argo-rollouts
       containers:
-      - image: "quay.io/argoproj/argo-rollouts:v1.9.0"
+      - image: "quay.io/argoproj/argo-rollouts:v1.9.1"
         args:
         - --healthzPort=8080
         - --metricsPort=8090

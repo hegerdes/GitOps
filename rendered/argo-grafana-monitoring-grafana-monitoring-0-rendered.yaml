@@ -118,7 +118,6 @@ data:
           replacement = "$1"
           target_label = "tmp_container_runtime"
         }
-    
         // explicitly set service_name. if not set, loki will automatically try to populate a default.
         // see https://grafana.com/docs/loki/latest/get-started/labels/#default-labels-for-all-users
         //
@@ -1671,7 +1670,7 @@ data:
   self-reporting-metric.prom: |+
     # HELP grafana_kubernetes_monitoring_build_info A metric to report the version of the Kubernetes Monitoring Helm chart
     # TYPE grafana_kubernetes_monitoring_build_info gauge
-    grafana_kubernetes_monitoring_build_info{version="4.2.2", namespace="default"} 1
+    grafana_kubernetes_monitoring_build_info{version="4.3.0", namespace="default"} 1
     # HELP grafana_kubernetes_monitoring_feature_info A metric to report the enabled features of the Kubernetes Monitoring Helm chart
     # TYPE grafana_kubernetes_monitoring_feature_info gauge
     grafana_kubernetes_monitoring_feature_info{feature="applicationObservability", protocols="otlpgrpc,otlphttp,jaegergrpc,zipkin", version="1.0.0"} 1
@@ -3007,7 +3006,7 @@ metadata:
   labels:
     app.kubernetes.io/name: grafana-monitoring-0-k8s-monitoring-add-finalizer
     app.kubernetes.io/instance: grafana-monitoring-0
-    helm.sh/chart: k8s-monitoring-4.2.2
+    helm.sh/chart: k8s-monitoring-4.3.0
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "15"
@@ -3060,7 +3059,7 @@ metadata:
   labels:
     app.kubernetes.io/name: grafana-monitoring-0-k8s-monitoring-remove-alloy-and-finalizer
     app.kubernetes.io/instance: grafana-monitoring-0
-    helm.sh/chart: k8s-monitoring-4.2.2
+    helm.sh/chart: k8s-monitoring-4.3.0
   annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded

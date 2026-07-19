@@ -1,1 +1,1 @@
-{"config": {"enableGatewayAPI": true, "enableGatewayAPIListenerSet": true, "featureGates": {"ListenerSets": true}}, "crds": {"enabled": true}, "prometheus": {"servicemonitor": {"enabled": true}}}
+{"config": {"enableGatewayAPI": true, "enableGatewayAPIListenerSet": true, "featureGates": {"ListenerSets": true}}, "crds": {"enabled": true}, "webhook": {"tolerations": [{"key": "node.cloudprovider.kubernetes.io/uninitialized", "operator": "Exists", "effect": "NoSchedule"}]}, "prometheus": {"servicemonitor": {"enabled": true}}}

@@ -7,7 +7,7 @@ metadata:
   namespace: "default"
   labels:
     app: gitlab-runner
-    chart: gitlab-runner-0.90.1
+    chart: gitlab-runner-0.91.0
     release: "gitlab-runner"
     heritage: "Helm"
 ---
@@ -19,7 +19,7 @@ metadata:
   namespace: "default"
   labels:
     app: gitlab-runner
-    chart: gitlab-runner-0.90.1
+    chart: gitlab-runner-0.91.0
     release: "gitlab-runner"
     heritage: "Helm"
 data:
@@ -158,7 +158,7 @@ metadata:
   name: gitlab-runner
   labels:
     app: gitlab-runner
-    chart: gitlab-runner-0.90.1
+    chart: gitlab-runner-0.91.0
     release: "gitlab-runner"
     heritage: "Helm"
   namespace: "default"
@@ -174,7 +174,7 @@ metadata:
   name: gitlab-runner
   labels:
     app: gitlab-runner
-    chart: gitlab-runner-0.90.1
+    chart: gitlab-runner-0.91.0
     release: "gitlab-runner"
     heritage: "Helm"
   namespace: "default"
@@ -195,7 +195,7 @@ metadata:
   namespace: "default"
   labels:
     app: gitlab-runner
-    chart: gitlab-runner-0.90.1
+    chart: gitlab-runner-0.91.0
     release: "gitlab-runner"
     heritage: "Helm"
 spec:
@@ -207,11 +207,11 @@ spec:
     metadata:
       labels:
         app: gitlab-runner
-        chart: gitlab-runner-0.90.1
+        chart: gitlab-runner-0.91.0
         release: "gitlab-runner"
         heritage: "Helm"
       annotations:
-        checksum/configmap: 6f168c1300dd18dae2c3e4d2ca4483456f9134982c3e0c363aea8e279792f78d
+        checksum/configmap: 0a9e6af6a8fd8e6442f522628cf26bdc0b6494ed0dce8a5546ca94ee4a41f237
         checksum/secrets: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
         prometheus.io/scrape: 'true'
         prometheus.io/port: "9252"
@@ -223,7 +223,7 @@ spec:
       serviceAccountName: "gitlab-runner"
       containers:
       - name: gitlab-runner
-        image: registry.gitlab.com/gitlab-org/gitlab-runner:alpine-v19.1.1
+        image: registry.gitlab.com/gitlab-org/gitlab-runner:alpine-v19.2.0
         imagePullPolicy: "IfNotPresent"
         securityContext: 
           allowPrivilegeEscalation: false
