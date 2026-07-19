@@ -12,8 +12,8 @@ spec:
       labels:
         app: haproxy
     spec:
-      hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
+      # hostNetwork: true
+      # dnsPolicy: ClusterFirstWithHostNet
       containers:
         - name: haproxy
           image: haproxy:2.9
@@ -24,7 +24,7 @@ spec:
           ports:
             - name: tcp-6443
               containerPort: 6443
-              hostPort: 6443
+              # hostPort: 6443
               protocol: TCP
           volumeMounts:
             - name: config
@@ -68,3 +68,18 @@ data:
     backend apiserver_upstream
       mode tcp
       server upstream test1.hks.eu-central.hegerdes.com:6443 ssl verify none sni str(test1.hks.eu-central.hegerdes.com)
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: haproxy
+  namespace: kube-system
+spec:
+  selector:
+    app: haproxy
+  ports:
+    - name: tcp-6443
+      port: 6443
+      targetPort: 6443
+      protocol: TCP
+  type: ClusterIP
