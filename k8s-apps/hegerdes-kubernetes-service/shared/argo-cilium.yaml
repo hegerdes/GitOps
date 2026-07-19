@@ -43,8 +43,8 @@ spec:
 
             endpointRoutes:
               enabled: false
-            # k8s:
-            #   apiServerURLs: "https://127.0.0.1:6443"
+            k8s:
+              apiServerURLs: 'https://{{ index .metadata.annotations "hks.hegerdes.com/public-host" }}:6443'
             loadBalancer:
               algorithm: maglev
               serviceTopology: true
