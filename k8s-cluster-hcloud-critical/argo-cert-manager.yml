@@ -21,6 +21,11 @@ spec:
               ListenerSets: true
           crds:
             enabled: true
+          webhook:
+            tolerations:
+              - key: node.cloudprovider.kubernetes.io/uninitialized
+                operator: Exists
+                effect: NoSchedule
           prometheus:
             servicemonitor:
               enabled: true
@@ -53,6 +58,6 @@ spec:
     retry:
       limit: 8
       backoff:
-        duration: 15s
+        duration: 30s
         factor: 2
-        maxDuration: 3m
+        maxDuration: 5m
