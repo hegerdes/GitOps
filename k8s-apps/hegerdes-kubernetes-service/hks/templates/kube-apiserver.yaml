@@ -97,7 +97,7 @@ spec:
             - --client-ca-file=/etc/kubernetes/pki/ca.crt
             - --kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.crt
             - --kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client.key
-            - --kubelet-preferred-address-types=Hostname,InternalIP,ExternalIP
+            - --kubelet-preferred-address-types=InternalIP,ExternalIP,InternalDNS,ExternalDNS,Hostname
             - --audit-policy-file=/etc/kubernetes/extras/audit-policy.yaml
             - --authentication-config=/etc/kubernetes/extras/authentication-conf.yaml
             - --authorization-config=/etc/kubernetes/extras/authorization-conf.yaml
