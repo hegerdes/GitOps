@@ -95,7 +95,7 @@ spec:
             - --enable-admission-plugins=NodeRestriction,DenyServiceExternalIPs
             - --audit-log-path=/var/log/kube-apiserver/audit.log
             - --client-ca-file=/etc/kubernetes/pki/ca.crt
-            - --kubernetes-service-node-port=3000
+            - --kubernetes-service-node-port=30000
             - --kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.crt
             - --kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client.key
             - --kubelet-preferred-address-types=InternalIP,ExternalIP,InternalDNS,ExternalDNS,Hostname
