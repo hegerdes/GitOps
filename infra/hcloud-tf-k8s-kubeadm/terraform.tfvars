@@ -1,8 +1,9 @@
 node_pools = [
   {
-    name     = "controlplane-node-arm64"
-    instance = "cax21"
-    image    = "k8s-v1.36.2-debian-13-arm64"
+    name = "controlplane-node-amd64"
+    # instance = "cax21"
+    instance = "cx33"
+    image    = "k8s-v1.36.3-debian-13-amd64"
     # image = "debian-13"
     size = 1
     tags = {
@@ -16,7 +17,7 @@ node_pools = [
   {
     name     = "worker-node-amd64"
     instance = "cx23"
-    image    = "k8s-v1.36.2-debian-13-amd64"
+    image    = "k8s-v1.36.3-debian-13-amd64"
     # image = "debian-13"
     size = 1
     tags = {
@@ -27,20 +28,20 @@ node_pools = [
     ssh_key_paths = ["~/.ssh/id_rsa.pub", "~/.ssh/cloud-test.pub"]
     ipv4_enabled  = true
   },
-  {
-    name     = "worker-node-arm64"
-    instance = "cax11"
-    image    = "k8s-v1.36.2-debian-13-arm64"
-    # image = "debian-13"
-    size = 1
-    tags = {
-      k8s_worker = "true"
-      k8s        = "worker"
-      role       = "worker"
-    }
-    ssh_key_paths = ["~/.ssh/id_rsa.pub", "~/.ssh/cloud-test.pub"]
-    ipv4_enabled  = true
-  }
+  # {
+  #   name     = "worker-node-arm64"
+  #   instance = "cax11"
+  #   image    = "k8s-v1.36.3-debian-13-arm64"
+  #   # image = "debian-13"
+  #   size = 1
+  #   tags = {
+  #     k8s_worker = "true"
+  #     k8s        = "worker"
+  #     role       = "worker"
+  #   }
+  #   ssh_key_paths = ["~/.ssh/id_rsa.pub", "~/.ssh/cloud-test.pub"]
+  #   ipv4_enabled  = true
+  # }
 ]
 
 loadbancers = [

@@ -94,10 +94,11 @@ module "loadbalancers" {
 
 # Create manager VM
 resource "hcloud_server" "manager_nodes" {
-  count       = var.manager_vm_create ? 1 : 0
-  name        = "manager-node"
-  image       = "debian-13"
-  server_type = "cax11"
+  count = var.manager_vm_create ? 1 : 0
+  name  = "manager-node"
+  image = "debian-13"
+  # server_type = "cax11"
+  server_type = "cx23"
   location    = var.location
   user_data = templatefile("data/cloud-init.yml", {
     ssh_key = local.ssh_keys

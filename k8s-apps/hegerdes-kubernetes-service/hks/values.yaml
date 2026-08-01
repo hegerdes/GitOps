@@ -1,9 +1,13 @@
-kubernetesVersion: v1.36.2
-etcdVersion: 3.7.0-0
+kubernetesVersion: v1.36.3
+etcdVersion: 3.7.1-0
 namespaceLabels: {}
 name: default
 
 controlplane:
+  audit:
+    persistence:
+      enabled: false
+      size: 2Gi
   domainSuffix: hks.eu-central.hegerdes.com
   publicIp: "publicIpServiceRef"
   publicIpServiceRef:
@@ -14,9 +18,68 @@ controlplane:
     gatewayName: hks-gateway
     gatewayNamespace: envoy-gateway
   pdb:
-    enabled: false
+    enabled: true
   konnectivityServer:
     enabled: true
 
+controllerManager:
+  enabledControllers:
+    # - selinux-warning-controller
+    # - endpointslice-mirroring-controller
+    # - endpoints-controller
+    # - legacy-serviceaccount-token-cleaner-controller
+
+    - bootstrap-signer-controller
+    - certificatesigningrequest-approving-controller
+    - certificatesigningrequest-cleaner-controller
+    - certificatesigningrequest-signing-controller
+    - cloud-node-lifecycle-controller
+    - clusterrole-aggregation-controller
+    - cronjob-controller
+    - daemonset-controller
+    - deployment-controller
+    - device-taint-eviction-controller
+    - disruption-controller
+    - endpointslice-controller
+    - ephemeral-volume-controller
+    - garbage-collector-controller
+    - horizontal-pod-autoscaler-controller
+    - job-controller
+    - kube-apiserver-serving-clustertrustbundle-publisher-controller
+    - namespace-controller
+    - node-ipam-controller
+    - node-lifecycle-controller
+    - node-route-controller
+    - persistentvolume-attach-detach-controller
+    - persistentvolume-binder-controller
+    - persistentvolume-expander-controller
+    - persistentvolume-protection-controller
+    - persistentvolumeclaim-protection-controller
+    - pod-garbage-collector-controller
+    - podcertificaterequest-cleaner-controller
+    - podgroup-protection-controller
+    - replicaset-controller
+    - replicationcontroller-controller
+    - resourceclaim-controller
+    - resourcepoolstatusrequest-controller
+    - resourcequota-controller
+    - root-ca-certificate-publisher-controller
+    - service-cidr-controller
+    - service-lb-controller
+    - serviceaccount-controller
+    - serviceaccount-token-controller
+    - statefulset-controller
+    - storage-version-migrator-controller
+    - storageversion-garbage-collector-controller
+    - taint-eviction-controller
+    - token-cleaner-controller
+    - ttl-after-finished-controller
+    - ttl-controller
+    - validatingadmissionpolicy-status-controller
+    - volumeattributesclass-protection-controller
+
+etcd:
+  pdb:
+    enabled: true
 extensions: {}
 extraObjects: []
