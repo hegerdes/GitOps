@@ -7,7 +7,21 @@ spec:
   minAvailable: 1
   selector:
     matchLabels:
-    app: kube-apiserver
-    component: kube-apiserver
-    tier: control-plane
+      app: kube-apiserver
+      component: kube-apiserver
+      tier: control-plane
+{{- end }}
+{{- if .Values.etcd.pdb.enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: etcd
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: etcd
+      component: etcd
+      tier: control-plane
 {{- end }}

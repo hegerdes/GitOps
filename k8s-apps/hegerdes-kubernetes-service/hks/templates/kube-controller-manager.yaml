@@ -1,3 +1,4 @@
+{{- $kube_controller_joined := join "," .Values.controllerManager.enabledControllers -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -50,7 +51,7 @@ spec:
             - --authentication-kubeconfig=/etc/kubernetes/kubeconfig.yml
             - --authorization-kubeconfig=/etc/kubernetes/kubeconfig.yml
             - --kubeconfig=/etc/kubernetes/kubeconfig.yml
-            - --controllers=*,bootstrapsigner,tokencleaner
+            - --controllers={{ $kube_controller_joined }}
             - --leader-elect=true
             - --profiling=false
             - --tls-min-version=VersionTLS13

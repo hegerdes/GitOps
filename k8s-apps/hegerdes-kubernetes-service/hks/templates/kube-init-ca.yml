@@ -61,6 +61,12 @@ spec:
               value: "4096"
             - name: WORKSPACE
               value: /workspace
+          requests:
+              cpu: 10m
+              memory: 10Mi
+          limits:
+              cpu: 500m
+              memory: 100Mi
           command:
             - sh
             - -c
@@ -208,14 +214,6 @@ spec:
                       path: front-proxy-ca.key
                     - key: tls.crt
                       path: front-proxy-ca.crt
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: "{{ .Release.Namespace }}"
-  labels:
-    hks.hegerdes.com/cluster: "true"
-    hks.hegerdes.com/region: "{{ .Values.controlplane.domainSuffix }}"
 ---
 apiVersion: v1
 kind: ServiceAccount

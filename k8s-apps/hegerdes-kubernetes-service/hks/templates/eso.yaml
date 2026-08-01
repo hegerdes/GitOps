@@ -14,6 +14,7 @@ spec:
     template:
       metadata:
         annotations:
+          hks.hegerdes.com/public-ipv6: "unknown"
           hks.hegerdes.com/public-ipv4: "unknown"
           hks.hegerdes.com/public-host: "{{ .Release.Namespace }}.{{ .Values.controlplane.domainSuffix }}"
           hks.hegerdes.com/private-host: "kube-apiserver.{{ .Release.Namespace }}"
