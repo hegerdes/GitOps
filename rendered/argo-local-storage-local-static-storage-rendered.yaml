@@ -6,7 +6,7 @@ metadata:
   name: local-static-storage-local-static-provisioner
   namespace: default
   labels:
-    helm.sh/chart: local-static-provisioner-2.8.0
+    helm.sh/chart: local-static-provisioner-2.9.0
     app.kubernetes.io/name: local-static-provisioner
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: local-static-storage
@@ -18,7 +18,7 @@ metadata:
   name: local-static-storage-local-static-provisioner-config
   namespace: default
   labels:
-    helm.sh/chart: local-static-provisioner-2.8.0
+    helm.sh/chart: local-static-provisioner-2.9.0
     app.kubernetes.io/name: local-static-provisioner
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: local-static-storage
@@ -41,7 +41,7 @@ kind: ClusterRole
 metadata:
   name: local-static-storage-local-static-provisioner-node-clusterrole
   labels:
-    helm.sh/chart: local-static-provisioner-2.8.0
+    helm.sh/chart: local-static-provisioner-2.9.0
     app.kubernetes.io/name: local-static-provisioner
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: local-static-storage
@@ -68,7 +68,7 @@ kind: ClusterRoleBinding
 metadata:
   name: local-static-storage-local-static-provisioner-node-binding
   labels:
-    helm.sh/chart: local-static-provisioner-2.8.0
+    helm.sh/chart: local-static-provisioner-2.9.0
     app.kubernetes.io/name: local-static-provisioner
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: local-static-storage
@@ -88,7 +88,7 @@ metadata:
   name: local-static-storage-local-static-provisioner
   namespace: default
   labels:
-    helm.sh/chart: local-static-provisioner-2.8.0
+    helm.sh/chart: local-static-provisioner-2.9.0
     app.kubernetes.io/name: local-static-provisioner
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: local-static-storage
@@ -107,7 +107,7 @@ spec:
         app.kubernetes.io/name: local-static-provisioner
         app.kubernetes.io/instance: local-static-storage
       annotations:
-        checksum/config: 43ce768f7c272a9263462a2c99bc8116376c90c3c490ef4b16a18f24b7021baa
+        checksum/config: f1164e2ea00454d3d69ffc2560fad9392d8b589dfaf2093a9d195c7c7439c4be
     spec:
       hostPID: false
       serviceAccountName: local-static-storage-local-static-provisioner
@@ -129,6 +129,13 @@ spec:
                 fieldPath: metadata.namespace
           - name: JOB_CONTAINER_IMAGE
             value: registry.k8s.io/sig-storage/local-volume-provisioner:v2.8.0
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 60
+            tcpSocket:
+              port: metrics
+            timeoutSeconds: 5
           ports:
           - name: metrics
             containerPort: 8080
