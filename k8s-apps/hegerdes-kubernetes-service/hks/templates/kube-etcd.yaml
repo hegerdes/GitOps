@@ -344,7 +344,7 @@ spec:
             - -c
             - |
               echo "Mounting PVC to trigger provisioning..."
-              sleep 30
+              sleep 5
           volumeMounts:
             - name: data
               mountPath: /data
