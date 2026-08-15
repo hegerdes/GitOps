@@ -77,7 +77,7 @@ spec:
           key: ca.crt
 ---
 apiVersion: external-secrets.io/v1
-kind: SecretStore
+kind: ClusterSecretStore
 metadata:
   name: secret-sync-remote-{{ .Release.Namespace }}
 spec:
