@@ -42,7 +42,7 @@ spec:
   usages:
     - digital signature
     - key encipherment
-    - client auth
+    - server auth
   privateKey:
     algorithm: RSA
     size: 2048
