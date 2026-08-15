@@ -50,7 +50,7 @@ spec:
           image: haproxy:3.4
           args:
             - "-f"
-            - "/usr/local/etc/haproxy/haproxy.cfg"
+            - "/var/run/haproxy/haproxy.cfg"
             - "-db"
           ports:
             - name: tcp-6443
@@ -58,8 +58,7 @@ spec:
               protocol: TCP
           volumeMounts:
             - name: config
-              mountPath: /usr/local/etc/haproxy/haproxy.cfg
-              subPath: haproxy.cfg
+              mountPath: /var/run/haproxy
           securityContext:
             runAsNonRoot: true
             runAsUser: 99
@@ -69,8 +68,18 @@ spec:
                 - ALL
       volumes:
         - name: config
-          configMap:
-            name: kube-api-proxy-config
+          projected:
+            sources:
+              - secret:
+                  name: kube-downstream-api-proxy-tls
+                  items:
+                    - key: tls-combined.pem
+                      path: tls-combined.pem
+              - configMap:
+                  name: kube-api-proxy-config
+                  items:
+                    - key: haproxy.cfg
+                      path: haproxy.cfg
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -94,7 +103,7 @@ data:
       timeout tunnel  12h
 
     frontend kube_apiserver
-      bind 192.0.2.10:6443
+      bind 192.0.2.10:6443 ssl crt /var/run/haproxy/tls-combined.pem
       tcp-request inspect-delay 5s
       default_backend apiserver_upstream
 
