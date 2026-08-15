@@ -56,7 +56,9 @@ spec:
     - "kubernetes.default"
     - "kubernetes.default.svc"
     - "kubernetes.default.svc.cluster.local"
-  ipAddresses: ["192.0.2.10"]
+  ipAddresses:
+    - "192.0.2.10"
+    - "10.96.0.1"
   emailAddresses:
     - kubernetes-pki@hegerdes.com
   issuerRef:
