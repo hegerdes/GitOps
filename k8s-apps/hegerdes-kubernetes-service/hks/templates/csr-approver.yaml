@@ -1,0 +1,156 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubelet-serving-cert-approver
+  labels:
+    app.kubernetes.io/instance: kubelet-serving-cert-approver
+    app.kubernetes.io/name: kubelet-serving-cert-approver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: kubelet-serving-cert-approver
+      app.kubernetes.io/name: kubelet-serving-cert-approver
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: kubelet-serving-cert-approver
+        app.kubernetes.io/name: kubelet-serving-cert-approver
+    spec:
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: kube-apiserver
+                    component: kube-apiserver
+                    tier: control-plane
+                topologyKey: kubernetes.io/hostname
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: cert-approver
+          image: ghcr.io/alex1989hu/kubelet-serving-cert-approver:main
+          imagePullPolicy: Always
+          args: [serve, --debug]
+          env:
+          - name: KUBERNETES_SERVICE_HOST
+            value: ""
+          - name: KUBERNETES_SERVICE_PORT
+            value: ""
+          - name: KUBECONFIG
+            value: "/var/run/kube-auth/kubeconfig"
+          resources:
+            limits:
+              cpu: 250m
+              memory: 32Mi
+            requests:
+              cpu: 10m
+              memory: 16Mi
+          ports:
+          - name: health
+            containerPort: 8080
+          - name: metrics
+            containerPort: 9090
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: health
+            initialDelaySeconds: 6
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: health
+            initialDelaySeconds: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            capabilities:
+              drop:
+              - ALL
+          volumeMounts:
+            - name: kubeconf
+              mountPath: /var/run/kube-auth
+      volumes:
+      - name: kubeconf
+        projected:
+          sources:
+            - secret:
+                name: kube-super-admin-client-tls
+                items:
+                  - key: ca.crt
+                    path: ca.crt
+                  - key: tls.crt
+                    path: tls.crt
+                  - key: tls.key
+                    path: tls.key
+            - configMap:
+                name: csr-approver-kubeconf
+                items:
+                  - key: kubeconfig
+                    path: kubeconfig
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: csr-approver-kubeconf
+data:
+  kubeconfig: |
+    kind: Config
+    apiVersion: v1
+    current-context: default
+    contexts:
+      - name: default
+        context:
+          cluster: kubernetes
+          user: csr-approver
+    clusters:
+      - name: kubernetes
+        cluster:
+          server: "https://kube-apiserver:6443"
+          certificate-authority: /var/run/kube-auth/ca.crt
+    users:
+      - name: csr-approver
+        user:
+          client-certificate: /var/run/kube-auth/tls.crt
+          client-key: /var/run/kube-auth/tls.key
+# ---
+# apiVersion: rbac.authorization.k8s.io/v1
+# kind: RoleBinding
+# metadata:
+#   name: {{ .Release.Namespace }}-events:kubelet-serving-cert-approver
+#   labels:
+#     app.kubernetes.io/instance: kubelet-serving-cert-approver
+#     app.kubernetes.io/name: kubelet-serving-cert-approver
+# roleRef:
+#   apiGroup: rbac.authorization.k8s.io
+#   kind: ClusterRole
+#   name: events:kubelet-serving-cert-approver
+# subjects:
+# - kind: User
+#   name: {{ .Release.Namespace }}-kubelet-cert-approver
+
+# ---
+# apiVersion: rbac.authorization.k8s.io/v1
+# kind: ClusterRoleBinding
+# metadata:
+#   name: {{ .Release.Namespace }}-kubelet-serving-cert-approver
+#   labels:
+#     app.kubernetes.io/instance: kubelet-serving-cert-approver
+#     app.kubernetes.io/name: kubelet-serving-cert-approver
+# roleRef:
+#   apiGroup: rbac.authorization.k8s.io
+#   kind: ClusterRole
+#   name: certificates:kubelet-serving-cert-approver
+# subjects:
+# - kind: User
+#   name: {{ .Release.Namespace }}-kubelet-cert-approver

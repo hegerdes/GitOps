@@ -55,7 +55,6 @@ spec:
           ports:
             - name: tcp-6443
               containerPort: 6443
-              hostPort: 6443
               protocol: TCP
           volumeMounts:
             - name: config
