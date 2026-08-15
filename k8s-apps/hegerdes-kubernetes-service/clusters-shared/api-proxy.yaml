@@ -7,16 +7,47 @@ spec:
   selector:
     matchLabels:
       app: haproxy
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
   template:
     metadata:
       labels:
         app: haproxy
     spec:
-      # hostNetwork: true
-      # dnsPolicy: ClusterFirstWithHostNet
+      automountServiceAccountToken: false
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet # or Default
+      priorityClassName: system-node-critical
+      tolerations:
+        - operator: Exists
+      initContainers:
+        - name: netsetup
+          image: hegerdes/debug:ip-tools-alpine
+          securityContext:
+            privileged: true
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -eu
+              SENTINEL=192.0.2.10
+
+              # Loopback is unconditionally excluded from Cilium device auto-detection,
+              # so the sentinel cannot be picked up as a NodePort address.
+              if ! ip -4 addr show dev lo | grep -qw "$SENTINEL"; then
+                ip addr add "${SENTINEL}/32" dev lo
+              fi
+
+              # Remove a stale copy left by an earlier dummy-interface setup.
+              if ip link show k8sapi >/dev/null 2>&1; then
+                ip addr del "${SENTINEL}/32" dev k8sapi 2>/dev/null || true
+              fi
+
+              ip -4 addr show dev lo | grep -w "$SENTINEL"
       containers:
         - name: haproxy
-          image: haproxy:2.9
+          image: haproxy:3.4
           args:
             - "-f"
             - "/usr/local/etc/haproxy/haproxy.cfg"
@@ -24,7 +55,7 @@ spec:
           ports:
             - name: tcp-6443
               containerPort: 6443
-              # hostPort: 6443
+              hostPort: 6443
               protocol: TCP
           volumeMounts:
             - name: config
@@ -40,17 +71,17 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: haproxy-config
+            name: kube-api-proxy-config
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: haproxy-config
+  name: kube-api-proxy-config
   namespace: kube-system
 data:
   haproxy.cfg: |
     global
-      log stdout format raw local0
+      log stdout format raw local0 info
       maxconn 2000
 
     defaults
@@ -58,21 +89,47 @@ data:
       mode tcp
       option tcplog
       timeout connect 5s
-      timeout client  1m
-      timeout server  1m
+      timeout check   5s
+      timeout client  3m
+      timeout server  3m
+      timeout tunnel  12h
 
     frontend kube_apiserver
-      bind *:6443
+      bind 192.0.2.10:6443
+      tcp-request inspect-delay 5s
       default_backend apiserver_upstream
 
     backend apiserver_upstream
       mode tcp
       server upstream test1.hks.eu-central.hegerdes.com:6443 ssl verify none sni str(test1.hks.eu-central.hegerdes.com)
+  kube-apiserver-shim.nft: |
+    #!/usr/sbin/nft -f
+    # /cfg/kube-apiserver-shim.nft
+
+    table ip kube-apiserver-shim
+    delete table ip kube-apiserver-shim
+
+    table ip kube-apiserver-shim {
+        chain redirect {
+            # ClusterIP of the "kubernetes" service -> node-local HAProxy
+            ip daddr 10.96.0.1 tcp dport 443 counter dnat to 192.0.2.10:8443
+        }
+
+        chain prerouting {
+            type nat hook prerouting priority -110; policy accept;
+            jump redirect
+        }
+
+        chain output {
+            type nat hook output priority -110; policy accept;
+            jump redirect
+        }
+    }
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: haproxy
+  name: haproxy-kubernetes
   namespace: kube-system
 spec:
   selector:
