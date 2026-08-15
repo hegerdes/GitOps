@@ -24,20 +24,12 @@ spec:
         helm:
           releaseName: metrics-server
           valuesObject:
-            # serviceAccount:
-            #   create: false
-            #   rbac:
-            #     create: false
             defaultArgs:
               - --cert-dir=/tmp
               - --kubelet-use-node-status-port
               - --metric-resolution=15s
               - --profiling=false
               - --kubelet-preferred-address-types=InternalDNS,InternalIP,ExternalDNS,ExternalIP
-              # - --kubeconfig=TODO
-              # - --kubelet-certificate-authority string      Path to the CA to use to validate the Kubelet's serving certificates.
-              # - --kubelet-client-certificate string         Path to a client cert file for TLS.
-              # - --kubelet-client-key string
       destination:
         server: "{{.server}}"
         namespace: kube-system

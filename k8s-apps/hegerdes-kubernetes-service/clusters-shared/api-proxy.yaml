@@ -24,7 +24,7 @@ spec:
         - operator: Exists
       initContainers:
         - name: netsetup
-          image: hegerdes/debug:ip-tools-alpine
+          image: hegerdes/debug:ip-tools-alpine # alpine with iproute2
           securityContext:
             privileged: true
           command: ["/bin/sh", "-c"]
@@ -110,29 +110,6 @@ data:
     backend apiserver_upstream
       mode tcp
       server upstream test1.hks.eu-central.hegerdes.com:6443 ssl verify none sni str(test1.hks.eu-central.hegerdes.com)
-  kube-apiserver-shim.nft: |
-    #!/usr/sbin/nft -f
-    # /cfg/kube-apiserver-shim.nft
-
-    table ip kube-apiserver-shim
-    delete table ip kube-apiserver-shim
-
-    table ip kube-apiserver-shim {
-        chain redirect {
-            # ClusterIP of the "kubernetes" service -> node-local HAProxy
-            ip daddr 10.96.0.1 tcp dport 443 counter dnat to 192.0.2.10:8443
-        }
-
-        chain prerouting {
-            type nat hook prerouting priority -110; policy accept;
-            jump redirect
-        }
-
-        chain output {
-            type nat hook output priority -110; policy accept;
-            jump redirect
-        }
-    }
 ---
 apiVersion: v1
 kind: Service
