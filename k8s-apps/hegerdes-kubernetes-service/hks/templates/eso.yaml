@@ -75,3 +75,65 @@ spec:
           type: ConfigMap
           name: kube-root-ca.crt
           key: ca.crt
+---
+apiVersion: external-secrets.io/v1
+kind: SecretStore
+metadata:
+  name: secret-sync-remote-{{ .Release.Namespace }}
+spec:
+  provider:
+    kubernetes:
+      auth:
+        cert:
+          clientCert:
+            name: kube-super-admin-client-tls
+            namespace: {{ .Release.Namespace }}
+            key: tls.crt
+          clientKey:
+            name: kube-super-admin-client-tls
+            namespace: {{ .Release.Namespace }}
+            key: tls.key
+      remoteNamespace: "{{ .Release.Namespace }}"
+      server:
+        url: "https://kube-apiserver.{{ .Release.Namespace }}.svc:6443"
+        caProvider:
+          type: Secret
+          name: kube-super-admin-client-tls
+          namespace: {{ .Release.Namespace }}
+          key: ca.crt
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: kube-api-proxy
+spec:
+  updatePolicy: Replace
+  deletionPolicy: None
+  refreshInterval: 1h0m0s
+  secretStoreRefs:
+    - name: secret-sync-remote-{{ .Release.Namespace }}
+      kind: ClusterSecretStore
+  selector:
+    secret:
+      name: kube-downstream-api-proxy-tls
+  data:
+    - match:
+        secretKey: tls.key
+        remoteRef:
+          remoteKey: kube-downstream-api-proxy-tls
+          property: tls.key
+    - match:
+        secretKey: tls.crt
+        remoteRef:
+          remoteKey: kube-downstream-api-proxy-tls
+          property: tls.crt
+    - match:
+        secretKey: ca.crt
+        remoteRef:
+          remoteKey: kube-downstream-api-proxy-tls
+          property: ca.crt
+    - match:
+        secretKey: tls-combined.pem
+        remoteRef:
+          remoteKey: kube-downstream-api-proxy-tls
+          property: tls-combined.pem
