@@ -57,8 +57,8 @@ spec:
     - "kubernetes.default.svc"
     - "kubernetes.default.svc.cluster.local"
   ipAddresses:
-    - "192.0.2.10"
-    - "10.96.0.1"
+    - "{{ .Values.controlplane.inClusterIP }}"  #
+    - "10.96.0.1"   # cluster service ip
   emailAddresses:
     - kubernetes-pki@hegerdes.com
   issuerRef:

@@ -12,17 +12,14 @@ spec:
     - digital signature
     - key encipherment
     - server auth
-
   privateKey:
-    algorithm: RSA
+    algorithm: RSA # RSA, ECDSA or Ed25519
     size: 2048
-
   subject:
     organizationalUnits:
       - controlplane-serving
     organizations:
       - kubernetes
-
   dnsNames:
     - "{{ .Release.Namespace }}.{{ .Values.controlplane.domainSuffix }}"
     - "kube-apiserver"
@@ -35,7 +32,6 @@ spec:
     - "kubernetes.default.svc.cluster.local"
   emailAddresses:
     - kubernetes-pki@hegerdes.com
-
   issuerRef:
     name: ca-kube-controlplane
     kind: Issuer
@@ -54,17 +50,14 @@ spec:
     - digital signature
     - key encipherment
     - server auth
-
   privateKey:
     algorithm: RSA
     size: 2048
-
   subject:
     organizationalUnits:
       - scheduler-serving
     organizations:
       - kubernetes
-
   dnsNames:
     - localhost
     - "kube-scheduler"
@@ -73,7 +66,6 @@ spec:
     - "kube-scheduler.{{ .Release.Namespace }}.svc.cluster.local"
   emailAddresses:
     - kubernetes-pki@hegerdes.com
-
   issuerRef:
     name: ca-kube-controlplane
     kind: Issuer
@@ -92,17 +84,14 @@ spec:
     - digital signature
     - key encipherment
     - server auth
-
   privateKey:
     algorithm: RSA
     size: 2048
-
   subject:
     organizationalUnits:
       - kube-controller-manager-serving
     organizations:
       - kubernetes
-
   dnsNames:
     - localhost
     - "kube-controller-manager"
@@ -111,7 +100,6 @@ spec:
     - "kube-controller-manager.{{ .Release.Namespace }}.svc.cluster.local"
   emailAddresses:
     - kubernetes-pki@hegerdes.com
-
   issuerRef:
     name: ca-kube-controlplane
     kind: Issuer
@@ -130,21 +118,17 @@ spec:
     - digital signature
     - key encipherment
     - client auth
-
   privateKey:
     algorithm: RSA
     size: 2048
-
   subject:
     organizationalUnits:
       - controlplane-kubelet-auth
     organizations:
       - kubernetes
-
   dnsNames: []
   emailAddresses:
     - kubernetes-pki@hegerdes.com
-
   issuerRef:
     name: ca-kube-controlplane
     kind: Issuer
@@ -166,17 +150,14 @@ spec:
   privateKey:
     algorithm: RSA
     size: 2048
-
   subject:
     organizationalUnits:
       - front-proxy-client
     organizations:
       - kubernetes
-
   dnsNames: []
   emailAddresses:
     - kubernetes-pki@hegerdes.com
-
   issuerRef:
     name: ca-kube-front-proxy
     kind: Issuer
@@ -199,17 +180,14 @@ spec:
   privateKey:
     algorithm: RSA
     size: 2048
-
   subject:
     organizationalUnits:
       - scheduler-client
     organizations:
       - kubernetes
-
   dnsNames: []
   emailAddresses:
     - kubernetes-pki@hegerdes.com
-
   issuerRef:
     name: ca-kube-controlplane
     kind: Issuer
@@ -231,17 +209,14 @@ spec:
   privateKey:
     algorithm: RSA
     size: 2048
-
   subject:
     organizationalUnits:
       - controller-manager-client
     organizations:
       - kubernetes
-
   dnsNames: []
   emailAddresses:
     - kubernetes-pki@hegerdes.com
-
   issuerRef:
     name: ca-kube-controlplane
     kind: Issuer
@@ -293,17 +268,14 @@ spec:
   privateKey:
     algorithm: RSA
     size: 2048
-
   subject:
     organizationalUnits:
       - konnectivity-server
     organizations:
       - system:konnectivity-server
-
   dnsNames: []
   emailAddresses:
     - kubernetes-pki@hegerdes.com
-
   issuerRef:
     name: ca-kube-controlplane
     kind: Issuer

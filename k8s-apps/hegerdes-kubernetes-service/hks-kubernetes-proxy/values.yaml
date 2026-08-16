@@ -1,0 +1,4 @@
+serverHost: "unknown"
+serverPort: 6443
+extraObjects: []
+inClusterIP: 192.0.2.10

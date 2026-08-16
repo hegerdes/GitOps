@@ -3,7 +3,12 @@ etcdVersion: 3.7.1-0
 namespaceLabels: {}
 name: default
 
+pki:
+  algorithm: ED25519 # RSA, EC or ED25519
+  genKeyOptions: "" # -pkeyopt rsa_keygen_bits:2048 or -pkeyopt ec_paramgen_curve:prime256v1
+
 controlplane:
+  inClusterIP: 192.0.2.10
   audit:
     persistence:
       enabled: false
@@ -81,5 +86,9 @@ controllerManager:
 etcd:
   pdb:
     enabled: true
+  backup:
+    schedule: "0 */2 * * *" # every 2 hours
+    enabled: true
+
 extensions: {}
 extraObjects: []

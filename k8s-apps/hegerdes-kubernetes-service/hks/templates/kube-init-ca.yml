@@ -57,8 +57,10 @@ spec:
                   fieldPath: metadata.namespace
             - name: CA_VALID_DAYS
               value: "3560"
-            - name: KEY_SIZE
-              value: "4096"
+            - name: KEY_ALGO
+              value: "{{ .Values.pki.algorithm }}"
+            - name: KEY_OPTIONS
+              value: "{{ .Values.pki.genKeyOptions }}"
             - name: WORKSPACE
               value: /workspace
           requests:
@@ -93,7 +95,7 @@ spec:
               echo "Checking for file: $CA_ETCD_PATH_KEY"
               if [ ! -e "$CA_ETCD_PATH_KEY" ]; then
                 echo "NOT FOUND: $CA_ETCD_PATH_KEY. Generating..."
-                openssl genrsa -out $WORKSPACE/etcd-ca.key $KEY_SIZE
+                openssl genpkey -algorithm $KEY_ALGO $KEY_OPTIONS -out $WORKSPACE/etcd-ca.key
                 openssl req -new -key $WORKSPACE/etcd-ca.key -x509 -days $CA_VALID_DAYS -batch \
                   -subj "/CN=${CLUSTER_ID}/O=kubernetes/OU=pki/emailAddress=kubernetes-pki@hegerdes.com" \
                   -out $WORKSPACE/ca.crt
@@ -111,7 +113,7 @@ spec:
               echo "Checking for file: $CA_CP_PATH_KEY"
               if [ ! -e "$CA_CP_PATH_KEY" ]; then
                 echo "NOT FOUND: $CA_CP_PATH_KEY. Generating..."
-                openssl genrsa -out $WORKSPACE/kube-ca.key $KEY_SIZE
+                openssl genpkey -algorithm $KEY_ALGO $KEY_OPTIONS -out $WORKSPACE/kube-ca.key
                 openssl req -new -key $WORKSPACE/kube-ca.key -x509 -days $CA_VALID_DAYS -batch \
                   -subj "/CN=${CLUSTER_ID}/O=kubernetes/OU=pki/emailAddress=kubernetes-pki@hegerdes.com" \
                   -out $WORKSPACE/ca.crt
@@ -129,7 +131,7 @@ spec:
               echo "Checking for file: $CA_PROXY_PATH_KEY"
               if [ ! -e "$CA_PROXY_PATH_KEY" ]; then
                 echo "NOT FOUND: $CA_PROXY_PATH_KEY. Generating..."
-                openssl genrsa -out $WORKSPACE/front-proxy-ca.key $KEY_SIZE
+                openssl genpkey -algorithm $KEY_ALGO $KEY_OPTIONS -out $WORKSPACE/front-proxy-ca.key
                 openssl req -new -key $WORKSPACE/front-proxy-ca.key -x509 -days $CA_VALID_DAYS -batch \
                   -subj "/CN=${CLUSTER_ID}/O=kubernetes/OU=pki/emailAddress=kubernetes-pki@hegerdes.com" \
                   -out $WORKSPACE/front-proxy-ca.crt
@@ -147,7 +149,7 @@ spec:
               echo "Checking for file: $CA_SA_PATH_KEY"
               if [ ! -e "$CA_SA_PATH_KEY" ]; then
                 echo "NOT FOUND: $CA_SA_PATH_KEY. Generating..."
-                openssl genrsa -out $WORKSPACE/sa.key $KEY_SIZE
+                openssl genpkey -algorithm $KEY_ALGO $KEY_OPTIONS -out $WORKSPACE/sa.key
                 openssl req -new -key $WORKSPACE/sa.key -x509 -days $CA_VALID_DAYS -batch \
                   -subj "/CN=${CLUSTER_ID}/O=kubernetes/OU=pki/emailAddress=kubernetes-pki@hegerdes.com" \
                   -out $WORKSPACE/sa.crt

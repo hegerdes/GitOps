@@ -197,13 +197,14 @@ spec:
     app: etcd
     component: etcd
     tier: control-plane
+{{- if .Values.etcd.backup.enabled }}
 ---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: etcd-backup
 spec:
-  schedule: "0 */2 * * *" # every 2 hours
+  schedule: "{{ .Values.etcd.backup.schedule }}"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
@@ -230,7 +231,6 @@ spec:
                       component: etcd
                       tier: control-plane
                   topologyKey: kubernetes.io/hostname
-
           containers:
             - name: etcd-backup
               image: hegerdes/debug:hks
@@ -352,3 +352,4 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: etcd-backups
+{{- end }}

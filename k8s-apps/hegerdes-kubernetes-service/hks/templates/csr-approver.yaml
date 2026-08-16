@@ -39,7 +39,7 @@ spec:
         - name: cert-approver
           image: ghcr.io/alex1989hu/kubelet-serving-cert-approver:main
           imagePullPolicy: Always
-          args: [serve, --debug]
+          args: [serve]
           env:
           - name: KUBERNETES_SERVICE_HOST
             value: ""

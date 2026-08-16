@@ -12,7 +12,6 @@ spec:
           matchLabels:
             hks.hegerdes.com/managed-cluster: "true"
             hks.hegerdes.com/cluster-type: "downstream"
-            # argocd.argoproj.io/kubernetes-version: "1.35"
   template:
     metadata:
       name: "{{.name}}-cluster-conf"
@@ -51,6 +50,13 @@ spec:
         - repoURL: https://github.com/hegerdes/GitOps.git
           targetRevision: HEAD
           path: k8s-apps/hegerdes-kubernetes-service/clusters-shared
+        - repoURL: https://github.com/hegerdes/GitOps.git
+          targetRevision: HEAD
+          path: k8s-apps/hegerdes-kubernetes-service/hks-kubernetes-proxy
+          helm:
+            valuesObject:
+              serverHost: '{{ index .metadata.annotations "hks.hegerdes.com/public-host" }}'
+              inClusterIP: '{{ index .metadata.annotations "hks.hegerdes.com/advertise-ip" }}'
       destination:
         server: "{{.server}}"
         namespace: kube-system
