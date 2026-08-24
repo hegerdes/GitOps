@@ -1,4 +1,4 @@
-kubernetesVersion: v1.36.3
+kubernetesVersion: v1.36.4
 serverHost: "unknown"
 serverPort: 6443
 extraObjects: []
