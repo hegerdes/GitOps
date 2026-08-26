@@ -58,7 +58,7 @@ spec:
             releaseName: coredns
             valuesObject:
               image:
-                tag: 1.14.6
+                tag: 1.14.7
               serviceAccount:
                 create: true
                 name: coredns

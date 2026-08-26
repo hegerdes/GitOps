@@ -14,11 +14,12 @@ packer {
 ######################## INPUT ########################
 variable "talos_version" {
   type    = string
-  default = "v1.13.4"
+  default = "v1.13.9"
 }
 variable "talos_extensions" {
   type    = list(string)
-  default = ["siderolabs/crun", "siderolabs/gvisor", "siderolabs/wasmedge", "siderolabs/qemu-guest-agent"]
+  default = ["siderolabs/crun", "siderolabs/gvisor", "siderolabs/qemu-guest-agent"]
+  # "siderolabs/youki", "siderolabs/wasmedge",
 }
 variable "talos_kernel_args" {
   type    = list(string)
@@ -61,7 +62,7 @@ locals {
 
 source "hcloud" "talos_amd64" {
   rescue               = "linux64"
-  image                = "debian-12"
+  image                = "debian-13"
   location             = var.location
   server_type          = "cx23"
   ssh_username         = "root"
@@ -70,7 +71,7 @@ source "hcloud" "talos_amd64" {
 }
 
 source "hcloud" "talos_arm64" {
-  image                = "debian-12"
+  image                = "debian-13"
   location             = var.location
   rescue               = "linux64"
   server_type          = "cax11"
