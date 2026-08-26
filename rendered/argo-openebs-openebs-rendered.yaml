@@ -24,7 +24,7 @@ metadata:
   name: openebs-localpv-provisioner
   namespace: default
   labels:
-    chart: localpv-provisioner-4.5.1
+    chart: localpv-provisioner-4.6.0
     heritage: Helm
     app: localpv-provisioner
     release: openebs
@@ -38,9 +38,9 @@ metadata:
   name: openebs-lvm-controller-sa
   namespace: default
   labels:
-    chart: lvm-localpv-1.9.1
+    chart: lvm-localpv-1.10.0
     heritage: Helm
-    openebs.io/version: "1.9.1"
+    openebs.io/version: "1.10.0"
     role: "openebs-lvm"
     app: "openebs-lvm-controller"
     release: openebs
@@ -54,9 +54,9 @@ metadata:
   name: openebs-lvm-node-sa
   namespace: default
   labels:
-    chart: lvm-localpv-1.9.1
+    chart: lvm-localpv-1.10.0
     heritage: Helm
-    openebs.io/version: "1.9.1"
+    openebs.io/version: "1.10.0"
     role: "openebs-lvm"
     name: "openebs-lvm-node"
     release: openebs
@@ -1597,7 +1597,7 @@ kind: ClusterRole
 metadata:
   name: openebs-localpv-provisioner
   labels:
-    chart: localpv-provisioner-4.5.1
+    chart: localpv-provisioner-4.6.0
     heritage: Helm
     app: localpv-provisioner
     release: openebs
@@ -1639,9 +1639,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: openebs-lvm-provisioner-role
   labels:
-    chart: lvm-localpv-1.9.1
+    chart: lvm-localpv-1.10.0
     heritage: Helm
-    openebs.io/version: "1.9.1"
+    openebs.io/version: "1.10.0"
     role: "openebs-lvm"
     app: "openebs-lvm-controller"
     release: openebs
@@ -1688,9 +1688,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: openebs-lvm-snapshotter-role
   labels:
-    chart: lvm-localpv-1.9.1
+    chart: lvm-localpv-1.10.0
     heritage: Helm
-    openebs.io/version: "1.9.1"
+    openebs.io/version: "1.10.0"
     role: "openebs-lvm"
     app: "openebs-lvm-controller"
     release: openebs
@@ -1723,7 +1723,7 @@ rules:
     verbs: ["get", "list", "watch", "update", "patch"]
   - apiGroups: ["snapshot.storage.k8s.io"]
     resources: ["volumesnapshotcontents/status"]
-    verbs: ["update"]
+    verbs: ["update", "patch"]
   - apiGroups: ["snapshot.storage.k8s.io"]
     resources: ["volumesnapshots/status"]
     verbs: ["update"]
@@ -1737,9 +1737,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: openebs-lvm-driver-registrar-role
   labels:
-    chart: lvm-localpv-1.9.1
+    chart: lvm-localpv-1.10.0
     heritage: Helm
-    openebs.io/version: "1.9.1"
+    openebs.io/version: "1.10.0"
     role: "openebs-lvm"
     name: "openebs-lvm-node"
     release: openebs
@@ -1761,7 +1761,7 @@ kind: ClusterRoleBinding
 metadata:
   name: openebs-localpv-provisioner
   labels:
-    chart: localpv-provisioner-4.5.1
+    chart: localpv-provisioner-4.6.0
     heritage: Helm
     app: localpv-provisioner
     release: openebs
@@ -1782,9 +1782,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: openebs-lvm-provisioner-binding
   labels:
-    chart: lvm-localpv-1.9.1
+    chart: lvm-localpv-1.10.0
     heritage: Helm
-    openebs.io/version: "1.9.1"
+    openebs.io/version: "1.10.0"
     role: "openebs-lvm"
     app: "openebs-lvm-controller"
     release: openebs
@@ -1805,9 +1805,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: openebs-lvm-snapshotter-binding
   labels:
-    chart: lvm-localpv-1.9.1
+    chart: lvm-localpv-1.10.0
     heritage: Helm
-    openebs.io/version: "1.9.1"
+    openebs.io/version: "1.10.0"
     role: "openebs-lvm"
     app: "openebs-lvm-controller"
     release: openebs
@@ -1828,9 +1828,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: openebs-lvm-driver-registrar-binding
   labels:
-    chart: lvm-localpv-1.9.1
+    chart: lvm-localpv-1.10.0
     heritage: Helm
-    openebs.io/version: "1.9.1"
+    openebs.io/version: "1.10.0"
     role: "openebs-lvm"
     name: "openebs-lvm-node"
     release: openebs
@@ -1850,9 +1850,9 @@ kind: Service
 metadata:
   name: openebs-lvm-localpv-node-service
   labels:
-    chart: lvm-localpv-1.9.1
+    chart: lvm-localpv-1.10.0
     heritage: Helm
-    openebs.io/version: "1.9.1"
+    openebs.io/version: "1.10.0"
     role: "openebs-lvm"
     name: "openebs-lvm-node"
     release: openebs
@@ -1873,9 +1873,9 @@ apiVersion: apps/v1
 metadata:
   name: openebs-lvm-localpv-node
   labels:
-    chart: lvm-localpv-1.9.1
+    chart: lvm-localpv-1.10.0
     heritage: Helm
-    openebs.io/version: "1.9.1"
+    openebs.io/version: "1.10.0"
     role: "openebs-lvm"
     name: "openebs-lvm-node"
     release: openebs
@@ -1892,9 +1892,9 @@ spec:
   template:
     metadata:
       labels:
-        chart: lvm-localpv-1.9.1
+        chart: lvm-localpv-1.10.0
         heritage: Helm
-        openebs.io/version: "1.9.1"
+        openebs.io/version: "1.10.0"
         role: "openebs-lvm"
         name: "openebs-lvm-node"
         release: openebs
@@ -1941,7 +1941,7 @@ spec:
           securityContext:
             privileged: true
             allowPrivilegeEscalation: true
-          image: "docker.io/openebs/lvm-driver:1.9.1"
+          image: "docker.io/openebs/lvm-driver:1.10.0"
           imagePullPolicy: IfNotPresent
           args:
             - "--nodeid=$(OPENEBS_NODE_ID)"
@@ -2005,7 +2005,7 @@ metadata:
   name: openebs-localpv-provisioner
   namespace: default
   labels:
-    chart: localpv-provisioner-4.5.1
+    chart: localpv-provisioner-4.6.0
     heritage: Helm
     app: localpv-provisioner
     release: openebs
@@ -2024,7 +2024,7 @@ spec:
   template:
     metadata:
       labels:
-        chart: localpv-provisioner-4.5.1
+        chart: localpv-provisioner-4.6.0
         heritage: Helm
         app: localpv-provisioner
         release: openebs
@@ -2039,7 +2039,7 @@ spec:
         {}
       containers:
       - name: openebs-localpv-provisioner
-        image: "docker.io/openebs/provisioner-localpv:4.5.1"
+        image: "docker.io/openebs/provisioner-localpv:4.6.0"
         imagePullPolicy: IfNotPresent
         resources:
           null
@@ -2085,8 +2085,10 @@ spec:
           value: "/var/openebs/local"
         - name: OPENEBS_IO_WORKER_THREADS
           value: "4"
+        - name: OPENEBS_IO_IMAGE_PULL_POLICY
+          value: "IfNotPresent"
         - name: OPENEBS_IO_HELPER_IMAGE
-          value: "docker.io/openebs/linux-utils:4.5.0"
+          value: "docker.io/openebs/linux-utils:4.6.0"
         - name: OPENEBS_IO_HELPER_POD_HOST_NETWORK
           value: "false"
         - name: OPENEBS_IO_INSTALLER_TYPE
@@ -2096,21 +2098,33 @@ spec:
         # LEADER_ELECTION_ENABLED is used to enable/disable leader election. By default
         # leader election is enabled.
         - name: LEADER_ELECTION_ENABLED
-          value: "true"        
-        # Process name used for matching is limited to the 15 characters
-        # present in the pgrep output.
-        # So fullname can't be used here with pgrep (>15 chars).A regular expression
-        # that matches the entire command name has to specified.
-        # Anchor `^` : matches any string that starts with `provisioner-loc`
-        # `.*`: matches any string that has `provisioner-loc` followed by zero or more char
+          value: "true"
+        # OPENEBS_IO_HEALTH_PROBE_BIND_ADDRESS is the address the health-probe
+        # HTTP server binds to. /healthz serves liveness, /readyz serves readiness.
+        - name: OPENEBS_IO_HEALTH_PROBE_BIND_ADDRESS
+          value: ":8081"        
+        
+        
+        ports:
+        - name: healthz
+          containerPort: 8081
+          protocol: TCP
         livenessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - test `pgrep -c "^provisioner-loc.*"` = 1
-          initialDelaySeconds: 30
-          periodSeconds: 60
+          httpGet:
+            path: /healthz
+            port: healthz
+          initialDelaySeconds: 1
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: healthz
+          initialDelaySeconds: 1
+          periodSeconds: 20
+          timeoutSeconds: 5
+          failureThreshold: 3
       tolerations: 
         - effect: NoExecute
           key: node.kubernetes.io/unreachable
@@ -2127,9 +2141,9 @@ kind: Deployment
 metadata:
   name: openebs-lvm-localpv-controller
   labels:
-    chart: lvm-localpv-1.9.1
+    chart: lvm-localpv-1.10.0
     heritage: Helm
-    openebs.io/version: "1.9.1"
+    openebs.io/version: "1.10.0"
     role: "openebs-lvm"
     app: "openebs-lvm-controller"
     release: openebs
@@ -2145,9 +2159,9 @@ spec:
   template:
     metadata:
       labels:
-        chart: lvm-localpv-1.9.1
+        chart: lvm-localpv-1.10.0
         heritage: Helm
-        openebs.io/version: "1.9.1"
+        openebs.io/version: "1.10.0"
         role: "openebs-lvm"
         app: "openebs-lvm-controller"
         release: openebs
@@ -2176,7 +2190,7 @@ spec:
           resources:
             {}
         - name: csi-snapshotter
-          image: "registry.k8s.io/sig-storage/csi-snapshotter:v7.0.0"
+          image: "registry.k8s.io/sig-storage/csi-snapshotter:v8.2.0"
           imagePullPolicy: IfNotPresent
           args:
             - "--csi-address=$(ADDRESS)"
@@ -2189,7 +2203,7 @@ spec:
           resources:
             {}
         - name: snapshot-controller
-          image: "registry.k8s.io/sig-storage/snapshot-controller:v7.0.0"
+          image: "registry.k8s.io/sig-storage/snapshot-controller:v8.2.0"
           args:
             - "--v=5"
           imagePullPolicy: IfNotPresent
@@ -2223,7 +2237,7 @@ spec:
           resources:
             {}
         - name: openebs-lvm-plugin
-          image: "docker.io/openebs/lvm-driver:1.9.1"
+          image: "docker.io/openebs/lvm-driver:1.10.0"
           imagePullPolicy: IfNotPresent
           env:
             - name: OPENEBS_CONTROLLER_DRIVER
