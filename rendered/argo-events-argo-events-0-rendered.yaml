@@ -7,7 +7,7 @@ metadata:
   name: argo-events-0-controller-manager
   namespace: "default"
   labels:
-    helm.sh/chart: argo-events-2.4.24
+    helm.sh/chart: argo-events-2.4.25
     app.kubernetes.io/name: argo-events-controller-manager
     app.kubernetes.io/instance: argo-events-0
     app.kubernetes.io/component: controller-manager
@@ -22,7 +22,7 @@ metadata:
   name: argo-events-0-events-webhook
   namespace: "default"
   labels:
-    helm.sh/chart: argo-events-2.4.24
+    helm.sh/chart: argo-events-2.4.25
     app.kubernetes.io/name: argo-events-events-webhook
     app.kubernetes.io/instance: argo-events-0
     app.kubernetes.io/component: events-webhook
@@ -36,7 +36,7 @@ metadata:
   name: argo-events-0-controller-manager
   namespace: "default"
   labels:
-    helm.sh/chart: argo-events-2.4.24
+    helm.sh/chart: argo-events-2.4.25
     app.kubernetes.io/name: argo-events-controller-manager
     app.kubernetes.io/instance: argo-events-0
     app.kubernetes.io/managed-by: Helm
@@ -70,6 +70,11 @@ data:
           discard: 0
         versions:
         - version: latest
+          natsImage: nats:2.10.29
+          metricsExporterImage: natsio/prometheus-nats-exporter:0.14.0
+          configReloaderImage: natsio/nats-server-config-reloader:0.14.0
+          startCommand: /nats-server
+        - version: 2.10.10
           natsImage: nats:2.10.10
           metricsExporterImage: natsio/prometheus-nats-exporter:0.14.0
           configReloaderImage: natsio/nats-server-config-reloader:0.14.0
@@ -109,8 +114,8 @@ data:
           metricsExporterImage: natsio/prometheus-nats-exporter:0.9.1
           configReloaderImage: natsio/nats-server-config-reloader:0.7.0
           startCommand: /nats-server
-        - version: 2.10.10
-          natsImage: nats:2.10.10
+        - version: 2.10.29
+          natsImage: nats:2.10.29
           metricsExporterImage: natsio/prometheus-nats-exporter:0.14.0
           configReloaderImage: natsio/nats-server-config-reloader:0.14.0
           startCommand: /nats-server
@@ -250,7 +255,7 @@ kind: ClusterRole
 metadata:
   name: argo-events-0-controller-manager
   labels:
-    helm.sh/chart: argo-events-2.4.24
+    helm.sh/chart: argo-events-2.4.25
     app.kubernetes.io/name: argo-events-controller-manager
     app.kubernetes.io/instance: argo-events-0
     app.kubernetes.io/component: controller-manager
@@ -344,7 +349,7 @@ kind: ClusterRoleBinding
 metadata:
   name: argo-events-0-controller-manager
   labels:
-    helm.sh/chart: argo-events-2.4.24
+    helm.sh/chart: argo-events-2.4.25
     app.kubernetes.io/name: argo-events-controller-manager
     app.kubernetes.io/instance: argo-events-0
     app.kubernetes.io/component: controller-manager
@@ -366,7 +371,7 @@ metadata:
   name: argo-events-0-controller-manager
   namespace: "default"
   labels:
-    helm.sh/chart: argo-events-2.4.24
+    helm.sh/chart: argo-events-2.4.25
     app.kubernetes.io/name: argo-events-controller-manager
     app.kubernetes.io/instance: argo-events-0
     app.kubernetes.io/component: controller-manager
@@ -385,9 +390,9 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 67b95386550d05fcb0e77c5f0d5c213aa2a60d2afbd6b347b4b5042ebbe4c78f
+        checksum/config: 4b7e88c24ee7c243d5f44a0d6a554714583549e76a2a84e9e436338b752c9c55
       labels:
-        helm.sh/chart: argo-events-2.4.24
+        helm.sh/chart: argo-events-2.4.25
         app.kubernetes.io/name: argo-events-controller-manager
         app.kubernetes.io/instance: argo-events-0
         app.kubernetes.io/component: controller-manager

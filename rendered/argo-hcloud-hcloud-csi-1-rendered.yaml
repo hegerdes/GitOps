@@ -7,7 +7,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: hcloud-csi
-    helm.sh/chart: hcloud-csi-2.22.1
+    helm.sh/chart: hcloud-csi-2.23.0
     app.kubernetes.io/instance: hcloud-csi-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
@@ -32,7 +32,7 @@ metadata:
   name: hcloud-csi-1-controller
   labels:
     app.kubernetes.io/name: hcloud-csi
-    helm.sh/chart: hcloud-csi-2.22.1
+    helm.sh/chart: hcloud-csi-2.23.0
     app.kubernetes.io/instance: hcloud-csi-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
@@ -94,7 +94,7 @@ metadata:
   name: hcloud-csi-1-controller
   labels:
     app.kubernetes.io/name: hcloud-csi
-    helm.sh/chart: hcloud-csi-2.22.1
+    helm.sh/chart: hcloud-csi-2.23.0
     app.kubernetes.io/instance: hcloud-csi-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
@@ -115,7 +115,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: hcloud-csi
-    helm.sh/chart: hcloud-csi-2.22.1
+    helm.sh/chart: hcloud-csi-2.23.0
     app.kubernetes.io/instance: hcloud-csi-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
@@ -136,7 +136,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: hcloud-csi
-    helm.sh/chart: hcloud-csi-2.22.1
+    helm.sh/chart: hcloud-csi-2.23.0
     app.kubernetes.io/instance: hcloud-csi-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: node
@@ -157,7 +157,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: hcloud-csi
-    helm.sh/chart: hcloud-csi-2.22.1
+    helm.sh/chart: hcloud-csi-2.23.0
     app.kubernetes.io/instance: hcloud-csi-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: node
@@ -174,7 +174,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: hcloud-csi
-        helm.sh/chart: hcloud-csi-2.22.1
+        helm.sh/chart: hcloud-csi-2.23.0
         app.kubernetes.io/instance: hcloud-csi-1
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: node
@@ -227,7 +227,7 @@ spec:
             limits: {}
             requests: {}
         - name: hcloud-csi-driver
-          image: docker.io/hetznercloud/hcloud-csi-driver:v2.22.1 # x-releaser-pleaser-version
+          image: docker.io/hetznercloud/hcloud-csi-driver:v2.23.0 # x-releaser-pleaser-version
           imagePullPolicy: IfNotPresent
           args:
             - -node
@@ -292,7 +292,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: hcloud-csi
-    helm.sh/chart: hcloud-csi-2.22.1
+    helm.sh/chart: hcloud-csi-2.23.0
     app.kubernetes.io/instance: hcloud-csi-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
@@ -310,7 +310,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: hcloud-csi
-        helm.sh/chart: hcloud-csi-2.22.1
+        helm.sh/chart: hcloud-csi-2.23.0
         app.kubernetes.io/instance: hcloud-csi-1
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: controller
@@ -332,7 +332,7 @@ spec:
       initContainers:
       containers:
         - name: hcloud-csi-driver
-          image: docker.io/hetznercloud/hcloud-csi-driver:v2.22.1 # x-releaser-pleaser-version
+          image: docker.io/hetznercloud/hcloud-csi-driver:v2.23.0 # x-releaser-pleaser-version
           imagePullPolicy: IfNotPresent
           args:
             - -controller

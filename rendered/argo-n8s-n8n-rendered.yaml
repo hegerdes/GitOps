@@ -6,11 +6,26 @@ metadata:
   name: n8n
   namespace: default
   labels:
-    helm.sh/chart: n8n-2.1.0
+    helm.sh/chart: n8n-2.1.1
     app.kubernetes.io/name: n8n
     app.kubernetes.io/instance: n8n
-    app.kubernetes.io/version: "2.35.7"
+    app.kubernetes.io/version: "2.36.8"
     app.kubernetes.io/managed-by: Helm
+---
+# Source: n8n/templates/configmap.worker.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: n8n-worker-config
+  namespace: default
+  labels:
+    helm.sh/chart: n8n-2.1.1
+    app.kubernetes.io/name: n8n
+    app.kubernetes.io/instance: n8n
+    app.kubernetes.io/version: "2.36.8"
+    app.kubernetes.io/managed-by: Helm
+data:
+  QUEUE_HEALTH_CHECK_ACTIVE: "true"
 ---
 # Source: n8n/templates/service.yaml
 apiVersion: v1
@@ -19,10 +34,10 @@ metadata:
   name: n8n
   namespace: default
   labels:
-    helm.sh/chart: n8n-2.1.0
+    helm.sh/chart: n8n-2.1.1
     app.kubernetes.io/name: n8n
     app.kubernetes.io/instance: n8n
-    app.kubernetes.io/version: "2.35.7"
+    app.kubernetes.io/version: "2.36.8"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -43,10 +58,10 @@ metadata:
   name: n8n
   namespace: default
   labels:
-    helm.sh/chart: n8n-2.1.0
+    helm.sh/chart: n8n-2.1.1
     app.kubernetes.io/name: n8n
     app.kubernetes.io/instance: n8n
-    app.kubernetes.io/version: "2.35.7"
+    app.kubernetes.io/version: "2.36.8"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -60,7 +75,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 05f48fa1dac3a71e714ba907c34a63fa5074c7da4e372ee69afe0eee5ce4cd9c
+        checksum/config: 4cdf5aebefe27c1b8e948dbca8cf1c48614daf2b04e877b799e470e345682166
       labels:
         app.kubernetes.io/name: n8n
         app.kubernetes.io/instance: n8n
@@ -76,7 +91,7 @@ spec:
         - name: n8n
           securityContext:
             {}
-          image: "n8nio/n8n:2.35.7"
+          image: "n8nio/n8n:2.36.8"
           imagePullPolicy: IfNotPresent
           envFrom:
           env: []
@@ -86,13 +101,19 @@ spec:
             - name: http
               containerPort: 5678
               protocol: TCP
+          startupProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /healthz
               port: http
           readinessProbe:
             httpGet:
-              path: /healthz
+              path: /healthz/readiness
               port: http
           resources:
             {}
@@ -110,10 +131,10 @@ kind: Pod
 metadata:
   name: "n8n-test-connection"
   labels:
-    helm.sh/chart: n8n-2.1.0
+    helm.sh/chart: n8n-2.1.1
     app.kubernetes.io/name: n8n
     app.kubernetes.io/instance: n8n
-    app.kubernetes.io/version: "2.35.7"
+    app.kubernetes.io/version: "2.36.8"
     app.kubernetes.io/managed-by: Helm
   annotations:
     "helm.sh/hook": test
