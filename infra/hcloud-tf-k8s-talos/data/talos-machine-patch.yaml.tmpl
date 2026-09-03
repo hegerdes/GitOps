@@ -1,3 +1,21 @@
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: STATE
+encryption:
+  provider: luks2
+  keys:
+    - nodeID: {}
+      slot: 0
+---
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: EPHEMERAL
+encryption:
+  provider: luks2
+  keys:
+    - nodeID: {}
+      slot: 0
+---
 version: v1alpha1
 machine:
   kubelet:
@@ -48,15 +66,6 @@ machine:
     net.ipv4.icmp_ignore_bogus_error_responses: 1
     net.ipv4.tcp_rfc1337: 1
     net.ipv4.ip_local_port_range: 10240 65535
-
-#  registries:
-#    mirrors:
-#      ghcr.io:
-#        endpoints:
-#          - https://ghcr.mirror.123preview.app
-#      registry.k8s.io:
-#        endpoints:
-#          - https://k8s.mirror.123preview.app
 
   network:
     kubespan:
@@ -135,7 +144,7 @@ cluster:
   inlineManifests: []
   extraManifests:
     # CRDs
-    - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
+    - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.1/standard-install.yaml
     - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/heads/main/charts/kube-prometheus-stack/charts/crds/crds/crd-podmonitors.yaml
     - https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/heads/main/charts/kube-prometheus-stack/charts/crds/crds/crd-servicemonitors.yaml
     - https://raw.githubusercontent.com/external-secrets/external-secrets/refs/heads/main/deploy/crds/bundle.yaml
