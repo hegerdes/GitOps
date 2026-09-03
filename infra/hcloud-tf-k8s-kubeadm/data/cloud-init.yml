@@ -51,7 +51,6 @@ packages:
   - gnupg
   - lsb-release
   - ca-certificates
-  - curl
   - pigz # fast decompress for container image
   - isal # even faster decompress for container image
   - cryptsetup # support LUKS disk encryptio
