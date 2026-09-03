@@ -119,22 +119,4 @@ spec:
       name: kube-downstream-api-proxy-tls
   data:
     - match:
-        secretKey: tls.key
-        remoteRef:
-          remoteKey: kube-downstream-api-proxy-tls
-          property: tls.key
-    - match:
-        secretKey: tls.crt
-        remoteRef:
-          remoteKey: kube-downstream-api-proxy-tls
-          property: tls.crt
-    - match:
-        secretKey: ca.crt
-        remoteRef:
-          remoteKey: kube-downstream-api-proxy-tls
-          property: ca.crt
-    - match:
-        secretKey: tls-combined.pem
-        remoteRef:
-          remoteKey: kube-downstream-api-proxy-tls
-          property: tls-combined.pem
+        remoteKey: kube-downstream-api-proxy-tls
