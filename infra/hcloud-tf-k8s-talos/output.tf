@@ -1,7 +1,7 @@
 # ################# Output #################
 resource "local_sensitive_file" "machineconf" {
-  for_each = data.talos_machine_configuration.this
-  content  = each.value.machine_configuration
+  for_each = local.node_pools
+  content  = each.value.user_data
   filename = "out/machine_configuration-${each.key}.yaml"
 }
 resource "local_sensitive_file" "talosclientconf" {
