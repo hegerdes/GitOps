@@ -1,57 +1,61 @@
-cluster:
-  inlineManifests:
-    - name: external-secrets-ns
-      contents: |-
-        apiVersion: v1
-        kind: Namespace
-        metadata:
-          name: external-secrets
-    - name: monitoring-ns
-      contents: |-
-        apiVersion: v1
-        kind: Namespace
-        metadata:
-          labels:
-            pod-security.kubernetes.io/enforce: privileged
-          name: monitoring
-    - name: openebs-ns
-      contents: |-
-        apiVersion: v1
-        kind: Namespace
-        metadata:
-          labels:
-            pod-security.kubernetes.io/enforce: privileged
-          name: openebs
-    - name: argo-app-of-apps-system
-      contents: |-
-        apiVersion: argoproj.io/v1alpha1
-        kind: Application
-        metadata:
-          name: argocd-cluster-apps
-          namespace: argocd
-        spec:
-          project: default
-          source:
-            repoURL: https://github.com/hegerdes/GitOps.git
-            targetRevision: HEAD
-            path: k8s-cluster-hcloud-critical
-            directory:
-              recurse: false
-          destination:
-            server: https://kubernetes.default.svc
-            namespace: argocd
-          syncPolicy:
-            automated:
-              prune: false
-              selfHeal: true
-          retry:
-            limit:
-            backoff:
-              duration: 5s
-              factor: 5
-              maxDuration: 5m
-
-machine:
-  nodeLabels:
-    node.kubernetes.io/exclude-from-external-load-balancers:
-      $patch: delete
+apiVersion: v1alpha1
+kind: KubeInlineManifestConfig
+name: openebs-ns
+manifest: |-
+  apiVersion: v1
+  kind: Namespace
+  metadata:
+    labels:
+      pod-security.kubernetes.io/enforce: privileged
+    name: openebs
+---
+apiVersion: v1alpha1
+kind: KubeInlineManifestConfig
+name: monitoring-ns
+manifest: |-
+  apiVersion: v1
+  kind: Namespace
+  metadata:
+    labels:
+      pod-security.kubernetes.io/enforce: privileged
+    name: monitoring
+---
+apiVersion: v1alpha1
+kind: KubeInlineManifestConfig
+name: eso-ns
+manifest: |-
+  apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: external-secrets
+---
+apiVersion: v1alpha1
+kind: KubeInlineManifestConfig
+name: argo-app-of-apps
+manifest: |-
+  apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    name: argocd-cluster-apps
+    namespace: argocd
+  spec:
+    project: default
+    source:
+      repoURL: https://github.com/hegerdes/GitOps.git
+      targetRevision: HEAD
+      path: k8s-cluster-hcloud-critical
+      directory:
+        recurse: false
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: argocd
+    syncPolicy:
+      automated:
+        prune: false
+        selfHeal: true
+    retry:
+      limit:
+      backoff:
+        duration: 5s
+        factor: 5
+        maxDuration: 5m
