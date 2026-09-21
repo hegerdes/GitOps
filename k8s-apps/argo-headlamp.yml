@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: headlamp
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/background
+spec:
+  project: default
+  source:
+    chart: headlamp
+    repoURL: https://kubernetes-sigs.github.io/headlamp/
+    targetRevision: 0.*
+    helm:
+      releaseName: headlamp
+      valuesObject:
+        config:
+          inCluster: true
+          inClusterContextName: "main"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  info:
+    - name: Chart-Info
+      value: https://artifacthub.io/packages/helm/headlamp/headlamp
+    - name: Code-Info
+      value: https://github.com/kubernetes-sigs/headlamp
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
