@@ -7,7 +7,7 @@ metadata:
   name: argo-events-0-controller-manager
   namespace: "default"
   labels:
-    helm.sh/chart: argo-events-2.4.25
+    helm.sh/chart: argo-events-2.4.27
     app.kubernetes.io/name: argo-events-controller-manager
     app.kubernetes.io/instance: argo-events-0
     app.kubernetes.io/component: controller-manager
@@ -22,7 +22,7 @@ metadata:
   name: argo-events-0-events-webhook
   namespace: "default"
   labels:
-    helm.sh/chart: argo-events-2.4.25
+    helm.sh/chart: argo-events-2.4.27
     app.kubernetes.io/name: argo-events-events-webhook
     app.kubernetes.io/instance: argo-events-0
     app.kubernetes.io/component: events-webhook
@@ -36,7 +36,7 @@ metadata:
   name: argo-events-0-controller-manager
   namespace: "default"
   labels:
-    helm.sh/chart: argo-events-2.4.25
+    helm.sh/chart: argo-events-2.4.27
     app.kubernetes.io/name: argo-events-controller-manager
     app.kubernetes.io/instance: argo-events-0
     app.kubernetes.io/managed-by: Helm
@@ -255,7 +255,7 @@ kind: ClusterRole
 metadata:
   name: argo-events-0-controller-manager
   labels:
-    helm.sh/chart: argo-events-2.4.25
+    helm.sh/chart: argo-events-2.4.27
     app.kubernetes.io/name: argo-events-controller-manager
     app.kubernetes.io/instance: argo-events-0
     app.kubernetes.io/component: controller-manager
@@ -349,7 +349,7 @@ kind: ClusterRoleBinding
 metadata:
   name: argo-events-0-controller-manager
   labels:
-    helm.sh/chart: argo-events-2.4.25
+    helm.sh/chart: argo-events-2.4.27
     app.kubernetes.io/name: argo-events-controller-manager
     app.kubernetes.io/instance: argo-events-0
     app.kubernetes.io/component: controller-manager
@@ -371,7 +371,7 @@ metadata:
   name: argo-events-0-controller-manager
   namespace: "default"
   labels:
-    helm.sh/chart: argo-events-2.4.25
+    helm.sh/chart: argo-events-2.4.27
     app.kubernetes.io/name: argo-events-controller-manager
     app.kubernetes.io/instance: argo-events-0
     app.kubernetes.io/component: controller-manager
@@ -390,9 +390,9 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 4b7e88c24ee7c243d5f44a0d6a554714583549e76a2a84e9e436338b752c9c55
+        checksum/config: 24a571d53e6cc58a08973bd0cb013a3a003f3997450ceb4060201378b33763b4
       labels:
-        helm.sh/chart: argo-events-2.4.25
+        helm.sh/chart: argo-events-2.4.27
         app.kubernetes.io/name: argo-events-controller-manager
         app.kubernetes.io/instance: argo-events-0
         app.kubernetes.io/component: controller-manager

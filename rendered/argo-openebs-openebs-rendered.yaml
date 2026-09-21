@@ -38,9 +38,9 @@ metadata:
   name: openebs-lvm-controller-sa
   namespace: default
   labels:
-    chart: lvm-localpv-1.10.0
+    chart: lvm-localpv-1.10.1
     heritage: Helm
-    openebs.io/version: "1.10.0"
+    openebs.io/version: "1.10.1"
     role: "openebs-lvm"
     app: "openebs-lvm-controller"
     release: openebs
@@ -54,9 +54,9 @@ metadata:
   name: openebs-lvm-node-sa
   namespace: default
   labels:
-    chart: lvm-localpv-1.10.0
+    chart: lvm-localpv-1.10.1
     heritage: Helm
-    openebs.io/version: "1.10.0"
+    openebs.io/version: "1.10.1"
     role: "openebs-lvm"
     name: "openebs-lvm-node"
     release: openebs
@@ -1639,9 +1639,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: openebs-lvm-provisioner-role
   labels:
-    chart: lvm-localpv-1.10.0
+    chart: lvm-localpv-1.10.1
     heritage: Helm
-    openebs.io/version: "1.10.0"
+    openebs.io/version: "1.10.1"
     role: "openebs-lvm"
     app: "openebs-lvm-controller"
     release: openebs
@@ -1688,9 +1688,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: openebs-lvm-snapshotter-role
   labels:
-    chart: lvm-localpv-1.10.0
+    chart: lvm-localpv-1.10.1
     heritage: Helm
-    openebs.io/version: "1.10.0"
+    openebs.io/version: "1.10.1"
     role: "openebs-lvm"
     app: "openebs-lvm-controller"
     release: openebs
@@ -1737,9 +1737,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: openebs-lvm-driver-registrar-role
   labels:
-    chart: lvm-localpv-1.10.0
+    chart: lvm-localpv-1.10.1
     heritage: Helm
-    openebs.io/version: "1.10.0"
+    openebs.io/version: "1.10.1"
     role: "openebs-lvm"
     name: "openebs-lvm-node"
     release: openebs
@@ -1782,9 +1782,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: openebs-lvm-provisioner-binding
   labels:
-    chart: lvm-localpv-1.10.0
+    chart: lvm-localpv-1.10.1
     heritage: Helm
-    openebs.io/version: "1.10.0"
+    openebs.io/version: "1.10.1"
     role: "openebs-lvm"
     app: "openebs-lvm-controller"
     release: openebs
@@ -1805,9 +1805,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: openebs-lvm-snapshotter-binding
   labels:
-    chart: lvm-localpv-1.10.0
+    chart: lvm-localpv-1.10.1
     heritage: Helm
-    openebs.io/version: "1.10.0"
+    openebs.io/version: "1.10.1"
     role: "openebs-lvm"
     app: "openebs-lvm-controller"
     release: openebs
@@ -1828,9 +1828,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: openebs-lvm-driver-registrar-binding
   labels:
-    chart: lvm-localpv-1.10.0
+    chart: lvm-localpv-1.10.1
     heritage: Helm
-    openebs.io/version: "1.10.0"
+    openebs.io/version: "1.10.1"
     role: "openebs-lvm"
     name: "openebs-lvm-node"
     release: openebs
@@ -1850,9 +1850,9 @@ kind: Service
 metadata:
   name: openebs-lvm-localpv-node-service
   labels:
-    chart: lvm-localpv-1.10.0
+    chart: lvm-localpv-1.10.1
     heritage: Helm
-    openebs.io/version: "1.10.0"
+    openebs.io/version: "1.10.1"
     role: "openebs-lvm"
     name: "openebs-lvm-node"
     release: openebs
@@ -1873,9 +1873,9 @@ apiVersion: apps/v1
 metadata:
   name: openebs-lvm-localpv-node
   labels:
-    chart: lvm-localpv-1.10.0
+    chart: lvm-localpv-1.10.1
     heritage: Helm
-    openebs.io/version: "1.10.0"
+    openebs.io/version: "1.10.1"
     role: "openebs-lvm"
     name: "openebs-lvm-node"
     release: openebs
@@ -1892,9 +1892,9 @@ spec:
   template:
     metadata:
       labels:
-        chart: lvm-localpv-1.10.0
+        chart: lvm-localpv-1.10.1
         heritage: Helm
-        openebs.io/version: "1.10.0"
+        openebs.io/version: "1.10.1"
         role: "openebs-lvm"
         name: "openebs-lvm-node"
         release: openebs
@@ -1941,7 +1941,7 @@ spec:
           securityContext:
             privileged: true
             allowPrivilegeEscalation: true
-          image: "docker.io/openebs/lvm-driver:1.10.0"
+          image: "docker.io/openebs/lvm-driver:1.10.1"
           imagePullPolicy: IfNotPresent
           args:
             - "--nodeid=$(OPENEBS_NODE_ID)"
@@ -2141,9 +2141,9 @@ kind: Deployment
 metadata:
   name: openebs-lvm-localpv-controller
   labels:
-    chart: lvm-localpv-1.10.0
+    chart: lvm-localpv-1.10.1
     heritage: Helm
-    openebs.io/version: "1.10.0"
+    openebs.io/version: "1.10.1"
     role: "openebs-lvm"
     app: "openebs-lvm-controller"
     release: openebs
@@ -2159,9 +2159,9 @@ spec:
   template:
     metadata:
       labels:
-        chart: lvm-localpv-1.10.0
+        chart: lvm-localpv-1.10.1
         heritage: Helm
-        openebs.io/version: "1.10.0"
+        openebs.io/version: "1.10.1"
         role: "openebs-lvm"
         app: "openebs-lvm-controller"
         release: openebs
@@ -2237,7 +2237,7 @@ spec:
           resources:
             {}
         - name: openebs-lvm-plugin
-          image: "docker.io/openebs/lvm-driver:1.10.0"
+          image: "docker.io/openebs/lvm-driver:1.10.1"
           imagePullPolicy: IfNotPresent
           env:
             - name: OPENEBS_CONTROLLER_DRIVER

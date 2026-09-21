@@ -6,10 +6,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.6.3
+    helm.sh/chart: alloy-operator-0.7.1
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.11.1"
+    app.kubernetes.io/version: "1.12.1"
     app.kubernetes.io/managed-by: Helm
 automountServiceAccountToken: true
 ---
@@ -19,7 +19,7 @@ kind: ServiceAccount
 automountServiceAccountToken: true
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-8.4.0
+    helm.sh/chart: kube-state-metrics-8.4.2
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -37,7 +37,7 @@ metadata:
   name: grafana-monitoring-0-node-exporter
   namespace: default
   labels:
-    helm.sh/chart: node-exporter-4.56.1
+    helm.sh/chart: node-exporter-4.56.3
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: node-exporter
@@ -54,7 +54,7 @@ metadata:
   name: grafana-monitoring-0-opencost
   namespace: default
   labels:
-    helm.sh/chart: opencost-2.5.29
+    helm.sh/chart: opencost-2.5.30
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
     app.kubernetes.io/version: "1.121.1"
@@ -821,7 +821,11 @@ data:
         scrape {
           default_scrape_interval = "30s"
           default_scrape_timeout = "10s"
+          scrape_classic_histograms = false
           scrape_native_histograms = false
+          convert_classic_histograms_to_nhcb = false
+          native_histogram_bucket_limit = 0
+          native_histogram_min_bucket_factor = 0
         }
         forward_to = argument.metrics_destinations.value
       } // prometheus.operator.podmonitors "pod_monitors"
@@ -834,7 +838,11 @@ data:
         scrape {
           default_scrape_interval = "30s"
           default_scrape_timeout = "10s"
+          scrape_classic_histograms = false
           scrape_native_histograms = false
+          convert_classic_histograms_to_nhcb = false
+          native_histogram_bucket_limit = 0
+          native_histogram_min_bucket_factor = 0
         }
         forward_to = argument.metrics_destinations.value
       } // prometheus.operator.probes "probes"
@@ -848,7 +856,11 @@ data:
         scrape {
           default_scrape_interval = "30s"
           default_scrape_timeout = "10s"
+          scrape_classic_histograms = false
           scrape_native_histograms = false
+          convert_classic_histograms_to_nhcb = false
+          native_histogram_bucket_limit = 0
+          native_histogram_min_bucket_factor = 0
         }
         forward_to = argument.metrics_destinations.value
       } // prometheus.operator.servicemonitors "service_monitors"
@@ -1670,7 +1682,7 @@ data:
   self-reporting-metric.prom: |+
     # HELP grafana_kubernetes_monitoring_build_info A metric to report the version of the Kubernetes Monitoring Helm chart
     # TYPE grafana_kubernetes_monitoring_build_info gauge
-    grafana_kubernetes_monitoring_build_info{version="4.5.0", namespace="default"} 1
+    grafana_kubernetes_monitoring_build_info{version="4.5.2", namespace="default"} 1
     # HELP grafana_kubernetes_monitoring_feature_info A metric to report the enabled features of the Kubernetes Monitoring Helm chart
     # TYPE grafana_kubernetes_monitoring_feature_info gauge
     grafana_kubernetes_monitoring_feature_info{feature="applicationObservability", protocols="otlpgrpc,otlphttp,jaegergrpc,zipkin", version="1.0.0"} 1
@@ -1694,10 +1706,10 @@ kind: ClusterRole
 metadata:
   name: grafana-monitoring-0-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: alloy-operator-0.6.3
+    helm.sh/chart: alloy-operator-0.7.1
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.11.1"
+    app.kubernetes.io/version: "1.12.1"
     app.kubernetes.io/managed-by: Helm
 rules:
   - apiGroups:
@@ -1757,7 +1769,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-8.4.0
+    helm.sh/chart: kube-state-metrics-8.4.2
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -1916,7 +1928,7 @@ kind: ClusterRole
 metadata:
   name: grafana-monitoring-0-opencost
   labels:
-    helm.sh/chart: opencost-2.5.29
+    helm.sh/chart: opencost-2.5.30
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
     app.kubernetes.io/version: "1.121.1"
@@ -2001,10 +2013,10 @@ kind: ClusterRoleBinding
 metadata:
   name: grafana-monitoring-0-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: alloy-operator-0.6.3
+    helm.sh/chart: alloy-operator-0.7.1
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.11.1"
+    app.kubernetes.io/version: "1.12.1"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -2021,10 +2033,10 @@ kind: ClusterRoleBinding
 metadata:
   name: grafana-monitoring-0-alloy-operator
   labels:
-    helm.sh/chart: alloy-operator-0.6.3
+    helm.sh/chart: alloy-operator-0.7.1
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.11.1"
+    app.kubernetes.io/version: "1.12.1"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -2040,7 +2052,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-8.4.0
+    helm.sh/chart: kube-state-metrics-8.4.2
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -2064,7 +2076,7 @@ kind: ClusterRoleBinding
 metadata:
   name: grafana-monitoring-0-opencost
   labels:
-    helm.sh/chart: opencost-2.5.29
+    helm.sh/chart: opencost-2.5.30
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
     app.kubernetes.io/version: "1.121.1"
@@ -2086,10 +2098,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator-leader-election-role
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.6.3
+    helm.sh/chart: alloy-operator-0.7.1
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.11.1"
+    app.kubernetes.io/version: "1.12.1"
     app.kubernetes.io/managed-by: Helm
 rules:
   - apiGroups:
@@ -2131,10 +2143,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator-leader-election-rolebinding
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.6.3
+    helm.sh/chart: alloy-operator-0.7.1
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.11.1"
+    app.kubernetes.io/version: "1.12.1"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -2152,10 +2164,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.6.3
+    helm.sh/chart: alloy-operator-0.7.1
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.11.1"
+    app.kubernetes.io/version: "1.12.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -2179,7 +2191,7 @@ metadata:
   name: grafana-monitoring-0-kube-state-metrics
   namespace: default
   labels:    
-    helm.sh/chart: kube-state-metrics-8.4.0
+    helm.sh/chart: kube-state-metrics-8.4.2
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -2206,7 +2218,7 @@ metadata:
   name: grafana-monitoring-0-node-exporter
   namespace: default
   labels:
-    helm.sh/chart: node-exporter-4.56.1
+    helm.sh/chart: node-exporter-4.56.3
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: node-exporter
@@ -2234,7 +2246,7 @@ metadata:
   name: grafana-monitoring-0-opencost
   namespace: default
   labels:
-    helm.sh/chart: opencost-2.5.29
+    helm.sh/chart: opencost-2.5.30
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
     app.kubernetes.io/version: "1.121.1"
@@ -2257,7 +2269,7 @@ metadata:
   name: grafana-monitoring-0-node-exporter
   namespace: default
   labels:
-    helm.sh/chart: node-exporter-4.56.1
+    helm.sh/chart: node-exporter-4.56.3
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: node-exporter
@@ -2282,7 +2294,7 @@ spec:
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
         k8s.grafana.com/logs.job: integrations/node_exporter
       labels:
-        helm.sh/chart: node-exporter-4.56.1
+        helm.sh/chart: node-exporter-4.56.3
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: metrics
         app.kubernetes.io/part-of: node-exporter
@@ -2386,10 +2398,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.6.3
+    helm.sh/chart: alloy-operator-0.7.1
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.11.1"
+    app.kubernetes.io/version: "1.12.1"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -2400,10 +2412,10 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: alloy-operator-0.6.3
+        helm.sh/chart: alloy-operator-0.7.1
         app.kubernetes.io/name: alloy-operator
         app.kubernetes.io/instance: grafana-monitoring-0
-        app.kubernetes.io/version: "1.11.1"
+        app.kubernetes.io/version: "1.12.1"
         app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: grafana-monitoring-0-alloy-operator
@@ -2411,7 +2423,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: alloy-operator
-          image: "ghcr.io/grafana/alloy-operator:1.11.1"
+          image: "ghcr.io/grafana/alloy-operator:1.12.1"
           imagePullPolicy: IfNotPresent
           args:
             - --health-probe-bind-address=:8081
@@ -2457,7 +2469,7 @@ metadata:
   name: grafana-monitoring-0-kube-state-metrics
   namespace: default
   labels:    
-    helm.sh/chart: kube-state-metrics-8.4.0
+    helm.sh/chart: kube-state-metrics-8.4.2
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -2477,7 +2489,7 @@ spec:
   template:
     metadata:
       labels:        
-        helm.sh/chart: kube-state-metrics-8.4.0
+        helm.sh/chart: kube-state-metrics-8.4.2
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: metrics
         app.kubernetes.io/part-of: kube-state-metrics
@@ -2551,7 +2563,7 @@ metadata:
   name: grafana-monitoring-0-opencost
   namespace: default
   labels:
-    helm.sh/chart: opencost-2.5.29
+    helm.sh/chart: opencost-2.5.30
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
     app.kubernetes.io/version: "1.121.1"
@@ -3005,7 +3017,7 @@ metadata:
   labels:
     app.kubernetes.io/name: grafana-monitoring-0-k8s-monitoring-add-finalizer
     app.kubernetes.io/instance: grafana-monitoring-0
-    helm.sh/chart: k8s-monitoring-4.5.0
+    helm.sh/chart: k8s-monitoring-4.5.2
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "15"
@@ -3058,7 +3070,7 @@ metadata:
   labels:
     app.kubernetes.io/name: grafana-monitoring-0-k8s-monitoring-remove-alloy-and-finalizer
     app.kubernetes.io/instance: grafana-monitoring-0
-    helm.sh/chart: k8s-monitoring-4.5.0
+    helm.sh/chart: k8s-monitoring-4.5.2
   annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
