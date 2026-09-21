@@ -47,12 +47,30 @@ locals {
   talos_endpoint   = local.talos_apply_use_pvt_ip ? local.cp_public_endpoint : null
   talos_cp_node_ip = local.talos_apply_use_pvt_ip ? try(local.private_cp_ips[0], "") : try([for pool in module.node_pools : pool.vm_ips[0]][0], "")
 
+  k8s = {
+    k8s_bootstrap_token         = talos_machine_secrets.this.machine_secrets.secrets.bootstrap_token
+    k8s_ca_cert                 = indent(4, trimspace(base64decode(talos_machine_secrets.this.machine_secrets.certs.k8s.cert)))
+    k8s_ca_key                  = indent(4, trimspace(base64decode(talos_machine_secrets.this.machine_secrets.certs.k8s.key)))
+    k8s_ca_aggregator_cert      = indent(4, trimspace(base64decode(talos_machine_secrets.this.machine_secrets.certs.k8s_aggregator.cert)))
+    k8s_ca_aggregator_key       = indent(4, trimspace(base64decode(talos_machine_secrets.this.machine_secrets.certs.k8s_aggregator.key)))
+    etcd_ca_cert                = talos_machine_secrets.this.machine_secrets.certs.etcd.cert
+    etcd_ca_key                 = talos_machine_secrets.this.machine_secrets.certs.etcd.key
+    service_account_issuer_key  = indent(4, trimspace(base64decode(talos_machine_secrets.this.machine_secrets.certs.k8s_serviceaccount.key)))
+    secretbox_encryption_secret = talos_machine_secrets.this.machine_secrets.secrets.secretbox_encryption_secret
+    extraSANs                   = local.certSANs
+  }
+  talos = {
+    cluster_id           = talos_machine_secrets.this.machine_secrets.cluster.id
+    cluster_secret       = talos_machine_secrets.this.machine_secrets.cluster.secret
+    machine_secret_certs = talos_machine_secrets.this.machine_secrets.certs
+    trustd_token         = talos_machine_secrets.this.machine_secrets.trustdinfo.token
+  }
+
   # Node Pools
   node_pools = { for index, pool in var.node_pools :
     pool.name => merge(
       pool, {
-        user_data            = try(data.talos_machine_configuration.this[pool.name].machine_configuration, "")
-        machine_type         = try(data.talos_machine_configuration.this[pool.name].machine_type)
+        machine_type         = pool.tags.role
         ssh_keys             = concat([for key in hcloud_ssh_key.default : key.name], [hcloud_ssh_key.dummy.id])
         network_name         = hcloud_network.k8s_network.name
         location             = try(lower(pool.location), var.location)
@@ -62,12 +80,33 @@ locals {
           image = pool.image,
           location : try(lower(pool.location), var.location)
         })
+        user_data = join("---\n", [for patch in pool.machine_patches :
+          templatefile("${path.module}/${patch}", {
+            cluster_version                = var.cluster_version
+            talos                          = local.talos
+            machineCertSANs                = local.certSANs,
+            k8s                            = local.k8s
+            cluster_endpoint               = local.cp_public_endpoint
+            controlplane_endpoint_internal = local.cp_internal_endpoint,
+            controlplane_internal_ip       = local.cp_internel_lb_ip
+            extraArgsApiServer             = var.api_server_extra_args
+            subnets                        = local.subnets,
+            ipv6_enabled                   = local.ipv6_enabled
+            nodeRole                       = pool.tags.role
+            external_secret_client_secret  = data.azurerm_key_vault_secret.external_secrets_oauth_client_secret.value
+            extra_ca                       = data.azurerm_key_vault_secret.external_secrets_hegerdes_ca_cert.value
+            nodeLabels = {
+              "pool"              = pool.name,
+              "openebs.io/engine" = "mayastor"
+            }
+          })
+        ])
       }
     )
   }
 
   # Autoscaler
-  autoscale_node_conf = compact([for k, v in data.talos_machine_configuration.this : v.machine_type == "worker" ? v.machine_configuration : null])[0]
+  autoscale_node_conf = compact([for k, v in local.node_pools : v.machine_type == "worker" ? v.user_data : null])[0]
   cluster-config = base64encode(jsonencode(
     {
       imagesForArch = {
@@ -94,37 +133,6 @@ locals {
 
 # ################# Talos #################
 resource "talos_machine_secrets" "this" {}
-
-# create the worker/controlplane config and apply patches
-data "talos_machine_configuration" "this" {
-  for_each = { for index, pool in var.node_pools : pool.name => pool }
-
-  cluster_name       = local.cluster_name
-  cluster_endpoint   = "https://${local.cp_internal_endpoint}:6443"
-  machine_type       = each.value.tags.role
-  machine_secrets    = talos_machine_secrets.this.machine_secrets
-  kubernetes_version = var.cluster_version
-  talos_version      = var.talos_version
-  docs               = false
-  config_patches = [for patch in each.value.machine_patches :
-    templatefile("${path.module}/${patch}", {
-      machineCertSANs                = local.certSANs,
-      apiServerCertSANs              = local.certSANs,
-      subnets                        = local.subnets,
-      controlplane_endpoint_internal = local.cp_internal_endpoint,
-      controlplane_internal_ip       = local.cp_internel_lb_ip
-      ipv6_enabled                   = local.ipv6_enabled
-      extraArgsApiServer             = var.api_server_extra_args
-      nodeRole                       = each.value.tags.role
-      external_secret_client_secret  = data.azurerm_key_vault_secret.external_secrets_oauth_client_secret.value
-      extra_ca                       = data.azurerm_key_vault_secret.external_secrets_hegerdes_ca_cert.value
-      nodeLabels = {
-        "pool"              = each.value.name,
-        "openebs.io/engine" = "mayastor"
-      }
-    })
-  ]
-}
 
 # create the talos client config
 data "talos_client_configuration" "this" {
@@ -155,16 +163,16 @@ resource "talos_machine_bootstrap" "this" {
   node                 = local.talos_cp_node_ip
 }
 
-# Ensures that current machine configuration is afer servers are created
-resource "talos_machine_configuration_apply" "this" {
-  for_each                    = toset(local.private_ips)
-  endpoint                    = local.talos_apply_use_pvt_ip ? local.cp_public_endpoint : null
-  client_configuration        = talos_machine_secrets.this.client_configuration
-  machine_configuration_input = data.talos_machine_configuration.this[local.vm_pvt_ip_map[each.key].labels.pool].machine_configuration
+# # Ensures that current machine configuration is afer servers are created
+# resource "talos_machine_configuration_apply" "this" {
+#   for_each                    = toset(local.private_ips)
+#   endpoint                    = local.talos_apply_use_pvt_ip ? local.cp_public_endpoint : null
+#   client_configuration        = talos_machine_secrets.this.client_configuration
+#   machine_configuration_input = data.talos_machine_configuration.this[local.vm_pvt_ip_map[each.key].labels.pool].machine_configuration
 
-  node       = local.talos_apply_use_pvt_ip ? each.key : local.vm_pvt_ip_map[each.key].ipv4_address
-  depends_on = [module.node_pools]
-}
+#   node       = local.talos_apply_use_pvt_ip ? each.key : local.vm_pvt_ip_map[each.key].ipv4_address
+#   depends_on = [module.node_pools]
+# }
 
 # ################# Server #################
 module "node_pools" {
@@ -355,8 +363,3 @@ resource "azurerm_key_vault_secret" "k8s-hetzner-custer-autoscale-conf" {
   value        = local.cluster-config
   key_vault_id = data.azurerm_key_vault.hegerdes.id
 }
-
-# import {
-#   to = azurerm_key_vault_secret.k8s-hetzner-custer-autoscale-conf
-#   id = "https://hegerdes.vault.azure.net/secrets/k8s-hetzner-custer-autoscale-conf/aeef5ae9ad1a4eeba182300aff937dcb"
-# }

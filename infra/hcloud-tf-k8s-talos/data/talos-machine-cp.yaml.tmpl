@@ -1,0 +1,152 @@
+apiVersion: v1alpha1
+kind: KubeExternalManifestConfig
+name: crd-gateway-api
+url: https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.2/standard-install.yaml
+---
+apiVersion: v1alpha1
+kind: KubeExternalManifestConfig
+name: crd-prom-podmonitor
+url: https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/heads/main/charts/kube-prometheus-stack/charts/crds/crds/crd-podmonitors.yaml
+---
+apiVersion: v1alpha1
+kind: KubeExternalManifestConfig
+name: crd-prom-servicemonitor
+url: https://raw.githubusercontent.com/prometheus-community/helm-charts/refs/heads/main/charts/kube-prometheus-stack/charts/crds/crds/crd-servicemonitors.yaml
+---
+apiVersion: v1alpha1
+kind: KubeExternalManifestConfig
+name: crd-eso
+url: https://raw.githubusercontent.com/external-secrets/external-secrets/refs/heads/main/deploy/crds/bundle.yaml
+---
+apiVersion: v1alpha1
+kind: KubeExternalManifestConfig
+name: kubelet-serving-cert-approver
+url: https://raw.githubusercontent.com/alex1989hu/kubelet-serving-cert-approver/main/deploy/standalone-install.yaml
+---
+apiVersion: v1alpha1
+kind: KubeAPIServerCAConfig
+# The currently active issuing certificate authority for the Kubernetes API server.
+issuingCA:
+  cert: |
+    ${k8s.k8s_ca_cert}
+  key: |
+    ${k8s.k8s_ca_key}
+---
+apiVersion: v1alpha1
+kind: KubeAggregatorCAConfig
+# The currently active issuing certificate authority for the Kubernetes API aggregator flow.
+issuingCA:
+  cert: |
+    ${k8s.k8s_ca_aggregator_cert}
+  key: |
+    ${k8s.k8s_ca_aggregator_key}
+---
+apiVersion: v1alpha1
+kind: KubeServiceAccountConfig
+issuer:
+  privateKey: |
+    ${k8s.service_account_issuer_key}
+  issuerURL: https://${cluster_endpoint}:6443
+---
+apiVersion: v1alpha1
+kind: KubeAuthorizerConfig
+name: node
+type: Node
+---
+apiVersion: v1alpha1
+kind: KubeAuthorizerConfig
+name: rbac
+type: RBAC
+---
+apiVersion: v1alpha1
+kind: KubeEtcdEncryptionConfig
+# Kubernetes API server [encryption of secret data at rest](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/).
+config:
+  resources:
+    - resources:
+      - secrets
+      providers:
+      - identity: {}
+---
+apiVersion: v1alpha1
+kind: KubeSchedulerConfig
+image: registry.k8s.io/kube-scheduler:${cluster_version}
+config: {}
+---
+apiVersion: v1alpha1
+kind: KubeAPIServerConfig
+image: registry.k8s.io/kube-apiserver:${cluster_version}
+extraArgs: ${yamlencode(extraArgsApiServer)}
+
+certExtraSANs:
+  %{ for SAN in k8s.extraSANs ~}
+    - ${SAN}
+  %{ endfor ~}
+
+---
+apiVersion: v1alpha1
+kind: KubeControllerManagerConfig
+image: registry.k8s.io/kube-controller-manager:${cluster_version}
+---
+apiVersion: v1alpha1
+kind: KubeAuditPolicyConfig
+# Kubernetes API server [audit policy](https://kubernetes.io/docs/tasks/debug-application-cluster/audit/) configuration.
+configuration:
+    apiVersion: audit.k8s.io/v1
+    kind: Policy
+    rules:
+        - level: Metadata
+---
+apiVersion: v1alpha1
+kind: KubeProxyConfig
+image: registry.k8s.io/kube-proxy:${cluster_version}
+mode: nftables
+enabled: false
+---
+apiVersion: v1alpha1
+kind: KubeTalosAPIAccessConfig
+# The list of Talos API roles which can be granted for access from Kubernetes pods.
+allowedRoles:
+  - os:reader
+  - os:etcd:backup
+# - os:admin
+# - os:operator
+allowedKubernetesNamespaces:
+  - kube-system
+  - cluster-autoscaler
+---
+apiVersion: v1alpha1
+kind: KubeAuthenticationConfig
+# Kubernetes API server [authentication](https://kubernetes.io/docs/reference/access-authn-authz/authentication/) configuration.
+configuration:
+    anonymous:
+        conditions:
+            - path: /livez
+            - path: /readyz
+            - path: /healthz
+        enabled: true
+    jwt:
+    - issuer:
+        url: https://login.microsoftonline.com/295b5ac3-2e4e-4ade-85d8-7dc31617bc2c/v2.0
+        audiences:
+          - "0eedabf2-3d31-4b35-be31-4fd5e9c9e47c"
+      claimMappings:
+        username:
+          claim: "email"
+          prefix: "oidc:"
+        groups:
+          claim: "groups"
+          prefix: "oidc:"
+        extra:
+          - key: "microsoft.com/tenant"
+            valueExpression: "claims.tid"
+      userValidationRules:
+        # CEL expression that evaluates to a boolean for auth validation
+        - expression: "!user.username.startsWith('system:')"
+          message: "username cannot used reserved system: prefix"
+        - expression: "user.username.lowerAscii().startsWith('oidc:henrik')"
+          message: "only henrik is allowed"
+        - expression: '"oidc:8d6c909a-13ef-44c0-9d3e-053e50d338b5" in user.groups'
+          message: "only users in group 'k8s-admins' may perform this operation"
+        - expression: '"295b5ac3-2e4e-4ade-85d8-7dc31617bc2c" in user.extra["microsoft.com/tenant"]'
+          message: "only users in your tenant are allowed"
