@@ -184,13 +184,21 @@ else
   rm -rvf /usr/lib/modules/$(uname -r)/kernel/net/bluetooth/*
   depmod -a $(uname -r)
 
+  rm -rvf /usr/lib/os-prober/newns /usr/lib/dracut/dracut-install
+
+  rm -rvf /usr/lib/mime/packages/tar
+  rm -rvf /usr/lib/mime/packages/sensible-utils
+  rm -rvf /usr/lib/mime/packages/unzip
+  rm -rvf /usr/lib/mime/packages/groff-base
+  rm -rvf /usr/lib/mime/packages/util-linux
+
   # Caches cleanup
   journalctl --sync
   journalctl --flush
   journalctl --rotate
   journalctl --vacuum-time=1s
   systemctl stop systemd-journald
-  rm -rvf /var/cache/apt/* /var/cache/apparmor/* /var/lib/apt/lists/* /var/cache/debconf/* /var/cache/dpkg/* /var/cache/ansible/* /var/log/*.log* /tmp/* /var/tmp/* /usr/share/doc/* /usr/share/man/* /var/log/journal/* /run/log/journal/* /usr/lib/python3.13/__pycache__/* /usr/share/bash-completion/completions/* /usr/share/mime/*
+  rm -rvf /var/cache/apt/* /var/cache/apparmor/* /var/lib/apt/lists/* /var/cache/debconf/* /var/cache/dpkg/* /var/cache/ansible/* /var/log/*.log* /tmp/* /var/tmp/* /usr/share/doc/* /usr/share/man/* /var/log/journal/* /run/log/journal/* /usr/lib/python3.13/__pycache__/* /usr/share/bash-completion/completions/* /usr/share/mime/* /usr/lib/python3.13/test/*
   rm -rvf /usr/lib/openssh/sftp-server
   find /usr/lib/python3 -type f -name "*.pyc" -delete
   find /usr/share/locale/ -maxdepth 1 -type d ! -name 'en' ! -name 'en_US' ! -name 'en_US.UTF-8' -exec rm -rf {} +
