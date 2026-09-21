@@ -16,6 +16,7 @@ spec:
         valuesObject:
           provider:
             name: aws
+          policy: sync
           extraArgs:
             - --exclude-target-net=10.0.0.0/8
           sources:

@@ -16,6 +16,7 @@ spec:
         valuesObject:
           provider:
             name: cloudflare
+          policy: sync
           extraArgs:
             - --exclude-target-net=10.0.0.0/8
           domainFilters:
@@ -39,15 +40,7 @@ spec:
             create: true
             additionalPermissions:
               - apiGroups: ["gateway.networking.k8s.io"]
-                resources:
-                  [
-                    "gateways",
-                    "httproutes",
-                    "grpcroutes",
-                    "tlsroutes",
-                    "tcproutes",
-                    "udproutes",
-                  ]
+                resources: ["gateways", "httproutes", "grpcroutes", "tlsroutes", "tcproutes", "udproutes"]
                 verbs: ["get", "watch", "list"]
     - repoURL: https://github.com/hegerdes/GitOps.git
       targetRevision: HEAD
