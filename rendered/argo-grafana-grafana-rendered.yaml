@@ -28,7 +28,7 @@ type: Opaque
 data:
   
   admin-user: "YWRtaW4="
-  admin-password: "Zk1ncVZtd1RacTBubHREMjE2NWFCdFZ1eTVtbXhnNXRibFUzRnU2NQ=="
+  admin-password: "c3REWFhOM1J5ZVl1WlJzM2g4a1ljYWpGNGh3eDVCQ3ZpSEFoRjB4Ug=="
   ldap-toml: ""
 ---
 # Source: grafana/templates/configmap.yaml
@@ -361,7 +361,7 @@ spec:
         checksum/config: fa30a09b932df921f573e8476aef753cd8364afa9f133ccfec5403fe4851ea1f
         checksum/dashboards-json-config: 4c3e8be2bb732bab7bb03f05a1e9aa1d4c8ea1528d685e73826d388943389fce
         checksum/sc-dashboard-provider-config: e70bf6a851099d385178a76de9757bb0bef8299da6d8443602590e44f05fdf24
-        checksum/secret: 55ad0bd5cbca1237d96eacee0d0e40d78edb73336decd24b7c577387b51828b8
+        checksum/secret: d40f750f4c9b787c43006aa831b211f56a2cd8751ff5583fc3aa9bb8d922b4c6
         kubectl.kubernetes.io/default-container: grafana
     spec:
       
