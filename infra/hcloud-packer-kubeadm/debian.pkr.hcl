@@ -33,9 +33,9 @@ variable "location" {
 locals {
   output_name = "${var.output_name}-v${var.k8s_version}-${var.base_image}"
   shares_tags = {
-    type    = "infra",
-    base    = var.base_image,
-    version = "${var.k8s_version}",
+    type     = "infra",
+    base     = var.base_image,
+    version  = "${var.k8s_version}",
     category = "k8s"
   }
 }
@@ -49,8 +49,8 @@ source "hcloud" "k8s-amd64" {
   ssh_username  = "root"
   snapshot_name = "${local.output_name}-amd64"
   snapshot_labels = merge(local.shares_tags, {
-    name    = "${local.output_name}-amd64"
-    arch    = "amd64"
+    name = "${local.output_name}-amd64"
+    arch = "amd64"
   })
 }
 source "hcloud" "k8s-arm64" {
@@ -62,8 +62,8 @@ source "hcloud" "k8s-arm64" {
   ssh_username  = "root"
   snapshot_name = "${local.output_name}-arm64"
   snapshot_labels = merge(local.shares_tags, {
-        name    = "${local.output_name}-arm64"
-    arch    = "arm64"
+    name = "${local.output_name}-arm64"
+    arch = "arm64"
   })
 }
 build {
@@ -80,7 +80,7 @@ build {
   }
   provisioner "shell" {
     pause_before = "30s"
-    max_retries = 1
+    max_retries  = 1
     env = {
       k8s_version = "${var.k8s_version}"
     }
@@ -88,4 +88,14 @@ build {
       "ansible-setup.sh",
     ]
   }
+  # provisioner "shell" {
+  #   env = {
+  #     AWS_ACCESS_KEY_ID     = "xxx"
+  #     AWS_SECRET_ACCESS_KEY = "xxx"
+  #     AWS_SESSION_TOKEN     = "xxx"
+  #   }
+  #   scripts = [
+  #     "aws-export.sh",
+  #   ]
+  # }
 }

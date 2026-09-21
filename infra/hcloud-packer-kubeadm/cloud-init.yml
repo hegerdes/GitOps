@@ -14,8 +14,7 @@ packages:
   - gnupg
   - lsb-release
   - ca-certificates
-  - pigz # fast decompress for container image
-  - isal # even faster decompress for container image
+  - isal # faster decompress for container image
   - cryptsetup # support LUKS disk encryptio
   - apparmor
   - python3-debian

@@ -56,9 +56,8 @@ server:
   # extraArgs:
   #   - --insecure
   ingress:
-    enabled: true
+    enabled: false
     annotations:
-      cert-manager.io/cluster-issuer: "letsencrypt-prod-ing-nginx"
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
       nginx.ingress.kubernetes.io/ssl-passthrough: "true"

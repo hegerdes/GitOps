@@ -140,6 +140,7 @@ data "talos_client_configuration" "this" {
   client_configuration = talos_machine_secrets.this.client_configuration
   endpoints            = [var.controlplane_endpoint]
   nodes                = local.private_ips
+
 }
 
 # create kubeconfig
@@ -163,16 +164,28 @@ resource "talos_machine_bootstrap" "this" {
   node                 = local.talos_cp_node_ip
 }
 
-# # Ensures that current machine configuration is afer servers are created
-# resource "talos_machine_configuration_apply" "this" {
-#   for_each                    = toset(local.private_ips)
-#   endpoint                    = local.talos_apply_use_pvt_ip ? local.cp_public_endpoint : null
-#   client_configuration        = talos_machine_secrets.this.client_configuration
-#   machine_configuration_input = data.talos_machine_configuration.this[local.vm_pvt_ip_map[each.key].labels.pool].machine_configuration
+# resource "talos_machine" "this" {
+#   for_each = toset(local.private_ips)
 
-#   node       = local.talos_apply_use_pvt_ip ? each.key : local.vm_pvt_ip_map[each.key].ipv4_address
-#   depends_on = [module.node_pools]
+#   node                            = local.talos_apply_use_pvt_ip ? each.key : local.vm_pvt_ip_map[each.key].ipv4_address
+#   endpoint                        = local.talos_apply_use_pvt_ip ? local.cp_public_endpoint : null
+#   client_configuration            = talos_machine_secrets.this.client_configuration
+#   machine_configuration           = local.node_pools[local.vm_pvt_ip_map[each.key].labels.pool].user_data
+#   ignore_kubernetes_upgrade_drift = true
+
+#   depends_on = [module.node_pools, time_sleep.wait]
 # }
+
+# Ensures that current machine configuration is after servers are created
+resource "talos_machine_configuration_apply" "this" {
+  for_each                    = toset(local.private_ips)
+  endpoint                    = local.talos_apply_use_pvt_ip ? local.cp_public_endpoint : null
+  client_configuration        = talos_machine_secrets.this.client_configuration
+  machine_configuration_input = local.node_pools[local.vm_pvt_ip_map[each.key].labels.pool].user_data
+
+  node       = local.talos_apply_use_pvt_ip ? each.key : local.vm_pvt_ip_map[each.key].ipv4_address
+  depends_on = [module.node_pools]
+}
 
 # ################# Server #################
 module "node_pools" {

@@ -32,3 +32,6 @@ output "vm_pool_public_ips" {
 output "lb_endpoint" {
   value = local.cp_public_endpoint
 }
+output "talos_version" {
+  value = var.talos_version
+}
