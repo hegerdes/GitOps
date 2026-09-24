@@ -54,7 +54,6 @@ controllerManager:
     - namespace-controller
     - node-ipam-controller
     - node-lifecycle-controller
-    - node-route-controller
     - persistentvolume-attach-detach-controller
     - persistentvolume-binder-controller
     - persistentvolume-expander-controller
@@ -70,7 +69,6 @@ controllerManager:
     - resourcequota-controller
     - root-ca-certificate-publisher-controller
     - service-cidr-controller
-    - service-lb-controller
     - serviceaccount-controller
     - serviceaccount-token-controller
     - statefulset-controller

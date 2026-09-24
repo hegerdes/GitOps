@@ -31,9 +31,7 @@ data:
     evictionPressureTransitionPeriod: 0s
     failCgroupV1: true
     failSwapOn: true
-    featureGates:
-      ClusterTrustBundle: true
-      ClusterTrustBundleProjection: true
+    featureGates: {}
     fileCheckFrequency: 0s
     healthzBindAddress: 0.0.0.0
     healthzPort: 10248
