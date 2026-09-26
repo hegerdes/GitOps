@@ -1,5 +1,5 @@
-kubernetesVersion: v1.37.0
-etcdVersion: 3.7.1-0
+kubernetesVersion: v1.37.1
+etcdVersion: 3.7.2-0
 namespaceLabels: {}
 name: default
 
