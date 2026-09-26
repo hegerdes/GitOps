@@ -1,25 +1,42 @@
 #!/bin/bash
 
 # set -e
+#Make it prittttyyyy
+RED='\033[0;31m'
+NC='\033[0m'
+GRN='\033[0;32m'
+
+# Const
 HELM_TEMPLATE_DST="/tmp/k8s-check"
 mkdir -p $HELM_TEMPLATE_DST
+KUBECONFORM_DEFAULT_SCHEMA_LOCATIONS="-schema-location default -schema-location \"https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json\""
+
+
+# Extend extra args to CRDs check args
+if [ "${KUBECONFORM_VALIDATE_CRDS}" = "true" ]; then
+  KUBECONFORM_EXTRA_ARGS="${KUBECONFORM_EXTRA_ARGS} ${${KUBECONFORM_SCHEMA_LOCATIONS-$KUBECONFORM_DEFAULT_SCHEMA_LOCATIONS}}"
+else
+  KUBECONFORM_EXTRA_ARGS="${KUBECONFORM_EXTRA_ARGS} -ignore-missing-schemas"
+fi
 
 ######### Raw kustomize setup #########
-echo "Linting kustomize manifests..."
-find . -type f -name "kustomization.yaml" -exec dirname {} \; | parallel --joblog kustomize.log -k kubectl kustomize --enable-helm {} | kubeconform -summary -ignore-missing-schemas
+echo -e "${GRN}Linting kustomize manifests...${NC}"
+find . -type f -name "kustomization.yaml" -exec dirname {} \; | parallel --joblog kustomize.log -k kubectl kustomize --enable-helm {} | kubeconform -summary -output pretty $KUBECONFORM_EXTRA_ARGS
 
 ######### Raw manifests #########
-echo "Linting raw manifests..."
-find . -type f \( -name "*.yaml" -o -name "*.yml" \) \
+echo -e "${GRN}Linting raw manifests...${NC}"
+find . \
+  \( -type d -name templates -prune \) -o \
+  \( -type f \( -name "*.yaml" -o -name "*.yml" \) \
   ! -iname "kustomization.yaml" ! -iname "kustomization.yml" \
   -exec grep -q "apiVersion" {} \; \
   -exec grep -q "kind" {} \; \
-  -print 2>/dev/null | parallel --joblog manifests.log -k yq eval-all '.' | kubeconform -summary -ignore-missing-schemas
-  -print 2>/dev/null | yq eval-all '.' | kubeconform -summary -ignore-missing-schemas
+  -print 2>/dev/null | parallel --joblog manifests.log -k yq eval-all '.' | kubeconform -summary -output pretty $KUBECONFORM_EXTRA_ARGS
+  -print 2>/dev/null | yq eval-all '.' | kubeconform -summary -output pretty $KUBECONFORM_EXTRA_ARGS
 
 
 ######### ArgoCD Application Helm charts #########
-echo "Linting ArgoCD Application Helm charts..."
+echo -e "${GRN}Linting ArgoCD Application Helm charts...${NC}"
 ARGO_APPS=$(find . -type f \( -name "*.yaml" -o -name "*.yml" \) \
   -exec grep -q "^kind: *Application" {} \; \
   -exec grep -q "^apiVersion: *argoproj.io/v1" {} \; \
@@ -71,11 +88,11 @@ for app in $ARGO_APPS; do
     fi
 done
 
-echo "Updating helm repos"
+echo -e "${GRN}Updating helm repos${NC}"
 helm repo update
 
 for app in $ARGO_APPS; do
-    echo "Linting ArgoCD Application: $app"
+    echo -e "${GRN}Linting ArgoCD Application: $app${NC}"
 
     if $(yq eval '(.spec.source) != null' $app) = "true"; then
         ARGO_HELM_CHART=$(yq eval '.spec.source.chart' $app)
@@ -167,6 +184,20 @@ for app in $ARGO_APPS; do
     fi
 done
 
-find $HELM_TEMPLATE_DST -type f -name "*.yaml" | parallel --joblog helm.log -k kubeconform -summary -ignore-missing-schemas
+find $HELM_TEMPLATE_DST -type f -name "*.yaml" | parallel --joblog helm.log -k kubeconform -summary -output pretty $KUBECONFORM_EXTRA_ARGS
 
+echo -e "${GRN}All done. Log:${NC}"
 cat *.log
+
+
+# kubeconform -output pretty -strict \
+#   -schema-location default \
+#   -schema-location "https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json" \
+#   -schema-location "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/{{.NormalizedKubernetesVersion}}/{{.ResourceKind}}.json"
+
+
+# -kubernetes-version="your-version"
+# -schema-location default
+# -schema-location https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json
+# -schema-location https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/{{.NormalizedKubernetesVersion}}/{{.ResourceKind}}.json
+# -schema-location https://json.schemastore.org/{{.ResourceKind}}.json
