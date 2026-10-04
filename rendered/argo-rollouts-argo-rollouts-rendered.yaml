@@ -7,7 +7,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.43.2
+    helm.sh/chart: argo-rollouts-2.43.5
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
     app.kubernetes.io/version: "v1.10.0"
@@ -22,7 +22,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.43.2
+    helm.sh/chart: argo-rollouts-2.43.5
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
     app.kubernetes.io/version: "v1.10.0"
@@ -38,7 +38,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.43.2
+    helm.sh/chart: argo-rollouts-2.43.5
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
     app.kubernetes.io/version: "v1.10.0"
@@ -18444,7 +18444,7 @@ metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-view: "true"
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.43.2
+    helm.sh/chart: argo-rollouts-2.43.5
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
     app.kubernetes.io/version: "v1.10.0"
@@ -18473,7 +18473,7 @@ metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.43.2
+    helm.sh/chart: argo-rollouts-2.43.5
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
     app.kubernetes.io/version: "v1.10.0"
@@ -18508,7 +18508,7 @@ metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.43.2
+    helm.sh/chart: argo-rollouts-2.43.5
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
     app.kubernetes.io/version: "v1.10.0"
@@ -18542,7 +18542,7 @@ metadata:
   name: argo-rollouts
   labels:
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.43.2
+    helm.sh/chart: argo-rollouts-2.43.5
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
     app.kubernetes.io/version: "v1.10.0"
@@ -18832,7 +18832,7 @@ metadata:
   name: argo-rollouts
   labels:
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.43.2
+    helm.sh/chart: argo-rollouts-2.43.5
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
     app.kubernetes.io/version: "v1.10.0"
@@ -18855,7 +18855,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.43.2
+    helm.sh/chart: argo-rollouts-2.43.5
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
     app.kubernetes.io/version: "v1.10.0"

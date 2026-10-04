@@ -1,26 +1,14 @@
 ---
-# Source: kargo/templates/cluster-secrets-namespace/namespace.yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: "kargo-cluster-secrets"
-  labels:
-    helm.sh/chart: kargo-1.11.4
-    app.kubernetes.io/name: kargo
-    app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
-    app.kubernetes.io/managed-by: Helm
----
 # Source: kargo/templates/shared-resources-namespace/namespace.yaml
 apiVersion: v1
 kind: Namespace
 metadata:
   name: "kargo-shared-resources"
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: kargo/templates/system-resources-namespace/namespace.yaml
@@ -29,10 +17,10 @@ kind: Namespace
 metadata:
   name: "kargo-system-resources"
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: kargo/templates/api/service-account.yaml
@@ -42,10 +30,10 @@ metadata:
   name: kargo-api
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: api
 ---
@@ -56,10 +44,10 @@ metadata:
   name: kargo-controller
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
 ---
@@ -70,10 +58,10 @@ metadata:
   name: kargo-external-webhooks-server
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: external-webhooks-server
 ---
@@ -84,10 +72,10 @@ metadata:
   name: kargo-garbage-collector
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: garbage-collector
 ---
@@ -98,10 +86,10 @@ metadata:
   name: kargo-webhooks-server
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
 ---
@@ -112,10 +100,10 @@ metadata:
   name: kargo-management-controller
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: management-controller
 ---
@@ -126,10 +114,10 @@ metadata:
   name: kargo-admin
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     rbac.kargo.akuity.io/system-role: "true"
   annotations:
@@ -142,10 +130,10 @@ metadata:
   name: kargo-project-creator
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     rbac.kargo.akuity.io/system-role: "true"
 ---
@@ -156,10 +144,10 @@ metadata:
   name: kargo-user
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     rbac.kargo.akuity.io/system-role: "true"
   annotations:
@@ -172,10 +160,10 @@ metadata:
   name: kargo-viewer
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     rbac.kargo.akuity.io/system-role: "true"
 ---
@@ -187,10 +175,10 @@ metadata:
   name: kargo-api
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: api
   
@@ -203,10 +191,10 @@ metadata:
   name: kargo-api
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: api
   
@@ -236,10 +224,10 @@ metadata:
   name: kargo-controller
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
     
@@ -248,6 +236,7 @@ data:
   API_SERVER_BASE_URL: https://kargo.k8s.henrikgerdes.me
   LOG_LEVEL: "INFO"
   LOG_FORMAT: "CONSOLE"
+  CREDENTIAL_PROVIDERS_ENABLED: "true"
   KARGO_NAMESPACE: default
   SYSTEM_RESOURCES_NAMESPACE: "kargo-system-resources"
   IS_DEFAULT_CONTROLLER: "true"
@@ -255,7 +244,7 @@ data:
   ALLOW_CREDENTIALS_OVER_HTTP: "false"
   GITCLIENT_NAME: "Kargo"
   GITCLIENT_EMAIL: "no-reply@kargo.io"
-  GIT_PUSH_INTEGRATION_POLICY: "AlwaysRebase"
+  GIT_PUSH_INTEGRATION_POLICY: "RebaseOrMerge"
   GITCLIENT_SIGNING_KEY_TYPE: "gpg"
   GITHUB_PUSH_MAX_REVISIONS: "10"
   GITHUB_PUSH_VERIFY_UNTRUSTED_COMMITS: "false"
@@ -270,6 +259,7 @@ data:
   ROLLOUTS_CONTROLLER_INSTANCE_ID: ""
   MAX_CONCURRENT_CONTROL_FLOW_RECONCILES: "4"
   MAX_CONCURRENT_PROMOTION_RECONCILES: "4"
+  MAX_CONCURRENT_PROMOTION_REQUEST_RECONCILES: "4"
   MAX_CONCURRENT_STAGE_RECONCILES: "4"
   MAX_CONCURRENT_WAREHOUSE_RECONCILES: "4"
   MIN_WAREHOUSE_RECONCILIATION_INTERVAL: "5m0s"
@@ -281,10 +271,10 @@ metadata:
   name: kargo-external-webhooks-server
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: external-webhooks-server
   
@@ -305,10 +295,10 @@ metadata:
   name: kargo-garbage-collector
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: garbage-collector
   
@@ -328,10 +318,10 @@ metadata:
   name: kargo-webhooks-server
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
   
@@ -351,17 +341,16 @@ metadata:
   name: kargo-management-controller
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: management-controller
   
 data:
   EXTERNAL_WEBHOOK_SERVER_BASE_URL: https://localhost
   KARGO_NAMESPACE: default
-  CLUSTER_SECRETS_NAMESPACE: "kargo-cluster-secrets"
   SYSTEM_RESOURCES_NAMESPACE: "kargo-system-resources"
   SHARED_RESOURCES_NAMESPACE: "kargo-shared-resources"
   LOG_LEVEL: "INFO"
@@ -502,6 +491,221 @@ spec:
                 - email
                 - name
                 type: object
+              promotionWindows:
+                description: |-
+                  PromotionWindows defines time windows that gate promotions across the
+                  cluster. Each window may narrow its scope with a projectSelector and/or
+                  stageSelector. A Stage's effective schedule is the union of matching
+                  windows defined here and any project-level windows in ProjectConfig.
+
+                  Kargo Enterprise only: This field is ignored in Kargo OSS.
+                items:
+                  description: |-
+                    PromotionWindow describes a recurring or one-shot time window that gates
+                    promotions for the Stages it matches. Windows may appear on both
+                    ProjectConfig and ClusterConfig; a Stage's effective schedule is the union of
+                    all matching windows from both. A schedule is open at a given time when no
+                    matching Deny window is active and, if any Allow windows match the Stage, at
+                    least one of them is active. Windows gate all promotions uniformly (auto,
+                    manual, and rollback).
+
+                    Kargo Enterprise only: This type is ignored in Kargo OSS. The schedule is
+                    evaluated and enforced only by Kargo Enterprise; OSS carries the API for
+                    compatibility, as it does for other Enterprise-only fields.
+                  properties:
+                    description:
+                      description: |-
+                        Description is a human-readable description of the window.
+                        May contain reason, author or any clarification for the window.
+                      maxLength: 1024
+                      type: string
+                    disabled:
+                      description: |-
+                        Disabled controls whether configured windows should be skipped when calculating the stage window status.
+                        Optional. Default is `false`. Unless set to `true` the window will impact the stages it's configured for.
+                      type: boolean
+                    dtend:
+                      description: |-
+                        DTEnd is the window's end in the same format as DTStart. When combined with
+                        RRule, DTEnd - DTStart defines the duration of each occurrence. The value
+                        is parsed and validated by Kargo Enterprise.
+                      type: string
+                    dtstart:
+                      description: |-
+                        DTStart is the window's start as an iCal date-time, with an optional
+                        "TZID=" prefix carrying the time zone (e.g.
+                        "TZID=America/New_York:20260101T090000"). The value is parsed and validated
+                        by Kargo Enterprise.
+                      type: string
+                    kind:
+                      description: |-
+                        Kind indicates whether this window allows or denies promotions while it is
+                        active.
+                      enum:
+                      - Allow
+                      - Deny
+                      type: string
+                    name:
+                      description: |-
+                        Name is a symbolic name for the window, unique within its list. It is used
+                        to identify the window in denial messages and events.
+                      maxLength: 253
+                      minLength: 1
+                      pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                      type: string
+                    projectSelector:
+                      description: |-
+                        ProjectSelector selects the Projects this window applies to. It is only
+                        meaningful on ClusterConfig windows; on ProjectConfig windows the Project
+                        is implicit and this field is rejected. When omitted on a ClusterConfig
+                        window, the window applies to all Projects. It reuses
+                        PromotionPolicySelector, matching Projects by exact name, glob/regex
+                        pattern, or label selector.
+                      properties:
+                        matchExpressions:
+                          description: matchExpressions is a list of label selector
+                            requirements. The requirements are ANDed.
+                          items:
+                            description: |-
+                              A label selector requirement is a selector that contains values, a key, and an operator that
+                              relates the key and values.
+                            properties:
+                              key:
+                                description: key is the label key that the selector
+                                  applies to.
+                                type: string
+                              operator:
+                                description: |-
+                                  operator represents a key's relationship to a set of values.
+                                  Valid operators are In, NotIn, Exists and DoesNotExist.
+                                type: string
+                              values:
+                                description: |-
+                                  values is an array of string values. If the operator is In or NotIn,
+                                  the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                  the values array must be empty. This array is replaced during a strategic
+                                  merge patch.
+                                items:
+                                  type: string
+                                type: array
+                                x-kubernetes-list-type: atomic
+                            required:
+                            - key
+                            - operator
+                            type: object
+                          type: array
+                          x-kubernetes-list-type: atomic
+                        matchLabels:
+                          additionalProperties:
+                            type: string
+                          description: |-
+                            matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                            map is equivalent to an element of matchExpressions, whose key field is "key", the
+                            operator is "In", and the values array contains only "value". The requirements are ANDed.
+                          type: object
+                        name:
+                          description: |-
+                            Name is the name of the resource to which this policy applies.
+
+                            It can be an exact name, a regex pattern (with prefix "regex:"), or a
+                            glob pattern (with prefix "glob:").
+
+                            When both Name and LabelSelector are specified, the Name is ANDed with
+                            the LabelSelector. I.e., the resource must match both the Name and
+                            LabelSelector to be selected by this policy.
+
+                            NOTE: Using a specific exact name is the most secure option. Pattern
+                            matching via regex or glob can be exploited by users with permissions to
+                            match promotion policies that weren't intended to apply to their
+                            resources. For example, a user could create a resource with a name
+                            deliberately crafted to match the pattern, potentially bypassing intended
+                            promotion controls.
+                          type: string
+                      type: object
+                      x-kubernetes-map-type: atomic
+                    rrule:
+                      description: |-
+                        RRule is an optional RFC 5545 recurrence rule (e.g. "FREQ=DAILY") that
+                        makes the window recurring. When omitted, the window is a one-shot interval
+                        defined by DTStart and DTEnd. The full value is parsed and validated by
+                        Kargo Enterprise.
+                      type: string
+                    stageSelector:
+                      description: |-
+                        StageSelector selects the Stages this window applies to. When omitted, the
+                        window applies to all Stages in scope (project-wide on ProjectConfig,
+                        cluster-wide on ClusterConfig). It reuses PromotionPolicySelector, so it
+                        can match by exact name, glob/regex pattern, or label selector.
+                      properties:
+                        matchExpressions:
+                          description: matchExpressions is a list of label selector
+                            requirements. The requirements are ANDed.
+                          items:
+                            description: |-
+                              A label selector requirement is a selector that contains values, a key, and an operator that
+                              relates the key and values.
+                            properties:
+                              key:
+                                description: key is the label key that the selector
+                                  applies to.
+                                type: string
+                              operator:
+                                description: |-
+                                  operator represents a key's relationship to a set of values.
+                                  Valid operators are In, NotIn, Exists and DoesNotExist.
+                                type: string
+                              values:
+                                description: |-
+                                  values is an array of string values. If the operator is In or NotIn,
+                                  the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                  the values array must be empty. This array is replaced during a strategic
+                                  merge patch.
+                                items:
+                                  type: string
+                                type: array
+                                x-kubernetes-list-type: atomic
+                            required:
+                            - key
+                            - operator
+                            type: object
+                          type: array
+                          x-kubernetes-list-type: atomic
+                        matchLabels:
+                          additionalProperties:
+                            type: string
+                          description: |-
+                            matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                            map is equivalent to an element of matchExpressions, whose key field is "key", the
+                            operator is "In", and the values array contains only "value". The requirements are ANDed.
+                          type: object
+                        name:
+                          description: |-
+                            Name is the name of the resource to which this policy applies.
+
+                            It can be an exact name, a regex pattern (with prefix "regex:"), or a
+                            glob pattern (with prefix "glob:").
+
+                            When both Name and LabelSelector are specified, the Name is ANDed with
+                            the LabelSelector. I.e., the resource must match both the Name and
+                            LabelSelector to be selected by this policy.
+
+                            NOTE: Using a specific exact name is the most secure option. Pattern
+                            matching via regex or glob can be exploited by users with permissions to
+                            match promotion policies that weren't intended to apply to their
+                            resources. For example, a user could create a resource with a name
+                            deliberately crafted to match the pattern, potentially bypassing intended
+                            promotion controls.
+                          type: string
+                      type: object
+                      x-kubernetes-map-type: atomic
+                  required:
+                  - kind
+                  - name
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - name
+                x-kubernetes-list-type: map
               stageLinks:
                 description: |-
                   StageLinks defines deep links shown when viewing any Stage resource
@@ -1508,6 +1712,12 @@ spec:
                     registry, the URL implicitly points to a specific chart and the Name field
                     will be empty.
                   type: string
+                subscriptionName:
+                  description: |-
+                    SubscriptionName is the name of the subscription that discovered this
+                    chart. This field is only populated if the subscription was assigned
+                    a name.
+                  type: string
                 version:
                   description: Version specifies a particular version of the chart.
                   type: string
@@ -1542,6 +1752,12 @@ spec:
                 repoURL:
                   description: RepoURL is the URL of a Git repository.
                   type: string
+                subscriptionName:
+                  description: |-
+                    SubscriptionName is the name of the subscription that discovered this
+                    commit. This field is only populated if the subscription was assigned
+                    a name.
+                  type: string
                 tag:
                   description: |-
                     Tag denotes a tag in the repository that matched selection criteria and
@@ -1575,6 +1791,12 @@ spec:
                 repoURL:
                   description: RepoURL describes the repository in which the image
                     can be found.
+                  type: string
+                subscriptionName:
+                  description: |-
+                    SubscriptionName is the name of the subscription that discovered this
+                    image. This field is only populated if the subscription was assigned
+                    a name.
                   type: string
                 tag:
                   description: |-
@@ -1790,7 +2012,7 @@ spec:
                     autoPromotionEnabled:
                       description: |-
                         AutoPromotionEnabled indicates whether new Freight can automatically be
-                        promoted into the Stage referenced by the Stage field. Note: There are may
+                        promoted into the Stage referenced by the Stage field. Note: There may
                         be other conditions also required for an auto-promotion to occur. This
                         field defaults to false, but is commonly set to true for Stages that
                         subscribe to Warehouses instead of other, upstream Stages. This allows
@@ -1925,6 +2147,220 @@ spec:
                       set
                     rule: 'has(self.stage) ? !has(self.stageSelector) : has(self.stageSelector)'
                 type: array
+              promotionWindows:
+                description: |-
+                  PromotionWindows defines time windows that gate promotions for Stages in
+                  this Project. A Stage's effective schedule is the union of matching windows
+                  defined here and any cluster-level windows in ClusterConfig.
+
+                  Kargo Enterprise only: This field is ignored in Kargo OSS.
+                items:
+                  description: |-
+                    PromotionWindow describes a recurring or one-shot time window that gates
+                    promotions for the Stages it matches. Windows may appear on both
+                    ProjectConfig and ClusterConfig; a Stage's effective schedule is the union of
+                    all matching windows from both. A schedule is open at a given time when no
+                    matching Deny window is active and, if any Allow windows match the Stage, at
+                    least one of them is active. Windows gate all promotions uniformly (auto,
+                    manual, and rollback).
+
+                    Kargo Enterprise only: This type is ignored in Kargo OSS. The schedule is
+                    evaluated and enforced only by Kargo Enterprise; OSS carries the API for
+                    compatibility, as it does for other Enterprise-only fields.
+                  properties:
+                    description:
+                      description: |-
+                        Description is a human-readable description of the window.
+                        May contain reason, author or any clarification for the window.
+                      maxLength: 1024
+                      type: string
+                    disabled:
+                      description: |-
+                        Disabled controls whether configured windows should be skipped when calculating the stage window status.
+                        Optional. Default is `false`. Unless set to `true` the window will impact the stages it's configured for.
+                      type: boolean
+                    dtend:
+                      description: |-
+                        DTEnd is the window's end in the same format as DTStart. When combined with
+                        RRule, DTEnd - DTStart defines the duration of each occurrence. The value
+                        is parsed and validated by Kargo Enterprise.
+                      type: string
+                    dtstart:
+                      description: |-
+                        DTStart is the window's start as an iCal date-time, with an optional
+                        "TZID=" prefix carrying the time zone (e.g.
+                        "TZID=America/New_York:20260101T090000"). The value is parsed and validated
+                        by Kargo Enterprise.
+                      type: string
+                    kind:
+                      description: |-
+                        Kind indicates whether this window allows or denies promotions while it is
+                        active.
+                      enum:
+                      - Allow
+                      - Deny
+                      type: string
+                    name:
+                      description: |-
+                        Name is a symbolic name for the window, unique within its list. It is used
+                        to identify the window in denial messages and events.
+                      maxLength: 253
+                      minLength: 1
+                      pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                      type: string
+                    projectSelector:
+                      description: |-
+                        ProjectSelector selects the Projects this window applies to. It is only
+                        meaningful on ClusterConfig windows; on ProjectConfig windows the Project
+                        is implicit and this field is rejected. When omitted on a ClusterConfig
+                        window, the window applies to all Projects. It reuses
+                        PromotionPolicySelector, matching Projects by exact name, glob/regex
+                        pattern, or label selector.
+                      properties:
+                        matchExpressions:
+                          description: matchExpressions is a list of label selector
+                            requirements. The requirements are ANDed.
+                          items:
+                            description: |-
+                              A label selector requirement is a selector that contains values, a key, and an operator that
+                              relates the key and values.
+                            properties:
+                              key:
+                                description: key is the label key that the selector
+                                  applies to.
+                                type: string
+                              operator:
+                                description: |-
+                                  operator represents a key's relationship to a set of values.
+                                  Valid operators are In, NotIn, Exists and DoesNotExist.
+                                type: string
+                              values:
+                                description: |-
+                                  values is an array of string values. If the operator is In or NotIn,
+                                  the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                  the values array must be empty. This array is replaced during a strategic
+                                  merge patch.
+                                items:
+                                  type: string
+                                type: array
+                                x-kubernetes-list-type: atomic
+                            required:
+                            - key
+                            - operator
+                            type: object
+                          type: array
+                          x-kubernetes-list-type: atomic
+                        matchLabels:
+                          additionalProperties:
+                            type: string
+                          description: |-
+                            matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                            map is equivalent to an element of matchExpressions, whose key field is "key", the
+                            operator is "In", and the values array contains only "value". The requirements are ANDed.
+                          type: object
+                        name:
+                          description: |-
+                            Name is the name of the resource to which this policy applies.
+
+                            It can be an exact name, a regex pattern (with prefix "regex:"), or a
+                            glob pattern (with prefix "glob:").
+
+                            When both Name and LabelSelector are specified, the Name is ANDed with
+                            the LabelSelector. I.e., the resource must match both the Name and
+                            LabelSelector to be selected by this policy.
+
+                            NOTE: Using a specific exact name is the most secure option. Pattern
+                            matching via regex or glob can be exploited by users with permissions to
+                            match promotion policies that weren't intended to apply to their
+                            resources. For example, a user could create a resource with a name
+                            deliberately crafted to match the pattern, potentially bypassing intended
+                            promotion controls.
+                          type: string
+                      type: object
+                      x-kubernetes-map-type: atomic
+                    rrule:
+                      description: |-
+                        RRule is an optional RFC 5545 recurrence rule (e.g. "FREQ=DAILY") that
+                        makes the window recurring. When omitted, the window is a one-shot interval
+                        defined by DTStart and DTEnd. The full value is parsed and validated by
+                        Kargo Enterprise.
+                      type: string
+                    stageSelector:
+                      description: |-
+                        StageSelector selects the Stages this window applies to. When omitted, the
+                        window applies to all Stages in scope (project-wide on ProjectConfig,
+                        cluster-wide on ClusterConfig). It reuses PromotionPolicySelector, so it
+                        can match by exact name, glob/regex pattern, or label selector.
+                      properties:
+                        matchExpressions:
+                          description: matchExpressions is a list of label selector
+                            requirements. The requirements are ANDed.
+                          items:
+                            description: |-
+                              A label selector requirement is a selector that contains values, a key, and an operator that
+                              relates the key and values.
+                            properties:
+                              key:
+                                description: key is the label key that the selector
+                                  applies to.
+                                type: string
+                              operator:
+                                description: |-
+                                  operator represents a key's relationship to a set of values.
+                                  Valid operators are In, NotIn, Exists and DoesNotExist.
+                                type: string
+                              values:
+                                description: |-
+                                  values is an array of string values. If the operator is In or NotIn,
+                                  the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                  the values array must be empty. This array is replaced during a strategic
+                                  merge patch.
+                                items:
+                                  type: string
+                                type: array
+                                x-kubernetes-list-type: atomic
+                            required:
+                            - key
+                            - operator
+                            type: object
+                          type: array
+                          x-kubernetes-list-type: atomic
+                        matchLabels:
+                          additionalProperties:
+                            type: string
+                          description: |-
+                            matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                            map is equivalent to an element of matchExpressions, whose key field is "key", the
+                            operator is "In", and the values array contains only "value". The requirements are ANDed.
+                          type: object
+                        name:
+                          description: |-
+                            Name is the name of the resource to which this policy applies.
+
+                            It can be an exact name, a regex pattern (with prefix "regex:"), or a
+                            glob pattern (with prefix "glob:").
+
+                            When both Name and LabelSelector are specified, the Name is ANDed with
+                            the LabelSelector. I.e., the resource must match both the Name and
+                            LabelSelector to be selected by this policy.
+
+                            NOTE: Using a specific exact name is the most secure option. Pattern
+                            matching via regex or glob can be exploited by users with permissions to
+                            match promotion policies that weren't intended to apply to their
+                            resources. For example, a user could create a resource with a name
+                            deliberately crafted to match the pattern, potentially bypassing intended
+                            promotion controls.
+                          type: string
+                      type: object
+                      x-kubernetes-map-type: atomic
+                  required:
+                  - kind
+                  - name
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - name
+                x-kubernetes-list-type: map
               stageLinks:
                 description: |-
                   StageLinks defines deep links shown when viewing Stage resources within
@@ -2735,6 +3171,34 @@ spec:
                             type: integer
                         type: object
                     type: object
+                  targets:
+                    description: |-
+                      Targets contains a summary of the collective state of the Project's
+                      Targets. It is absent for a Project with no Targets.
+                    properties:
+                      count:
+                        description: Count contains the total number of Targets in
+                          the Project.
+                        format: int64
+                        type: integer
+                      health:
+                        description: |-
+                          Health contains a summary of the collective health of a Project's
+                          Targets.
+
+                          Until Target status records health, a Target is counted as healthy when
+                          at least one Stage has promoted to it and the latest promotion to it from
+                          every Stage that did so succeeded. Once Target health is recorded, a
+                          Target is counted as healthy when it is healthy with respect to every
+                          Stage that governs it.
+                        properties:
+                          healthy:
+                            description: Healthy contains the number of resources
+                              that are explicitly healthy.
+                            format: int64
+                            type: integer
+                        type: object
+                    type: object
                   warehouses:
                     description: |-
                       Warehouses contains a summary of the collective state of the Project's
@@ -2759,6 +3223,302 @@ spec:
                     type: object
                 type: object
             type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+# Source: kargo/templates/crds.yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.19.0
+    helm.sh/resource-policy: keep
+  name: promotionrequests.kargo.akuity.io
+spec:
+  group: kargo.akuity.io
+  names:
+    kind: PromotionRequest
+    listKind: PromotionRequestList
+    plural: promotionrequests
+    shortNames:
+    - promotionrequest
+    - promotionrequests
+    singular: promotionrequest
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .spec.stage
+      name: Stage
+      type: string
+    - jsonPath: .spec.freight
+      name: Freight
+      type: string
+    - jsonPath: .status.phase
+      name: Phase
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: |-
+          PromotionRequest expresses the intent to promote a piece of Freight to a
+          specific set of Targets. Its Stage and Freight are fixed for its lifetime,
+          giving it a single freight transition to represent from start to terminal
+          state; only its list of Targets may change, so that Targets discovered after
+          creation can still be included.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: |-
+              Spec describes the Stage, the Freight, and the Targets of the
+              PromotionRequest.
+            properties:
+              freight:
+                description: |-
+                  Freight specifies the piece of Freight promoted by the Stage.
+                  The Freight MUST be in the same namespace as the PromotionRequest.
+                maxLength: 253
+                minLength: 1
+                pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                type: string
+                x-kubernetes-validations:
+                - rule: self == oldSelf
+              stage:
+                description: |-
+                  Stage specifies the name of the Stage that promotes the Freight.
+                  The Stage MUST be in the same namespace as the PromotionRequest.
+                maxLength: 253
+                minLength: 1
+                pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                type: string
+                x-kubernetes-validations:
+                - rule: self == oldSelf
+              targets:
+                description: |-
+                  Targets names the Targets to which this PromotionRequest promotes Freight.
+                  Each Target MUST be in the same namespace as the PromotionRequest. The
+                  list may be empty, which records that the governing Stage governed no
+                  Targets when the PromotionRequest was created -- distinct from the field
+                  being absent, which asks for it to be resolved.
+
+                  This is a resolved list, not a selector: the Stage's target selectors are
+                  evaluated once, at creation, and the result recorded here. The membership
+                  of the PromotionRequest is therefore a snapshot of what the Stage governed
+                  at that moment, and its threshold and terminal state are computed against
+                  it rather than against a selector that could match differently later.
+
+                  This is the only mutable field in the spec. The governing Stage owns it,
+                  and may add Targets to an in-flight PromotionRequest so that Targets
+                  discovered after creation can still receive the Freight. Target names MUST
+                  be unique; this is enforced by the validating webhook rather than by the
+                  schema, since a list-map's per-item ownership tracking would roughly
+                  double the storage cost of every entry.
+                items:
+                  description: |-
+                    PromotionRequestTarget names a Target that a PromotionRequest promotes
+                    Freight to.
+                  properties:
+                    name:
+                      description: Name is the name of the Target.
+                      maxLength: 253
+                      minLength: 1
+                      pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                      type: string
+                  required:
+                  - name
+                  type: object
+                type: array
+                x-kubernetes-list-type: atomic
+            required:
+            - freight
+            - stage
+            - targets
+            type: object
+          status:
+            description: |-
+              Status describes the per-Target progress and the aggregate state of the
+              PromotionRequest's Promotions.
+            properties:
+              conditions:
+                description: |-
+                  Conditions contains the last observations of the PromotionRequest's current
+                  state.
+                items:
+                  description: Condition contains details for one aspect of the current
+                    state of this API Resource.
+                  properties:
+                    lastTransitionTime:
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
+                      maxLength: 32768
+                      type: string
+                    observedGeneration:
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      minimum: 0
+                      type: integer
+                    reason:
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
+                        This field may not be empty.
+                      maxLength: 1024
+                      minLength: 1
+                      pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                      type: string
+                    status:
+                      description: status of the condition, one of True, False, Unknown.
+                      enum:
+                      - "True"
+                      - "False"
+                      - Unknown
+                      type: string
+                    type:
+                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
+                      maxLength: 316
+                      pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - message
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+              finishedAt:
+                description: FinishedAt is the time at which the PromotionRequest
+                  completed.
+                format: date-time
+                type: string
+              message:
+                description: |-
+                  Message is a display message explaining the current Phase: what the
+                  PromotionRequest is waiting on, how far its fan-out has progressed, or
+                  why it did not succeed. i.e. If the Phase field has a value of Failed or
+                  Errored, this field can be expected to explain why.
+                type: string
+              observedGeneration:
+                description: ObservedGeneration is the generation of the spec last
+                  reconciled.
+                format: int64
+                type: integer
+              phase:
+                description: Phase is a high-level summary of the PromotionRequest's
+                  lifecycle.
+                type: string
+              startedAt:
+                description: StartedAt is the time at which the PromotionRequest started.
+                format: date-time
+                type: string
+              summary:
+                description: Summary aggregates the phases of this PromotionRequest's
+                  child Promotions.
+                properties:
+                  aborted:
+                    description: Aborted is the number of child Promotions in the
+                      Aborted phase.
+                    format: int32
+                    type: integer
+                  errored:
+                    description: Errored is the number of child Promotions in the
+                      Errored phase.
+                    format: int32
+                    type: integer
+                  failed:
+                    description: Failed is the number of child Promotions in the Failed
+                      phase.
+                    format: int32
+                    type: integer
+                  pending:
+                    description: Pending is the number of child Promotions in the
+                      Pending phase.
+                    format: int32
+                    type: integer
+                  running:
+                    description: Running is the number of child Promotions in the
+                      Running phase.
+                    format: int32
+                    type: integer
+                  succeeded:
+                    description: Succeeded is the number of child Promotions in the
+                      Succeeded phase.
+                    format: int32
+                    type: integer
+                type: object
+              targets:
+                description: |-
+                  Targets records progress against spec.targets: one entry per Target, with
+                  the child Promotion promoting to it and that Promotion's phase. Entries
+                  appear as the reconciler acts on each Target in spec.targets.
+
+                  The list is atomic rather than a map keyed by name: the reconciler is its
+                  only writer, so per-item ownership tracking in managedFields would only
+                  inflate the object -- roughly doubling the storage cost of each entry --
+                  without ever being used to merge.
+                items:
+                  description: |-
+                    PromotionRequestTargetStatus records the state of a single Target selected
+                    by a PromotionRequest.
+                  properties:
+                    name:
+                      description: Name is the name of the Target.
+                      maxLength: 253
+                      minLength: 1
+                      pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                      type: string
+                    phase:
+                      description: Phase is the phase of that Promotion.
+                      type: string
+                    promotion:
+                      description: |-
+                        Promotion is the name of the child Promotion currently promoting the
+                        Freight to this Target. Empty if none has been created yet.
+                      type: string
+                  required:
+                  - name
+                  type: object
+                type: array
+                x-kubernetes-list-type: atomic
+            type: object
+        required:
+        - spec
         type: object
     served: true
     storage: true
@@ -3010,6 +3770,21 @@ spec:
                     rule: has(self.uses) && !has(self.task)
                 minItems: 1
                 type: array
+              target:
+                description: |-
+                  Target optionally names the Target, within the Promotion's own Project
+                  (namespace), that this Promotion promotes Freight to. Targets allow a
+                  single Stage to govern -- and promote Freight to -- multiple destinations.
+                  When set, the named Target must be one that the referenced Stage governs,
+                  i.e. one selected by the Stage's targets.selectors.
+
+                  When empty (the default), the Promotion promotes to the Stage itself. This
+                  preserves the behavior of Promotions created before Targets existed:
+                  classic Stages -- those without a targets block -- govern no Targets, so
+                  their Promotions leave this field empty.
+                maxLength: 253
+                pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                type: string
               vars:
                 description: |-
                   Vars is a list of variables that can be referenced by expressions in
@@ -3122,6 +3897,12 @@ spec:
                             registry, the URL implicitly points to a specific chart and the Name field
                             will be empty.
                           type: string
+                        subscriptionName:
+                          description: |-
+                            SubscriptionName is the name of the subscription that discovered this
+                            chart. This field is only populated if the subscription was assigned
+                            a name.
+                          type: string
                         version:
                           description: Version specifies a particular version of the
                             chart.
@@ -3157,6 +3938,12 @@ spec:
                         repoURL:
                           description: RepoURL is the URL of a Git repository.
                           type: string
+                        subscriptionName:
+                          description: |-
+                            SubscriptionName is the name of the subscription that discovered this
+                            commit. This field is only populated if the subscription was assigned
+                            a name.
+                          type: string
                         tag:
                           description: |-
                             Tag denotes a tag in the repository that matched selection criteria and
@@ -3185,6 +3972,12 @@ spec:
                         repoURL:
                           description: RepoURL describes the repository in which the
                             image can be found.
+                          type: string
+                        subscriptionName:
+                          description: |-
+                            SubscriptionName is the name of the subscription that discovered this
+                            image. This field is only populated if the subscription was assigned
+                            a name.
                           type: string
                         tag:
                           description: |-
@@ -3295,6 +4088,12 @@ spec:
                                   registry, the URL implicitly points to a specific chart and the Name field
                                   will be empty.
                                 type: string
+                              subscriptionName:
+                                description: |-
+                                  SubscriptionName is the name of the subscription that discovered this
+                                  chart. This field is only populated if the subscription was assigned
+                                  a name.
+                                type: string
                               version:
                                 description: Version specifies a particular version
                                   of the chart.
@@ -3331,6 +4130,12 @@ spec:
                               repoURL:
                                 description: RepoURL is the URL of a Git repository.
                                 type: string
+                              subscriptionName:
+                                description: |-
+                                  SubscriptionName is the name of the subscription that discovered this
+                                  commit. This field is only populated if the subscription was assigned
+                                  a name.
+                                type: string
                               tag:
                                 description: |-
                                   Tag denotes a tag in the repository that matched selection criteria and
@@ -3359,6 +4164,12 @@ spec:
                               repoURL:
                                 description: RepoURL describes the repository in which
                                   the image can be found.
+                                type: string
+                              subscriptionName:
+                                description: |-
+                                  SubscriptionName is the name of the subscription that discovered this
+                                  image. This field is only populated if the subscription was assigned
+                                  a name.
                                 type: string
                               tag:
                                 description: |-
@@ -4173,6 +4984,79 @@ spec:
                   kargo.akuity.io/shard label with the value of this field. When this field
                   is empty, the webhook will ensure that label is absent.
                 type: string
+              targets:
+                description: |-
+                  Targets describes the Targets that this Stage governs and promotes Freight
+                  to. Its presence is what makes a Stage target-aware.
+
+                  When this field is nil (the default), the Stage operates in classic mode:
+                  it governs no Targets and promotes Freight by way of Promotions alone.
+                  This preserves the behavior of Stages authored before Targets existed.
+                properties:
+                  selectors:
+                    description: |-
+                      Selectors select the Targets that the Stage governs, matching Targets by
+                      their labels within the Stage's own Project. A Target is selected when it
+                      matches any selector in the list, so several selectors describe a union.
+                      A Target matching more than one of them is still governed once.
+
+                      An empty selector selects every Target in the Project. An empty list
+                      selects none: the Stage still governs Targets, it just governs none at the
+                      moment.
+                    items:
+                      description: |-
+                        A label selector is a label query over a set of resources. The result of matchLabels and
+                        matchExpressions are ANDed. An empty label selector matches all objects. A null
+                        label selector matches no objects.
+                      properties:
+                        matchExpressions:
+                          description: matchExpressions is a list of label selector
+                            requirements. The requirements are ANDed.
+                          items:
+                            description: |-
+                              A label selector requirement is a selector that contains values, a key, and an operator that
+                              relates the key and values.
+                            properties:
+                              key:
+                                description: key is the label key that the selector
+                                  applies to.
+                                type: string
+                              operator:
+                                description: |-
+                                  operator represents a key's relationship to a set of values.
+                                  Valid operators are In, NotIn, Exists and DoesNotExist.
+                                type: string
+                              values:
+                                description: |-
+                                  values is an array of string values. If the operator is In or NotIn,
+                                  the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                  the values array must be empty. This array is replaced during a strategic
+                                  merge patch.
+                                items:
+                                  type: string
+                                type: array
+                                x-kubernetes-list-type: atomic
+                            required:
+                            - key
+                            - operator
+                            type: object
+                          type: array
+                          x-kubernetes-list-type: atomic
+                        matchLabels:
+                          additionalProperties:
+                            type: string
+                          description: |-
+                            matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                            map is equivalent to an element of matchExpressions, whose key field is "key", the
+                            operator is "In", and the values array contains only "value". The requirements are ANDed.
+                          type: object
+                      type: object
+                      x-kubernetes-map-type: atomic
+                    type: array
+                    x-kubernetes-list-type: atomic
+                required:
+                - selectors
+                type: object
               vars:
                 description: |-
                   Vars is a list of variables that can be referenced anywhere in the
@@ -4470,6 +5354,12 @@ spec:
                                 registry, the URL implicitly points to a specific chart and the Name field
                                 will be empty.
                               type: string
+                            subscriptionName:
+                              description: |-
+                                SubscriptionName is the name of the subscription that discovered this
+                                chart. This field is only populated if the subscription was assigned
+                                a name.
+                              type: string
                             version:
                               description: Version specifies a particular version
                                 of the chart.
@@ -4506,6 +5396,12 @@ spec:
                             repoURL:
                               description: RepoURL is the URL of a Git repository.
                               type: string
+                            subscriptionName:
+                              description: |-
+                                SubscriptionName is the name of the subscription that discovered this
+                                commit. This field is only populated if the subscription was assigned
+                                a name.
+                              type: string
                             tag:
                               description: |-
                                 Tag denotes a tag in the repository that matched selection criteria and
@@ -4534,6 +5430,12 @@ spec:
                             repoURL:
                               description: RepoURL describes the repository in which
                                 the image can be found.
+                              type: string
+                            subscriptionName:
+                              description: |-
+                                SubscriptionName is the name of the subscription that discovered this
+                                image. This field is only populated if the subscription was assigned
+                                a name.
                               type: string
                             tag:
                               description: |-
@@ -4649,6 +5551,12 @@ spec:
                                     registry, the URL implicitly points to a specific chart and the Name field
                                     will be empty.
                                   type: string
+                                subscriptionName:
+                                  description: |-
+                                    SubscriptionName is the name of the subscription that discovered this
+                                    chart. This field is only populated if the subscription was assigned
+                                    a name.
+                                  type: string
                                 version:
                                   description: Version specifies a particular version
                                     of the chart.
@@ -4686,6 +5594,12 @@ spec:
                                 repoURL:
                                   description: RepoURL is the URL of a Git repository.
                                   type: string
+                                subscriptionName:
+                                  description: |-
+                                    SubscriptionName is the name of the subscription that discovered this
+                                    commit. This field is only populated if the subscription was assigned
+                                    a name.
+                                  type: string
                                 tag:
                                   description: |-
                                     Tag denotes a tag in the repository that matched selection criteria and
@@ -4714,6 +5628,12 @@ spec:
                                 repoURL:
                                   description: RepoURL describes the repository in
                                     which the image can be found.
+                                  type: string
+                                subscriptionName:
+                                  description: |-
+                                    SubscriptionName is the name of the subscription that discovered this
+                                    image. This field is only populated if the subscription was assigned
+                                    a name.
                                   type: string
                                 tag:
                                   description: |-
@@ -4825,6 +5745,12 @@ spec:
                                           registry, the URL implicitly points to a specific chart and the Name field
                                           will be empty.
                                         type: string
+                                      subscriptionName:
+                                        description: |-
+                                          SubscriptionName is the name of the subscription that discovered this
+                                          chart. This field is only populated if the subscription was assigned
+                                          a name.
+                                        type: string
                                       version:
                                         description: Version specifies a particular
                                           version of the chart.
@@ -4862,6 +5788,12 @@ spec:
                                       repoURL:
                                         description: RepoURL is the URL of a Git repository.
                                         type: string
+                                      subscriptionName:
+                                        description: |-
+                                          SubscriptionName is the name of the subscription that discovered this
+                                          commit. This field is only populated if the subscription was assigned
+                                          a name.
+                                        type: string
                                       tag:
                                         description: |-
                                           Tag denotes a tag in the repository that matched selection criteria and
@@ -4890,6 +5822,12 @@ spec:
                                       repoURL:
                                         description: RepoURL describes the repository
                                           in which the image can be found.
+                                        type: string
+                                      subscriptionName:
+                                        description: |-
+                                          SubscriptionName is the name of the subscription that discovered this
+                                          image. This field is only populated if the subscription was assigned
+                                          a name.
                                         type: string
                                       tag:
                                         description: |-
@@ -5092,6 +6030,40 @@ spec:
                 required:
                 - name
                 type: object
+              currentPromotionRequest:
+                description: |-
+                  CurrentPromotionRequest is a reference to the PromotionRequest currently
+                  fanning Freight out to this Stage's Targets. It is absent for a Stage that
+                  governs no Targets.
+
+                  Fanning Freight out to Targets is a Kargo Enterprise-only feature. Kargo
+                  OSS maintains this field all the same, but the PromotionRequest it refers
+                  to never gets further than being marked Errored for that reason.
+                properties:
+                  finishedAt:
+                    description: FinishedAt is the time at which the PromotionRequest
+                      completed.
+                    format: date-time
+                    type: string
+                  freight:
+                    description: Freight identifies the Freight being promoted.
+                    properties:
+                      name:
+                        description: Name is the name of the Freight.
+                        type: string
+                    required:
+                    - name
+                    type: object
+                  name:
+                    description: Name is the name of the PromotionRequest.
+                    type: string
+                  phase:
+                    description: Phase is a high-level summary of the PromotionRequest's
+                      lifecycle.
+                    type: string
+                required:
+                - name
+                type: object
               effectiveAutoPromotionHolds:
                 additionalProperties:
                   description: |-
@@ -5228,6 +6200,12 @@ spec:
                                     registry, the URL implicitly points to a specific chart and the Name field
                                     will be empty.
                                   type: string
+                                subscriptionName:
+                                  description: |-
+                                    SubscriptionName is the name of the subscription that discovered this
+                                    chart. This field is only populated if the subscription was assigned
+                                    a name.
+                                  type: string
                                 version:
                                   description: Version specifies a particular version
                                     of the chart.
@@ -5265,6 +6243,12 @@ spec:
                                 repoURL:
                                   description: RepoURL is the URL of a Git repository.
                                   type: string
+                                subscriptionName:
+                                  description: |-
+                                    SubscriptionName is the name of the subscription that discovered this
+                                    commit. This field is only populated if the subscription was assigned
+                                    a name.
+                                  type: string
                                 tag:
                                   description: |-
                                     Tag denotes a tag in the repository that matched selection criteria and
@@ -5293,6 +6277,12 @@ spec:
                                 repoURL:
                                   description: RepoURL describes the repository in
                                     which the image can be found.
+                                  type: string
+                                subscriptionName:
+                                  description: |-
+                                    SubscriptionName is the name of the subscription that discovered this
+                                    image. This field is only populated if the subscription was assigned
+                                    a name.
                                   type: string
                                 tag:
                                   description: |-
@@ -5509,6 +6499,12 @@ spec:
                                 registry, the URL implicitly points to a specific chart and the Name field
                                 will be empty.
                               type: string
+                            subscriptionName:
+                              description: |-
+                                SubscriptionName is the name of the subscription that discovered this
+                                chart. This field is only populated if the subscription was assigned
+                                a name.
+                              type: string
                             version:
                               description: Version specifies a particular version
                                 of the chart.
@@ -5545,6 +6541,12 @@ spec:
                             repoURL:
                               description: RepoURL is the URL of a Git repository.
                               type: string
+                            subscriptionName:
+                              description: |-
+                                SubscriptionName is the name of the subscription that discovered this
+                                commit. This field is only populated if the subscription was assigned
+                                a name.
+                              type: string
                             tag:
                               description: |-
                                 Tag denotes a tag in the repository that matched selection criteria and
@@ -5573,6 +6575,12 @@ spec:
                             repoURL:
                               description: RepoURL describes the repository in which
                                 the image can be found.
+                              type: string
+                            subscriptionName:
+                              description: |-
+                                SubscriptionName is the name of the subscription that discovered this
+                                image. This field is only populated if the subscription was assigned
+                                a name.
                               type: string
                             tag:
                               description: |-
@@ -5688,6 +6696,12 @@ spec:
                                     registry, the URL implicitly points to a specific chart and the Name field
                                     will be empty.
                                   type: string
+                                subscriptionName:
+                                  description: |-
+                                    SubscriptionName is the name of the subscription that discovered this
+                                    chart. This field is only populated if the subscription was assigned
+                                    a name.
+                                  type: string
                                 version:
                                   description: Version specifies a particular version
                                     of the chart.
@@ -5725,6 +6739,12 @@ spec:
                                 repoURL:
                                   description: RepoURL is the URL of a Git repository.
                                   type: string
+                                subscriptionName:
+                                  description: |-
+                                    SubscriptionName is the name of the subscription that discovered this
+                                    commit. This field is only populated if the subscription was assigned
+                                    a name.
+                                  type: string
                                 tag:
                                   description: |-
                                     Tag denotes a tag in the repository that matched selection criteria and
@@ -5753,6 +6773,12 @@ spec:
                                 repoURL:
                                   description: RepoURL describes the repository in
                                     which the image can be found.
+                                  type: string
+                                subscriptionName:
+                                  description: |-
+                                    SubscriptionName is the name of the subscription that discovered this
+                                    image. This field is only populated if the subscription was assigned
+                                    a name.
                                   type: string
                                 tag:
                                   description: |-
@@ -5864,6 +6890,12 @@ spec:
                                           registry, the URL implicitly points to a specific chart and the Name field
                                           will be empty.
                                         type: string
+                                      subscriptionName:
+                                        description: |-
+                                          SubscriptionName is the name of the subscription that discovered this
+                                          chart. This field is only populated if the subscription was assigned
+                                          a name.
+                                        type: string
                                       version:
                                         description: Version specifies a particular
                                           version of the chart.
@@ -5901,6 +6933,12 @@ spec:
                                       repoURL:
                                         description: RepoURL is the URL of a Git repository.
                                         type: string
+                                      subscriptionName:
+                                        description: |-
+                                          SubscriptionName is the name of the subscription that discovered this
+                                          commit. This field is only populated if the subscription was assigned
+                                          a name.
+                                        type: string
                                       tag:
                                         description: |-
                                           Tag denotes a tag in the repository that matched selection criteria and
@@ -5929,6 +6967,12 @@ spec:
                                       repoURL:
                                         description: RepoURL describes the repository
                                           in which the image can be found.
+                                        type: string
+                                      subscriptionName:
+                                        description: |-
+                                          SubscriptionName is the name of the subscription that discovered this
+                                          image. This field is only populated if the subscription was assigned
+                                          a name.
                                         type: string
                                       tag:
                                         description: |-
@@ -6131,6 +7175,36 @@ spec:
                 required:
                 - name
                 type: object
+              lastPromotionRequest:
+                description: |-
+                  LastPromotionRequest is a reference to the last PromotionRequest to reach a
+                  terminal phase. It is absent for a Stage that governs no Targets, and only
+                  ever moves forward, so it outlives the PromotionRequest it refers to.
+                properties:
+                  finishedAt:
+                    description: FinishedAt is the time at which the PromotionRequest
+                      completed.
+                    format: date-time
+                    type: string
+                  freight:
+                    description: Freight identifies the Freight being promoted.
+                    properties:
+                      name:
+                        description: Name is the name of the Freight.
+                        type: string
+                    required:
+                    - name
+                    type: object
+                  name:
+                    description: Name is the name of the PromotionRequest.
+                    type: string
+                  phase:
+                    description: Phase is a high-level summary of the PromotionRequest's
+                      lifecycle.
+                    type: string
+                required:
+                - name
+                type: object
               metadata:
                 additionalProperties:
                   x-kubernetes-preserve-unknown-fields: true
@@ -6145,9 +7219,495 @@ spec:
                   status was reconciled against.
                 format: int64
                 type: integer
+              promotionWindowStatus:
+                description: |-
+                  PromotionWindowStatus reports whether promotion windows currently permit
+                  promotion of this Stage, and when that is next expected to change. It is
+                  absent when no window gates the Stage.
+
+                  Kargo Enterprise only: This field is ignored in Kargo OSS.
+                properties:
+                  closed:
+                    description: |-
+                      Closed indicates that the schedule currently forbids promotion of this
+                      Stage.
+                    type: boolean
+                  nextClose:
+                    description: |-
+                      NextClose is when promotion is next expected to become forbidden, and is
+                      meaningful only while Closed is false. It allows a client to give warning of
+                      an approaching freeze, which NextCloseReason names. Like NextOpen it is optional, and
+                      absent when no such boundary is known -- a schedule that will never forbid
+                      promotion again has none.
+                    format: date-time
+                    type: string
+                  nextCloseReason:
+                    description: |-
+                      NextCloseReason explains in human-readable terms why promotion will be forbidden
+                      at NextClose, naming the freeze responsible where there is one.
+                      It is set whenever NextClose is set.
+                    type: string
+                  nextOpen:
+                    description: |-
+                      NextOpen is when the schedule is next expected to permit promotions.
+
+                      It is optional even while Closed is true, and its absence means only that
+                      no reopening is known: the schedule may have none (a one-shot Allow window
+                      that has already elapsed), determining one may be impractical, or the
+                      closure may be indefinite by design. Clients must therefore render Reason
+                      and treat a missing NextOpen as "frozen, with no known end" rather than
+                      assuming a value is present.
+                    format: date-time
+                    type: string
+                  reason:
+                    description: |-
+                      Reason explains in human-readable terms why promotion is forbidden,
+                      naming the freeze responsible where there is one.
+
+                      It is set whenever Closed is true, where it is the only field guaranteed
+                      to explain the freeze because NextOpen may be absent.
+                      It carries the same explanation as the corresponding admission rejection.
+                    type: string
+                required:
+                - closed
+                type: object
             type: object
         required:
         - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+# Source: kargo/templates/crds.yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.19.0
+    helm.sh/resource-policy: keep
+  name: targets.kargo.akuity.io
+spec:
+  group: kargo.akuity.io
+  names:
+    kind: Target
+    listKind: TargetList
+    plural: targets
+    singular: target
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: |-
+          Target represents a single destination -- a cluster, for instance -- that
+          Stages promote Freight to. A Target is descriptive: it holds target-specific
+          values consumed by the promotion steps of Stages that govern it. It defines
+          no promotion steps and no Freight sources of its own and therefore cannot
+          effect any promotion itself. Its status records, per governing Stage, what
+          Freight was last promoted to it and how that Freight is faring there.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: Spec describes the Target.
+            properties:
+              params:
+                additionalProperties:
+                  x-kubernetes-preserve-unknown-fields: true
+                description: |-
+                  Params is a map of arbitrary, target-specific values. Values may be any
+                  valid JSON -- including nested objects and arrays -- so promotion steps
+                  can reference deeply nested data. Promotion steps of Stages that govern
+                  this Target may reference these values by key in their expressions (for
+                  example, target.params.branch or target.params.cluster.region).
+                type: object
+            type: object
+          status:
+            description: Status describes the current status of the Target.
+            properties:
+              stages:
+                additionalProperties:
+                  description: |-
+                    TargetStageStatus describes a Target's state with respect to a single Stage
+                    that governs it: the Freight that Stage last successfully promoted to the
+                    Target, the health checks that Promotion left behind, and the Target's
+                    current health as assessed from them. It is the per-Target counterpart of
+                    the current Freight, health, and verification state a Stage keeps for
+                    itself.
+                  properties:
+                    currentFreight:
+                      description: |-
+                        CurrentFreight is the FreightCollection that the Stage's most recent
+                        successful Promotion to this Target rendered. Because a Stage may
+                        request Freight from several origins and a single Promotion changes
+                        only one of them, this is a collection rather than a single Freight
+                        reference: it holds one entry per origin, exactly as the Stage's own
+                        current collection does, so the Target's full desired state is known
+                        even for origins the latest Promotion did not touch.
+
+                        The collection is copied from the Promotion's status rather than
+                        derived from this Target's previous state, so a Target that missed a
+                        round or was newly discovered converges to the Stage's desired state
+                        on its next successful Promotion. Its ID is deterministic in its
+                        contents, so a Target that received the same round as the Stage carries
+                        the same ID as the Stage's current collection; comparing the two tells
+                        whether the Target is up to date. Its verification history records
+                        verifications of this Freight on this Target specifically.
+                      properties:
+                        id:
+                          description: |-
+                            ID is a unique and deterministically calculated identifier for the
+                            FreightCollection. It is updated on each use of the UpdateOrPush method.
+                          type: string
+                        items:
+                          additionalProperties:
+                            description: |-
+                              FreightReference is a simplified representation of a piece of Freight -- not
+                              a root resource type.
+                            properties:
+                              artifacts:
+                                description: |-
+                                  Artifacts describes specific versions of artifacts other
+                                  than Git repository commits, container images, and Helm charts.
+                                items:
+                                  description: ArtifactReference is a reference to
+                                    a specific version of an artifact.
+                                  properties:
+                                    artifactType:
+                                      description: |-
+                                        ArtifactType specifies the type of artifact this is. Often, but not always,
+                                        it will be the media type (MIME type) of the artifact referenced by this
+                                        ArtifactReference.
+                                      minLength: 1
+                                      type: string
+                                    metadata:
+                                      description: |-
+                                        Metadata is a JSON object containing a mostly opaque collection of artifact
+                                        attributes. (It must be an object. It may not be a list or a scalar value.)
+                                        "Mostly" because Kargo may understand how to interpret some documented,
+                                        well-known, top-level keys. Those aside, this metadata is only understood
+                                        by a corresponding Subscriber implementation that created it.
+                                      x-kubernetes-preserve-unknown-fields: true
+                                    subscriptionName:
+                                      description: |-
+                                        SubscriptionName is the name of the Subscription that discovered this
+                                        artifact.
+                                      minLength: 1
+                                      type: string
+                                    version:
+                                      description: Version identifies a specific revision
+                                        of this artifact.
+                                      minLength: 1
+                                      type: string
+                                  required:
+                                  - subscriptionName
+                                  - version
+                                  type: object
+                                type: array
+                              charts:
+                                description: Charts describes specific versions of
+                                  specific Helm charts.
+                                items:
+                                  description: Chart describes a specific version
+                                    of a Helm chart.
+                                  properties:
+                                    name:
+                                      description: Name specifies the name of the
+                                        chart.
+                                      type: string
+                                    repoURL:
+                                      description: |-
+                                        RepoURL specifies the URL of a Helm chart repository. Classic chart
+                                        repositories (using HTTP/S) can contain differently named charts. When this
+                                        field points to such a repository, the Name field will specify the name of
+                                        the chart within the repository. In the case of a repository within an OCI
+                                        registry, the URL implicitly points to a specific chart and the Name field
+                                        will be empty.
+                                      type: string
+                                    subscriptionName:
+                                      description: |-
+                                        SubscriptionName is the name of the subscription that discovered this
+                                        chart. This field is only populated if the subscription was assigned
+                                        a name.
+                                      type: string
+                                    version:
+                                      description: Version specifies a particular
+                                        version of the chart.
+                                      type: string
+                                  type: object
+                                type: array
+                              commits:
+                                description: Commits describes specific Git repository
+                                  commits.
+                                items:
+                                  description: GitCommit describes a specific commit
+                                    from a specific Git repository.
+                                  properties:
+                                    author:
+                                      description: Author is the author of the commit.
+                                      type: string
+                                    branch:
+                                      description: Branch denotes the branch of the
+                                        repository where this commit was found.
+                                      type: string
+                                    committer:
+                                      description: Committer is the person who committed
+                                        the commit.
+                                      type: string
+                                    id:
+                                      description: |-
+                                        ID is the ID of a specific commit in the Git repository specified by
+                                        RepoURL.
+                                      type: string
+                                    message:
+                                      description: |-
+                                        Message is the message associated with the commit. At present, this only
+                                        contains the first line (subject) of the commit message.
+                                      type: string
+                                    repoURL:
+                                      description: RepoURL is the URL of a Git repository.
+                                      type: string
+                                    subscriptionName:
+                                      description: |-
+                                        SubscriptionName is the name of the subscription that discovered this
+                                        commit. This field is only populated if the subscription was assigned
+                                        a name.
+                                      type: string
+                                    tag:
+                                      description: |-
+                                        Tag denotes a tag in the repository that matched selection criteria and
+                                        resolved to this commit.
+                                      type: string
+                                  type: object
+                                type: array
+                              images:
+                                description: Images describes specific versions of
+                                  specific container images.
+                                items:
+                                  description: Image describes a specific version
+                                    of a container image.
+                                  properties:
+                                    annotations:
+                                      additionalProperties:
+                                        type: string
+                                      description: Annotations is a map of arbitrary
+                                        metadata for the image.
+                                      type: object
+                                    digest:
+                                      description: |-
+                                        Digest identifies a specific version of the image in the repository
+                                        specified by RepoURL. This is a more precise identifier than Tag.
+                                      type: string
+                                    repoURL:
+                                      description: RepoURL describes the repository
+                                        in which the image can be found.
+                                      type: string
+                                    subscriptionName:
+                                      description: |-
+                                        SubscriptionName is the name of the subscription that discovered this
+                                        image. This field is only populated if the subscription was assigned
+                                        a name.
+                                      type: string
+                                    tag:
+                                      description: |-
+                                        Tag identifies a specific version of the image in the repository specified
+                                        by RepoURL.
+                                      type: string
+                                  type: object
+                                type: array
+                              name:
+                                description: |-
+                                  Name is a system-assigned identifier derived deterministically from
+                                  the contents of the Freight. I.e., two pieces of Freight can be compared
+                                  for equality by comparing their Names.
+                                type: string
+                              origin:
+                                description: Origin describes a kind of Freight in
+                                  terms of its origin.
+                                properties:
+                                  kind:
+                                    description: |-
+                                      Kind is the kind of resource from which Freight may have originated. At
+                                      present, this can only be "Warehouse".
+                                    enum:
+                                    - Warehouse
+                                    type: string
+                                  name:
+                                    description: |-
+                                      Name is the name of the resource of the kind indicated by the Kind field
+                                      from which Freight may originate.
+                                    type: string
+                                required:
+                                - kind
+                                - name
+                                type: object
+                            type: object
+                          description: |-
+                            Freight is a map of FreightReference objects, indexed by their Warehouse
+                            origin.
+                          type: object
+                        verificationHistory:
+                          description: |-
+                            VerificationHistory is a stack of recent VerificationInfo. By default,
+                            the last ten VerificationInfo are stored.
+                          items:
+                            description: |-
+                              VerificationInfo contains the details of an instance of a Verification
+                              process.
+                            properties:
+                              actor:
+                                description: |-
+                                  Actor is the name of the entity that initiated or aborted the
+                                  Verification process.
+                                type: string
+                              analysisRun:
+                                description: |-
+                                  AnalysisRun is a reference to the Argo Rollouts AnalysisRun that implements
+                                  the Verification process.
+                                properties:
+                                  name:
+                                    description: Name is the name of the AnalysisRun.
+                                    type: string
+                                  namespace:
+                                    description: Namespace is the namespace of the
+                                      AnalysisRun.
+                                    type: string
+                                  phase:
+                                    description: Phase is the last observed phase
+                                      of the AnalysisRun referenced by Name.
+                                    type: string
+                                required:
+                                - name
+                                - namespace
+                                - phase
+                                type: object
+                              finishTime:
+                                description: FinishTime is the time at which the Verification
+                                  process finished.
+                                format: date-time
+                                type: string
+                              id:
+                                description: ID is the identifier of the Verification
+                                  process.
+                                type: string
+                              message:
+                                description: |-
+                                  Message may contain additional information about why the verification
+                                  process is in its current phase.
+                                type: string
+                              phase:
+                                description: |-
+                                  Phase describes the current phase of the Verification process. Generally,
+                                  this will be a reflection of the underlying AnalysisRun's phase, however,
+                                  there are exceptions to this, such as in the case where an AnalysisRun
+                                  cannot be launched successfully.
+                                type: string
+                              startTime:
+                                description: StartTime is the time at which the Verification
+                                  process was started.
+                                format: date-time
+                                type: string
+                            type: object
+                          type: array
+                      required:
+                      - id
+                      type: object
+                    health:
+                      description: |-
+                        Health is the Target's health with respect to this Stage's Freight, as
+                        last assessed by executing HealthChecks. It is absent until the first
+                        assessment. Health is an ongoing observation rather than a Promotion
+                        outcome: it is reassessed periodically and whenever the systems the
+                        health checks observe change, so it may become Unhealthy long after the
+                        Promotion that produced CurrentFreight succeeded.
+
+                        A target-aware Stage does not assess health itself. Its own health is
+                        an aggregate of this field across every Target it governs: Healthy only
+                        when each is Healthy and on the Stage's current Freight, Unhealthy when
+                        any is not, Unknown while any has yet to be assessed.
+                      properties:
+                        config:
+                          description: |-
+                            Config is the opaque configuration of all health checks performed on this
+                            Stage.
+                          x-kubernetes-preserve-unknown-fields: true
+                        issues:
+                          description: |-
+                            Issues clarifies why a Stage in any state other than Healthy is in that
+                            state. This field will always be the empty when a Stage is Healthy.
+                          items:
+                            type: string
+                          type: array
+                        output:
+                          description: Output is the opaque output of all health checks
+                            performed on this Stage.
+                          x-kubernetes-preserve-unknown-fields: true
+                        status:
+                          description: Status describes the health of the Stage.
+                          type: string
+                      type: object
+                    healthChecks:
+                      description: |-
+                        HealthChecks are the health check directives produced by the steps of
+                        the Stage's most recent successful Promotion to this Target -- for
+                        instance, which Argo CD Applications that Promotion updated and to what
+                        revisions. They are the input from which Health is assessed, and they
+                        are recorded here because Health must be reassessed for as long as
+                        CurrentFreight remains on the Target, while the Promotion that produced
+                        them is eventually garbage collected. A Stage keeps the same
+                        information for itself in its lastPromotion.
+                      items:
+                        description: |-
+                          HealthCheckStep describes a health check directive which can be executed by
+                          a Stage to verify the health of a Promotion result.
+                        properties:
+                          config:
+                            description: Config is the configuration for the directive.
+                            x-kubernetes-preserve-unknown-fields: true
+                          uses:
+                            description: Uses identifies a runner that can execute
+                              this step.
+                            minLength: 1
+                            type: string
+                        required:
+                        - uses
+                        type: object
+                      type: array
+                  type: object
+                description: |-
+                  Stages records the Target's state with respect to each Stage that
+                  governs it, keyed by Stage name. A Target may be governed by several
+                  Stages at once, each promoting its own Freight to it, so everything
+                  observed about the Target is scoped to the Stage that observed it.
+                  This mirrors how Freight status keys currentlyIn, verifiedIn, and
+                  approvedFor by Stage name.
+
+                  An entry exists only once a Promotion from that Stage to this Target
+                  has succeeded. A Stage that governs the Target but has never promoted
+                  to it has no entry.
+                type: object
+            type: object
         type: object
     served: true
     storage: true
@@ -6357,6 +7917,11 @@ spec:
                             This field is optional, and only populated if the ChartSubscription
                             specifies a SemverConstraint.
                           type: string
+                        subscriptionName:
+                          description: |-
+                            SubscriptionName is the optional human-readable name of the subscription
+                            that produced this discovery result.
+                          type: string
                         versions:
                           description: |-
                             Versions is a list of versions discovered by the Warehouse for the
@@ -6488,6 +8053,11 @@ spec:
                           minLength: 1
                           pattern: (?:^(ssh|https?)://(?:([\w-]+)(:(.+))?@)?([\w-]+(?:\.[\w-]+)*)(?::(\d{1,5}))?(/.*)$)|(?:^([\w-]+)@([\w+]+(?:\.[\w-]+)*):(/?.*))
                           type: string
+                        subscriptionName:
+                          description: |-
+                            SubscriptionName is the optional human-readable name of the subscription
+                            that produced this discovery result.
+                          type: string
                       required:
                       - repoURL
                       type: object
@@ -6552,6 +8122,11 @@ spec:
                             RepoURL is the repository URL of the image, as specified in the
                             ImageSubscription.
                           minLength: 1
+                          type: string
+                        subscriptionName:
+                          description: |-
+                            SubscriptionName is the optional human-readable name of the subscription
+                            that produced this discovery result.
                           type: string
                       required:
                       - repoURL
@@ -6647,10 +8222,10 @@ kind: ClusterRole
 metadata:
   name: kargo-api
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: api
   
@@ -6699,6 +8274,12 @@ rules:
   verbs:
   - create
 - apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
   - kargo.akuity.io
   resources:
   - freights
@@ -6726,6 +8307,8 @@ rules:
   - stages
   - warehouses
   - projectconfigs
+  - promotionrequests
+  - targets
   verbs:
   - "*"
 - apiGroups:
@@ -6770,10 +8353,10 @@ kind: ClusterRole
 metadata:
   name: kargo-api-rollouts
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: api
   
@@ -6797,10 +8380,10 @@ kind: ClusterRole
 metadata:
   name: kargo-project-admin
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 rules:
@@ -6840,10 +8423,10 @@ kind: ClusterRole
 metadata:
   name: kargo-project-secrets-reader
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 rules:
@@ -6862,10 +8445,10 @@ kind: ClusterRole
 metadata:
   name: kargo-controller
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
   
@@ -6891,6 +8474,7 @@ rules:
   - clusterconfigs
   - projects
   - projectconfigs
+  - targets
   verbs:
   - get
   - list
@@ -6899,6 +8483,7 @@ rules:
   - kargo.akuity.io
   resources:
   - promotions
+  - promotionrequests
   verbs:
   - create
   - get
@@ -6940,6 +8525,7 @@ rules:
   resources:
   - freights/status
   - promotions/status
+  - promotionrequests/status
   - stages/status
   - warehouses/finalizers
   - warehouses/status
@@ -6952,10 +8538,10 @@ kind: ClusterRole
 metadata:
   name: kargo-controller-read-secrets
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
   
@@ -6975,10 +8561,10 @@ kind: ClusterRole
 metadata:
   name: kargo-controller-rollouts
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
   
@@ -7017,10 +8603,10 @@ kind: ClusterRole
 metadata:
   name: kargo-controller-argocd
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
     
@@ -7042,10 +8628,10 @@ kind: ClusterRole
 metadata:
   name: kargo-external-webhooks-server
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: external-webhooks-server
   
@@ -7084,10 +8670,10 @@ kind: ClusterRole
 metadata:
   name: kargo-garbage-collector
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: garbage-collector
   
@@ -7135,10 +8721,10 @@ kind: ClusterRole
 metadata:
   name: kargo-webhooks-server
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
   
@@ -7185,6 +8771,7 @@ rules:
   - projectconfigs
   - promotiontasks
   - stages
+  - targets
   - warehouses
   verbs:
   - get
@@ -7215,10 +8802,10 @@ kind: ClusterRole
 metadata:
   name: kargo-webhooks-server-ns-controller
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
   
@@ -7242,10 +8829,10 @@ kind: ClusterRole
 metadata:
   name: kargo-webhooks-server-generic-gc
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
   
@@ -7263,10 +8850,10 @@ kind: ClusterRole
 metadata:
   name: kargo-management-controller
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: management-controller
   
@@ -7328,7 +8915,9 @@ rules:
   - kargo.akuity.io
   resources:
   - clusterconfigs
+  - promotionrequests
   - stages
+  - targets
   - warehouses
   - projectconfigs
   verbs:
@@ -7342,10 +8931,10 @@ kind: ClusterRole
 metadata:
   name: kargo-admin
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 rules:
@@ -7377,8 +8966,10 @@ rules:
   - freights
   - projects
   - projectconfigs
+  - promotionrequests
   - promotiontasks
   - stages
+  - targets
   - warehouses
   verbs:
   - create
@@ -7407,12 +8998,6 @@ rules:
   - patch
   - watch
 - apiGroups:
-  - kargo.akuity.io
-  resources:
-  - freights/status
-  verbs:
-  - patch # for manual approvals
-- apiGroups:
   - argoproj.io
   resources:
   - analysisruns
@@ -7440,10 +9025,10 @@ kind: ClusterRole
 metadata:
   name: kargo-project-creator
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 rules:
@@ -7488,10 +9073,10 @@ kind: ClusterRole
 metadata:
   name: kargo-user
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 rules:
@@ -7528,10 +9113,10 @@ kind: ClusterRole
 metadata:
   name: kargo-viewer
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 rules:
@@ -7563,8 +9148,10 @@ rules:
   - projects
   - projectconfigs
   - promotions
+  - promotionrequests
   - promotiontasks
   - stages
+  - targets
   - warehouses
   verbs:
   - get
@@ -7587,10 +9174,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-api
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: api
   
@@ -7609,10 +9196,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-api-rollouts
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: api
   
@@ -7631,10 +9218,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-controller
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
     
@@ -7654,10 +9241,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-controller-rollouts
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
     
@@ -7677,10 +9264,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-controller-argocd
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
     
@@ -7700,10 +9287,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-external-webhooks-server
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: external-webhooks-server
   
@@ -7722,10 +9309,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-garbage-collector
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: garbage-collector
   
@@ -7744,10 +9331,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-webhooks-server
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
   
@@ -7766,10 +9353,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-webhooks-server-ns-controller
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
   
@@ -7788,10 +9375,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-webhooks-server-generic-gc
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
   
@@ -7810,10 +9397,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-management-controller
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: management-controller
   
@@ -7832,10 +9419,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-admin
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 roleRef:
@@ -7853,10 +9440,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-project-creator
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 roleRef:
@@ -7874,10 +9461,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-user
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 roleRef:
@@ -7895,10 +9482,10 @@ kind: ClusterRoleBinding
 metadata:
   name: kargo-viewer
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 roleRef:
@@ -7917,10 +9504,10 @@ metadata:
   name: kargo-api
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 rules:
@@ -7939,50 +9526,6 @@ rules:
   - list
   - watch
 ---
-# Source: kargo/templates/cluster-secrets-namespace/roles.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: kargo-cluster-secrets-reader
-  namespace: kargo-cluster-secrets
-  labels:
-    helm.sh/chart: kargo-1.11.4
-    app.kubernetes.io/name: kargo
-    app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
-    app.kubernetes.io/managed-by: Helm
-  
-rules:
-- apiGroups:
-  - ""
-  resources:
-  - secrets
-  verbs:
-  - get
-  - list
-  - watch
----
-# Source: kargo/templates/cluster-secrets-namespace/roles.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: kargo-cluster-secrets-admin
-  namespace: kargo-cluster-secrets
-  labels:
-    helm.sh/chart: kargo-1.11.4
-    app.kubernetes.io/name: kargo
-    app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
-    app.kubernetes.io/managed-by: Helm
-  
-rules:
-- apiGroups:
-  - ""
-  resources:
-  - secrets
-  verbs:
-  - "*"
----
 # Source: kargo/templates/controller/roles.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -7990,10 +9533,10 @@ metadata:
   name: kargo-controller
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
   
@@ -8016,10 +9559,10 @@ metadata:
   name: kargo-shared-resources-reader
   namespace: kargo-shared-resources
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 rules:
@@ -8039,10 +9582,10 @@ metadata:
   name: kargo-shared-resources-admin
   namespace: kargo-shared-resources
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 rules:
@@ -8067,10 +9610,10 @@ metadata:
   name: kargo-shared-resources-controller-reader
   namespace: kargo-shared-resources
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 rules:
@@ -8091,10 +9634,10 @@ metadata:
   name: kargo-system-resources-reader
   namespace: kargo-system-resources
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 rules:
@@ -8114,10 +9657,10 @@ metadata:
   name: kargo-system-resources-admin
   namespace: kargo-system-resources
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 rules:
@@ -8135,10 +9678,10 @@ metadata:
   name: kargo-admin
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 rules:
@@ -8156,10 +9699,10 @@ metadata:
   name: kargo-api
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 roleRef:
@@ -8170,77 +9713,6 @@ subjects:
 - kind: ServiceAccount
   namespace: default
   name: kargo-api
----
-# Source: kargo/templates/cluster-secrets-namespace/role-bindings.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: kargo-cluster-secrets-reader
-  namespace: kargo-cluster-secrets
-  labels:
-    helm.sh/chart: kargo-1.11.4
-    app.kubernetes.io/name: kargo
-    app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
-    app.kubernetes.io/managed-by: Helm
-  
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: kargo-cluster-secrets-reader
-subjects:
-- kind: ServiceAccount
-  namespace: default
-  name: kargo-external-webhooks-server
----
-# Source: kargo/templates/cluster-secrets-namespace/role-bindings.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: kargo-cluster-secrets-admin
-  namespace: kargo-cluster-secrets
-  labels:
-    helm.sh/chart: kargo-1.11.4
-    app.kubernetes.io/name: kargo
-    app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
-    app.kubernetes.io/managed-by: Helm
-  
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: kargo-cluster-secrets-admin
-subjects:
-- kind: ServiceAccount
-  namespace: default
-  name: kargo-api
-- kind: ServiceAccount
-  namespace: default
-  name: kargo-admin
----
-# Source: kargo/templates/cluster-secrets-namespace/role-bindings.yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: kargo-controller-cluster-secrets-reader
-  namespace: kargo-cluster-secrets
-  labels:
-    helm.sh/chart: kargo-1.11.4
-    app.kubernetes.io/name: kargo
-    app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: controller
-    
-  
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: kargo-cluster-secrets-reader
-subjects:
-- kind: ServiceAccount
-  namespace: default
-  name: kargo-controller
 ---
 # Source: kargo/templates/controller/role-bindings.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -8249,10 +9721,10 @@ metadata:
   name: kargo-controller
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
     
@@ -8273,10 +9745,10 @@ metadata:
   name: kargo-shared-resources-reader
   namespace: kargo-shared-resources
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 roleRef:
@@ -8301,10 +9773,10 @@ metadata:
   name: kargo-shared-resources-admin
   namespace: kargo-shared-resources
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 roleRef:
@@ -8326,10 +9798,10 @@ metadata:
   name: kargo-controller-shared-resources-reader
   namespace: kargo-shared-resources
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
     
@@ -8350,10 +9822,10 @@ metadata:
   name: kargo-system-resources-reader
   namespace: kargo-system-resources
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 roleRef:
@@ -8372,10 +9844,10 @@ metadata:
   name: kargo-system-resources-admin
   namespace: kargo-system-resources
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 roleRef:
@@ -8397,10 +9869,10 @@ metadata:
   name: kargo-controller-system-resources-reader
   namespace: kargo-system-resources
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
     
@@ -8421,10 +9893,10 @@ metadata:
   name: kargo-admin
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
   
 roleRef:
@@ -8443,10 +9915,10 @@ metadata:
   name: kargo-api
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: api
   
@@ -8469,10 +9941,10 @@ metadata:
   name: kargo-external-webhooks-server
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: external-webhooks-server
   
@@ -8494,10 +9966,10 @@ metadata:
   name: kargo-webhooks-server
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
   
@@ -8519,10 +9991,10 @@ metadata:
   name: kargo-api
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: api
   
@@ -8539,10 +10011,10 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: kargo-1.11.4
+        helm.sh/chart: kargo-1.12.1
         app.kubernetes.io/name: kargo
         app.kubernetes.io/instance: kargo
-        app.kubernetes.io/version: "v1.11.4"
+        app.kubernetes.io/version: "v1.12.1"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: api
       annotations:
@@ -8552,7 +10024,7 @@ spec:
       serviceAccountName: kargo-api
       containers:
       - name: api
-        image: ghcr.io/akuity/kargo:v1.11.4
+        image: ghcr.io/akuity/kargo:v1.12.1
         imagePullPolicy: IfNotPresent
         command: ["/usr/local/bin/kargo", "api"]
         env:
@@ -8620,10 +10092,10 @@ metadata:
   name: kargo-controller
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
     
@@ -8642,20 +10114,20 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: kargo-1.11.4
+        helm.sh/chart: kargo-1.12.1
         app.kubernetes.io/name: kargo
         app.kubernetes.io/instance: kargo
-        app.kubernetes.io/version: "v1.11.4"
+        app.kubernetes.io/version: "v1.12.1"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: controller
         
       annotations:
-        configmap/checksum: 1371f4e8f1c7091718a16b63cd60a34f2668e5b443bb6b54fb87b8b1ab8d3711
+        configmap/checksum: 1f3bf5974bc38e2541daed63f3981d5b4dfb43ea11b5e196ca5c6367fbce390f
     spec:
       serviceAccountName: kargo-controller
       containers:
       - name: controller
-        image: ghcr.io/akuity/kargo:v1.11.4
+        image: ghcr.io/akuity/kargo:v1.12.1
         imagePullPolicy: IfNotPresent
         command: ["/sbin/tini", "--", "/usr/local/bin/kargo"]
         args: ["controller"]
@@ -8691,10 +10163,10 @@ metadata:
   name: kargo-external-webhooks-server
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: external-webhooks-server
   
@@ -8711,10 +10183,10 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: kargo-1.11.4
+        helm.sh/chart: kargo-1.12.1
         app.kubernetes.io/name: kargo
         app.kubernetes.io/instance: kargo
-        app.kubernetes.io/version: "v1.11.4"
+        app.kubernetes.io/version: "v1.12.1"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: external-webhooks-server
       annotations:
@@ -8723,7 +10195,7 @@ spec:
       serviceAccountName: kargo-external-webhooks-server
       containers:
       - name: webhooks-server
-        image: ghcr.io/akuity/kargo:v1.11.4
+        image: ghcr.io/akuity/kargo:v1.12.1
         imagePullPolicy: IfNotPresent
         command: ["/sbin/tini", "--", "/usr/local/bin/kargo"]
         args: ["external-webhooks-server"]
@@ -8790,10 +10262,10 @@ metadata:
   name: kargo-webhooks-server
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
   
@@ -8810,10 +10282,10 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: kargo-1.11.4
+        helm.sh/chart: kargo-1.12.1
         app.kubernetes.io/name: kargo
         app.kubernetes.io/instance: kargo
-        app.kubernetes.io/version: "v1.11.4"
+        app.kubernetes.io/version: "v1.12.1"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: kubernetes-webhooks-server
       annotations:
@@ -8822,7 +10294,7 @@ spec:
       serviceAccountName: kargo-webhooks-server
       containers:
       - name: webhooks-server
-        image: ghcr.io/akuity/kargo:v1.11.4
+        image: ghcr.io/akuity/kargo:v1.12.1
         imagePullPolicy: IfNotPresent
         command: ["/sbin/tini", "--", "/usr/local/bin/kargo"]
         args: ["kubernetes-webhooks-server"]
@@ -8865,10 +10337,10 @@ metadata:
   name: kargo-management-controller
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: management-controller
   
@@ -8885,19 +10357,19 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: kargo-1.11.4
+        helm.sh/chart: kargo-1.12.1
         app.kubernetes.io/name: kargo
         app.kubernetes.io/instance: kargo
-        app.kubernetes.io/version: "v1.11.4"
+        app.kubernetes.io/version: "v1.12.1"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: management-controller
       annotations:
-        configmap/checksum: c096327695398942aac1dc314ac14cf6c3056b1b1d8609996d376b289ba6ecae
+        configmap/checksum: 0197e9d18cc8859548d25df53272a2f2d4fd6d0200b44210e4664f10b36404be
     spec:
       serviceAccountName: kargo-management-controller
       containers:
       - name: management-controller
-        image: ghcr.io/akuity/kargo:v1.11.4
+        image: ghcr.io/akuity/kargo:v1.12.1
         imagePullPolicy: IfNotPresent
         command: ["/sbin/tini", "--", "/usr/local/bin/kargo"]
         args: ["management-controller"]
@@ -8927,10 +10399,10 @@ metadata:
   name: kargo-garbage-collector
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: garbage-collector
   
@@ -8942,10 +10414,10 @@ spec:
   jobTemplate:
     metadata:
       labels:
-        helm.sh/chart: kargo-1.11.4
+        helm.sh/chart: kargo-1.12.1
         app.kubernetes.io/name: kargo
         app.kubernetes.io/instance: kargo
-        app.kubernetes.io/version: "v1.11.4"
+        app.kubernetes.io/version: "v1.12.1"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: garbage-collector
       annotations:
@@ -8954,10 +10426,10 @@ spec:
       template:
         metadata:
           labels:
-            helm.sh/chart: kargo-1.11.4
+            helm.sh/chart: kargo-1.12.1
             app.kubernetes.io/name: kargo
             app.kubernetes.io/instance: kargo
-            app.kubernetes.io/version: "v1.11.4"
+            app.kubernetes.io/version: "v1.12.1"
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/component: garbage-collector
           annotations:
@@ -8966,7 +10438,7 @@ spec:
           serviceAccountName: kargo-garbage-collector
           containers:
           - name: garbage-collector
-            image: ghcr.io/akuity/kargo:v1.11.4
+            image: ghcr.io/akuity/kargo:v1.12.1
             imagePullPolicy: IfNotPresent
             command: ["/sbin/tini", "--", "/usr/local/bin/kargo"]
             args: ["garbage-collector"]
@@ -9014,10 +10486,10 @@ metadata:
   name: kargo-external-webhooks-server
   namespace: default
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: external-webhooks-server
   
@@ -9108,10 +10580,10 @@ kind: MutatingWebhookConfiguration
 metadata:
   name: kargo
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
   annotations:
@@ -9184,10 +10656,10 @@ kind: ValidatingWebhookConfiguration
 metadata:
   name: kargo
   labels:
-    helm.sh/chart: kargo-1.11.4
+    helm.sh/chart: kargo-1.12.1
     app.kubernetes.io/name: kargo
     app.kubernetes.io/instance: kargo
-    app.kubernetes.io/version: "v1.11.4"
+    app.kubernetes.io/version: "v1.12.1"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: kubernetes-webhooks-server
   annotations:
@@ -9282,6 +10754,21 @@ webhooks:
     apiVersions: ["v1alpha1"]
     resources: ["promotions"]
     operations: ["CREATE", "UPDATE", "DELETE"]
+  failurePolicy: Fail
+- name: promotionrequest.kargo.akuity.io
+  admissionReviewVersions: [ "v1" ]
+  sideEffects: None
+  clientConfig:
+    service:
+      namespace: default
+      name: kargo-webhooks-server
+      path: /validate-kargo-akuity-io-v1alpha1-promotionrequest
+  rules:
+  - scope: Namespaced
+    apiGroups: ["kargo.akuity.io"]
+    apiVersions: ["v1alpha1"]
+    resources: ["promotionrequests"]
+    operations: ["CREATE", "UPDATE"]
   failurePolicy: Fail
 - name: promotiontask.kargo.akuity.io
   admissionReviewVersions: [ "v1" ]
