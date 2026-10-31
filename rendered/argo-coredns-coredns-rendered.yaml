@@ -1,4 +1,17 @@
 ---
+# Source: coredns/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: coredns
+  namespace: default
+  labels:
+    app.kubernetes.io/managed-by: "Helm"
+    app.kubernetes.io/instance: "coredns"
+    helm.sh/chart: "coredns-1.49.0"
+    app.kubernetes.io/name: coredns
+    k8s-app: kube-dns
+---
 # Source: coredns/templates/configmap.yaml
 apiVersion: v1
 kind: ConfigMap
@@ -8,7 +21,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "coredns"
-    helm.sh/chart: "coredns-1.48.2"
+    helm.sh/chart: "coredns-1.49.0"
     app.kubernetes.io/name: coredns
     k8s-app: kube-dns
 data:
@@ -49,7 +62,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "coredns"
-    helm.sh/chart: "coredns-1.48.2"
+    helm.sh/chart: "coredns-1.49.0"
     app.kubernetes.io/name: coredns
 rules:
 - apiGroups:
@@ -78,7 +91,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "coredns"
-    helm.sh/chart: "coredns-1.48.2"
+    helm.sh/chart: "coredns-1.49.0"
     app.kubernetes.io/name: coredns
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -86,7 +99,7 @@ roleRef:
   name: coredns
 subjects:
 - kind: ServiceAccount
-  name: default
+  name: coredns
   namespace: default
 ---
 # Source: coredns/templates/service-metrics.yaml
@@ -98,7 +111,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "coredns"
-    helm.sh/chart: "coredns-1.48.2"
+    helm.sh/chart: "coredns-1.49.0"
     app.kubernetes.io/name: coredns
     app.kubernetes.io/component: metrics
     k8s-app: kube-dns
@@ -123,7 +136,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "coredns"
-    helm.sh/chart: "coredns-1.48.2"
+    helm.sh/chart: "coredns-1.49.0"
     app.kubernetes.io/name: coredns
     k8s-app: kube-dns
 spec:
@@ -143,7 +156,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "coredns"
-    helm.sh/chart: "coredns-1.48.2"
+    helm.sh/chart: "coredns-1.49.0"
     app.kubernetes.io/name: coredns
     app.kubernetes.io/version: "1.14.7"
     k8s-app: kube-dns
@@ -166,10 +179,10 @@ spec:
         app.kubernetes.io/instance: "coredns"
         k8s-app: kube-dns
       annotations:
-        checksum/config: 76f1d9ebe9dc229f114a3632db1c5e5d7049809fa540110eec977e1d78b2cd0e
+        checksum/config: c462e98caef5641f275559ee37256fb95ddf83b31f0c55c0b8770c81cdfb7f5b
     spec:
       terminationGracePeriodSeconds: 30
-      serviceAccountName: default
+      serviceAccountName: coredns
       priorityClassName: "system-cluster-critical"
       affinity:
         podAntiAffinity:
@@ -246,7 +259,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: "Helm"
     app.kubernetes.io/instance: "coredns"
-    helm.sh/chart: "coredns-1.48.2"
+    helm.sh/chart: "coredns-1.49.0"
     app.kubernetes.io/name: coredns
 spec:
   namespaceSelector:

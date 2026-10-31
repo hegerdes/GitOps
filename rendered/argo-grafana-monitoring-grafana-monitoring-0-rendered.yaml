@@ -6,10 +6,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.7.1
+    helm.sh/chart: alloy-operator-0.9.4
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.12.1"
+    app.kubernetes.io/version: "1.14.4"
     app.kubernetes.io/managed-by: Helm
 automountServiceAccountToken: true
 ---
@@ -19,7 +19,7 @@ kind: ServiceAccount
 automountServiceAccountToken: true
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-8.4.2
+    helm.sh/chart: kube-state-metrics-8.8.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -37,7 +37,7 @@ metadata:
   name: grafana-monitoring-0-node-exporter
   namespace: default
   labels:
-    helm.sh/chart: node-exporter-4.56.3
+    helm.sh/chart: node-exporter-4.60.1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: node-exporter
@@ -54,10 +54,10 @@ metadata:
   name: grafana-monitoring-0-opencost
   namespace: default
   labels:
-    helm.sh/chart: opencost-2.5.30
+    helm.sh/chart: opencost-2.5.33
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.121.1"
+    app.kubernetes.io/version: "1.121.3"
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/managed-by: Helm
 automountServiceAccountToken: true
@@ -373,7 +373,7 @@ data:
         max_cache_size = 100000
         rule {
           source_labels = ["__name__"]
-          regex = "up|scrape_samples_scraped|go_goroutines|kubelet_certificate_manager_client_expiration_renew_errors|kubelet_certificate_manager_client_ttl_seconds|kubelet_certificate_manager_server_ttl_seconds|kubelet_cgroup_manager_duration_seconds_bucket|kubelet_cgroup_manager_duration_seconds_count|kubelet_node_config_error|kubelet_node_name|kubelet_pleg_relist_duration_seconds_bucket|kubelet_pleg_relist_duration_seconds_count|kubelet_pleg_relist_interval_seconds_bucket|kubelet_pod_start_duration_seconds_bucket|kubelet_pod_start_duration_seconds_count|kubelet_pod_worker_duration_seconds_bucket|kubelet_pod_worker_duration_seconds_count|kubelet_running_container_count|kubelet_running_containers|kubelet_running_pod_count|kubelet_running_pods|kubelet_runtime_operations_errors_total|kubelet_runtime_operations_total|kubelet_server_expiration_renew_errors|kubelet_volume_stats_available_bytes|kubelet_volume_stats_capacity_bytes|kubelet_volume_stats_inodes|kubelet_volume_stats_inodes_free|kubelet_volume_stats_inodes_used|kubelet_volume_stats_used_bytes|kubernetes_build_info|namespace_workload_pod|process_cpu_seconds_total|process_resident_memory_bytes|rest_client_requests_total|storage_operation_duration_seconds_count|storage_operation_errors_total|volume_manager_total_volumes"
+          regex = "up|scrape_samples_scraped|go_goroutines|kubelet_certificate_manager_client_expiration_renew_errors|kubelet_certificate_manager_client_ttl_seconds|kubelet_certificate_manager_server_ttl_seconds|kubelet_cgroup_manager_duration_seconds_bucket|kubelet_cgroup_manager_duration_seconds_count|kubelet_evictions|kubelet_node_config_error|kubelet_node_name|kubelet_pleg_relist_duration_seconds_bucket|kubelet_pleg_relist_duration_seconds_count|kubelet_pleg_relist_interval_seconds_bucket|kubelet_pod_start_duration_seconds_bucket|kubelet_pod_start_duration_seconds_count|kubelet_pod_worker_duration_seconds_bucket|kubelet_pod_worker_duration_seconds_count|kubelet_running_container_count|kubelet_running_containers|kubelet_running_pod_count|kubelet_running_pods|kubelet_runtime_operations_errors_total|kubelet_runtime_operations_total|kubelet_server_expiration_renew_errors|kubelet_volume_stats_available_bytes|kubelet_volume_stats_capacity_bytes|kubelet_volume_stats_inodes|kubelet_volume_stats_inodes_free|kubelet_volume_stats_inodes_used|kubelet_volume_stats_used_bytes|kubernetes_build_info|namespace_workload_pod|process_cpu_seconds_total|process_resident_memory_bytes|rest_client_requests_total|storage_operation_duration_seconds_count|storage_operation_errors_total|volume_manager_total_volumes"
           action = "keep"
         }
     
@@ -584,7 +584,7 @@ data:
         max_cache_size = 100000
         rule {
           source_labels = ["__name__"]
-          regex = "up|scrape_samples_scraped|kube_configmap_info|kube_configmap_metadata_resource_version|kube_cronjob.*|kube_daemonset.*|kube_deployment_metadata_generation|kube_deployment_spec_replicas|kube_deployment_status_condition|kube_deployment_status_observed_generation|kube_deployment_status_replicas_available|kube_deployment_status_replicas_updated|kube_horizontalpodautoscaler_spec_max_replicas|kube_horizontalpodautoscaler_spec_min_replicas|kube_horizontalpodautoscaler_status_current_replicas|kube_horizontalpodautoscaler_status_desired_replicas|kube_job.*|kube_namespace_status_phase|kube_node.*|kube_persistentvolume_status_phase|kube_persistentvolumeclaim_access_mode|kube_persistentvolumeclaim_info|kube_persistentvolumeclaim_labels|kube_persistentvolumeclaim_resource_requests_storage_bytes|kube_persistentvolumeclaim_status_phase|kube_pod_completion_time|kube_pod_container_info|kube_pod_container_resource_limits|kube_pod_container_resource_requests|kube_pod_container_status_last_terminated_reason|kube_pod_container_status_last_terminated_timestamp|kube_pod_container_status_restarts_total|kube_pod_container_status_waiting_reason|kube_pod_info|kube_pod_owner|kube_pod_restart_policy|kube_pod_spec_volumes_persistentvolumeclaims_info|kube_pod_start_time|kube_pod_status_phase|kube_pod_status_reason|kube_pod_init_.*|kube_replicaset.*|kube_resourcequota|kube_secret_metadata_resource_version|kube_statefulset.*"
+          regex = "up|scrape_samples_scraped|kube_configmap_info|kube_configmap_metadata_resource_version|kube_cronjob.*|kube_daemonset.*|kube_deployment_metadata_generation|kube_deployment_spec_replicas|kube_deployment_status_condition|kube_deployment_status_observed_generation|kube_deployment_status_replicas_available|kube_deployment_status_replicas_updated|kube_horizontalpodautoscaler_spec_max_replicas|kube_horizontalpodautoscaler_spec_min_replicas|kube_horizontalpodautoscaler_status_current_replicas|kube_horizontalpodautoscaler_status_desired_replicas|kube_job.*|kube_namespace_status_phase|kube_node.*|kube_persistentvolume_status_phase|kube_persistentvolumeclaim_access_mode|kube_persistentvolumeclaim_info|kube_persistentvolumeclaim_labels|kube_persistentvolumeclaim_resource_requests_storage_bytes|kube_persistentvolumeclaim_status_phase|kube_pod_completion_time|kube_pod_container_info|kube_pod_container_resource_limits|kube_pod_container_resource_requests|kube_pod_container_status_last_terminated_reason|kube_pod_container_status_last_terminated_timestamp|kube_pod_container_status_restarts_total|kube_pod_container_status_waiting_reason|kube_pod_info|kube_pod_owner|kube_pod_restart_policy|kube_pod_spec_volumes_persistentvolumeclaims_info|kube_pod_start_time|kube_pod_status_phase|kube_pod_status_ready|kube_pod_status_reason|kube_pod_init_.*|kube_poddisruptionbudget_status_current_healthy|kube_poddisruptionbudget_status_desired_healthy|kube_replicaset.*|kube_resourcequota|kube_secret_metadata_resource_version|kube_statefulset.*"
           action = "keep"
         }
         forward_to = argument.metrics_destinations.value
@@ -1207,6 +1207,11 @@ data:
         statements = [
           `set(attributes["cluster"], "hetzner-k8s")`,
           `set(attributes["k8s.cluster.name"], "hetzner-k8s")`,
+          // Scrape targets such as Grafana Beyla (3.20 and newer) put a flat k8s_cluster_name label on every
+          // series. The cluster label statements above add k8s.cluster.name to the same datapoint, both
+          // translate to the same Prometheus label, and the OTLP endpoint joins the values with ";". Drop
+          // the flat copy when the values match.
+          `delete_key(attributes, "k8s_cluster_name") where attributes["k8s_cluster_name"] == attributes["k8s.cluster.name"]`,
           `set(resource.attributes["deployment.environment"], attributes["deployment_environment"] ) where resource.attributes["deployment.environment"] == nil and attributes["deployment_environment"] != nil`,
           `delete_key(attributes, "deployment_environment") where attributes["deployment_environment"] == resource.attributes["deployment.environment"]`,
           `set(resource.attributes["deployment.environment.name"], attributes["deployment_environment_name"] ) where resource.attributes["deployment.environment.name"] == nil and attributes["deployment_environment_name"] != nil`,
@@ -1296,6 +1301,9 @@ data:
           `delete_key(attributes, "container.image.repo_digests")`,
           `delete_key(attributes, "os.description")`,
           `delete_key(attributes, "os.build_id")`,
+          // Injected SDK resource attributes arrive as strings. Normalize the span metrics flag before export.
+          `set(attributes["span.metrics.skip"], true) where attributes["span.metrics.skip"] == "true"`,
+          `set(attributes["span.metrics.skip"], false) where attributes["span.metrics.skip"] == "false"`,
         ]
       }
     
@@ -1387,6 +1395,9 @@ data:
           `delete_key(attributes, "container.image.repo_digests")`,
           `delete_key(attributes, "os.description")`,
           `delete_key(attributes, "os.build_id")`,
+          // Injected SDK resource attributes arrive as strings. Normalize the span metrics flag before export.
+          `set(attributes["span.metrics.skip"], true) where attributes["span.metrics.skip"] == "true"`,
+          `set(attributes["span.metrics.skip"], false) where attributes["span.metrics.skip"] == "false"`,
         ]
       }
     
@@ -1682,7 +1693,7 @@ data:
   self-reporting-metric.prom: |+
     # HELP grafana_kubernetes_monitoring_build_info A metric to report the version of the Kubernetes Monitoring Helm chart
     # TYPE grafana_kubernetes_monitoring_build_info gauge
-    grafana_kubernetes_monitoring_build_info{version="4.5.2", namespace="default"} 1
+    grafana_kubernetes_monitoring_build_info{version="4.6.0", namespace="default"} 1
     # HELP grafana_kubernetes_monitoring_feature_info A metric to report the enabled features of the Kubernetes Monitoring Helm chart
     # TYPE grafana_kubernetes_monitoring_feature_info gauge
     grafana_kubernetes_monitoring_feature_info{feature="applicationObservability", protocols="otlpgrpc,otlphttp,jaegergrpc,zipkin", version="1.0.0"} 1
@@ -1692,6 +1703,12 @@ data:
     grafana_kubernetes_monitoring_feature_info{feature="linuxHosts", source="node-exporter", version="1.0.0"} 1
     grafana_kubernetes_monitoring_feature_info{feature="podLogsViaLoki", version="1.0.0"} 1
     grafana_kubernetes_monitoring_feature_info{feature="prometheusOperatorObjects", sources="ServiceMonitors,PodMonitors,Probes", version="1.0.0"} 1
+    # HELP grafana_kubernetes_monitoring_destination_info_count A metric to report the number of enabled destinations grouped by type and configuration
+    # TYPE grafana_kubernetes_monitoring_destination_info_count gauge
+    grafana_kubernetes_monitoring_destination_info_count{logs="false", metrics="false", service_graph_metrics_enabled="false", tail_sampling_enabled="false", traces="true", type="otlp"} 1
+    grafana_kubernetes_monitoring_destination_info_count{logs="true", metrics="true", service_graph_metrics_enabled="false", tail_sampling_enabled="false", traces="true", type="otlp"} 1
+    grafana_kubernetes_monitoring_destination_info_count{rules_enabled="false", type="prometheus"} 1
+    grafana_kubernetes_monitoring_destination_info_count{type="loki"} 1
     # HELP grafana_kubernetes_monitoring_collector_info A metric to report the collectors of the Kubernetes Monitoring Helm chart
     # TYPE grafana_kubernetes_monitoring_collector_info gauge
     grafana_kubernetes_monitoring_collector_info{kind="daemonset", name="alloy-logs", presets="filesystem-log-reader,daemonset", type="alloy"} 1
@@ -1706,10 +1723,10 @@ kind: ClusterRole
 metadata:
   name: grafana-monitoring-0-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: alloy-operator-0.7.1
+    helm.sh/chart: alloy-operator-0.9.4
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.12.1"
+    app.kubernetes.io/version: "1.14.4"
     app.kubernetes.io/managed-by: Helm
 rules:
   - apiGroups:
@@ -1769,7 +1786,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-8.4.2
+    helm.sh/chart: kube-state-metrics-8.8.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -1928,10 +1945,10 @@ kind: ClusterRole
 metadata:
   name: grafana-monitoring-0-opencost
   labels:
-    helm.sh/chart: opencost-2.5.30
+    helm.sh/chart: opencost-2.5.33
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.121.1"
+    app.kubernetes.io/version: "1.121.3"
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/managed-by: Helm
 rules:
@@ -2013,10 +2030,10 @@ kind: ClusterRoleBinding
 metadata:
   name: grafana-monitoring-0-alloy-operator-alloy-manager
   labels:
-    helm.sh/chart: alloy-operator-0.7.1
+    helm.sh/chart: alloy-operator-0.9.4
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.12.1"
+    app.kubernetes.io/version: "1.14.4"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -2033,10 +2050,10 @@ kind: ClusterRoleBinding
 metadata:
   name: grafana-monitoring-0-alloy-operator
   labels:
-    helm.sh/chart: alloy-operator-0.7.1
+    helm.sh/chart: alloy-operator-0.9.4
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.12.1"
+    app.kubernetes.io/version: "1.14.4"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -2052,7 +2069,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-8.4.2
+    helm.sh/chart: kube-state-metrics-8.8.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -2076,10 +2093,10 @@ kind: ClusterRoleBinding
 metadata:
   name: grafana-monitoring-0-opencost
   labels:
-    helm.sh/chart: opencost-2.5.30
+    helm.sh/chart: opencost-2.5.33
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.121.1"
+    app.kubernetes.io/version: "1.121.3"
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/managed-by: Helm
 roleRef:
@@ -2098,10 +2115,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator-leader-election-role
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.7.1
+    helm.sh/chart: alloy-operator-0.9.4
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.12.1"
+    app.kubernetes.io/version: "1.14.4"
     app.kubernetes.io/managed-by: Helm
 rules:
   - apiGroups:
@@ -2143,10 +2160,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator-leader-election-rolebinding
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.7.1
+    helm.sh/chart: alloy-operator-0.9.4
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.12.1"
+    app.kubernetes.io/version: "1.14.4"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -2164,10 +2181,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.7.1
+    helm.sh/chart: alloy-operator-0.9.4
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.12.1"
+    app.kubernetes.io/version: "1.14.4"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -2191,7 +2208,7 @@ metadata:
   name: grafana-monitoring-0-kube-state-metrics
   namespace: default
   labels:    
-    helm.sh/chart: kube-state-metrics-8.4.2
+    helm.sh/chart: kube-state-metrics-8.8.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -2218,7 +2235,7 @@ metadata:
   name: grafana-monitoring-0-node-exporter
   namespace: default
   labels:
-    helm.sh/chart: node-exporter-4.56.3
+    helm.sh/chart: node-exporter-4.60.1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: node-exporter
@@ -2226,8 +2243,6 @@ metadata:
     app.kubernetes.io/instance: grafana-monitoring-0
     app.kubernetes.io/version: "1.12.1"
     release: grafana-monitoring-0
-  annotations:
-    prometheus.io/scrape: "false"
 spec:
   type: ClusterIP
   ports:
@@ -2246,10 +2261,10 @@ metadata:
   name: grafana-monitoring-0-opencost
   namespace: default
   labels:
-    helm.sh/chart: opencost-2.5.30
+    helm.sh/chart: opencost-2.5.33
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.121.1"
+    app.kubernetes.io/version: "1.121.3"
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -2269,7 +2284,7 @@ metadata:
   name: grafana-monitoring-0-node-exporter
   namespace: default
   labels:
-    helm.sh/chart: node-exporter-4.56.3
+    helm.sh/chart: node-exporter-4.60.1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: node-exporter
@@ -2294,13 +2309,12 @@ spec:
         cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
         k8s.grafana.com/logs.job: integrations/node_exporter
       labels:
-        helm.sh/chart: node-exporter-4.56.3
-        app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: metrics
-        app.kubernetes.io/part-of: node-exporter
-        app.kubernetes.io/name: node-exporter
         app.kubernetes.io/instance: grafana-monitoring-0
-        app.kubernetes.io/version: "1.12.1"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: node-exporter
+        app.kubernetes.io/part-of: node-exporter
+        app.kubernetes.io/version: 1.12.1
         release: grafana-monitoring-0
     spec:
       automountServiceAccountToken: false
@@ -2322,6 +2336,7 @@ spec:
             - --web.listen-address=[$(HOST_IP)]:9100
             - --collector.filesystem.fs-types-exclude=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|erofs|sysfs|tracefs|tmpfs|ramfs)$
           securityContext:
+            allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
           env:
             - name: HOST_IP
@@ -2398,10 +2413,10 @@ metadata:
   name: grafana-monitoring-0-alloy-operator
   namespace: default
   labels:
-    helm.sh/chart: alloy-operator-0.7.1
+    helm.sh/chart: alloy-operator-0.9.4
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.12.1"
+    app.kubernetes.io/version: "1.14.4"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -2412,10 +2427,10 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: alloy-operator-0.7.1
+        helm.sh/chart: alloy-operator-0.9.4
         app.kubernetes.io/name: alloy-operator
         app.kubernetes.io/instance: grafana-monitoring-0
-        app.kubernetes.io/version: "1.12.1"
+        app.kubernetes.io/version: "1.14.4"
         app.kubernetes.io/managed-by: Helm
     spec:
       serviceAccountName: grafana-monitoring-0-alloy-operator
@@ -2423,7 +2438,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: alloy-operator
-          image: "ghcr.io/grafana/alloy-operator:1.12.1"
+          image: "ghcr.io/grafana/alloy-operator:1.14.4"
           imagePullPolicy: IfNotPresent
           args:
             - --health-probe-bind-address=:8081
@@ -2469,7 +2484,7 @@ metadata:
   name: grafana-monitoring-0-kube-state-metrics
   namespace: default
   labels:    
-    helm.sh/chart: kube-state-metrics-8.4.2
+    helm.sh/chart: kube-state-metrics-8.8.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -2488,14 +2503,13 @@ spec:
   revisionHistoryLimit: 10
   template:
     metadata:
-      labels:        
-        helm.sh/chart: kube-state-metrics-8.4.2
-        app.kubernetes.io/managed-by: Helm
+      labels:
         app.kubernetes.io/component: metrics
-        app.kubernetes.io/part-of: kube-state-metrics
-        app.kubernetes.io/name: kube-state-metrics
         app.kubernetes.io/instance: grafana-monitoring-0
-        app.kubernetes.io/version: "2.20.0"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: kube-state-metrics
+        app.kubernetes.io/part-of: kube-state-metrics
+        app.kubernetes.io/version: 2.20.0
         release: grafana-monitoring-0
       annotations:
       
@@ -2563,10 +2577,10 @@ metadata:
   name: grafana-monitoring-0-opencost
   namespace: default
   labels:
-    helm.sh/chart: opencost-2.5.30
+    helm.sh/chart: opencost-2.5.33
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.121.1"
+    app.kubernetes.io/version: "1.121.3"
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/managed-by: Helm
   annotations:
@@ -2600,7 +2614,7 @@ spec:
       initContainers:
       containers:
         - name: grafana-monitoring-0-opencost
-          image: ghcr.io/opencost/opencost:1.121.1@sha256:50052694785db32174332670920faf7b7f55d32a91ba3caec1e9207a58338ff5
+          image: ghcr.io/opencost/opencost:1.121.3@sha256:4cdd173253e5abba048dfe2cfa968707a5b59d774157d5356940d0d923a6c281
           imagePullPolicy: IfNotPresent
           args:
           ports:
@@ -2719,20 +2733,7 @@ spec:
       allowPrivilegeEscalation: false
       capabilities:
         add:
-        - CHOWN
-        - DAC_OVERRIDE
-        - FOWNER
-        - FSETID
-        - KILL
-        - SETGID
-        - SETUID
-        - SETPCAP
         - NET_BIND_SERVICE
-        - NET_RAW
-        - SYS_CHROOT
-        - MKNOD
-        - AUDIT_WRITE
-        - SETFCAP
         drop:
         - ALL
       seccompProfile:
@@ -2770,20 +2771,7 @@ spec:
       allowPrivilegeEscalation: false
       capabilities:
         add:
-        - CHOWN
-        - DAC_OVERRIDE
-        - FOWNER
-        - FSETID
-        - KILL
-        - SETGID
-        - SETUID
-        - SETPCAP
         - NET_BIND_SERVICE
-        - NET_RAW
-        - SYS_CHROOT
-        - MKNOD
-        - AUDIT_WRITE
-        - SETFCAP
         drop:
         - ALL
       seccompProfile:
@@ -2833,20 +2821,7 @@ spec:
       allowPrivilegeEscalation: false
       capabilities:
         add:
-        - CHOWN
-        - DAC_OVERRIDE
-        - FOWNER
-        - FSETID
-        - KILL
-        - SETGID
-        - SETUID
-        - SETPCAP
         - NET_BIND_SERVICE
-        - NET_RAW
-        - SYS_CHROOT
-        - MKNOD
-        - AUDIT_WRITE
-        - SETFCAP
         drop:
         - ALL
       seccompProfile:
@@ -2884,20 +2859,7 @@ spec:
       allowPrivilegeEscalation: false
       capabilities:
         add:
-        - CHOWN
-        - DAC_OVERRIDE
-        - FOWNER
-        - FSETID
-        - KILL
-        - SETGID
-        - SETUID
-        - SETPCAP
         - NET_BIND_SERVICE
-        - NET_RAW
-        - SYS_CHROOT
-        - MKNOD
-        - AUDIT_WRITE
-        - SETFCAP
         drop:
         - ALL
       seccompProfile:
@@ -3017,7 +2979,7 @@ metadata:
   labels:
     app.kubernetes.io/name: grafana-monitoring-0-k8s-monitoring-add-finalizer
     app.kubernetes.io/instance: grafana-monitoring-0
-    helm.sh/chart: k8s-monitoring-4.5.2
+    helm.sh/chart: k8s-monitoring-4.6.0
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "15"
@@ -3070,7 +3032,7 @@ metadata:
   labels:
     app.kubernetes.io/name: grafana-monitoring-0-k8s-monitoring-remove-alloy-and-finalizer
     app.kubernetes.io/instance: grafana-monitoring-0
-    helm.sh/chart: k8s-monitoring-4.5.2
+    helm.sh/chart: k8s-monitoring-4.6.0
   annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded

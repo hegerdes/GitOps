@@ -6,7 +6,7 @@ metadata:
   name: local-static-storage-local-static-provisioner
   namespace: default
   labels:
-    helm.sh/chart: local-static-provisioner-2.9.0
+    helm.sh/chart: local-static-provisioner-2.10.0
     app.kubernetes.io/name: local-static-provisioner
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: local-static-storage
@@ -18,7 +18,7 @@ metadata:
   name: local-static-storage-local-static-provisioner-config
   namespace: default
   labels:
-    helm.sh/chart: local-static-provisioner-2.9.0
+    helm.sh/chart: local-static-provisioner-2.10.0
     app.kubernetes.io/name: local-static-provisioner
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: local-static-storage
@@ -41,7 +41,7 @@ kind: ClusterRole
 metadata:
   name: local-static-storage-local-static-provisioner-node-clusterrole
   labels:
-    helm.sh/chart: local-static-provisioner-2.9.0
+    helm.sh/chart: local-static-provisioner-2.10.0
     app.kubernetes.io/name: local-static-provisioner
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: local-static-storage
@@ -68,7 +68,7 @@ kind: ClusterRoleBinding
 metadata:
   name: local-static-storage-local-static-provisioner-node-binding
   labels:
-    helm.sh/chart: local-static-provisioner-2.9.0
+    helm.sh/chart: local-static-provisioner-2.10.0
     app.kubernetes.io/name: local-static-provisioner
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: local-static-storage
@@ -88,7 +88,7 @@ metadata:
   name: local-static-storage-local-static-provisioner
   namespace: default
   labels:
-    helm.sh/chart: local-static-provisioner-2.9.0
+    helm.sh/chart: local-static-provisioner-2.10.0
     app.kubernetes.io/name: local-static-provisioner
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: local-static-storage
@@ -107,7 +107,7 @@ spec:
         app.kubernetes.io/name: local-static-provisioner
         app.kubernetes.io/instance: local-static-storage
       annotations:
-        checksum/config: f1164e2ea00454d3d69ffc2560fad9392d8b589dfaf2093a9d195c7c7439c4be
+        checksum/config: bc80d01a10b6bcfbd929a87cadea7c7bedbed0d0128eeada3d03f565536c8965
     spec:
       hostPID: false
       serviceAccountName: local-static-storage-local-static-provisioner
