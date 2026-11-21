@@ -11,9 +11,10 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-admission-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 automountServiceAccountToken: false
+
 ---
 # Source: kyverno/templates/background-controller/serviceaccount.yaml
 apiVersion: v1
@@ -27,8 +28,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-background-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 automountServiceAccountToken: false
 ---
 # Source: kyverno/templates/cleanup-controller/serviceaccount.yaml
@@ -43,8 +44,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-cleanup-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 automountServiceAccountToken: false
 ---
 # Source: kyverno/templates/reports-controller/serviceaccount.yaml
@@ -59,8 +60,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-reports-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 automountServiceAccountToken: false
 ---
 # Source: kyverno/templates/config/configmap.yaml
@@ -74,8 +75,8 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
   annotations:
     helm.sh/resource-policy: "keep"
 data:
@@ -189,6 +190,7 @@ data:
     [Secret,default,kyverno-0-svc.default.svc.*]
     [Secret,default,kyverno-cleanup-controller.default.svc.*]
   updateRequestThreshold: "1000"
+  enableUpdateRequestCleanup: "false"
   webhooks: "{\"namespaceSelector\":{\"matchExpressions\":[{\"key\":\"kubernetes.io/metadata.name\",\"operator\":\"NotIn\",\"values\":[\"kube-system\"]},{\"key\":\"kubernetes.io/metadata.name\",\"operator\":\"NotIn\",\"values\":[\"default\"]}],\"matchLabels\":null}}"
   webhookAnnotations: "{\"admissions.enforcer/disabled\":\"true\"}"
 ---
@@ -203,11 +205,11 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 data:
   namespaces: "{\"exclude\":[],\"include\":[]}"
-  metricsExposure: "{\"kyverno_admission_requests_total\":{\"disabledLabelDimensions\":[\"resource_namespace\"]},\"kyverno_admission_review_duration_seconds\":{\"disabledLabelDimensions\":[\"resource_namespace\"]},\"kyverno_cleanup_controller_deletedobjects_total\":{\"disabledLabelDimensions\":[\"resource_namespace\",\"policy_namespace\"]},\"kyverno_generating_policy_execution_duration_seconds\":{\"disabledLabelDimensions\":[\"resource_namespace\",\"resource_request_operation\"]},\"kyverno_generating_policy_results_total\":{\"disabledLabelDimensions\":[\"resource_namespace\",\"policy_namespace\"]},\"kyverno_image_validating_policy_execution_duration_seconds\":{\"disabledLabelDimensions\":[\"resource_namespace\",\"resource_request_operation\"]},\"kyverno_image_validating_policy_results_total\":{\"disabledLabelDimensions\":[\"resource_namespace\",\"policy_namespace\"]},\"kyverno_mutating_policy_execution_duration_seconds\":{\"disabledLabelDimensions\":[\"resource_namespace\",\"resource_request_operation\"]},\"kyverno_mutating_policy_results_total\":{\"disabledLabelDimensions\":[\"resource_namespace\",\"policy_namespace\"]},\"kyverno_policy_execution_duration_seconds\":{\"disabledLabelDimensions\":[\"resource_namespace\",\"resource_request_operation\"]},\"kyverno_policy_results_total\":{\"disabledLabelDimensions\":[\"resource_namespace\",\"policy_namespace\"]},\"kyverno_policy_rule_info_total\":{\"disabledLabelDimensions\":[\"resource_namespace\",\"policy_namespace\"]},\"kyverno_validating_policy_execution_duration_seconds\":{\"disabledLabelDimensions\":[\"resource_namespace\",\"resource_request_operation\"]},\"kyverno_validating_policy_results_total\":{\"disabledLabelDimensions\":[\"resource_namespace\",\"policy_namespace\"]}}"
+  metricsExposure: "{\"kyverno_admission_requests_total\":{\"disabledLabelDimensions\":[\"resource_namespace\"]},\"kyverno_admission_review_duration_seconds\":{\"disabledLabelDimensions\":[\"resource_namespace\"]},\"kyverno_generating_policy_execution_duration_seconds\":{\"disabledLabelDimensions\":[\"resource_namespace\",\"resource_request_operation\"]},\"kyverno_generating_policy_results_total\":{\"disabledLabelDimensions\":[\"resource_namespace\",\"policy_namespace\"]},\"kyverno_image_validating_policy_execution_duration_seconds\":{\"disabledLabelDimensions\":[\"resource_namespace\",\"resource_request_operation\"]},\"kyverno_image_validating_policy_results_total\":{\"disabledLabelDimensions\":[\"resource_namespace\",\"policy_namespace\"]},\"kyverno_mutating_policy_execution_duration_seconds\":{\"disabledLabelDimensions\":[\"resource_namespace\",\"resource_request_operation\"]},\"kyverno_mutating_policy_results_total\":{\"disabledLabelDimensions\":[\"resource_namespace\",\"policy_namespace\"]},\"kyverno_validating_policy_execution_duration_seconds\":{\"disabledLabelDimensions\":[\"resource_namespace\",\"resource_request_operation\"]},\"kyverno_validating_policy_results_total\":{\"disabledLabelDimensions\":[\"resource_namespace\",\"policy_namespace\"]}}"
   bucketBoundaries: "0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10, 15, 20, 25, 30"
 ---
 # Source: kyverno/charts/crds/templates/kyverno.io/kyverno.io_cleanuppolicies.yaml
@@ -219,10 +221,11 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0-crds
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: crds-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: crds-3.10.0
   annotations:
     controller-gen.kubebuilder.io/version: v0.20.0
+    helm.sh/resource-policy: keep
   name: cleanuppolicies.kyverno.io
 spec:
   group: kyverno.io
@@ -2831,6 +2834,7 @@ spec:
     storage: false
     subresources:
       status: {}
+
 ---
 # Source: kyverno/charts/crds/templates/kyverno.io/kyverno.io_clustercleanuppolicies.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -2841,10 +2845,11 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0-crds
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: crds-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: crds-3.10.0
   annotations:
     controller-gen.kubebuilder.io/version: v0.20.0
+    helm.sh/resource-policy: keep
   name: clustercleanuppolicies.kyverno.io
 spec:
   group: kyverno.io
@@ -5453,6 +5458,7 @@ spec:
     storage: false
     subresources:
       status: {}
+
 ---
 # Source: kyverno/charts/crds/templates/kyverno.io/kyverno.io_clusterpolicies.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -5463,10 +5469,11 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0-crds
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: crds-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: crds-3.10.0
   annotations:
     controller-gen.kubebuilder.io/version: v0.20.0
+    helm.sh/resource-policy: keep
   name: clusterpolicies.kyverno.io
 spec:
   group: kyverno.io
@@ -25867,6 +25874,7 @@ spec:
     storage: false
     subresources:
       status: {}
+
 ---
 # Source: kyverno/charts/crds/templates/kyverno.io/kyverno.io_globalcontextentries.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -25877,8 +25885,8 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0-crds
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: crds-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: crds-3.10.0
   annotations:
     controller-gen.kubebuilder.io/version: v0.20.0
   name: globalcontextentries.kyverno.io
@@ -26055,22 +26063,46 @@ spec:
                 - version
                 type: object
               projections:
-                description: Projections defines the list of JMESPath expressions
-                  to extract values from the cached resource.
+                description: Projections defines the list of projections to extract
+                  values from the cached resource.
                 items:
+                  description: |-
+                    GlobalContextEntryProjection extracts a named value from the cached resource using
+                    exactly one of JMESPath or Expression.
+
+                    The bound input, `object` for Expression or `@` for JMESPath, is exactly the value
+                    returned by `globalContext.Get(name)` with no projection:
+                      - For an APICall entry, `object` is the parsed API response, typically
+                        `{"items": [...]}` for a list endpoint, so a projection reads `object.items.size()`.
+                      - For a KubernetesResource entry, `object` is the list of matching resources
+                        directly, so the equivalent projection reads `object.size()`.
+
+                    Numeric values extracted via Expression keep their CEL-native type (`int`,
+                    `uint`, or `double`), which may differ from the `float64` JMESPath always produces;
+                    arithmetic written against one is not guaranteed to type-check against the other.
                   properties:
+                    expression:
+                      description: |-
+                        Expression is the CEL expression to extract the value from the cached resource.
+                        Mutually exclusive with JMESPath.
+                      minLength: 1
+                      type: string
                     jmesPath:
-                      description: JMESPath is the JMESPath expression to extract
-                        the value from the cached resource.
+                      description: |-
+                        JMESPath is the JMESPath expression to extract the value from the cached resource.
+                        Mutually exclusive with Expression.
+                      minLength: 1
                       type: string
                     name:
                       description: Name is the name to use for the extracted value
                         in the context.
                       type: string
                   required:
-                  - jmesPath
                   - name
                   type: object
+                  x-kubernetes-validations:
+                  - message: exactly one of jmesPath or expression must be set
+                    rule: has(self.jmesPath) != has(self.expression)
                 type: array
             type: object
           status:
@@ -26308,22 +26340,46 @@ spec:
                 - version
                 type: object
               projections:
-                description: Projections defines the list of JMESPath expressions
-                  to extract values from the cached resource.
+                description: Projections defines the list of projections to extract
+                  values from the cached resource.
                 items:
+                  description: |-
+                    GlobalContextEntryProjection extracts a named value from the cached resource using
+                    exactly one of JMESPath or Expression.
+
+                    The bound input, `object` for Expression or `@` for JMESPath, is exactly the value
+                    returned by `globalContext.Get(name)` with no projection:
+                      - For an APICall entry, `object` is the parsed API response, typically
+                        `{"items": [...]}` for a list endpoint, so a projection reads `object.items.size()`.
+                      - For a KubernetesResource entry, `object` is the list of matching resources
+                        directly, so the equivalent projection reads `object.size()`.
+
+                    Numeric values extracted via Expression keep their CEL-native type (`int`,
+                    `uint`, or `double`), which may differ from the `float64` JMESPath always produces;
+                    arithmetic written against one is not guaranteed to type-check against the other.
                   properties:
+                    expression:
+                      description: |-
+                        Expression is the CEL expression to extract the value from the cached resource.
+                        Mutually exclusive with JMESPath.
+                      minLength: 1
+                      type: string
                     jmesPath:
-                      description: JMESPath is the JMESPath expression to extract
-                        the value from the cached resource.
+                      description: |-
+                        JMESPath is the JMESPath expression to extract the value from the cached resource.
+                        Mutually exclusive with Expression.
+                      minLength: 1
                       type: string
                     name:
                       description: Name is the name to use for the extracted value
                         in the context.
                       type: string
                   required:
-                  - jmesPath
                   - name
                   type: object
+                  x-kubernetes-validations:
+                  - message: exactly one of jmesPath or expression must be set
+                    rule: has(self.jmesPath) != has(self.expression)
                 type: array
             type: object
           status:
@@ -26561,22 +26617,46 @@ spec:
                 - version
                 type: object
               projections:
-                description: Projections defines the list of JMESPath expressions
-                  to extract values from the cached resource.
+                description: Projections defines the list of projections to extract
+                  values from the cached resource.
                 items:
+                  description: |-
+                    GlobalContextEntryProjection extracts a named value from the cached resource using
+                    exactly one of JMESPath or Expression.
+
+                    The bound input, `object` for Expression or `@` for JMESPath, is exactly the value
+                    returned by `globalContext.Get(name)` with no projection:
+                      - For an APICall entry, `object` is the parsed API response, typically
+                        `{"items": [...]}` for a list endpoint, so a projection reads `object.items.size()`.
+                      - For a KubernetesResource entry, `object` is the list of matching resources
+                        directly, so the equivalent projection reads `object.size()`.
+
+                    Numeric values extracted via Expression keep their CEL-native type (`int`,
+                    `uint`, or `double`), which may differ from the `float64` JMESPath always produces;
+                    arithmetic written against one is not guaranteed to type-check against the other.
                   properties:
+                    expression:
+                      description: |-
+                        Expression is the CEL expression to extract the value from the cached resource.
+                        Mutually exclusive with JMESPath.
+                      minLength: 1
+                      type: string
                     jmesPath:
-                      description: JMESPath is the JMESPath expression to extract
-                        the value from the cached resource.
+                      description: |-
+                        JMESPath is the JMESPath expression to extract the value from the cached resource.
+                        Mutually exclusive with Expression.
+                      minLength: 1
                       type: string
                     name:
                       description: Name is the name to use for the extracted value
                         in the context.
                       type: string
                   required:
-                  - jmesPath
                   - name
                   type: object
+                  x-kubernetes-validations:
+                  - message: exactly one of jmesPath or expression must be set
+                    rule: has(self.jmesPath) != has(self.expression)
                 type: array
             type: object
           status:
@@ -26654,6 +26734,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: kyverno/charts/crds/templates/kyverno.io/kyverno.io_policies.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -26664,10 +26745,11 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0-crds
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: crds-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: crds-3.10.0
   annotations:
     controller-gen.kubebuilder.io/version: v0.20.0
+    helm.sh/resource-policy: keep
   name: policies.kyverno.io
 spec:
   group: kyverno.io
@@ -47071,6 +47153,7 @@ spec:
     storage: false
     subresources:
       status: {}
+
 ---
 # Source: kyverno/charts/crds/templates/kyverno.io/kyverno.io_policyexceptions.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -47081,10 +47164,11 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0-crds
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: crds-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: crds-3.10.0
   annotations:
     controller-gen.kubebuilder.io/version: v0.20.0
+    helm.sh/resource-policy: keep
   name: policyexceptions.kyverno.io
 spec:
   group: kyverno.io
@@ -48386,6 +48470,7 @@ spec:
         type: object
     served: true
     storage: false
+
 ---
 # Source: kyverno/charts/crds/templates/kyverno.io/kyverno.io_updaterequests.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -48396,8 +48481,8 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0-crds
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: crds-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: crds-3.10.0
   annotations:
     controller-gen.kubebuilder.io/version: v0.20.0
   name: updaterequests.kyverno.io
@@ -49223,6 +49308,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: kyverno/charts/crds/templates/reports.kyverno.io/reports.kyverno.io_clusterephemeralreports.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -49233,8 +49319,8 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0-crds
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: crds-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: crds-3.10.0
   annotations:
     controller-gen.kubebuilder.io/version: v0.20.0
   name: clusterephemeralreports.reports.kyverno.io
@@ -49568,6 +49654,7 @@ spec:
     served: true
     storage: true
     subresources: {}
+
 ---
 # Source: kyverno/charts/crds/templates/reports.kyverno.io/reports.kyverno.io_ephemeralreports.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -49578,8 +49665,8 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0-crds
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: crds-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: crds-3.10.0
   annotations:
     controller-gen.kubebuilder.io/version: v0.20.0
   name: ephemeralreports.reports.kyverno.io
@@ -49913,6 +50000,7 @@ spec:
     served: true
     storage: true
     subresources: {}
+
 ---
 # Source: kyverno/charts/crds/templates/wgpolicyk8s.io/wgpolicyk8s.io_clusterpolicyreports.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -49923,8 +50011,8 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0-crds
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: crds-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: crds-3.10.0
   annotations:
     controller-gen.kubebuilder.io/version: v0.20.0
   name: clusterpolicyreports.wgpolicyk8s.io
@@ -50282,6 +50370,7 @@ spec:
     served: true
     storage: true
     subresources: {}
+
 ---
 # Source: kyverno/charts/crds/templates/wgpolicyk8s.io/wgpolicyk8s.io_policyreports.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -50292,8 +50381,8 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0-crds
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: crds-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: crds-3.10.0
   annotations:
     controller-gen.kubebuilder.io/version: v0.20.0
   name: policyreports.wgpolicyk8s.io
@@ -50650,15 +50739,12 @@ spec:
     served: true
     storage: true
     subresources: {}
+
 ---
 # Source: kyverno/charts/kyverno-api/templates/crds/policies.kyverno.io_deletingpolicies.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  labels:
-    {}
-  annotations:
-    {}
   name: deletingpolicies.policies.kyverno.io
 spec:
   group: policies.kyverno.io
@@ -52330,15 +52416,12 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: kyverno/charts/kyverno-api/templates/crds/policies.kyverno.io_generatingpolicies.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  labels:
-    {}
-  annotations:
-    {}
   name: generatingpolicies.policies.kyverno.io
 spec:
   group: policies.kyverno.io
@@ -54478,15 +54561,12 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: kyverno/charts/kyverno-api/templates/crds/policies.kyverno.io_imagevalidatingpolicies.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  labels:
-    {}
-  annotations:
-    {}
   name: imagevalidatingpolicies.policies.kyverno.io
 spec:
   group: policies.kyverno.io
@@ -61612,15 +61692,12 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: kyverno/charts/kyverno-api/templates/crds/policies.kyverno.io_mutatingpolicies.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  labels:
-    {}
-  annotations:
-    {}
   name: mutatingpolicies.policies.kyverno.io
 spec:
   group: policies.kyverno.io
@@ -68905,15 +68982,12 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: kyverno/charts/kyverno-api/templates/crds/policies.kyverno.io_namespaceddeletingpolicies.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  labels:
-    {}
-  annotations:
-    {}
   name: namespaceddeletingpolicies.policies.kyverno.io
 spec:
   group: policies.kyverno.io
@@ -70032,15 +70106,12 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: kyverno/charts/kyverno-api/templates/crds/policies.kyverno.io_namespacedgeneratingpolicies.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  labels:
-    {}
-  annotations:
-    {}
   name: namespacedgeneratingpolicies.policies.kyverno.io
 spec:
   group: policies.kyverno.io
@@ -71475,15 +71546,12 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: kyverno/charts/kyverno-api/templates/crds/policies.kyverno.io_namespacedimagevalidatingpolicies.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  labels:
-    {}
-  annotations:
-    {}
   name: namespacedimagevalidatingpolicies.policies.kyverno.io
 spec:
   group: policies.kyverno.io
@@ -76238,15 +76306,12 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: kyverno/charts/kyverno-api/templates/crds/policies.kyverno.io_namespacedmutatingpolicies.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  labels:
-    {}
-  annotations:
-    {}
   name: namespacedmutatingpolicies.policies.kyverno.io
 spec:
   group: policies.kyverno.io
@@ -81107,15 +81172,12 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: kyverno/charts/kyverno-api/templates/crds/policies.kyverno.io_namespacedvalidatingpolicies.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  labels:
-    {}
-  annotations:
-    {}
   name: namespacedvalidatingpolicies.policies.kyverno.io
 spec:
   group: policies.kyverno.io
@@ -84254,15 +84316,12 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: kyverno/charts/kyverno-api/templates/crds/policies.kyverno.io_policyexceptions.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  labels:
-    {}
-  annotations:
-    {}
   name: policyexceptions.policies.kyverno.io
 spec:
   group: policies.kyverno.io
@@ -84399,6 +84458,105 @@ spec:
                 - skip
                 - pass
                 type: string
+              validations:
+                description: |-
+                  Validations are compensating controls that must be satisfied for this exception to be
+                  granted. They are evaluated only for resources that already matched MatchConditions.
+                  If any expression evaluates to false, the exception is not granted and the resource is
+                  rejected with that validation's message.
+                  Only honored for exceptions referencing a ValidatingPolicy.
+                items:
+                  description: Validation specifies the CEL expression which is used
+                    to apply the validation.
+                  properties:
+                    expression:
+                      description: "Expression represents the expression which will
+                        be evaluated by CEL.\nref: https://github.com/google/cel-spec\nCEL
+                        expressions have access to the contents of the API request/response,
+                        organized into CEL variables as well as some other useful
+                        variables:\n\n- 'object' - The object from the incoming request.
+                        The value is null for DELETE requests.\n- 'oldObject' - The
+                        existing object. The value is null for CREATE requests.\n-
+                        'request' - Attributes of the API request([ref](/pkg/apis/admission/types.go#AdmissionRequest)).\n-
+                        'params' - Parameter resource referred to by the policy binding
+                        being evaluated. Only populated if the policy has a ParamKind.\n-
+                        'namespaceObject' - The namespace object that the incoming
+                        object belongs to. The value is null for cluster-scoped resources.\n-
+                        'variables' - Map of composited variables, from its name to
+                        its lazily evaluated value.\n  For example, a variable named
+                        'foo' can be accessed as 'variables.foo'.\n- 'authorizer'
+                        - A CEL Authorizer. May be used to perform authorization checks
+                        for the principal (user or service account) of the request.\n
+                        \ See https://pkg.go.dev/k8s.io/apiserver/pkg/cel/library#Authz\n-
+                        'authorizer.requestResource' - A CEL ResourceCheck constructed
+                        from the 'authorizer' and configured with the\n  request resource.\n\nThe
+                        `apiVersion`, `kind`, `metadata.name` and `metadata.generateName`
+                        are always accessible from the root of the\nobject. No other
+                        metadata properties are accessible.\n\nOnly property names
+                        of the form `[a-zA-Z_.-/][a-zA-Z0-9_.-/]*` are accessible.\nAccessible
+                        property names are escaped according to the following rules
+                        when accessed in the expression:\n- '__' escapes to '__underscores__'\n-
+                        '.' escapes to '__dot__'\n- '-' escapes to '__dash__'\n- '/'
+                        escapes to '__slash__'\n- Property names that exactly match
+                        a CEL RESERVED keyword escape to '__{keyword}__'. The keywords
+                        are:\n\t  \"true\", \"false\", \"null\", \"in\", \"as\", \"break\",
+                        \"const\", \"continue\", \"else\", \"for\", \"function\",
+                        \"if\",\n\t  \"import\", \"let\", \"loop\", \"package\", \"namespace\",
+                        \"return\".\nExamples:\n  - Expression accessing a property
+                        named \"namespace\": {\"Expression\": \"object.__namespace__
+                        > 0\"}\n  - Expression accessing a property named \"x-prop\":
+                        {\"Expression\": \"object.x__dash__prop > 0\"}\n  - Expression
+                        accessing a property named \"redact__d\": {\"Expression\":
+                        \"object.redact__underscores__d > 0\"}\n\nEquality on arrays
+                        with list type of 'set' or 'map' ignores element order, i.e.
+                        [1, 2] == [2, 1].\nConcatenation on arrays with x-kubernetes-list-type
+                        use the semantics of the list type:\n  - 'set': `X + Y` performs
+                        a union where the array positions of all elements in `X` are
+                        preserved and\n    non-intersecting elements in `Y` are appended,
+                        retaining their partial order.\n  - 'map': `X + Y` performs
+                        a merge where the array positions of all keys in `X` are preserved
+                        but the values\n    are overwritten by values in `Y` when
+                        the key sets of `X` and `Y` intersect. Elements in `Y` with\n
+                        \   non-intersecting keys are appended, retaining their partial
+                        order.\nRequired."
+                      type: string
+                    message:
+                      description: |-
+                        Message represents the message displayed when validation fails. The message is required if the Expression contains
+                        line breaks. The message must not contain line breaks.
+                        If unset, the message is "failed rule: {Rule}".
+                        e.g. "must be a URL with the host matching spec.host"
+                        If the Expression contains line breaks. Message is required.
+                        The message must not contain line breaks.
+                        If unset, the message is "failed Expression: {Expression}".
+                      type: string
+                    messageExpression:
+                      description: |-
+                        messageExpression declares a CEL expression that evaluates to the validation failure message that is returned when this rule fails.
+                        Since messageExpression is used as a failure message, it must evaluate to a string.
+                        If both message and messageExpression are present on a validation, then messageExpression will be used if validation fails.
+                        If messageExpression results in a runtime error, the runtime error is logged, and the validation failure message is produced
+                        as if the messageExpression field were unset. If messageExpression evaluates to an empty string, a string with only spaces, or a string
+                        that contains line breaks, then the validation failure message will also be produced as if the messageExpression field were unset, and
+                        the fact that messageExpression produced an empty string/string with only spaces/string with line breaks will be logged.
+                        messageExpression has access to all the same variables as the `expression` except for 'authorizer' and 'authorizer.requestResource'.
+                        Example:
+                        "object.x must be less than max ("+string(params.max)+")"
+                      type: string
+                    reason:
+                      description: |-
+                        Reason represents a machine-readable description of why this validation failed.
+                        If this is the first validation in the list to fail, this reason, as well as the
+                        corresponding HTTP response code, are used in the
+                        HTTP response to the client.
+                        The currently supported reasons are: "Unauthorized", "Forbidden", "Invalid", "RequestEntityTooLarge".
+                        If not set, StatusReasonInvalid is used in the response to the client.
+                      type: string
+                  required:
+                  - expression
+                  type: object
+                type: array
+                x-kubernetes-list-type: atomic
             required:
             - policyRefs
             type: object
@@ -84534,6 +84692,105 @@ spec:
                 - skip
                 - pass
                 type: string
+              validations:
+                description: |-
+                  Validations are compensating controls that must be satisfied for this exception to be
+                  granted. They are evaluated only for resources that already matched MatchConditions.
+                  If any expression evaluates to false, the exception is not granted and the resource is
+                  rejected with that validation's message.
+                  Only honored for exceptions referencing a ValidatingPolicy.
+                items:
+                  description: Validation specifies the CEL expression which is used
+                    to apply the validation.
+                  properties:
+                    expression:
+                      description: "Expression represents the expression which will
+                        be evaluated by CEL.\nref: https://github.com/google/cel-spec\nCEL
+                        expressions have access to the contents of the API request/response,
+                        organized into CEL variables as well as some other useful
+                        variables:\n\n- 'object' - The object from the incoming request.
+                        The value is null for DELETE requests.\n- 'oldObject' - The
+                        existing object. The value is null for CREATE requests.\n-
+                        'request' - Attributes of the API request([ref](/pkg/apis/admission/types.go#AdmissionRequest)).\n-
+                        'params' - Parameter resource referred to by the policy binding
+                        being evaluated. Only populated if the policy has a ParamKind.\n-
+                        'namespaceObject' - The namespace object that the incoming
+                        object belongs to. The value is null for cluster-scoped resources.\n-
+                        'variables' - Map of composited variables, from its name to
+                        its lazily evaluated value.\n  For example, a variable named
+                        'foo' can be accessed as 'variables.foo'.\n- 'authorizer'
+                        - A CEL Authorizer. May be used to perform authorization checks
+                        for the principal (user or service account) of the request.\n
+                        \ See https://pkg.go.dev/k8s.io/apiserver/pkg/cel/library#Authz\n-
+                        'authorizer.requestResource' - A CEL ResourceCheck constructed
+                        from the 'authorizer' and configured with the\n  request resource.\n\nThe
+                        `apiVersion`, `kind`, `metadata.name` and `metadata.generateName`
+                        are always accessible from the root of the\nobject. No other
+                        metadata properties are accessible.\n\nOnly property names
+                        of the form `[a-zA-Z_.-/][a-zA-Z0-9_.-/]*` are accessible.\nAccessible
+                        property names are escaped according to the following rules
+                        when accessed in the expression:\n- '__' escapes to '__underscores__'\n-
+                        '.' escapes to '__dot__'\n- '-' escapes to '__dash__'\n- '/'
+                        escapes to '__slash__'\n- Property names that exactly match
+                        a CEL RESERVED keyword escape to '__{keyword}__'. The keywords
+                        are:\n\t  \"true\", \"false\", \"null\", \"in\", \"as\", \"break\",
+                        \"const\", \"continue\", \"else\", \"for\", \"function\",
+                        \"if\",\n\t  \"import\", \"let\", \"loop\", \"package\", \"namespace\",
+                        \"return\".\nExamples:\n  - Expression accessing a property
+                        named \"namespace\": {\"Expression\": \"object.__namespace__
+                        > 0\"}\n  - Expression accessing a property named \"x-prop\":
+                        {\"Expression\": \"object.x__dash__prop > 0\"}\n  - Expression
+                        accessing a property named \"redact__d\": {\"Expression\":
+                        \"object.redact__underscores__d > 0\"}\n\nEquality on arrays
+                        with list type of 'set' or 'map' ignores element order, i.e.
+                        [1, 2] == [2, 1].\nConcatenation on arrays with x-kubernetes-list-type
+                        use the semantics of the list type:\n  - 'set': `X + Y` performs
+                        a union where the array positions of all elements in `X` are
+                        preserved and\n    non-intersecting elements in `Y` are appended,
+                        retaining their partial order.\n  - 'map': `X + Y` performs
+                        a merge where the array positions of all keys in `X` are preserved
+                        but the values\n    are overwritten by values in `Y` when
+                        the key sets of `X` and `Y` intersect. Elements in `Y` with\n
+                        \   non-intersecting keys are appended, retaining their partial
+                        order.\nRequired."
+                      type: string
+                    message:
+                      description: |-
+                        Message represents the message displayed when validation fails. The message is required if the Expression contains
+                        line breaks. The message must not contain line breaks.
+                        If unset, the message is "failed rule: {Rule}".
+                        e.g. "must be a URL with the host matching spec.host"
+                        If the Expression contains line breaks. Message is required.
+                        The message must not contain line breaks.
+                        If unset, the message is "failed Expression: {Expression}".
+                      type: string
+                    messageExpression:
+                      description: |-
+                        messageExpression declares a CEL expression that evaluates to the validation failure message that is returned when this rule fails.
+                        Since messageExpression is used as a failure message, it must evaluate to a string.
+                        If both message and messageExpression are present on a validation, then messageExpression will be used if validation fails.
+                        If messageExpression results in a runtime error, the runtime error is logged, and the validation failure message is produced
+                        as if the messageExpression field were unset. If messageExpression evaluates to an empty string, a string with only spaces, or a string
+                        that contains line breaks, then the validation failure message will also be produced as if the messageExpression field were unset, and
+                        the fact that messageExpression produced an empty string/string with only spaces/string with line breaks will be logged.
+                        messageExpression has access to all the same variables as the `expression` except for 'authorizer' and 'authorizer.requestResource'.
+                        Example:
+                        "object.x must be less than max ("+string(params.max)+")"
+                      type: string
+                    reason:
+                      description: |-
+                        Reason represents a machine-readable description of why this validation failed.
+                        If this is the first validation in the list to fail, this reason, as well as the
+                        corresponding HTTP response code, are used in the
+                        HTTP response to the client.
+                        The currently supported reasons are: "Unauthorized", "Forbidden", "Invalid", "RequestEntityTooLarge".
+                        If not set, StatusReasonInvalid is used in the response to the client.
+                      type: string
+                  required:
+                  - expression
+                  type: object
+                type: array
+                x-kubernetes-list-type: atomic
             required:
             - policyRefs
             type: object
@@ -84668,6 +84925,105 @@ spec:
                 - skip
                 - pass
                 type: string
+              validations:
+                description: |-
+                  Validations are compensating controls that must be satisfied for this exception to be
+                  granted. They are evaluated only for resources that already matched MatchConditions.
+                  If any expression evaluates to false, the exception is not granted and the resource is
+                  rejected with that validation's message.
+                  Only honored for exceptions referencing a ValidatingPolicy.
+                items:
+                  description: Validation specifies the CEL expression which is used
+                    to apply the validation.
+                  properties:
+                    expression:
+                      description: "Expression represents the expression which will
+                        be evaluated by CEL.\nref: https://github.com/google/cel-spec\nCEL
+                        expressions have access to the contents of the API request/response,
+                        organized into CEL variables as well as some other useful
+                        variables:\n\n- 'object' - The object from the incoming request.
+                        The value is null for DELETE requests.\n- 'oldObject' - The
+                        existing object. The value is null for CREATE requests.\n-
+                        'request' - Attributes of the API request([ref](/pkg/apis/admission/types.go#AdmissionRequest)).\n-
+                        'params' - Parameter resource referred to by the policy binding
+                        being evaluated. Only populated if the policy has a ParamKind.\n-
+                        'namespaceObject' - The namespace object that the incoming
+                        object belongs to. The value is null for cluster-scoped resources.\n-
+                        'variables' - Map of composited variables, from its name to
+                        its lazily evaluated value.\n  For example, a variable named
+                        'foo' can be accessed as 'variables.foo'.\n- 'authorizer'
+                        - A CEL Authorizer. May be used to perform authorization checks
+                        for the principal (user or service account) of the request.\n
+                        \ See https://pkg.go.dev/k8s.io/apiserver/pkg/cel/library#Authz\n-
+                        'authorizer.requestResource' - A CEL ResourceCheck constructed
+                        from the 'authorizer' and configured with the\n  request resource.\n\nThe
+                        `apiVersion`, `kind`, `metadata.name` and `metadata.generateName`
+                        are always accessible from the root of the\nobject. No other
+                        metadata properties are accessible.\n\nOnly property names
+                        of the form `[a-zA-Z_.-/][a-zA-Z0-9_.-/]*` are accessible.\nAccessible
+                        property names are escaped according to the following rules
+                        when accessed in the expression:\n- '__' escapes to '__underscores__'\n-
+                        '.' escapes to '__dot__'\n- '-' escapes to '__dash__'\n- '/'
+                        escapes to '__slash__'\n- Property names that exactly match
+                        a CEL RESERVED keyword escape to '__{keyword}__'. The keywords
+                        are:\n\t  \"true\", \"false\", \"null\", \"in\", \"as\", \"break\",
+                        \"const\", \"continue\", \"else\", \"for\", \"function\",
+                        \"if\",\n\t  \"import\", \"let\", \"loop\", \"package\", \"namespace\",
+                        \"return\".\nExamples:\n  - Expression accessing a property
+                        named \"namespace\": {\"Expression\": \"object.__namespace__
+                        > 0\"}\n  - Expression accessing a property named \"x-prop\":
+                        {\"Expression\": \"object.x__dash__prop > 0\"}\n  - Expression
+                        accessing a property named \"redact__d\": {\"Expression\":
+                        \"object.redact__underscores__d > 0\"}\n\nEquality on arrays
+                        with list type of 'set' or 'map' ignores element order, i.e.
+                        [1, 2] == [2, 1].\nConcatenation on arrays with x-kubernetes-list-type
+                        use the semantics of the list type:\n  - 'set': `X + Y` performs
+                        a union where the array positions of all elements in `X` are
+                        preserved and\n    non-intersecting elements in `Y` are appended,
+                        retaining their partial order.\n  - 'map': `X + Y` performs
+                        a merge where the array positions of all keys in `X` are preserved
+                        but the values\n    are overwritten by values in `Y` when
+                        the key sets of `X` and `Y` intersect. Elements in `Y` with\n
+                        \   non-intersecting keys are appended, retaining their partial
+                        order.\nRequired."
+                      type: string
+                    message:
+                      description: |-
+                        Message represents the message displayed when validation fails. The message is required if the Expression contains
+                        line breaks. The message must not contain line breaks.
+                        If unset, the message is "failed rule: {Rule}".
+                        e.g. "must be a URL with the host matching spec.host"
+                        If the Expression contains line breaks. Message is required.
+                        The message must not contain line breaks.
+                        If unset, the message is "failed Expression: {Expression}".
+                      type: string
+                    messageExpression:
+                      description: |-
+                        messageExpression declares a CEL expression that evaluates to the validation failure message that is returned when this rule fails.
+                        Since messageExpression is used as a failure message, it must evaluate to a string.
+                        If both message and messageExpression are present on a validation, then messageExpression will be used if validation fails.
+                        If messageExpression results in a runtime error, the runtime error is logged, and the validation failure message is produced
+                        as if the messageExpression field were unset. If messageExpression evaluates to an empty string, a string with only spaces, or a string
+                        that contains line breaks, then the validation failure message will also be produced as if the messageExpression field were unset, and
+                        the fact that messageExpression produced an empty string/string with only spaces/string with line breaks will be logged.
+                        messageExpression has access to all the same variables as the `expression` except for 'authorizer' and 'authorizer.requestResource'.
+                        Example:
+                        "object.x must be less than max ("+string(params.max)+")"
+                      type: string
+                    reason:
+                      description: |-
+                        Reason represents a machine-readable description of why this validation failed.
+                        If this is the first validation in the list to fail, this reason, as well as the
+                        corresponding HTTP response code, are used in the
+                        HTTP response to the client.
+                        The currently supported reasons are: "Unauthorized", "Forbidden", "Invalid", "RequestEntityTooLarge".
+                        If not set, StatusReasonInvalid is used in the response to the client.
+                      type: string
+                  required:
+                  - expression
+                  type: object
+                type: array
+                x-kubernetes-list-type: atomic
             required:
             - policyRefs
             type: object
@@ -84676,15 +85032,12 @@ spec:
         type: object
     served: true
     storage: true
+
 ---
 # Source: kyverno/charts/kyverno-api/templates/crds/policies.kyverno.io_validatingpolicies.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  labels:
-    {}
-  annotations:
-    {}
   name: validatingpolicies.policies.kyverno.io
 spec:
   group: policies.kyverno.io
@@ -89386,6 +89739,7 @@ spec:
     storage: true
     subresources:
       status: {}
+
 ---
 # Source: kyverno/templates/admission-controller/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -89398,8 +89752,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-admission-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 aggregationRule:
   clusterRoleSelectors:
     - matchLabels:
@@ -89408,6 +89762,7 @@ aggregationRule:
         app.kubernetes.io/component: admission-controller
         app.kubernetes.io/instance: kyverno-0
         app.kubernetes.io/part-of: kyverno-0
+
 ---
 # Source: kyverno/templates/admission-controller/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -89420,8 +89775,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-admission-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 rules:
   - apiGroups:
       - apiextensions.k8s.io
@@ -89463,10 +89818,6 @@ rules:
   - apiGroups:
       - kyverno.io
     resources:
-      - policies
-      - policies/status
-      - clusterpolicies
-      - clusterpolicies/status
       - updaterequests
       - updaterequests/status
       - globalcontextentries
@@ -89480,17 +89831,32 @@ rules:
       - update
       - watch
       - deletecollection
+  # Read-only: kyverno-init's startup inventory and the admission controller's
+  # kyverno_legacy_policies_total gauge list the legacy kyverno.io kinds. Nothing in this
+  # pod creates, updates, or deletes them (kyverno-init only patches their status, below).
   - apiGroups:
       - kyverno.io
     resources:
+      - clusterpolicies
+      - policies
       - policyexceptions
+      - cleanuppolicies
+      - clustercleanuppolicies
     verbs:
-      - create
-      - get
+      - list
+  # kyverno-init replaces the stale Ready condition on legacy ClusterPolicy/Policy objects
+  # (see cmd/kyverno-init/legacy_status.go). Status only: spec stays read-only.
+  - apiGroups:
+      - kyverno.io
+    resources:
+      - clusterpolicies/status
+      - policies/status
+      - cleanuppolicies/status
+      - clustercleanuppolicies/status
+    verbs:
       - list
       - patch
       - update
-      - watch
   - apiGroups:
       - policies.kyverno.io
     resources:
@@ -89595,6 +89961,7 @@ rules:
       - get
       - list
       - watch
+
 ---
 # Source: kyverno/templates/background-controller/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -89607,8 +89974,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-background-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 aggregationRule:
   clusterRoleSelectors:
     - matchLabels:
@@ -89617,6 +89984,7 @@ aggregationRule:
         app.kubernetes.io/component: background-controller
         app.kubernetes.io/instance: kyverno-0
         app.kubernetes.io/part-of: kyverno-0
+
 ---
 # Source: kyverno/templates/background-controller/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -89629,8 +89997,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-background-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 rules:
   - apiGroups:
       - apiextensions.k8s.io
@@ -89641,11 +90009,6 @@ rules:
   - apiGroups:
       - kyverno.io
     resources:
-      - policies
-      - policies/status
-      - clusterpolicies
-      - clusterpolicies/status
-      - policyexceptions
       - updaterequests
       - updaterequests/status
       - globalcontextentries
@@ -89682,6 +90045,57 @@ rules:
       - policyexceptions
     verbs:
       - create
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  # Everything else the chart aggregates into the admin and view roles (see
+  # templates/rbac/). Generate rules that create a RoleBinding to those roles
+  # are rejected by the RBAC escalation check unless the background controller
+  # holds every permission they grant.
+  # Includes the legacy policies/clusterpolicies rows of admin:policies and view:policies
+  # until those roles drop them in 1.21.
+  - apiGroups:
+      - kyverno.io
+    resources:
+      - cleanuppolicies
+      - clustercleanuppolicies
+      - policies
+      - clusterpolicies
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - policies.kyverno.io
+    resources:
+      - deletingpolicies
+      - imagevalidatingpolicies
+      - namespaceddeletingpolicies
+      - namespacedimagevalidatingpolicies
+      - namespacedvalidatingpolicies
+      - validatingpolicies
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - wgpolicyk8s.io
+    resources:
+      - policyreports
+      - clusterpolicyreports
+    verbs:
+      - create
+      - delete
       - get
       - list
       - patch
@@ -89765,6 +90179,7 @@ rules:
     - update
     - patch
     - deletecollection
+
 ---
 # Source: kyverno/templates/cleanup-controller/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -89777,8 +90192,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-cleanup-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 aggregationRule:
   clusterRoleSelectors:
     - matchLabels:
@@ -89787,6 +90202,7 @@ aggregationRule:
         app.kubernetes.io/component: cleanup-controller
         app.kubernetes.io/instance: kyverno-0
         app.kubernetes.io/part-of: kyverno-0
+
 ---
 # Source: kyverno/templates/cleanup-controller/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -89799,8 +90215,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-cleanup-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 rules:
   - apiGroups:
       - apiextensions.k8s.io
@@ -89834,7 +90250,6 @@ rules:
       - cleanuppolicies
     verbs:
       - list
-      - watch
   - apiGroups:
       - policies.kyverno.io
     resources:
@@ -89876,13 +90291,6 @@ rules:
       - watch
       - deletecollection
   - apiGroups:
-      - kyverno.io
-    resources:
-      - clustercleanuppolicies/status
-      - cleanuppolicies/status
-    verbs:
-      - update
-  - apiGroups:
       - ''
     resources:
       - configmaps
@@ -89905,6 +90313,15 @@ rules:
       - subjectaccessreviews
     verbs:
       - create
+  - apiGroups:
+      - kyverno.io
+    resources:
+      - updaterequests
+    verbs:
+      - list
+      - watch
+      - delete
+
 ---
 # Source: kyverno/templates/rbac/policies.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -89916,8 +90333,8 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
 rules:
   - apiGroups:
@@ -89957,6 +90374,7 @@ rules:
       - patch
       - update
       - watch
+
 ---
 # Source: kyverno/templates/rbac/policies.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -89968,8 +90386,8 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
     rbac.authorization.k8s.io/aggregate-to-view: "true"
 rules:
   - apiGroups:
@@ -90012,8 +90430,8 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
 rules:
   - apiGroups:
@@ -90029,6 +90447,7 @@ rules:
       - patch
       - update
       - watch
+
 ---
 # Source: kyverno/templates/rbac/policyreports.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -90040,8 +90459,8 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
     rbac.authorization.k8s.io/aggregate-to-view: "true"
 rules:
   - apiGroups:
@@ -90064,8 +90483,8 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
 rules:
   - apiGroups:
@@ -90081,6 +90500,7 @@ rules:
       - patch
       - update
       - watch
+
 ---
 # Source: kyverno/templates/rbac/reports.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -90092,8 +90512,8 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
     rbac.authorization.k8s.io/aggregate-to-view: "true"
 rules:
   - apiGroups:
@@ -90116,8 +90536,8 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
 rules:
   - apiGroups:
@@ -90132,6 +90552,7 @@ rules:
       - patch
       - update
       - watch
+
 ---
 # Source: kyverno/templates/rbac/updaterequests.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -90143,8 +90564,8 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
     rbac.authorization.k8s.io/aggregate-to-view: "true"
 rules:
   - apiGroups:
@@ -90167,8 +90588,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-reports-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 aggregationRule:
   clusterRoleSelectors:
     - matchLabels:
@@ -90177,6 +90598,7 @@ aggregationRule:
         app.kubernetes.io/component: reports-controller
         app.kubernetes.io/instance: kyverno-0
         app.kubernetes.io/part-of: kyverno-0
+
 ---
 # Source: kyverno/templates/reports-controller/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -90189,8 +90611,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-reports-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 rules:
   - apiGroups:
       - apiextensions.k8s.io
@@ -90212,9 +90634,6 @@ rules:
     resources:
       - globalcontextentries
       - globalcontextentries/status
-      - policyexceptions
-      - policies
-      - clusterpolicies
     verbs:
       - create
       - delete
@@ -90224,6 +90643,15 @@ rules:
       - update
       - watch
       - deletecollection
+  # Read-only: the aggregate controller's 1.20 startup sweep lists these once per leader start
+  # (#17710 PR 3). Remove with the sweep in 1.21.
+  - apiGroups:
+      - kyverno.io
+    resources:
+      - clusterpolicies
+      - policies
+    verbs:
+      - list
   - apiGroups:
       - policies.kyverno.io
     resources:
@@ -90320,6 +90748,7 @@ rules:
     verbs:
       - create
       - patch
+
 ---
 # Source: kyverno/templates/admission-controller/clusterrolebinding.yaml
 kind: ClusterRoleBinding
@@ -90332,8 +90761,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-admission-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -90342,6 +90771,7 @@ subjects:
   - kind: ServiceAccount
     name: kyverno-admission-controller
     namespace: default
+
 ---
 # Source: kyverno/templates/admission-controller/clusterrolebinding.yaml
 kind: ClusterRoleBinding
@@ -90354,8 +90784,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-admission-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -90376,8 +90806,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-background-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -90386,6 +90816,7 @@ subjects:
 - kind: ServiceAccount
   name: kyverno-background-controller
   namespace: default
+
 ---
 # Source: kyverno/templates/background-controller/clusterrolebinding.yaml
 kind: ClusterRoleBinding
@@ -90398,8 +90829,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-background-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -90420,8 +90851,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-cleanup-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -90442,8 +90873,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-reports-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -90452,6 +90883,7 @@ subjects:
 - kind: ServiceAccount
   name: kyverno-reports-controller
   namespace: default
+
 ---
 # Source: kyverno/templates/reports-controller/clusterrolebinding.yaml
 kind: ClusterRoleBinding
@@ -90464,8 +90896,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-reports-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -90487,8 +90919,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-admission-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 rules:
   - apiGroups:
       - ''
@@ -90548,8 +90980,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-background-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
   namespace: default
 rules:
   - apiGroups:
@@ -90600,8 +91032,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-cleanup-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
   namespace: default
 rules:
   - apiGroups:
@@ -90679,8 +91111,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-reports-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
   namespace: default
 rules:
   - apiGroups:
@@ -90732,8 +91164,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-admission-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -90754,8 +91186,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-background-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
   namespace: default
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -90777,8 +91209,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-cleanup-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
   namespace: default
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -90800,8 +91232,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-reports-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
   namespace: default
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -90824,8 +91256,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-admission-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 spec:
   ports:
   - port: 443
@@ -90838,6 +91270,7 @@ spec:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/part-of: kyverno-0
   type: ClusterIP
+
 ---
 # Source: kyverno/templates/admission-controller/service.yaml
 apiVersion: v1
@@ -90851,8 +91284,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-admission-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 spec:
   ports:
   - port: 8000
@@ -90877,8 +91310,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-background-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 spec:
   ports:
   - port: 8000
@@ -90903,8 +91336,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-cleanup-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 spec:
   ports:
   - port: 443
@@ -90917,6 +91350,7 @@ spec:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/part-of: kyverno-0
   type: ClusterIP
+
 ---
 # Source: kyverno/templates/cleanup-controller/service.yaml
 apiVersion: v1
@@ -90930,8 +91364,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-cleanup-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 spec:
   ports:
   - port: 8000
@@ -90956,8 +91390,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-reports-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 spec:
   ports:
   - port: 8000
@@ -90982,8 +91416,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-admission-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 spec:
   replicas: 
   revisionHistoryLimit: 10
@@ -91005,8 +91439,8 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: kyverno-admission-controller
         app.kubernetes.io/part-of: kyverno-0
-        app.kubernetes.io/version: 3.9.2
-        helm.sh/chart: kyverno-3.9.2
+        app.kubernetes.io/version: 3.10.0
+        helm.sh/chart: kyverno-3.10.0
     spec:
       nodeSelector:
         kubernetes.io/os: linux
@@ -91027,7 +91461,7 @@ spec:
       automountServiceAccountToken: true
       initContainers:
         - name: kyverno-pre
-          image: "reg.kyverno.io/kyverno/kyvernopre:v1.19.2"
+          image: "reg.kyverno.io/kyverno/kyvernopre:v1.20.0"
           imagePullPolicy: IfNotPresent
           args:
             - --loggingFormat=text
@@ -91075,7 +91509,7 @@ spec:
             value: kyverno-0-svc
       containers:
         - name: kyverno
-          image: "reg.kyverno.io/kyverno/kyverno:v1.19.2"
+          image: "reg.kyverno.io/kyverno/kyverno:v1.20.0"
           imagePullPolicy: IfNotPresent
           args:
             - --caSecretName=kyverno-0-svc.default.svc.kyverno-tls-ca
@@ -91110,6 +91544,7 @@ spec:
             - --omitEvents=PolicyApplied,PolicySkipped
             - --enablePolicyException=false
             - --protectManagedResources=false
+            - --protectGenerationLabels=true
             - --allowInsecureRegistry=false
             - --registryCredentialHelpers=default,google,amazon,azure,github
             - --enableReporting=validate,mutate,mutateExisting,imageVerify,generate
@@ -91221,8 +91656,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-background-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 spec:
   replicas: 
   revisionHistoryLimit: 10
@@ -91244,8 +91679,8 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: kyverno-background-controller
         app.kubernetes.io/part-of: kyverno-0
-        app.kubernetes.io/version: 3.9.2
-        helm.sh/chart: kyverno-3.9.2
+        app.kubernetes.io/version: 3.10.0
+        helm.sh/chart: kyverno-3.10.0
     spec:
       nodeSelector:
         kubernetes.io/os: linux
@@ -91266,7 +91701,7 @@ spec:
       automountServiceAccountToken: true
       containers:
         - name: controller
-          image: "reg.kyverno.io/kyverno/background-controller:v1.19.2"
+          image: "reg.kyverno.io/kyverno/background-controller:v1.20.0"
           imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 9443
@@ -91281,6 +91716,7 @@ spec:
             - --otelConfig=prometheus
             - --metricsPort=8000
             - --resyncPeriod=15m
+            - --crdWatcher=false
             - --enableConfigMapCaching=true
             - --controllerRuntimeMetricsAddress=:8080
             - --enableDeferredLoading=true
@@ -91354,8 +91790,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-cleanup-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 spec:
   replicas: 
   revisionHistoryLimit: 10
@@ -91377,8 +91813,8 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: kyverno-cleanup-controller
         app.kubernetes.io/part-of: kyverno-0
-        app.kubernetes.io/version: 3.9.2
-        helm.sh/chart: kyverno-3.9.2
+        app.kubernetes.io/version: 3.10.0
+        helm.sh/chart: kyverno-3.10.0
     spec:
       nodeSelector:
         kubernetes.io/os: linux
@@ -91399,7 +91835,7 @@ spec:
       automountServiceAccountToken: true
       containers:
         - name: controller
-          image: "reg.kyverno.io/kyverno/cleanup-controller:v1.19.2"
+          image: "reg.kyverno.io/kyverno/cleanup-controller:v1.20.0"
           imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 9443
@@ -91522,8 +91958,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-reports-controller
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
 spec:
   replicas: 
   revisionHistoryLimit: 10
@@ -91545,8 +91981,8 @@ spec:
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: kyverno-reports-controller
         app.kubernetes.io/part-of: kyverno-0
-        app.kubernetes.io/version: 3.9.2
-        helm.sh/chart: kyverno-3.9.2
+        app.kubernetes.io/version: 3.10.0
+        helm.sh/chart: kyverno-3.10.0
     spec:
       nodeSelector:
         kubernetes.io/os: linux
@@ -91567,7 +92003,7 @@ spec:
       automountServiceAccountToken: true
       containers:
         - name: controller
-          image: "reg.kyverno.io/kyverno/reports-controller:v1.19.2"
+          image: "reg.kyverno.io/kyverno/reports-controller:v1.20.0"
           imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 9443
@@ -91671,13 +92107,35 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-hooks
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
   annotations:
     helm.sh/hook: post-upgrade
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
     helm.sh/hook-weight: "100"
 automountServiceAccountToken: false
+
+---
+# Source: kyverno/templates/hooks/pre-install-check-legacy-policies.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kyverno-0-check-legacy-policies
+  namespace: default
+  labels:
+    app.kubernetes.io/component: hooks
+    app.kubernetes.io/instance: kyverno-0
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kyverno-hooks
+    app.kubernetes.io/part-of: kyverno-0
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded,hook-failed
+    helm.sh/hook-weight: "100"
+automountServiceAccountToken: false
+
 ---
 # Source: kyverno/templates/hooks/post-upgrade-migrate-resources.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -91690,8 +92148,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-hooks
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
   annotations:
     helm.sh/hook: post-upgrade
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded,hook-failed
@@ -91725,6 +92183,52 @@ rules:
     - customresourcedefinitions/status
     verbs:
     - update
+
+---
+# Source: kyverno/templates/hooks/pre-install-check-legacy-policies.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kyverno-0:check-legacy-policies
+  labels:
+    app.kubernetes.io/component: hooks
+    app.kubernetes.io/instance: kyverno-0
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kyverno-hooks
+    app.kubernetes.io/part-of: kyverno-0
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded,hook-failed
+    helm.sh/hook-weight: "100"
+rules:
+  - apiGroups:
+    - kyverno.io
+    resources:
+    - clusterpolicies
+    - policies
+    - cleanuppolicies
+    - clustercleanuppolicies
+    - policyexceptions
+    verbs:
+    - get
+    - list
+  - apiGroups:
+    - apiextensions.k8s.io
+    resources:
+    - customresourcedefinitions
+    # Scope to just the five legacy CRDs the check reads by name (it does a
+    # per-name Get, not a list), so the pre-install SA can't read other CRDs.
+    resourceNames:
+    - clusterpolicies.kyverno.io
+    - policies.kyverno.io
+    - cleanuppolicies.kyverno.io
+    - clustercleanuppolicies.kyverno.io
+    - policyexceptions.kyverno.io
+    verbs:
+    - get
+
 ---
 # Source: kyverno/templates/hooks/post-upgrade-migrate-resources.yaml
 kind: ClusterRoleBinding
@@ -91737,8 +92241,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-hooks
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
   annotations:
     helm.sh/hook: post-upgrade
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded,hook-failed
@@ -91751,6 +92255,34 @@ subjects:
   - kind: ServiceAccount
     name: kyverno-0-migrate-resources
     namespace: default
+
+---
+# Source: kyverno/templates/hooks/pre-install-check-legacy-policies.yaml
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: kyverno-0:check-legacy-policies
+  labels:
+    app.kubernetes.io/component: hooks
+    app.kubernetes.io/instance: kyverno-0
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kyverno-hooks
+    app.kubernetes.io/part-of: kyverno-0
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded,hook-failed
+    helm.sh/hook-weight: "100"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kyverno-0:check-legacy-policies
+subjects:
+  - kind: ServiceAccount
+    name: kyverno-0-check-legacy-policies
+    namespace: default
+
 ---
 # Source: kyverno/templates/tests/admission-controller-metrics.yaml
 apiVersion: v1
@@ -91763,8 +92295,8 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
   annotations:
     helm.sh/hook: test
 spec:
@@ -91772,7 +92304,7 @@ spec:
   restartPolicy: Never
   containers:
     - name: test
-      image: ghcr.io/kyverno/readiness-checker:latest
+      image: ghcr.io/kyverno/readiness-checker:v1.20.0
       imagePullPolicy: IfNotPresent
       resources:
         limits:
@@ -91813,8 +92345,8 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
   annotations:
     helm.sh/hook: test
 spec:
@@ -91822,7 +92354,7 @@ spec:
   restartPolicy: Never
   containers:
     - name: test
-      image: ghcr.io/kyverno/readiness-checker:latest
+      image: ghcr.io/kyverno/readiness-checker:v1.20.0
       imagePullPolicy: IfNotPresent
       resources:
         limits:
@@ -91864,8 +92396,8 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
   annotations:
     helm.sh/hook: test
 spec:
@@ -91873,7 +92405,7 @@ spec:
   restartPolicy: Never
   containers:
     - name: test
-      image: ghcr.io/kyverno/readiness-checker:latest
+      image: ghcr.io/kyverno/readiness-checker:v1.20.0
       imagePullPolicy: IfNotPresent
       resources:
         limits:
@@ -91914,8 +92446,8 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
   annotations:
     helm.sh/hook: test
 spec:
@@ -91923,7 +92455,7 @@ spec:
   restartPolicy: Never
   containers:
     - name: test
-      image: ghcr.io/kyverno/readiness-checker:latest
+      image: ghcr.io/kyverno/readiness-checker:v1.20.0
       imagePullPolicy: IfNotPresent
       resources:
         limits:
@@ -91965,8 +92497,8 @@ metadata:
     app.kubernetes.io/instance: kyverno-0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
   annotations:
     helm.sh/hook: test
 spec:
@@ -91974,7 +92506,7 @@ spec:
   restartPolicy: Never
   containers:
     - name: test
-      image: ghcr.io/kyverno/readiness-checker:latest
+      image: ghcr.io/kyverno/readiness-checker:v1.20.0
       imagePullPolicy: IfNotPresent
       resources:
         limits:
@@ -92016,8 +92548,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-hooks
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
   annotations:
     helm.sh/hook: post-upgrade
     # helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded,hook-failed
@@ -92031,22 +92563,12 @@ spec:
       restartPolicy: Never
       containers:
         - name: kyverno-cli
-          image: "reg.kyverno.io/kyverno/kyverno-cli:v1.19.2"
+          image: "reg.kyverno.io/kyverno/kyverno-cli:v1.20.0"
           imagePullPolicy: IfNotPresent
           args:
             - migrate
             - --resource
-            - cleanuppolicies.kyverno.io
-            - --resource
-            - clustercleanuppolicies.kyverno.io
-            - --resource
-            - clusterpolicies.kyverno.io
-            - --resource
             - globalcontextentries.kyverno.io
-            - --resource
-            - policies.kyverno.io
-            - --resource
-            - policyexceptions.kyverno.io
             - --resource
             - updaterequests.kyverno.io
             - --resource
@@ -92105,8 +92627,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-hooks
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
   annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded,hook-failed
@@ -92120,7 +92642,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: kubectl
-          image: "ghcr.io/kyverno/readiness-checker:v1.19.2"
+          image: "ghcr.io/kyverno/readiness-checker:v1.20.0"
           imagePullPolicy: 
           args:
             - delete-webhooks
@@ -92158,8 +92680,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: kyverno-hooks
     app.kubernetes.io/part-of: kyverno-0
-    app.kubernetes.io/version: 3.9.2
-    helm.sh/chart: kyverno-3.9.2
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
   annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded,hook-failed
@@ -92174,10 +92696,74 @@ spec:
       restartPolicy: Never
       containers:
         - name: kubectl
-          image: "ghcr.io/kyverno/readiness-checker:v1.19.2"
+          image: "ghcr.io/kyverno/readiness-checker:v1.20.0"
           imagePullPolicy: 
           args:
             - scale-deploy
+            - --namespace=default
+            - --label=app.kubernetes.io/part-of=kyverno-0
+          resources:
+            limits:
+              cpu: 100m
+              memory: 256Mi
+            requests:
+              cpu: 10m
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 65534
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile:
+              type: RuntimeDefault
+      nodeSelector:
+        kubernetes.io/os: linux
+---
+# Source: kyverno/templates/hooks/pre-install-check-legacy-policies.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kyverno-0-check-legacy-policies
+  namespace: default
+  labels:
+    app.kubernetes.io/component: hooks
+    app.kubernetes.io/instance: kyverno-0
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kyverno-hooks
+    app.kubernetes.io/part-of: kyverno-0
+    app.kubernetes.io/version: 3.10.0
+    helm.sh/chart: kyverno-3.10.0
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+    helm.sh/hook-weight: "200"
+spec:
+  backoffLimit: 0
+  # Fail the Job (and unblock the release) if the check can't finish in time,
+  # e.g. against a stalled or unreachable API server, so the hook never hangs.
+  activeDeadlineSeconds: 120
+  # Auto-delete the finished Job (and its Pod) after this many seconds. The Job
+  # omits the hook-failed delete policy so a failed run's logs stay available,
+  # but on the opt-out recovery path the hook is not rendered again, so nothing
+  # would ever clean up a failed Job. This TTL bounds that. Set to 0 or null to
+  # keep failed Jobs indefinitely.
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      serviceAccountName: kyverno-0-check-legacy-policies
+      automountServiceAccountToken: true
+      restartPolicy: Never
+      containers:
+        - name: kyverno-cli
+          image: "reg.kyverno.io/kyverno/kyverno-cli:v1.20.0"
+          imagePullPolicy: IfNotPresent
+          args:
+            - check-legacy-policies
           resources:
             limits:
               cpu: 100m

@@ -25,6 +25,7 @@ spec:
     # Allow inbound connections
     - ports:
         - port: 6379
+
 ---
 # Source: redis/templates/master/pdb.yaml
 apiVersion: policy/v1
@@ -46,6 +47,7 @@ spec:
       app.kubernetes.io/instance: oauth2-redis-1
       app.kubernetes.io/name: redis
       app.kubernetes.io/component: master
+
 ---
 # Source: redis/templates/master/serviceaccount.yaml
 apiVersion: v1
@@ -60,6 +62,7 @@ metadata:
     app.kubernetes.io/name: redis
     app.kubernetes.io/version: 8.6.3
     helm.sh/chart: redis-25.5.3
+
 ---
 # Source: redis/templates/secret.yaml
 apiVersion: v1
@@ -75,7 +78,7 @@ metadata:
     helm.sh/chart: redis-25.5.3
 type: Opaque
 data:
-  redis-password: "M3g5WmI3ckQzSQ=="
+  redis-password: "d2t2NlhKSjNtYw=="
 ---
 # Source: redis/templates/configmap.yaml
 apiVersion: v1
@@ -113,6 +116,7 @@ data:
     rename-command FLUSHALL ""
     # End of replica configuration
   users.acl: |-
+
 ---
 # Source: redis/templates/health-configmap.yaml
 apiVersion: v1
@@ -222,6 +226,7 @@ data:
     "$script_dir/ping_liveness_local.sh" $1 || exit_status=$?
     "$script_dir/ping_liveness_master.sh" $1 || exit_status=$?
     exit $exit_status
+
 ---
 # Source: redis/templates/scripts-configmap.yaml
 apiVersion: v1
@@ -255,6 +260,7 @@ data:
     ARGS+=("--include" "/opt/bitnami/redis/etc/redis.conf")
     ARGS+=("--include" "/opt/bitnami/redis/etc/master.conf")
     exec redis-server "${ARGS[@]}"
+
 ---
 # Source: redis/templates/headless-svc.yaml
 apiVersion: v1
@@ -278,6 +284,7 @@ spec:
   selector:
     app.kubernetes.io/instance: oauth2-redis-1
     app.kubernetes.io/name: redis
+
 ---
 # Source: redis/templates/master/service.yaml
 apiVersion: v1
@@ -304,6 +311,7 @@ spec:
     app.kubernetes.io/instance: oauth2-redis-1
     app.kubernetes.io/name: redis
     app.kubernetes.io/component: master
+
 ---
 # Source: redis/templates/master/application.yaml
 apiVersion: apps/v1

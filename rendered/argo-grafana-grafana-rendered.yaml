@@ -11,6 +11,7 @@ metadata:
     app.kubernetes.io/version: "13.2.0"
   name: grafana
   namespace: default
+
 ---
 # Source: grafana/templates/secret.yaml
 apiVersion: v1
@@ -28,8 +29,9 @@ type: Opaque
 data:
   
   admin-user: "YWRtaW4="
-  admin-password: "cjZvUXQ5OG5YUjdPNklYWWRMZFZoRW9YNzgyTVRwOFpMbWNhcFdRZg=="
+  admin-password: "bGFrTkhHS2t1NlN2QnRpTnhQYTJvSFVSQ0p6UENsVEJ5WTd2Y3lwNA=="
   ldap-toml: ""
+
 ---
 # Source: grafana/templates/configmap.yaml
 apiVersion: v1
@@ -246,6 +248,8 @@ data:
       "https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-pods.json" \
       | sed '/-- .* --/! s/"datasource":.*,/"datasource": "Mimir",/g' \
     > "/var/lib/grafana/dashboards/kubernetes/k8s-pods-view.json"
+      
+
 ---
 # Source: grafana/templates/dashboards-json-configmap.yaml
 apiVersion: v1
@@ -261,6 +265,7 @@ metadata:
     dashboard-provider: default
 data:
   {}
+
 ---
 # Source: grafana/templates/dashboards-json-configmap.yaml
 apiVersion: v1
@@ -276,6 +281,7 @@ metadata:
     dashboard-provider: kubernetes-dashboards
 data:
   {}
+
 ---
 # Source: grafana/templates/clusterrole.yaml
 kind: ClusterRole
@@ -288,6 +294,7 @@ metadata:
     app.kubernetes.io/version: "13.2.0"
   name: grafana-clusterrole
 rules: []
+
 ---
 # Source: grafana/templates/clusterrolebinding.yaml
 kind: ClusterRoleBinding
@@ -307,6 +314,7 @@ roleRef:
   kind: ClusterRole
   name: grafana-clusterrole
   apiGroup: rbac.authorization.k8s.io
+
 ---
 # Source: grafana/templates/service.yaml
 apiVersion: v1
@@ -329,6 +337,7 @@ spec:
   selector:
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
+
 ---
 # Source: grafana/templates/deployment.yaml
 apiVersion: apps/v1
@@ -361,7 +370,7 @@ spec:
         checksum/config: fa30a09b932df921f573e8476aef753cd8364afa9f133ccfec5403fe4851ea1f
         checksum/dashboards-json-config: 4c3e8be2bb732bab7bb03f05a1e9aa1d4c8ea1528d685e73826d388943389fce
         checksum/sc-dashboard-provider-config: e70bf6a851099d385178a76de9757bb0bef8299da6d8443602590e44f05fdf24
-        checksum/secret: 084a3b18226ddbc4d7b422f4b72a3d1fc702e7e4d3fb51d79a12277158e49083
+        checksum/secret: e5d917fe2095eddaad1945099a1d59887edd8ea3695b38c2cdb68c9eda1328b4
         kubectl.kubernetes.io/default-container: grafana
     spec:
       
@@ -488,6 +497,7 @@ spec:
           emptyDir: {}
         - name: search
           emptyDir: {}
+
 ---
 # Source: grafana/templates/extra-manifests.yaml
 apiVersion: external-secrets.io/v1
@@ -511,6 +521,8 @@ spec:
   target:
     creationPolicy: Owner
     name: grafana-secret-sso-gh
+
+
 ---
 # Source: grafana/templates/extra-manifests.yaml
 apiVersion: external-secrets.io/v1
@@ -534,6 +546,8 @@ spec:
   target:
     creationPolicy: Owner
     name: grafana-secret-sso-entra
+
+
 ---
 # Source: grafana/templates/route.yaml
 apiVersion: gateway.networking.k8s.io/v1

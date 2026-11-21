@@ -13,6 +13,7 @@ metadata:
     app: workflow-controller
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-workflows
+
 ---
 # Source: argo-workflows/templates/controller/workflow-sa.yaml
 apiVersion: v1
@@ -28,6 +29,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-workflows
   namespace: default
+
 ---
 # Source: argo-workflows/templates/extra-manifests.yaml
 apiVersion: v1
@@ -39,6 +41,7 @@ metadata:
       groups'
     workflows.argoproj.io/rbac-rule-precedence: "1"
   name: admin-user
+
 ---
 # Source: argo-workflows/templates/server/server-sa.yaml
 apiVersion: v1
@@ -107,6 +110,7 @@ data:
     failedPodRestart:
       enabled: false
       maxRestarts: 3
+
 ---
 # Source: argo-workflows/templates/controller/workflow-aggregate-roles.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -146,6 +150,7 @@ rules:
   - get
   - list
   - watch
+
 ---
 # Source: argo-workflows/templates/controller/workflow-aggregate-roles.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -190,6 +195,7 @@ rules:
   - patch
   - update
   - watch
+
 ---
 # Source: argo-workflows/templates/controller/workflow-aggregate-roles.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -234,6 +240,7 @@ rules:
   - patch
   - update
   - watch
+
 ---
 # Source: argo-workflows/templates/controller/workflow-controller-cluster-roles.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -391,6 +398,7 @@ rules:
   - get
   resourceNames:
   - argo-workflows-agent-ca-certificates
+
 ---
 # Source: argo-workflows/templates/controller/workflow-controller-cluster-roles.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -415,6 +423,7 @@ rules:
   - get
   - list
   - watch
+
 ---
 # Source: argo-workflows/templates/server/server-cluster-roles.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -517,6 +526,7 @@ rules:
     - update
     - patch
     - delete
+
 ---
 # Source: argo-workflows/templates/server/server-cluster-roles.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -544,6 +554,7 @@ rules:
   - update
   - patch
   - delete
+
 ---
 # Source: argo-workflows/templates/controller/workflow-controller-crb.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -566,6 +577,7 @@ subjects:
   - kind: ServiceAccount
     name: argo-workflows-0-workflow-controller
     namespace: "default"
+
 ---
 # Source: argo-workflows/templates/controller/workflow-controller-crb.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -588,6 +600,7 @@ subjects:
   - kind: ServiceAccount
     name: argo-workflows-0-workflow-controller
     namespace: "default"
+
 ---
 # Source: argo-workflows/templates/server/server-crb.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -610,6 +623,7 @@ subjects:
 - kind: ServiceAccount
   name: argo-workflows-0-server
   namespace: "default"
+
 ---
 # Source: argo-workflows/templates/server/server-crb.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -655,6 +669,7 @@ rules:
     verbs:
       - create
       - patch
+
 ---
 # Source: argo-workflows/templates/controller/workflow-rb.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -678,6 +693,7 @@ subjects:
   - kind: ServiceAccount
     name: argo-workflow
     namespace: default
+
 ---
 # Source: argo-workflows/templates/server/server-service.yaml
 apiVersion: v1
@@ -793,6 +809,7 @@ spec:
             timeoutSeconds: 30
       nodeSelector:
         kubernetes.io/os: linux
+
 ---
 # Source: argo-workflows/templates/server/server-deployment.yaml
 apiVersion: apps/v1
@@ -907,6 +924,7 @@ spec:
   target:
     creationPolicy: Owner
     name: argo-workflows-server-sso
+
 ---
 # Source: argo-workflows/templates/server/server-httproute.yaml
 apiVersion: gateway.networking.k8s.io/v1
@@ -960,6 +978,7 @@ metadata:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "-10"
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+
 ---
 # Source: argo-workflows/templates/crds-install-job.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -982,6 +1001,7 @@ rules:
   - apiGroups: ["apiextensions.k8s.io"]
     resources: ["customresourcedefinitions"]
     verbs: ["create", "get", "list", "patch", "update"]
+
 ---
 # Source: argo-workflows/templates/crds-install-job.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -1008,6 +1028,7 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: argo-workflows-0-crd-install
+
 ---
 # Source: argo-workflows/templates/crds-install-job.yaml
 apiVersion: batch/v1
@@ -1081,3 +1102,4 @@ spec:
             - "https://raw.githubusercontent.com/argoproj/argo-helm/argo-workflows-1.1.1/charts/argo-workflows/files/crds/full/argoproj.io_workflowtemplates.yaml"
       restartPolicy: Never
   backoffLimit: 3
+

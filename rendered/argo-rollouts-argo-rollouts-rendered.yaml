@@ -7,12 +7,13 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.43.8
+    helm.sh/chart: argo-rollouts-2.43.12
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
-    app.kubernetes.io/version: "v1.10.1"
+    app.kubernetes.io/version: "v1.10.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-rollouts
+
 ---
 # Source: argo-rollouts/templates/controller/configmap.yaml
 apiVersion: v1
@@ -22,13 +23,14 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.43.8
+    helm.sh/chart: argo-rollouts-2.43.12
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
-    app.kubernetes.io/version: "v1.10.1"
+    app.kubernetes.io/version: "v1.10.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-rollouts
 data:
+
 ---
 # Source: argo-rollouts/templates/controller/notifications-configmap.yaml
 apiVersion: v1
@@ -38,13 +40,14 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.43.8
+    helm.sh/chart: argo-rollouts-2.43.12
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
-    app.kubernetes.io/version: "v1.10.1"
+    app.kubernetes.io/version: "v1.10.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-rollouts
 data:
+
 ---
 # Source: argo-rollouts/templates/crds/analysis-run-crd.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -3753,6 +3756,7 @@ spec:
       served: true
       storage: true
       subresources: {}
+
 ---
 # Source: argo-rollouts/templates/crds/analysis-template-crd.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -7333,6 +7337,7 @@ spec:
       served: true
       storage: true
       subresources: {}
+
 ---
 # Source: argo-rollouts/templates/crds/cluster-analysis-template-crd.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -10913,6 +10918,7 @@ spec:
       served: true
       storage: true
       subresources: {}
+
 ---
 # Source: argo-rollouts/templates/crds/experiment-crd.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -14141,6 +14147,7 @@ spec:
       served: true
       storage: true
       subresources: {}
+
 ---
 # Source: argo-rollouts/templates/crds/rollout-crd.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -18435,6 +18442,7 @@ spec:
           specReplicasPath: .spec.replicas
           statusReplicasPath: .status.HPAReplicas
         status: {}
+
 ---
 # Source: argo-rollouts/templates/aggregate-roles.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -18444,10 +18452,10 @@ metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-view: "true"
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.43.8
+    helm.sh/chart: argo-rollouts-2.43.12
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
-    app.kubernetes.io/version: "v1.10.1"
+    app.kubernetes.io/version: "v1.10.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-rollouts
 rules:
@@ -18464,6 +18472,8 @@ rules:
   - get
   - list
   - watch
+
+
 ---
 # Source: argo-rollouts/templates/aggregate-roles.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -18473,10 +18483,10 @@ metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.43.8
+    helm.sh/chart: argo-rollouts-2.43.12
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
-    app.kubernetes.io/version: "v1.10.1"
+    app.kubernetes.io/version: "v1.10.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-rollouts
 rules:
@@ -18499,6 +18509,8 @@ rules:
   - patch
   - update
   - watch
+
+
 ---
 # Source: argo-rollouts/templates/aggregate-roles.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -18508,10 +18520,10 @@ metadata:
   labels:
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.43.8
+    helm.sh/chart: argo-rollouts-2.43.12
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
-    app.kubernetes.io/version: "v1.10.1"
+    app.kubernetes.io/version: "v1.10.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-rollouts
 rules:
@@ -18534,6 +18546,7 @@ rules:
   - patch
   - update
   - watch
+
 ---
 # Source: argo-rollouts/templates/controller/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -18542,10 +18555,10 @@ metadata:
   name: argo-rollouts
   labels:
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.43.8
+    helm.sh/chart: argo-rollouts-2.43.12
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
-    app.kubernetes.io/version: "v1.10.1"
+    app.kubernetes.io/version: "v1.10.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-rollouts
 rules:
@@ -18833,6 +18846,7 @@ rules:
     - list
     - watch
     - update
+
 ---
 # Source: argo-rollouts/templates/controller/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -18841,10 +18855,10 @@ metadata:
   name: argo-rollouts
   labels:
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.43.8
+    helm.sh/chart: argo-rollouts-2.43.12
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
-    app.kubernetes.io/version: "v1.10.1"
+    app.kubernetes.io/version: "v1.10.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-rollouts
 roleRef:
@@ -18855,6 +18869,7 @@ subjects:
 - kind: ServiceAccount
   name: argo-rollouts
   namespace: "default"
+
 ---
 # Source: argo-rollouts/templates/controller/deployment.yaml
 apiVersion: apps/v1
@@ -18864,10 +18879,10 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/component: rollouts-controller
-    helm.sh/chart: argo-rollouts-2.43.8
+    helm.sh/chart: argo-rollouts-2.43.12
     app.kubernetes.io/name: argo-rollouts
     app.kubernetes.io/instance: argo-rollouts
-    app.kubernetes.io/version: "v1.10.1"
+    app.kubernetes.io/version: "v1.10.2"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: argo-rollouts
 spec:
@@ -18891,7 +18906,7 @@ spec:
     spec:
       serviceAccountName: argo-rollouts
       containers:
-      - image: "quay.io/argoproj/argo-rollouts:v1.10.1"
+      - image: "quay.io/argoproj/argo-rollouts:v1.10.2"
         args:
         - --healthzPort=8080
         - --metricsPort=8090

@@ -8,6 +8,7 @@ kind: ServiceAccount
 metadata:
   name: operator
   namespace: default
+
 ---
 # Source: tailscale-operator/templates/proxy-rbac.yaml
 # Copyright (c) Tailscale Inc & contributors
@@ -18,6 +19,7 @@ kind: ServiceAccount
 metadata:
   name: proxies
   namespace: default
+
 ---
 # Source: tailscale-operator/templates/tailscale.com_connectors.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -6623,6 +6625,7 @@ rules:
 - apiGroups: ["admissionregistration.k8s.io"]
   resources: ["validatingadmissionpolicies", "validatingadmissionpolicybindings"]
   verbs: ["list", "create", "delete", "update", "get", "watch"]
+
 ---
 # Source: tailscale-operator/templates/operator-rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -6637,6 +6640,7 @@ roleRef:
   kind: ClusterRole
   name: tailscale-operator
   apiGroup: rbac.authorization.k8s.io
+
 ---
 # Source: tailscale-operator/templates/operator-rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -6670,6 +6674,7 @@ rules:
 - apiGroups: ["monitoring.coreos.com"]
   resources: ["servicemonitors"]
   verbs: ["get", "list", "update", "create", "delete"]
+
 ---
 # Source: tailscale-operator/templates/proxy-rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -6684,6 +6689,7 @@ rules:
 - apiGroups: [""]
   resources: ["events"]
   verbs: ["create", "patch", "get"]
+
 ---
 # Source: tailscale-operator/templates/operator-rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -6699,6 +6705,7 @@ roleRef:
   kind: Role
   name: operator
   apiGroup: rbac.authorization.k8s.io
+
 ---
 # Source: tailscale-operator/templates/proxy-rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -6714,6 +6721,7 @@ roleRef:
   kind: Role
   name: proxies
   apiGroup: rbac.authorization.k8s.io
+
 ---
 # Source: tailscale-operator/templates/deployment.yaml
 # Copyright (c) Tailscale Inc & contributors
@@ -6743,7 +6751,7 @@ spec:
             secretName: operator-oauth
       containers:
         - name: operator
-          image: tailscale/k8s-operator:v1.104.2
+          image: tailscale/k8s-operator:v1.104.7
           imagePullPolicy: Always
           env:
             - name: OPERATOR_INITIAL_TAGS
@@ -6771,7 +6779,7 @@ spec:
             - name: CLIENT_SECRET_FILE
               value: /oauth/client_secret
             - name: PROXY_IMAGE
-              value: tailscale/tailscale:v1.104.2
+              value: tailscale/tailscale:v1.104.7
             - name: PROXY_TAGS
               value: tag:k8s
             - name: APISERVER_PROXY
@@ -6794,6 +6802,7 @@ spec:
               readOnly: true
       nodeSelector:
         kubernetes.io/os: linux
+
 ---
 # Source: tailscale-operator/templates/ingressclass.yaml
 apiVersion: networking.k8s.io/v1
@@ -6804,6 +6813,7 @@ metadata:
 spec:
   controller: tailscale.com/ts-ingress # controller name currently can not be changed
   # parameters: {} # currently no parameters are supported
+
 ---
 # Source: tailscale-operator/templates/apiserverproxy-rbac.yaml
 # Copyright (c) Tailscale Inc & contributors
@@ -6811,6 +6821,8 @@ spec:
 
 # If old setting used, enable both old (operator) and new (ProxyGroup) workflows.
 # If new setting used, enable only new workflow.
+
+
 ---
 # Source: tailscale-operator/templates/oauth-secret.yaml
 # Copyright (c) Tailscale Inc & contributors

@@ -7,14 +7,15 @@ metadata:
   namespace: default
   labels:
     
-    helm.sh/chart: kro-v0.9.4
+    helm.sh/chart: kro-v0.10.0
     app.kubernetes.io/name: kro
     app.kubernetes.io/instance: kro
-    app.kubernetes.io/version: "v0.9.4"
+    app.kubernetes.io/version: "v0.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
     app.kubernetes.io/part-of: kro
 automountServiceAccountToken: true
+
 ---
 # Source: kro/templates/cluster-role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -26,10 +27,10 @@ metadata:
   name: kro-cluster-role
   labels:
     
-    helm.sh/chart: kro-v0.9.4
+    helm.sh/chart: kro-v0.10.0
     app.kubernetes.io/name: kro
     app.kubernetes.io/instance: kro
-    app.kubernetes.io/version: "v0.9.4"
+    app.kubernetes.io/version: "v0.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
     app.kubernetes.io/part-of: kro
@@ -40,6 +41,8 @@ rules:
   - "*"
   verbs:
   - '*'
+
+
 ---
 # Source: kro/templates/user-cluster-role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -51,10 +54,10 @@ metadata:
   name: kro-edit
   labels:
     
-    helm.sh/chart: kro-v0.9.4
+    helm.sh/chart: kro-v0.10.0
     app.kubernetes.io/name: kro
     app.kubernetes.io/instance: kro
-    app.kubernetes.io/version: "v0.9.4"
+    app.kubernetes.io/version: "v0.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
     app.kubernetes.io/part-of: kro
@@ -63,13 +66,19 @@ metadata:
 rules:
 - apiGroups:
   - kro.run
-  resources: ["*"]
+  # Graph is an advanced, privileged primitive that must NOT be grantable through the
+  # built-in edit/admin/view roles (it is gated behind the GraphKind feature and needs
+  # an explicit, separate role). Therefore, enumerate resources explicitly and omit graphs.
+  resources:
+  - resourcegraphdefinitions
+  - resourcegraphdefinitions/status
   verbs:
   - create
   - delete
   - deletecollection
   - patch
   - update
+
 ---
 # Source: kro/templates/user-cluster-role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -81,10 +90,10 @@ metadata:
   name: kro-view
   labels:
     
-    helm.sh/chart: kro-v0.9.4
+    helm.sh/chart: kro-v0.10.0
     app.kubernetes.io/name: kro
     app.kubernetes.io/instance: kro
-    app.kubernetes.io/version: "v0.9.4"
+    app.kubernetes.io/version: "v0.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
     app.kubernetes.io/part-of: kro
@@ -94,11 +103,17 @@ metadata:
 rules:
 - apiGroups:
   - kro.run
-  resources: ["*"]
+  # Graph is an advanced, privileged primitive that must NOT be grantable through the
+  # built-in edit/admin/view roles (it is gated behind the GraphKind feature and needs
+  # an explicit, separate role). Therefore, enumerate resources explicitly and omit graphs.
+  resources:
+  - resourcegraphdefinitions
+  - resourcegraphdefinitions/status
   verbs:
   - get
   - list
   - watch
+
 ---
 # Source: kro/templates/cluster-role-binding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -107,10 +122,10 @@ metadata:
   name: kro-cluster-role-binding
   labels:
     
-    helm.sh/chart: kro-v0.9.4
+    helm.sh/chart: kro-v0.10.0
     app.kubernetes.io/name: kro
     app.kubernetes.io/instance: kro
-    app.kubernetes.io/version: "v0.9.4"
+    app.kubernetes.io/version: "v0.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
     app.kubernetes.io/part-of: kro
@@ -122,6 +137,7 @@ subjects:
 - kind: ServiceAccount
   name: kro
   namespace: default
+
 ---
 # Source: kro/templates/deployment.yaml
 apiVersion: apps/v1
@@ -131,10 +147,10 @@ metadata:
   namespace: default
   labels:
     
-    helm.sh/chart: kro-v0.9.4
+    helm.sh/chart: kro-v0.10.0
     app.kubernetes.io/name: kro
     app.kubernetes.io/instance: kro
-    app.kubernetes.io/version: "v0.9.4"
+    app.kubernetes.io/version: "v0.10.0"
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
     app.kubernetes.io/part-of: kro
@@ -148,10 +164,10 @@ spec:
     metadata:
       labels:
         
-        helm.sh/chart: kro-v0.9.4
+        helm.sh/chart: kro-v0.10.0
         app.kubernetes.io/name: kro
         app.kubernetes.io/instance: kro
-        app.kubernetes.io/version: "v0.9.4"
+        app.kubernetes.io/version: "v0.10.0"
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: controller
         app.kubernetes.io/part-of: kro
@@ -171,7 +187,7 @@ spec:
             privileged: false
             runAsNonRoot: true
             runAsUser: 1000
-          image: "registry.k8s.io/kro/kro:v0.9.4"
+          image: "registry.k8s.io/kro/kro:v0.10.0"
           imagePullPolicy: IfNotPresent
           ports:
             - name: metricsport
@@ -192,6 +208,8 @@ spec:
               value: "1"
             - name: KRO_GRAPH_REVISION_CONCURRENT_RECONCILES
               value: "1"
+            - name: KRO_GRAPH_CONCURRENT_RECONCILES
+              value: "1"
             - name: KRO_DYNAMIC_CONTROLLER_CONCURRENT_RECONCILES
               value: "1"
             - name: KRO_LOG_LEVEL
@@ -208,6 +226,8 @@ spec:
               value: "200ms"
             - name: KRO_DYNAMIC_CONTROLLER_RATE_LIMITER_MAX_DELAY
               value: "1000s"
+            - name: KRO_WATCH_SYNC_TIMEOUT
+              value: "30s"
             - name: KRO_GRACEFUL_SHUTDOWN_TIMEOUT
               value: "60s"
             - name: KRO_INSTANCE_REQUEUE_INTERVAL
@@ -234,6 +254,16 @@ spec:
               value: "10s"
             - name: KRO_LEADER_ELECTION_RETRY_PERIOD
               value: "2s"
+            - name: KRO_APPLY_CONCURRENCY
+              value: "20"
+            - name: KRO_CEL_COST_LIMIT
+              value: "0"
+            - name: KRO_CONTROLLER_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: KRO_CONTROLLER_SERVICE_ACCOUNT
+              value: "kro"
           args:
             - --metrics-bind-address
             - "$(KRO_METRICS_BIND_ADDRESS)"
@@ -243,6 +273,8 @@ spec:
             - "$(KRO_RESOURCE_GROUP_CONCURRENT_RECONCILES)"
             - --graph-revision-concurrent-reconciles
             - "$(KRO_GRAPH_REVISION_CONCURRENT_RECONCILES)"
+            - --graph-concurrent-reconciles
+            - "$(KRO_GRAPH_CONCURRENT_RECONCILES)"
             - --dynamic-controller-concurrent-reconciles
             - "$(KRO_DYNAMIC_CONTROLLER_CONCURRENT_RECONCILES)"
             - --zap-log-level
@@ -262,6 +294,8 @@ spec:
             - "$(KRO_DYNAMIC_CONTROLLER_RATE_LIMITER_MIN_DELAY)"
             - --dynamic-controller-rate-limiter-max-delay
             - "$(KRO_DYNAMIC_CONTROLLER_RATE_LIMITER_MAX_DELAY)"
+            - --watch-sync-timeout
+            - "$(KRO_WATCH_SYNC_TIMEOUT)"
             - --client-qps
             - "$(KRO_CLIENT_QPS)"
             - --client-burst
@@ -284,6 +318,14 @@ spec:
             - "$(KRO_LEADER_ELECTION_RENEW_DEADLINE)"
             - --leader-election-retry-period
             - "$(KRO_LEADER_ELECTION_RETRY_PERIOD)"
+            - --apply-concurrency
+            - "$(KRO_APPLY_CONCURRENCY)"
+            - --cel-cost-limit
+            - "$(KRO_CEL_COST_LIMIT)"
+            - --controller-namespace
+            - "$(KRO_CONTROLLER_NAMESPACE)"
+            - --controller-service-account
+            - "$(KRO_CONTROLLER_SERVICE_ACCOUNT)"
             - --leader-elect
           livenessProbe:
             httpGet:

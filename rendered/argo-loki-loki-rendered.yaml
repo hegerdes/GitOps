@@ -18,6 +18,7 @@ spec:
       app.kubernetes.io/instance: loki
       app.kubernetes.io/component: backend
   maxUnavailable: 1
+
 ---
 # Source: loki/templates/read/poddisruptionbudget-read.yaml
 apiVersion: policy/v1
@@ -38,6 +39,7 @@ spec:
       app.kubernetes.io/instance: loki
       app.kubernetes.io/component: read
   maxUnavailable: 1
+
 ---
 # Source: loki/templates/write/poddisruptionbudget-write.yaml
 apiVersion: policy/v1
@@ -58,6 +60,7 @@ spec:
       app.kubernetes.io/instance: loki
       app.kubernetes.io/component: write
   maxUnavailable: 1
+
 ---
 # Source: loki/templates/serviceaccount.yaml
 apiVersion: v1
@@ -71,6 +74,7 @@ metadata:
     app.kubernetes.io/instance: loki
     app.kubernetes.io/version: "3.6.7"
 automountServiceAccountToken: true
+
 ---
 # Source: loki/templates/config.yaml
 apiVersion: v1
@@ -206,6 +210,7 @@ data:
       use_thanos_objstore: false
     tracing:
       enabled: false
+
 ---
 # Source: loki/templates/gateway/configmap-gateway.yaml
 apiVersion: v1
@@ -418,6 +423,7 @@ data:
         }
       }
     }
+
 ---
 # Source: loki/templates/runtime-configmap.yaml
 apiVersion: v1
@@ -433,6 +439,7 @@ metadata:
 data:
   runtime-config.yaml: |
     {}
+
 ---
 # Source: loki/templates/backend/clusterrole.yaml
 kind: ClusterRole
@@ -448,6 +455,7 @@ rules:
 - apiGroups: [""] # "" indicates the core API group
   resources: ["configmaps", "secrets"]
   verbs: ["get", "watch", "list"]
+
 ---
 # Source: loki/templates/backend/clusterrolebinding.yaml
 kind: ClusterRoleBinding
@@ -497,6 +505,7 @@ spec:
     app.kubernetes.io/name: loki
     app.kubernetes.io/instance: loki
     app.kubernetes.io/component: backend
+
 ---
 # Source: loki/templates/backend/service-backend-headless.yaml
 apiVersion: v1
@@ -528,6 +537,7 @@ spec:
     app.kubernetes.io/name: loki
     app.kubernetes.io/instance: loki
     app.kubernetes.io/component: backend
+
 ---
 # Source: loki/templates/backend/service-backend.yaml
 apiVersion: v1
@@ -557,6 +567,7 @@ spec:
     app.kubernetes.io/name: loki
     app.kubernetes.io/instance: loki
     app.kubernetes.io/component: backend
+
 ---
 # Source: loki/templates/chunks-cache/service-chunks-cache-headless.yaml
 apiVersion: v1
@@ -587,6 +598,7 @@ spec:
     app.kubernetes.io/name: loki
     app.kubernetes.io/instance: loki
     app.kubernetes.io/component: "memcached-chunks-cache"
+
 ---
 # Source: loki/templates/gateway/service-gateway.yaml
 apiVersion: v1
@@ -613,6 +625,7 @@ spec:
     app.kubernetes.io/name: loki
     app.kubernetes.io/instance: loki
     app.kubernetes.io/component: gateway
+
 ---
 # Source: loki/templates/read/service-read-headless.yaml
 apiVersion: v1
@@ -644,6 +657,7 @@ spec:
     app.kubernetes.io/name: loki
     app.kubernetes.io/instance: loki
     app.kubernetes.io/component: read
+
 ---
 # Source: loki/templates/read/service-read.yaml
 apiVersion: v1
@@ -673,6 +687,7 @@ spec:
     app.kubernetes.io/name: loki
     app.kubernetes.io/instance: loki
     app.kubernetes.io/component: read
+
 ---
 # Source: loki/templates/results-cache/service-results-cache-headless.yaml
 apiVersion: v1
@@ -703,6 +718,7 @@ spec:
     app.kubernetes.io/name: loki
     app.kubernetes.io/instance: loki
     app.kubernetes.io/component: "memcached-results-cache"
+
 ---
 # Source: loki/templates/service-memberlist.yaml
 apiVersion: v1
@@ -728,6 +744,7 @@ spec:
     app.kubernetes.io/name: loki
     app.kubernetes.io/instance: loki
     app.kubernetes.io/part-of: memberlist
+
 ---
 # Source: loki/templates/write/service-write-headless.yaml
 apiVersion: v1
@@ -759,6 +776,7 @@ spec:
     app.kubernetes.io/name: loki
     app.kubernetes.io/instance: loki
     app.kubernetes.io/component: write
+
 ---
 # Source: loki/templates/write/service-write.yaml
 apiVersion: v1
@@ -788,6 +806,7 @@ spec:
     app.kubernetes.io/name: loki
     app.kubernetes.io/instance: loki
     app.kubernetes.io/component: write
+
 ---
 # Source: loki/templates/gateway/deployment-gateway-nginx.yaml
 apiVersion: apps/v1
@@ -875,6 +894,7 @@ spec:
           emptyDir: {}
         - name: docker-entrypoint-d-override
           emptyDir: {}
+
 ---
 # Source: loki/templates/read/deployment-read.yaml
 apiVersion: apps/v1
@@ -1003,6 +1023,7 @@ spec:
         - name: runtime-config
           configMap:
             name: loki-runtime
+
 ---
 # Source: loki/templates/backend/statefulset-backend.yaml
 apiVersion: apps/v1
@@ -1180,6 +1201,7 @@ spec:
         resources:
           requests:
             storage: "10Gi"
+
 ---
 # Source: loki/templates/chunks-cache/statefulset-chunks-cache.yaml
 apiVersion: apps/v1
@@ -1321,6 +1343,7 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
+
 ---
 # Source: loki/templates/results-cache/statefulset-results-cache.yaml
 apiVersion: apps/v1
@@ -1462,6 +1485,7 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
+
 ---
 # Source: loki/templates/write/statefulset-write.yaml
 apiVersion: apps/v1
@@ -1597,6 +1621,7 @@ spec:
         resources:
           requests:
             storage: "20Gi"
+
 ---
 # Source: loki/templates/extra-manifests.yaml
 apiVersion: external-secrets.io/v1

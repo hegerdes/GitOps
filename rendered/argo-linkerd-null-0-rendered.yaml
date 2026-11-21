@@ -4009,6 +4009,7 @@ status:
     plural: ""
   conditions: null
   storedVersions: null
+
 ---
 # Source: linkerd-crds/templates/policy/authorization-policy.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -4109,6 +4110,7 @@ spec:
                           this authentication refers to the local namespace.
                         maxLength: 253
                         type: string
+
 ---
 # Source: linkerd-crds/templates/policy/httproute.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -9326,6 +9328,7 @@ status:
     plural: ""
   conditions: []
   storedVersions: []
+
 ---
 # Source: linkerd-crds/templates/policy/meshtls-authentication.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -9415,6 +9418,7 @@ spec:
                           this authentication refers to the local namespace.
                         maxLength: 253
                         type: string
+
 ---
 # Source: linkerd-crds/templates/policy/network-authentication.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -9469,6 +9473,7 @@ spec:
                         type: array
                         items:
                           type: string
+
 ---
 # Source: linkerd-crds/templates/policy/server-authorization.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -9736,6 +9741,7 @@ spec:
         type: string
         description: The server that this grants access to
         jsonPath: .spec.server.name
+
 ---
 # Source: linkerd-crds/templates/policy/server.yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -9869,6 +9875,7 @@ spec:
         type: string
         description: The protocol of the server
         jsonPath: .spec.proxyProtocol
+
 ---
 # Source: linkerd-crds/templates/serviceprofile.yaml
 ###

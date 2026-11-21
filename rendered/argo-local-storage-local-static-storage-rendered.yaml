@@ -10,6 +10,7 @@ metadata:
     app.kubernetes.io/name: local-static-provisioner
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: local-static-storage
+
 ---
 # Source: local-static-provisioner/templates/configmap.yaml
 apiVersion: v1
@@ -34,6 +35,7 @@ data:
       accessMode: ReadWriteOnce
       fsType: ext4
       namePattern: "*"
+
 ---
 # Source: local-static-provisioner/templates/rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -61,6 +63,7 @@ rules:
 - apiGroups: [""]
   resources: ["nodes"]
   verbs: ["get", "update"]
+
 ---
 # Source: local-static-provisioner/templates/rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -80,6 +83,7 @@ roleRef:
   kind: ClusterRole
   name: local-static-storage-local-static-provisioner-node-clusterrole
   apiGroup: rbac.authorization.k8s.io
+
 ---
 # Source: local-static-provisioner/templates/daemonset_linux.yaml
 apiVersion: apps/v1

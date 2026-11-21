@@ -11,13 +11,14 @@ metadata:
     release: "reloader"
     app.kubernetes.io/name: reloader
     app.kubernetes.io/instance: "reloader"
-    helm.sh/chart: "reloader-2.2.19"
-    chart: "reloader-2.2.19"
+    helm.sh/chart: "reloader-2.2.20"
+    chart: "reloader-2.2.20"
     heritage: "Helm"
     app.kubernetes.io/managed-by: "Helm"
-    app.kubernetes.io/version: "v1.4.23"
+    app.kubernetes.io/version: "v1.4.24"
   name: reloader-reloader
   namespace: default
+
 ---
 # Source: reloader/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -32,11 +33,11 @@ metadata:
     release: "reloader"
     app.kubernetes.io/name: reloader
     app.kubernetes.io/instance: "reloader"
-    helm.sh/chart: "reloader-2.2.19"
-    chart: "reloader-2.2.19"
+    helm.sh/chart: "reloader-2.2.20"
+    chart: "reloader-2.2.20"
     heritage: "Helm"
     app.kubernetes.io/managed-by: "Helm"
-    app.kubernetes.io/version: "v1.4.23"
+    app.kubernetes.io/version: "v1.4.24"
   name: reloader-reloader-role
 rules:
   - apiGroups:
@@ -66,6 +67,7 @@ rules:
     verbs:
       - create
       - patch
+
 ---
 # Source: reloader/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -80,11 +82,11 @@ metadata:
     release: "reloader"
     app.kubernetes.io/name: reloader
     app.kubernetes.io/instance: "reloader"
-    helm.sh/chart: "reloader-2.2.19"
-    chart: "reloader-2.2.19"
+    helm.sh/chart: "reloader-2.2.20"
+    chart: "reloader-2.2.20"
     heritage: "Helm"
     app.kubernetes.io/managed-by: "Helm"
-    app.kubernetes.io/version: "v1.4.23"
+    app.kubernetes.io/version: "v1.4.24"
   name: reloader-reloader-role-binding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -94,6 +96,7 @@ subjects:
   - kind: ServiceAccount
     name: reloader-reloader
     namespace: default
+
 ---
 # Source: reloader/templates/role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -107,11 +110,11 @@ metadata:
     release: "reloader"
     app.kubernetes.io/name: reloader
     app.kubernetes.io/instance: "reloader"
-    helm.sh/chart: "reloader-2.2.19"
-    chart: "reloader-2.2.19"
+    helm.sh/chart: "reloader-2.2.20"
+    chart: "reloader-2.2.20"
     heritage: "Helm"
     app.kubernetes.io/managed-by: "Helm"
-    app.kubernetes.io/version: "v1.4.23"
+    app.kubernetes.io/version: "v1.4.24"
   name: reloader-reloader-metadata-role
   namespace: default
 rules:
@@ -125,6 +128,7 @@ rules:
       - watch
       - create
       - update
+
 ---
 # Source: reloader/templates/rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -138,11 +142,11 @@ metadata:
     release: "reloader"
     app.kubernetes.io/name: reloader
     app.kubernetes.io/instance: "reloader"
-    helm.sh/chart: "reloader-2.2.19"
-    chart: "reloader-2.2.19"
+    helm.sh/chart: "reloader-2.2.20"
+    chart: "reloader-2.2.20"
     heritage: "Helm"
     app.kubernetes.io/managed-by: "Helm"
-    app.kubernetes.io/version: "v1.4.23"
+    app.kubernetes.io/version: "v1.4.24"
   name: reloader-reloader-metadata-role-binding
   namespace: default
 roleRef:
@@ -166,14 +170,14 @@ metadata:
     release: "reloader"
     app.kubernetes.io/name: reloader
     app.kubernetes.io/instance: "reloader"
-    helm.sh/chart: "reloader-2.2.19"
-    chart: "reloader-2.2.19"
+    helm.sh/chart: "reloader-2.2.20"
+    chart: "reloader-2.2.20"
     heritage: "Helm"
     app.kubernetes.io/managed-by: "Helm"
-    app.kubernetes.io/version: "v1.4.23"
+    app.kubernetes.io/version: "v1.4.24"
     group: com.stakater.platform
     provider: stakater
-    version: v1.4.23
+    version: v1.4.24
   name: reloader-reloader
   namespace: default
 spec:
@@ -190,17 +194,17 @@ spec:
         release: "reloader"
         app.kubernetes.io/name: reloader
         app.kubernetes.io/instance: "reloader"
-        helm.sh/chart: "reloader-2.2.19"
-        chart: "reloader-2.2.19"
+        helm.sh/chart: "reloader-2.2.20"
+        chart: "reloader-2.2.20"
         heritage: "Helm"
         app.kubernetes.io/managed-by: "Helm"
-        app.kubernetes.io/version: "v1.4.23"
+        app.kubernetes.io/version: "v1.4.24"
         group: com.stakater.platform
         provider: stakater
-        version: v1.4.23
+        version: v1.4.24
     spec:
       containers:
-      - image: "ghcr.io/stakater/reloader:v1.4.23"
+      - image: "ghcr.io/stakater/reloader:v1.4.24"
         imagePullPolicy: IfNotPresent
         name: reloader-reloader
         env:

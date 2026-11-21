@@ -15,6 +15,7 @@ metadata:
     app.kubernetes.io/instance: crossplane-0
     app.kubernetes.io/version: "2.4.3"
 automountServiceAccountToken: true
+
 ---
 # Source: crossplane/templates/serviceaccount.yaml
 apiVersion: v1
@@ -32,6 +33,7 @@ metadata:
     app.kubernetes.io/instance: crossplane-0
     app.kubernetes.io/version: "2.4.3"
 automountServiceAccountToken: true
+
 ---
 # Source: crossplane/templates/secret.yaml
 # The reason this is created empty and filled by the init container is we want
@@ -43,6 +45,7 @@ metadata:
   name: crossplane-root-ca
   namespace: default
 type: Opaque
+
 ---
 # Source: crossplane/templates/secret.yaml
 # The reason this is created empty and filled by the init container is we want
@@ -54,6 +57,7 @@ metadata:
   name: crossplane-tls-server
   namespace: default
 type: Opaque
+
 ---
 # Source: crossplane/templates/secret.yaml
 # The reason this is created empty and filled by the init container is we want
@@ -65,6 +69,7 @@ metadata:
   name: crossplane-tls-client
   namespace: default
 type: Opaque
+
 ---
 # Source: crossplane/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -84,6 +89,7 @@ aggregationRule:
   clusterRoleSelectors:
   - matchLabels:
       rbac.crossplane.io/aggregate-to-crossplane: "true"
+
 ---
 # Source: crossplane/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -186,6 +192,7 @@ rules:
   - patch
   - watch
   - delete
+
 ---
 # Source: crossplane/templates/rbac-manager-allowed-provider-permissions.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -346,6 +353,7 @@ rules:
   - patch
   - watch
   - delete
+
 ---
 # Source: crossplane/templates/rbac-manager-managed-clusterroles.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -365,6 +373,7 @@ aggregationRule:
   clusterRoleSelectors:
   - matchLabels:
       rbac.crossplane.io/aggregate-to-admin: "true"
+
 ---
 # Source: crossplane/templates/rbac-manager-managed-clusterroles.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -384,6 +393,7 @@ aggregationRule:
   clusterRoleSelectors:
   - matchLabels:
       rbac.crossplane.io/aggregate-to-edit: "true"
+
 ---
 # Source: crossplane/templates/rbac-manager-managed-clusterroles.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -403,6 +413,7 @@ aggregationRule:
   clusterRoleSelectors:
   - matchLabels:
       rbac.crossplane.io/aggregate-to-view: "true"
+
 ---
 # Source: crossplane/templates/rbac-manager-managed-clusterroles.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -422,6 +433,7 @@ aggregationRule:
   clusterRoleSelectors:
   - matchLabels:
       rbac.crossplane.io/aggregate-to-browse: "true"
+
 ---
 # Source: crossplane/templates/rbac-manager-managed-clusterroles.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -484,6 +496,7 @@ rules:
     - ops.crossplane.io
   resources: ["*"]
   verbs: ["*"]
+
 ---
 # Source: crossplane/templates/rbac-manager-managed-clusterroles.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -535,6 +548,7 @@ rules:
     - ops.crossplane.io
   resources: ["*"]
   verbs: ["*"]
+
 ---
 # Source: crossplane/templates/rbac-manager-managed-clusterroles.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -581,6 +595,7 @@ rules:
     - ops.crossplane.io
   resources: ["*"]
   verbs: [get, list, watch]
+
 ---
 # Source: crossplane/templates/rbac-manager-managed-clusterroles.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -609,6 +624,7 @@ rules:
   - apiextensions.crossplane.io
   resources: ["*"]
   verbs: [get, list, watch]
+
 ---
 # Source: crossplane/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -632,6 +648,7 @@ subjects:
 - kind: ServiceAccount
   name: crossplane
   namespace: default
+
 ---
 # Source: crossplane/templates/rbac-manager-clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -678,6 +695,7 @@ subjects:
 - apiGroup: rbac.authorization.k8s.io
   kind: Group
   name: crossplane:masters
+
 ---
 # Source: crossplane/templates/service.yaml
 apiVersion: v1
@@ -704,6 +722,7 @@ spec:
   - protocol: TCP
     port: 9443
     targetPort: 9443
+
 ---
 # Source: crossplane/templates/deployment.yaml
 apiVersion: apps/v1
@@ -886,6 +905,7 @@ spec:
       - name: tls-client-certs
         secret:
           secretName: crossplane-tls-client
+
 ---
 # Source: crossplane/templates/rbac-manager-deployment.yaml
 apiVersion: apps/v1

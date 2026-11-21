@@ -11,6 +11,7 @@ metadata:
     app.kubernetes.io/instance: n8n
     app.kubernetes.io/version: "2.36.8"
     app.kubernetes.io/managed-by: Helm
+
 ---
 # Source: n8n/templates/configmap.worker.yaml
 apiVersion: v1
@@ -26,6 +27,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 data:
   QUEUE_HEALTH_CHECK_ACTIVE: "true"
+  
+
 ---
 # Source: n8n/templates/service.yaml
 apiVersion: v1
@@ -50,6 +53,8 @@ spec:
     app.kubernetes.io/name: n8n
     app.kubernetes.io/instance: n8n
     app.kubernetes.io/type: master
+
+
 ---
 # Source: n8n/templates/deployment.yaml
 apiVersion: apps/v1
@@ -75,7 +80,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 4cdf5aebefe27c1b8e948dbca8cf1c48614daf2b04e877b799e470e345682166
+        checksum/config: deb1b737c302d5669f0138b56ca6b29adfb781714219f1ef6966ec3927295e55
       labels:
         app.kubernetes.io/name: n8n
         app.kubernetes.io/instance: n8n
@@ -149,3 +154,4 @@ spec:
           nslookup n8n;
           wget n8n:80;
   restartPolicy: Never
+

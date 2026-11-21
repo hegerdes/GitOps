@@ -12,6 +12,7 @@ metadata:
     app.kubernetes.io/version: "1.14.4"
     app.kubernetes.io/managed-by: Helm
 automountServiceAccountToken: true
+
 ---
 # Source: k8s-monitoring/charts/telemetryServices/charts/kube-state-metrics/templates/serviceaccount.yaml
 apiVersion: v1
@@ -19,7 +20,7 @@ kind: ServiceAccount
 automountServiceAccountToken: true
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-8.8.0
+    helm.sh/chart: kube-state-metrics-9.0.1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -37,7 +38,7 @@ metadata:
   name: grafana-monitoring-0-node-exporter
   namespace: default
   labels:
-    helm.sh/chart: node-exporter-4.60.1
+    helm.sh/chart: node-exporter-5.1.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: node-exporter
@@ -54,13 +55,14 @@ metadata:
   name: grafana-monitoring-0-opencost
   namespace: default
   labels:
-    helm.sh/chart: opencost-2.5.33
+    helm.sh/chart: opencost-2.5.34
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.121.3"
+    app.kubernetes.io/version: "1.121.4"
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/managed-by: Helm
 automountServiceAccountToken: true
+
 ---
 # Source: k8s-monitoring/templates/alloy-config.yaml
 apiVersion: v1
@@ -308,6 +310,19 @@ data:
       name      = "grafana-agent-loki-cred"
       namespace = "monitoring"
     } // remote.kubernetes.secret "grafana_com_loki"
+
+
+
+
+      
+      
+      
+      
+
+
+
+
+
 ---
 # Source: k8s-monitoring/templates/alloy-config.yaml
 apiVersion: v1
@@ -551,6 +566,13 @@ data:
       discovery.relabel "kube_state_metrics" {
         targets = discovery.kubernetes.kube_state_metrics.targets
     
+        // only keep targets with a matching port name
+        rule {
+          source_labels = ["__meta_kubernetes_pod_container_port_name"]
+          regex = "http"
+          action = "keep"
+        }
+    
         rule {
           action = "replace"
           replacement = "kubernetes"
@@ -674,7 +696,7 @@ data:
       discovery.relabel "node_exporter" {
         targets = discovery.kubernetes.node_exporter.targets
     
-        // keep only the specified metrics port name, and pods that are Running and ready
+        // Keep pods that are Running and ready
         rule {
           source_labels = [
             "__meta_kubernetes_pod_container_init",
@@ -683,6 +705,13 @@ data:
           ]
           separator = "@"
           regex = "false@Running@true"
+          action = "keep"
+        }
+    
+        // Keep only the specified metrics port
+        rule {
+          source_labels = ["__meta_kubernetes_pod_container_port_name"]
+          regex = "metrics"
           action = "keep"
         }
     
@@ -929,6 +958,16 @@ data:
       name      = "grafana-agent-prometheus-cred"
       namespace = "monitoring"
     } // remote.kubernetes.secret "grafana_com_metrics"
+
+
+
+
+      
+
+
+
+
+
 ---
 # Source: k8s-monitoring/templates/alloy-config.yaml
 apiVersion: v1
@@ -1452,6 +1491,17 @@ data:
       name      = "grafana-agent-tempo-cred"
       namespace = "monitoring"
     } // remote.kubernetes.secret "grafana_com_tempo"
+
+
+
+
+      
+      
+
+
+
+
+
 ---
 # Source: k8s-monitoring/templates/alloy-config.yaml
 apiVersion: v1
@@ -1681,6 +1731,7 @@ data:
       name      = "grafana-agent-prometheus-cred"
       namespace = "monitoring"
     } // remote.kubernetes.secret "grafana_com_metrics"
+
 ---
 # Source: k8s-monitoring/templates/release-info.yaml
 apiVersion: v1
@@ -1693,7 +1744,7 @@ data:
   self-reporting-metric.prom: |+
     # HELP grafana_kubernetes_monitoring_build_info A metric to report the version of the Kubernetes Monitoring Helm chart
     # TYPE grafana_kubernetes_monitoring_build_info gauge
-    grafana_kubernetes_monitoring_build_info{version="4.6.0", namespace="default"} 1
+    grafana_kubernetes_monitoring_build_info{version="4.6.1", namespace="default"} 1
     # HELP grafana_kubernetes_monitoring_feature_info A metric to report the enabled features of the Kubernetes Monitoring Helm chart
     # TYPE grafana_kubernetes_monitoring_feature_info gauge
     grafana_kubernetes_monitoring_feature_info{feature="applicationObservability", protocols="otlpgrpc,otlphttp,jaegergrpc,zipkin", version="1.0.0"} 1
@@ -1716,6 +1767,9 @@ data:
     grafana_kubernetes_monitoring_collector_info{kind="deployment", name="alloy-receiver", presets="deployment", replicas="1", type="alloy"} 1
     grafana_kubernetes_monitoring_collector_info{kind="deployment", name="alloy-singleton", presets="singleton", replicas="1", type="alloy"} 1
     # EOF
+    
+
+
 ---
 # Source: k8s-monitoring/charts/alloy-operator/templates/rbac/alloy-manager.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -1743,6 +1797,7 @@ rules:
       - patch
       - update
       - watch
+
 ---
 # Source: k8s-monitoring/charts/alloy-operator/templates/rbac/alloy-objects.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -1780,13 +1835,14 @@ rules:
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources: ["clusterroles", "clusterrolebindings", "roles", "rolebindings"]
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete", "bind", "escalate"]
+
 ---
 # Source: k8s-monitoring/charts/telemetryServices/charts/kube-state-metrics/templates/role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-8.8.0
+    helm.sh/chart: kube-state-metrics-9.0.1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -1936,6 +1992,8 @@ rules:
   resources:
     - volumeattachments
   verbs: ["list", "watch"]
+
+
 ---
 # Source: k8s-monitoring/charts/telemetryServices/charts/opencost/templates/clusterrole.yaml
 # Cluster role giving opencost to get, list, watch required resources
@@ -1945,10 +2003,10 @@ kind: ClusterRole
 metadata:
   name: grafana-monitoring-0-opencost
   labels:
-    helm.sh/chart: opencost-2.5.33
+    helm.sh/chart: opencost-2.5.34
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.121.3"
+    app.kubernetes.io/version: "1.121.4"
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/managed-by: Helm
 rules:
@@ -2023,6 +2081,7 @@ rules:
       - get
       - list
       - watch
+
 ---
 # Source: k8s-monitoring/charts/alloy-operator/templates/rbac/alloy-manager.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -2043,6 +2102,7 @@ subjects:
   - kind: ServiceAccount
     name: grafana-monitoring-0-alloy-operator
     namespace: default
+
 ---
 # Source: k8s-monitoring/charts/alloy-operator/templates/rbac/alloy-objects.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -2063,13 +2123,14 @@ subjects:
   - kind: ServiceAccount
     name: grafana-monitoring-0-alloy-operator
     namespace: default
+
 ---
 # Source: k8s-monitoring/charts/telemetryServices/charts/kube-state-metrics/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   labels:    
-    helm.sh/chart: kube-state-metrics-8.8.0
+    helm.sh/chart: kube-state-metrics-9.0.1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -2093,10 +2154,10 @@ kind: ClusterRoleBinding
 metadata:
   name: grafana-monitoring-0-opencost
   labels:
-    helm.sh/chart: opencost-2.5.33
+    helm.sh/chart: opencost-2.5.34
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.121.3"
+    app.kubernetes.io/version: "1.121.4"
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/managed-by: Helm
 roleRef:
@@ -2107,6 +2168,7 @@ subjects:
   - kind: ServiceAccount
     name: grafana-monitoring-0-opencost
     namespace: default
+
 ---
 # Source: k8s-monitoring/charts/alloy-operator/templates/rbac/leader-election.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -2152,6 +2214,7 @@ rules:
     verbs:
       - create
       - patch
+
 ---
 # Source: k8s-monitoring/charts/alloy-operator/templates/rbac/leader-election.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -2173,6 +2236,7 @@ subjects:
   - kind: ServiceAccount
     name: grafana-monitoring-0-alloy-operator
     namespace: default
+
 ---
 # Source: k8s-monitoring/charts/alloy-operator/templates/service.yaml
 apiVersion: v1
@@ -2200,6 +2264,7 @@ spec:
   selector:
     app.kubernetes.io/name: alloy-operator
     app.kubernetes.io/instance: grafana-monitoring-0
+
 ---
 # Source: k8s-monitoring/charts/telemetryServices/charts/kube-state-metrics/templates/service.yaml
 apiVersion: v1
@@ -2208,7 +2273,7 @@ metadata:
   name: grafana-monitoring-0-kube-state-metrics
   namespace: default
   labels:    
-    helm.sh/chart: kube-state-metrics-8.8.0
+    helm.sh/chart: kube-state-metrics-9.0.1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -2227,6 +2292,7 @@ spec:
   selector:    
     app.kubernetes.io/name: kube-state-metrics
     app.kubernetes.io/instance: grafana-monitoring-0
+
 ---
 # Source: k8s-monitoring/charts/telemetryServices/charts/node-exporter/templates/service.yaml
 apiVersion: v1
@@ -2235,7 +2301,7 @@ metadata:
   name: grafana-monitoring-0-node-exporter
   namespace: default
   labels:
-    helm.sh/chart: node-exporter-4.60.1
+    helm.sh/chart: node-exporter-5.1.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: node-exporter
@@ -2253,6 +2319,7 @@ spec:
   selector:
     app.kubernetes.io/name: node-exporter
     app.kubernetes.io/instance: grafana-monitoring-0
+
 ---
 # Source: k8s-monitoring/charts/telemetryServices/charts/opencost/templates/service.yaml
 apiVersion: v1
@@ -2261,10 +2328,10 @@ metadata:
   name: grafana-monitoring-0-opencost
   namespace: default
   labels:
-    helm.sh/chart: opencost-2.5.33
+    helm.sh/chart: opencost-2.5.34
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.121.3"
+    app.kubernetes.io/version: "1.121.4"
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/managed-by: Helm
 spec:
@@ -2284,7 +2351,7 @@ metadata:
   name: grafana-monitoring-0-node-exporter
   namespace: default
   labels:
-    helm.sh/chart: node-exporter-4.60.1
+    helm.sh/chart: node-exporter-5.1.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: node-exporter
@@ -2337,7 +2404,12 @@ spec:
             - --collector.filesystem.fs-types-exclude=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|erofs|sysfs|tracefs|tmpfs|ramfs)$
           securityContext:
             allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
             readOnlyRootFilesystem: true
+            seccompProfile:
+              type: RuntimeDefault
           env:
             - name: HOST_IP
               value: 0.0.0.0
@@ -2355,7 +2427,7 @@ spec:
             initialDelaySeconds: 0
             periodSeconds: 10
             successThreshold: 1
-            timeoutSeconds: 1
+            timeoutSeconds: 5
           readinessProbe:
             failureThreshold: 3
             httpGet:
@@ -2366,7 +2438,7 @@ spec:
             initialDelaySeconds: 0
             periodSeconds: 10
             successThreshold: 1
-            timeoutSeconds: 1
+            timeoutSeconds: 5
           volumeMounts:
             - name: proc
               mountPath: /host/proc
@@ -2405,6 +2477,7 @@ spec:
         - name: root
           hostPath:
             path: /
+
 ---
 # Source: k8s-monitoring/charts/alloy-operator/templates/deployment.yaml
 apiVersion: apps/v1
@@ -2476,6 +2549,7 @@ spec:
             readOnlyRootFilesystem: true
       nodeSelector:
         kubernetes.io/os: linux
+
 ---
 # Source: k8s-monitoring/charts/telemetryServices/charts/kube-state-metrics/templates/deployment.yaml
 apiVersion: apps/v1
@@ -2484,7 +2558,7 @@ metadata:
   name: grafana-monitoring-0-kube-state-metrics
   namespace: default
   labels:    
-    helm.sh/chart: kube-state-metrics-8.8.0
+    helm.sh/chart: kube-state-metrics-9.0.1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: metrics
     app.kubernetes.io/part-of: kube-state-metrics
@@ -2569,6 +2643,7 @@ spec:
           readOnlyRootFilesystem: true
       nodeSelector:
         kubernetes.io/os: linux
+
 ---
 # Source: k8s-monitoring/charts/telemetryServices/charts/opencost/templates/deployment.yaml
 apiVersion: apps/v1
@@ -2577,10 +2652,10 @@ metadata:
   name: grafana-monitoring-0-opencost
   namespace: default
   labels:
-    helm.sh/chart: opencost-2.5.33
+    helm.sh/chart: opencost-2.5.34
     app.kubernetes.io/name: opencost
     app.kubernetes.io/instance: grafana-monitoring-0
-    app.kubernetes.io/version: "1.121.3"
+    app.kubernetes.io/version: "1.121.4"
     app.kubernetes.io/part-of: opencost
     app.kubernetes.io/managed-by: Helm
   annotations:
@@ -2614,7 +2689,7 @@ spec:
       initContainers:
       containers:
         - name: grafana-monitoring-0-opencost
-          image: ghcr.io/opencost/opencost:1.121.3@sha256:4cdd173253e5abba048dfe2cfa968707a5b59d774157d5356940d0d923a6c281
+          image: ghcr.io/opencost/opencost:1.121.4@sha256:daa04ae48f17b830de941c3602563c5a01fabb13522ede1ba057f09e96613aaa
           imagePullPolicy: IfNotPresent
           args:
           ports:
@@ -2712,6 +2787,7 @@ spec:
       volumes:
         - emptyDir: {}
           name: configs
+
 ---
 # Source: k8s-monitoring/templates/alloy.yaml
 apiVersion: collectors.grafana.com/v1alpha1
@@ -2750,6 +2826,7 @@ spec:
   crds:
     create: false
   nameOverride: alloy-logs
+
 ---
 # Source: k8s-monitoring/templates/alloy.yaml
 apiVersion: collectors.grafana.com/v1alpha1
@@ -2786,6 +2863,7 @@ spec:
   crds:
     create: false
   nameOverride: alloy-metrics
+
 ---
 # Source: k8s-monitoring/templates/alloy.yaml
 apiVersion: collectors.grafana.com/v1alpha1
@@ -2836,6 +2914,7 @@ spec:
   crds:
     create: false
   nameOverride: alloy-receiver
+
 ---
 # Source: k8s-monitoring/templates/alloy.yaml
 apiVersion: collectors.grafana.com/v1alpha1
@@ -2890,6 +2969,7 @@ metadata:
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
     "helm.sh/hook-weight": "5"
+
 ---
 # Source: k8s-monitoring/templates/hooks/pre-delete_remove-alloy-and-finalizer.yaml
 apiVersion: v1
@@ -2899,7 +2979,9 @@ metadata:
   namespace: default
   annotations:
     helm.sh/hook: pre-delete
+    helm.sh/hook-weight: "-5"
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+
 ---
 # Source: k8s-monitoring/templates/hooks/post-install_add-finalizer.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -2915,6 +2997,7 @@ rules:
   - apiGroups: ["apps"]
     resources: ["deployments"]
     verbs: ["get", "list", "watch", "patch"]
+
 ---
 # Source: k8s-monitoring/templates/hooks/pre-delete_remove-alloy-and-finalizer.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -2924,6 +3007,7 @@ metadata:
   namespace: default
   annotations:
     helm.sh/hook: pre-delete
+    helm.sh/hook-weight: "-5"
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
 rules:
   - apiGroups: ["apps"]
@@ -2932,6 +3016,7 @@ rules:
   - apiGroups: ["collectors.grafana.com"]
     resources: ["alloys"]
     verbs: ["get", "list", "watch", "delete"]
+
 ---
 # Source: k8s-monitoring/templates/hooks/post-install_add-finalizer.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -2951,6 +3036,7 @@ roleRef:
   kind: Role
   name: grafana-monitoring-0-k8s-monitoring-add-finalizer
   apiGroup: rbac.authorization.k8s.io
+
 ---
 # Source: k8s-monitoring/templates/hooks/pre-delete_remove-alloy-and-finalizer.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -2960,6 +3046,7 @@ metadata:
   namespace: default
   annotations:
     helm.sh/hook: pre-delete
+    helm.sh/hook-weight: "-5"
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
 subjects:
   - kind: ServiceAccount
@@ -2969,6 +3056,7 @@ roleRef:
   kind: Role
   name: grafana-monitoring-0-k8s-monitoring-remove-alloy-and-finalizer
   apiGroup: rbac.authorization.k8s.io
+
 ---
 # Source: k8s-monitoring/templates/hooks/post-install_add-finalizer.yaml
 apiVersion: batch/v1
@@ -2979,7 +3067,7 @@ metadata:
   labels:
     app.kubernetes.io/name: grafana-monitoring-0-k8s-monitoring-add-finalizer
     app.kubernetes.io/instance: grafana-monitoring-0
-    helm.sh/chart: k8s-monitoring-4.6.0
+    helm.sh/chart: k8s-monitoring-4.6.1
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "15"
@@ -3002,16 +3090,15 @@ spec:
       serviceAccountName: grafana-monitoring-0-k8s-monitoring-add-finalizer
       containers:
         - name: add-finalizers
-          image: "ghcr.io/grafana/helm-chart-toolbox-kubectl:0.1.2"
+          image: "registry.k8s.io/kubectl:v1.34.9"
           imagePullPolicy: IfNotPresent
           command:
-            - /bin/bash
-            - -ce
-            - |
-              kubectl patch \
-                --namespace=default \
-                --patch='{"metadata":{"finalizers":["k8s.grafana.com/finalizer"]}}' \
-                deployment/grafana-monitoring-0-alloy-operator
+            - kubectl
+          args:
+            - patch
+            - --namespace=default
+            - --patch={"metadata":{"finalizers":["k8s.grafana.com/finalizer"]}}
+            - deployment/grafana-monitoring-0-alloy-operator
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -3022,6 +3109,7 @@ spec:
             runAsUser: 4242
             seccompProfile:
               type: RuntimeDefault
+
 ---
 # Source: k8s-monitoring/templates/hooks/pre-delete_remove-alloy-and-finalizer.yaml
 apiVersion: batch/v1
@@ -3032,13 +3120,14 @@ metadata:
   labels:
     app.kubernetes.io/name: grafana-monitoring-0-k8s-monitoring-remove-alloy-and-finalizer
     app.kubernetes.io/instance: grafana-monitoring-0
-    helm.sh/chart: k8s-monitoring-4.6.0
+    helm.sh/chart: k8s-monitoring-4.6.1
   annotations:
     helm.sh/hook: pre-delete
+    helm.sh/hook-weight: "0"
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
 spec:
-  ttlSecondsAfterFinished: 300
-  backoffLimit: 3
+  activeDeadlineSeconds: 180
+  backoffLimit: 0
   template:
     metadata:
       name: grafana-monitoring-0-k8s-monitoring-remove-alloy-and-finalizer
@@ -3052,35 +3141,21 @@ spec:
       nodeSelector:
         kubernetes.io/os: linux
       serviceAccountName: grafana-monitoring-0-k8s-monitoring-remove-alloy-and-finalizer
-      containers:
-        - name: remove-finalizers
-          image: "ghcr.io/grafana/helm-chart-toolbox-kubectl:0.1.2"
+      initContainers:
+        - name: delete-alloy-instances
+          image: "registry.k8s.io/kubectl:v1.34.9"
           imagePullPolicy: IfNotPresent
           command:
-            - /bin/bash
-            - -ce
-            - |
-              echo "Deleting Alloy instance: alloy/grafana-monitoring-0-alloy-logs..."
-              kubectl delete alloy/grafana-monitoring-0-alloy-logs --ignore-not-found=true --wait
-              kubectl wait --for=delete alloy/grafana-monitoring-0-alloy-logs --timeout=60s || echo "Timed out waiting for deletion of alloy/grafana-monitoring-0-alloy-logs or it may not exist."
-
-              echo "Deleting Alloy instance: alloy/grafana-monitoring-0-alloy-metrics..."
-              kubectl delete alloy/grafana-monitoring-0-alloy-metrics --ignore-not-found=true --wait
-              kubectl wait --for=delete alloy/grafana-monitoring-0-alloy-metrics --timeout=60s || echo "Timed out waiting for deletion of alloy/grafana-monitoring-0-alloy-metrics or it may not exist."
-
-              echo "Deleting Alloy instance: alloy/grafana-monitoring-0-alloy-receiver..."
-              kubectl delete alloy/grafana-monitoring-0-alloy-receiver --ignore-not-found=true --wait
-              kubectl wait --for=delete alloy/grafana-monitoring-0-alloy-receiver --timeout=60s || echo "Timed out waiting for deletion of alloy/grafana-monitoring-0-alloy-receiver or it may not exist."
-
-              echo "Deleting Alloy instance: alloy/grafana-monitoring-0-alloy-singleton..."
-              kubectl delete alloy/grafana-monitoring-0-alloy-singleton --ignore-not-found=true --wait
-              kubectl wait --for=delete alloy/grafana-monitoring-0-alloy-singleton --timeout=60s || echo "Timed out waiting for deletion of alloy/grafana-monitoring-0-alloy-singleton or it may not exist."
-
-              kubectl patch \
-                --namespace=default \
-                --type merge \
-                --patch='{"metadata":{"finalizers":null}}' \
-                deployment/grafana-monitoring-0-alloy-operator
+            - kubectl
+          args:
+            - delete
+            - alloy/grafana-monitoring-0-alloy-logs
+            - alloy/grafana-monitoring-0-alloy-metrics
+            - alloy/grafana-monitoring-0-alloy-receiver
+            - alloy/grafana-monitoring-0-alloy-singleton
+            - --ignore-not-found=true
+            - --wait=true
+            - --timeout=120s
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -3091,3 +3166,26 @@ spec:
             runAsUser: 4242
             seccompProfile:
               type: RuntimeDefault
+      containers:
+        - name: remove-finalizers
+          image: "registry.k8s.io/kubectl:v1.34.9"
+          imagePullPolicy: IfNotPresent
+          command:
+            - kubectl
+          args:
+            - patch
+            - --namespace=default
+            - --type=merge
+            - --patch={"metadata":{"finalizers":null}}
+            - deployment/grafana-monitoring-0-alloy-operator
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 4242
+            seccompProfile:
+              type: RuntimeDefault
+

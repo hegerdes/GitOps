@@ -6,14 +6,15 @@ metadata:
   name: nginx-gateway-fabric-0
   namespace: default
   labels:
-    helm.sh/chart: nginx-gateway-fabric-2.8.0
+    helm.sh/chart: nginx-gateway-fabric-2.9.0
     app.kubernetes.io/name: nginx-gateway-fabric
     app.kubernetes.io/instance: nginx-gateway-fabric-0
-    app.kubernetes.io/version: "2.8.0"
+    app.kubernetes.io/version: "2.9.0"
     app.kubernetes.io/managed-by: Helm
   annotations:
     {}
 automountServiceAccountToken: false
+
 ---
 # Source: nginx-gateway-fabric/templates/rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -21,10 +22,10 @@ kind: ClusterRole
 metadata:
   name: nginx-gateway-fabric-0
   labels:
-    helm.sh/chart: nginx-gateway-fabric-2.8.0
+    helm.sh/chart: nginx-gateway-fabric-2.9.0
     app.kubernetes.io/name: nginx-gateway-fabric
     app.kubernetes.io/instance: nginx-gateway-fabric-0
-    app.kubernetes.io/version: "2.8.0"
+    app.kubernetes.io/version: "2.9.0"
     app.kubernetes.io/managed-by: Helm
 rules:
 - apiGroups:
@@ -237,6 +238,7 @@ rules:
   - create
   - get
   - update
+
 ---
 # Source: nginx-gateway-fabric/templates/rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -244,10 +246,10 @@ kind: ClusterRoleBinding
 metadata:
   name: nginx-gateway-fabric-0
   labels:
-    helm.sh/chart: nginx-gateway-fabric-2.8.0
+    helm.sh/chart: nginx-gateway-fabric-2.9.0
     app.kubernetes.io/name: nginx-gateway-fabric
     app.kubernetes.io/instance: nginx-gateway-fabric-0
-    app.kubernetes.io/version: "2.8.0"
+    app.kubernetes.io/version: "2.9.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -257,6 +259,7 @@ subjects:
 - kind: ServiceAccount
   name: nginx-gateway-fabric-0
   namespace: default
+
 ---
 # Source: nginx-gateway-fabric/templates/service.yaml
 # This is the control plane Service for internal communication with the data plane.
@@ -267,10 +270,10 @@ metadata:
   name: nginx-gateway-fabric-0
   namespace: default
   labels:
-    helm.sh/chart: nginx-gateway-fabric-2.8.0
+    helm.sh/chart: nginx-gateway-fabric-2.9.0
     app.kubernetes.io/name: nginx-gateway-fabric
     app.kubernetes.io/instance: nginx-gateway-fabric-0
-    app.kubernetes.io/version: "2.8.0"
+    app.kubernetes.io/version: "2.9.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -286,6 +289,7 @@ spec:
     port: 9113
     protocol: TCP
     targetPort: 9113
+
 ---
 # Source: nginx-gateway-fabric/templates/deployment.yaml
 apiVersion: apps/v1
@@ -294,10 +298,10 @@ metadata:
   name: nginx-gateway-fabric-0
   namespace: default
   labels:
-    helm.sh/chart: nginx-gateway-fabric-2.8.0
+    helm.sh/chart: nginx-gateway-fabric-2.9.0
     app.kubernetes.io/name: nginx-gateway-fabric
     app.kubernetes.io/instance: nginx-gateway-fabric-0
-    app.kubernetes.io/version: "2.8.0"
+    app.kubernetes.io/version: "2.9.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -347,8 +351,8 @@ spec:
             fieldRef:
               fieldPath: metadata.labels['app.kubernetes.io/instance']
         - name: IMAGE_NAME
-          value: ghcr.io/nginx/nginx-gateway-fabric:2.8.0
-        image: ghcr.io/nginx/nginx-gateway-fabric:2.8.0
+          value: ghcr.io/nginx/nginx-gateway-fabric:2.9.0
+        image: ghcr.io/nginx/nginx-gateway-fabric:2.9.0
         imagePullPolicy: IfNotPresent
         name: nginx-gateway
         ports:
@@ -389,6 +393,7 @@ spec:
       - name: nginx-agent-tls
         secret:
           secretName: server-tls
+
 ---
 # Source: nginx-gateway-fabric/templates/gatewayclass.yaml
 apiVersion: gateway.networking.k8s.io/v1
@@ -396,10 +401,10 @@ kind: GatewayClass
 metadata:
   name: nginx
   labels:
-    helm.sh/chart: nginx-gateway-fabric-2.8.0
+    helm.sh/chart: nginx-gateway-fabric-2.9.0
     app.kubernetes.io/name: nginx-gateway-fabric
     app.kubernetes.io/instance: nginx-gateway-fabric-0
-    app.kubernetes.io/version: "2.8.0"
+    app.kubernetes.io/version: "2.9.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   controllerName: gateway.nginx.org/nginx-gateway-controller
@@ -408,6 +413,7 @@ spec:
     kind: NginxProxy
     name: nginx-gateway-fabric-0-proxy-config
     namespace: default
+
 ---
 # Source: nginx-gateway-fabric/templates/nginxgateway.yaml
 apiVersion: gateway.nginx.org/v1alpha1
@@ -416,14 +422,15 @@ metadata:
   name: nginx-gateway-fabric-0-config
   namespace: default
   labels:
-    helm.sh/chart: nginx-gateway-fabric-2.8.0
+    helm.sh/chart: nginx-gateway-fabric-2.9.0
     app.kubernetes.io/name: nginx-gateway-fabric
     app.kubernetes.io/instance: nginx-gateway-fabric-0
-    app.kubernetes.io/version: "2.8.0"
+    app.kubernetes.io/version: "2.9.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   logging:
     level: info
+
 ---
 # Source: nginx-gateway-fabric/templates/nginxproxy.yaml
 apiVersion: gateway.nginx.org/v1alpha2
@@ -432,10 +439,10 @@ metadata:
   name: nginx-gateway-fabric-0-proxy-config
   namespace: default
   labels:
-    helm.sh/chart: nginx-gateway-fabric-2.8.0
+    helm.sh/chart: nginx-gateway-fabric-2.9.0
     app.kubernetes.io/name: nginx-gateway-fabric
     app.kubernetes.io/instance: nginx-gateway-fabric-0
-    app.kubernetes.io/version: "2.8.0"
+    app.kubernetes.io/version: "2.9.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   kubernetes:
@@ -445,7 +452,7 @@ spec:
         image:
           pullPolicy: IfNotPresent
           repository: ghcr.io/nginx/nginx-gateway-fabric/nginx
-          tag: 2.8.0
+          tag: 2.9.0
     service:
       externalTrafficPolicy: Local
       type: LoadBalancer
@@ -457,15 +464,16 @@ metadata:
   name: nginx-gateway-fabric-0-cert-generator
   namespace: default
   labels:
-    helm.sh/chart: nginx-gateway-fabric-2.8.0
+    helm.sh/chart: nginx-gateway-fabric-2.9.0
     app.kubernetes.io/name: nginx-gateway-fabric
     app.kubernetes.io/instance: nginx-gateway-fabric-0
-    app.kubernetes.io/version: "2.8.0"
+    app.kubernetes.io/version: "2.9.0"
     app.kubernetes.io/managed-by: Helm
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 automountServiceAccountToken: false
+
 ---
 # Source: nginx-gateway-fabric/templates/certs-job.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -474,10 +482,10 @@ metadata:
   name: nginx-gateway-fabric-0-cert-generator
   namespace: default
   labels:
-    helm.sh/chart: nginx-gateway-fabric-2.8.0
+    helm.sh/chart: nginx-gateway-fabric-2.9.0
     app.kubernetes.io/name: nginx-gateway-fabric
     app.kubernetes.io/instance: nginx-gateway-fabric-0
-    app.kubernetes.io/version: "2.8.0"
+    app.kubernetes.io/version: "2.9.0"
     app.kubernetes.io/managed-by: Helm
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
@@ -491,6 +499,7 @@ rules:
   - create
   - update
   - get
+
 ---
 # Source: nginx-gateway-fabric/templates/certs-job.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -499,10 +508,10 @@ metadata:
   name: nginx-gateway-fabric-0-cert-generator
   namespace: default
   labels:
-    helm.sh/chart: nginx-gateway-fabric-2.8.0
+    helm.sh/chart: nginx-gateway-fabric-2.9.0
     app.kubernetes.io/name: nginx-gateway-fabric
     app.kubernetes.io/instance: nginx-gateway-fabric-0
-    app.kubernetes.io/version: "2.8.0"
+    app.kubernetes.io/version: "2.9.0"
     app.kubernetes.io/managed-by: Helm
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
@@ -515,6 +524,7 @@ subjects:
 - kind: ServiceAccount
   name: nginx-gateway-fabric-0-cert-generator
   namespace: default
+
 ---
 # Source: nginx-gateway-fabric/templates/certs-job.yaml
 apiVersion: batch/v1
@@ -523,10 +533,10 @@ metadata:
   name: nginx-gateway-fabric-0-cert-generator
   namespace: default
   labels:
-    helm.sh/chart: nginx-gateway-fabric-2.8.0
+    helm.sh/chart: nginx-gateway-fabric-2.9.0
     app.kubernetes.io/name: nginx-gateway-fabric
     app.kubernetes.io/instance: nginx-gateway-fabric-0
-    app.kubernetes.io/version: "2.8.0"
+    app.kubernetes.io/version: "2.9.0"
     app.kubernetes.io/managed-by: Helm
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
@@ -549,7 +559,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: ghcr.io/nginx/nginx-gateway-fabric:2.8.0
+        image: ghcr.io/nginx/nginx-gateway-fabric:2.9.0
         imagePullPolicy: IfNotPresent
         name: cert-generator
         securityContext:
@@ -568,3 +578,4 @@ spec:
         fsGroup: 1001
         runAsNonRoot: true
   ttlSecondsAfterFinished: 30
+

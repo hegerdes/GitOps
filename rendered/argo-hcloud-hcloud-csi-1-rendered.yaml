@@ -7,11 +7,12 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: hcloud-csi
-    helm.sh/chart: hcloud-csi-2.24.1
+    helm.sh/chart: hcloud-csi-2.24.2
     app.kubernetes.io/instance: hcloud-csi-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
 automountServiceAccountToken: true
+
 ---
 # Source: hcloud-csi/templates/core/storageclass.yaml
 kind: StorageClass
@@ -24,6 +25,7 @@ provisioner: csi.hetzner.cloud
 volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true
 reclaimPolicy: "Delete"
+
 ---
 # Source: hcloud-csi/templates/controller/clusterrole.yaml
 kind: ClusterRole
@@ -32,7 +34,7 @@ metadata:
   name: hcloud-csi-1-controller
   labels:
     app.kubernetes.io/name: hcloud-csi
-    helm.sh/chart: hcloud-csi-2.24.1
+    helm.sh/chart: hcloud-csi-2.24.2
     app.kubernetes.io/instance: hcloud-csi-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
@@ -86,6 +88,7 @@ rules:
   - apiGroups: [""]
     resources: [events]
     verbs: [get, list, watch, create, update, patch]
+
 ---
 # Source: hcloud-csi/templates/controller/clusterrolebinding.yaml
 kind: ClusterRoleBinding
@@ -94,7 +97,7 @@ metadata:
   name: hcloud-csi-1-controller
   labels:
     app.kubernetes.io/name: hcloud-csi
-    helm.sh/chart: hcloud-csi-2.24.1
+    helm.sh/chart: hcloud-csi-2.24.2
     app.kubernetes.io/instance: hcloud-csi-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
@@ -106,6 +109,7 @@ subjects:
   - kind: ServiceAccount
     name: hcloud-csi-1-controller
     namespace: "default"
+
 ---
 # Source: hcloud-csi/templates/controller/service.yaml
 apiVersion: v1
@@ -115,7 +119,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: hcloud-csi
-    helm.sh/chart: hcloud-csi-2.24.1
+    helm.sh/chart: hcloud-csi-2.24.2
     app.kubernetes.io/instance: hcloud-csi-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
@@ -127,6 +131,7 @@ spec:
     app.kubernetes.io/name: hcloud-csi
     app.kubernetes.io/instance: hcloud-csi-1
     app.kubernetes.io/component: controller
+
 ---
 # Source: hcloud-csi/templates/node/service.yaml
 apiVersion: v1
@@ -136,7 +141,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: hcloud-csi
-    helm.sh/chart: hcloud-csi-2.24.1
+    helm.sh/chart: hcloud-csi-2.24.2
     app.kubernetes.io/instance: hcloud-csi-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: node
@@ -148,6 +153,7 @@ spec:
     app.kubernetes.io/name: hcloud-csi
     app.kubernetes.io/instance: hcloud-csi-1
     app.kubernetes.io/component: node
+
 ---
 # Source: hcloud-csi/templates/node/daemonset.yaml
 apiVersion: apps/v1
@@ -157,7 +163,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: hcloud-csi
-    helm.sh/chart: hcloud-csi-2.24.1
+    helm.sh/chart: hcloud-csi-2.24.2
     app.kubernetes.io/instance: hcloud-csi-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: node
@@ -174,7 +180,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: hcloud-csi
-        helm.sh/chart: hcloud-csi-2.24.1
+        helm.sh/chart: hcloud-csi-2.24.2
         app.kubernetes.io/instance: hcloud-csi-1
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: node
@@ -227,7 +233,7 @@ spec:
             limits: {}
             requests: {}
         - name: hcloud-csi-driver
-          image: docker.io/hetznercloud/hcloud-csi-driver:v2.24.1 # x-releaser-pleaser-version
+          image: docker.io/hetznercloud/hcloud-csi-driver:v2.24.2 # x-releaser-pleaser-version
           imagePullPolicy: IfNotPresent
           args:
             - -node
@@ -283,6 +289,7 @@ spec:
           hostPath:
             path: /dev
             type: Directory
+
 ---
 # Source: hcloud-csi/templates/controller/deployment.yaml
 apiVersion: apps/v1
@@ -292,7 +299,7 @@ metadata:
   namespace: "default"
   labels:
     app.kubernetes.io/name: hcloud-csi
-    helm.sh/chart: hcloud-csi-2.24.1
+    helm.sh/chart: hcloud-csi-2.24.2
     app.kubernetes.io/instance: hcloud-csi-1
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/component: controller
@@ -310,7 +317,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: hcloud-csi
-        helm.sh/chart: hcloud-csi-2.24.1
+        helm.sh/chart: hcloud-csi-2.24.2
         app.kubernetes.io/instance: hcloud-csi-1
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/component: controller
@@ -332,7 +339,7 @@ spec:
       initContainers:
       containers:
         - name: hcloud-csi-driver
-          image: docker.io/hetznercloud/hcloud-csi-driver:v2.24.1 # x-releaser-pleaser-version
+          image: docker.io/hetznercloud/hcloud-csi-driver:v2.24.2 # x-releaser-pleaser-version
           imagePullPolicy: IfNotPresent
           args:
             - -controller
@@ -382,6 +389,7 @@ spec:
             requests: {}
           args:
             - --default-fstype=ext4
+            - --timeout=60s
           volumeMounts:
           - name: socket-dir
             mountPath: /run/csi
@@ -427,6 +435,7 @@ spec:
         - name: hcloud-token
           secret:
             secretName: hcloud
+
 ---
 # Source: hcloud-csi/templates/core/csidriver.yaml
 apiVersion: storage.k8s.io/v1

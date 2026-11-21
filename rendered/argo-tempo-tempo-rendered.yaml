@@ -20,6 +20,7 @@ spec:
       app.kubernetes.io/instance: tempo
       app.kubernetes.io/component: ingester
   maxUnavailable: 1
+
 ---
 # Source: tempo-distributed/templates/serviceaccount.yaml
 apiVersion: v1
@@ -34,6 +35,7 @@ metadata:
     app.kubernetes.io/version: "2.9.0"
     app.kubernetes.io/managed-by: Helm
 automountServiceAccountToken: false
+
 ---
 # Source: tempo-distributed/templates/configmap-runtime.yaml
 apiVersion: v1
@@ -52,6 +54,7 @@ data:
     
     overrides:
       null
+
 ---
 # Source: tempo-distributed/templates/configmap-tempo.yaml
 apiVersion: v1
@@ -206,6 +209,7 @@ data:
     stream_over_http_enabled: false
     usage_report:
       reporting_enabled: true
+
 ---
 # Source: tempo-distributed/templates/gateway/configmap-gateway.yaml
 apiVersion: v1
@@ -321,6 +325,8 @@ data:
         }
       }
     }
+    
+
 ---
 # Source: tempo-distributed/templates/compactor/service-compactor.yaml
 apiVersion: v1
@@ -348,6 +354,7 @@ spec:
     app.kubernetes.io/component: compactor
   ipFamilies: [IPv4]
   ipFamilyPolicy: SingleStack
+
 ---
 # Source: tempo-distributed/templates/distributor/service-distributor-discovery.yaml
 apiVersion: v1
@@ -386,6 +393,7 @@ spec:
     app.kubernetes.io/name: tempo
     app.kubernetes.io/instance: tempo
     app.kubernetes.io/component: distributor
+
 ---
 # Source: tempo-distributed/templates/distributor/service-distributor.yaml
 apiVersion: v1
@@ -429,6 +437,8 @@ spec:
     app.kubernetes.io/name: tempo
     app.kubernetes.io/instance: tempo
     app.kubernetes.io/component: distributor
+
+
 ---
 # Source: tempo-distributed/templates/gateway/service-gateway.yaml
 apiVersion: v1
@@ -459,6 +469,7 @@ spec:
     app.kubernetes.io/name: tempo
     app.kubernetes.io/instance: tempo
     app.kubernetes.io/component: gateway
+
 ---
 # Source: tempo-distributed/templates/gossip-ring/service-gossip-ring.yaml
 apiVersion: v1
@@ -489,6 +500,7 @@ spec:
     app.kubernetes.io/name: tempo
     app.kubernetes.io/instance: tempo
     app.kubernetes.io/part-of: memberlist
+
 ---
 # Source: tempo-distributed/templates/ingester/service-ingester-discovery.yaml
 apiVersion: v1
@@ -520,6 +532,7 @@ spec:
     app.kubernetes.io/name: tempo
     app.kubernetes.io/instance: tempo
     app.kubernetes.io/component: ingester
+
 ---
 # Source: tempo-distributed/templates/ingester/service-ingester.yaml
 apiVersion: v1
@@ -552,6 +565,7 @@ spec:
     app.kubernetes.io/name: tempo
     app.kubernetes.io/instance: tempo
     app.kubernetes.io/component: ingester
+
 ---
 # Source: tempo-distributed/templates/memcached/service-memcached.yaml
 apiVersion: v1
@@ -580,6 +594,7 @@ spec:
     app.kubernetes.io/name: tempo
     app.kubernetes.io/instance: tempo
     app.kubernetes.io/component: memcached
+
 ---
 # Source: tempo-distributed/templates/querier/service-querier.yaml
 apiVersion: v1
@@ -610,6 +625,7 @@ spec:
     app.kubernetes.io/name: tempo
     app.kubernetes.io/instance: tempo
     app.kubernetes.io/component: querier
+
 ---
 # Source: tempo-distributed/templates/query-frontend/service-query-frontend-discovery.yaml
 apiVersion: v1
@@ -644,6 +660,7 @@ spec:
     app.kubernetes.io/name: tempo
     app.kubernetes.io/instance: tempo
     app.kubernetes.io/component: query-frontend
+
 ---
 # Source: tempo-distributed/templates/query-frontend/service-query-frontend.yaml
 apiVersion: v1
@@ -674,6 +691,7 @@ spec:
     app.kubernetes.io/name: tempo
     app.kubernetes.io/instance: tempo
     app.kubernetes.io/component: query-frontend
+
 ---
 # Source: tempo-distributed/templates/compactor/deployment-compactor.yaml
 apiVersion: apps/v1
@@ -811,6 +829,7 @@ spec:
                 path: "overrides.yaml"
         - name: tempo-compactor-store
           emptyDir: {}
+
 ---
 # Source: tempo-distributed/templates/distributor/deployment-distributor.yaml
 apiVersion: apps/v1
@@ -962,6 +981,7 @@ spec:
                 path: "overrides.yaml"
         - name: tempo-distributor-store
           emptyDir: {}
+
 ---
 # Source: tempo-distributed/templates/gateway/deployment-gateway.yaml
 apiVersion: apps/v1
@@ -1089,6 +1109,7 @@ spec:
           emptyDir: {}
         - name: docker-entrypoint-d-override
           emptyDir: {}
+
 ---
 # Source: tempo-distributed/templates/querier/deployment-querier.yaml
 apiVersion: apps/v1
@@ -1236,6 +1257,7 @@ spec:
                 path: "overrides.yaml"
         - name: tempo-querier-store
           emptyDir: {}
+
 ---
 # Source: tempo-distributed/templates/query-frontend/deployment-query-frontend.yaml
 apiVersion: apps/v1
@@ -1380,6 +1402,7 @@ spec:
                 path: "overrides.yaml"
         - name: tempo-queryfrontend-store
           emptyDir: {}
+
 ---
 # Source: tempo-distributed/templates/ingester/statefulset-ingester.yaml
 apiVersion: apps/v1
@@ -1529,6 +1552,7 @@ spec:
                 path: "overrides.yaml"
         - name: data
           emptyDir: {}
+
 ---
 # Source: tempo-distributed/templates/memcached/statefulset-memcached.yaml
 apiVersion: apps/v1
@@ -1647,6 +1671,7 @@ spec:
         
   updateStrategy:
     type: RollingUpdate
+
 ---
 # Source: tempo-distributed/templates/extra-manifests.yaml
 apiVersion: external-secrets.io/v1

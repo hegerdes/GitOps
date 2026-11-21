@@ -5,6 +5,7 @@ kind: ServiceAccount
 metadata:
   name: hcloud-cloud-controller-manager
   namespace: default
+
 ---
 # Source: hcloud-cloud-controller-manager/templates/deployment.yaml
 apiVersion: apps/v1
@@ -97,7 +98,7 @@ spec:
                 secretKeyRef:
                   key: network
                   name: hcloud
-          image: docker.io/hetznercloud/hcloud-cloud-controller-manager:v1.39.2 # x-releaser-pleaser-version
+          image: docker.io/hetznercloud/hcloud-cloud-controller-manager:v1.39.3 # x-releaser-pleaser-version
           ports:
             - name: metrics
               containerPort: 8233

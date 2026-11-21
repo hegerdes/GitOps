@@ -18,6 +18,7 @@ spec:
       app.kubernetes.io/name: policy-controller
       app.kubernetes.io/instance: policy-controller-0
       control-plane: policy-controller-0-webhook
+
 ---
 # Source: policy-controller/templates/webhook/sa_webhook.yaml
 apiVersion: v1
@@ -32,6 +33,7 @@ metadata:
     control-plane: policy-controller-0-webhook
   name: policy-controller-0-webhook
   namespace: default
+
 ---
 # Source: policy-controller/templates/webhook/secret_certs_webhook.yaml
 apiVersion: v1
@@ -47,6 +49,7 @@ metadata:
   name: webhook-certs
   namespace: default
 # The data is populated at install time.
+
 ---
 # Source: policy-controller/templates/webhook/config-sigstore-keys.yaml
 # Copyright 2022 The Sigstore Authors.
@@ -94,6 +97,7 @@ data:
     #                                     #
     # cluster-image-policy-json: '{"images":[{"glob":"ghcr.io/example/*","regex":""}],"authorities":[{"key":{"data":"-----BEGIN PUBLIC KEY-----\\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAExB6+H6054/W1SJgs5JR6AJr6J35J\\nRCTfQ5s1kD+hGMSE1rH7s46hmXEeyhnlRnaGF8eMU/SBJE/2NKPnxE7WzQ==\\n-----END PUBLIC KEY-----"}}]}'
     #######################################
+
 ---
 # Source: policy-controller/templates/webhook/configmap-policy-controller.yaml
 # Copyright 2022 The Sigstore Authors.
@@ -124,6 +128,8 @@ data:
     #                              #
     #    no-match-policy: warn     #
     ################################
+
+
 ---
 # Source: policy-controller/templates/webhook/configmap.yaml
 apiVersion: v1
@@ -164,6 +170,7 @@ data:
   # Changes are be picked up immediately.
   loglevel.controller: "info"
   loglevel.webhook: "info"
+
 ---
 # Source: policy-controller/templates/crds/clusterimagepolicy.yaml
 # Copyright 2022 The Sigstore Authors.
@@ -882,6 +889,7 @@ spec:
                   description: ObservedGeneration is the 'Generation' of the Service that was last processed by the controller.
                   type: integer
                   format: int64
+
 ---
 # Source: policy-controller/templates/crds/trustroots.yaml
 # Copyright 2022 The Sigstore Authors.
@@ -1072,6 +1080,7 @@ spec:
                   description: ObservedGeneration is the 'Generation' of the Service that was last processed by the controller.
                   type: integer
                   format: int64
+
 ---
 # Source: policy-controller/templates/webhook/clusterrole_webhook.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -1139,6 +1148,7 @@ rules:
   - apiGroups: ["policy.sigstore.dev"]
     resources: ["trustroots", "trustroots/status"]
     verbs: ["get", "list", "update", "watch", "patch"]
+
 ---
 # Source: policy-controller/templates/webhook/clusterrolebindings_webhook.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -1160,6 +1170,7 @@ subjects:
 - kind: ServiceAccount
   name: policy-controller-0-webhook
   namespace: default
+
 ---
 # Source: policy-controller/templates/webhook/role_webhook.yaml
 kind: Role
@@ -1224,6 +1235,7 @@ roleRef:
   kind: Role
   name: policy-controller-0-webhook
   apiGroup: rbac.authorization.k8s.io
+
 ---
 # Source: policy-controller/templates/webhook/service_webhook.yaml
 apiVersion: v1
@@ -1249,6 +1261,7 @@ spec:
     app.kubernetes.io/name: policy-controller
     app.kubernetes.io/instance: policy-controller-0
     control-plane: policy-controller-0-webhook
+
 ---
 # Source: policy-controller/templates/webhook/service_webhook.yaml
 apiVersion: v1
@@ -1274,6 +1287,7 @@ spec:
     app.kubernetes.io/name: policy-controller
     app.kubernetes.io/instance: policy-controller-0
     control-plane: policy-controller-0-webhook
+
 ---
 # Source: policy-controller/templates/webhook/deployment_webhook.yaml
 apiVersion: apps/v1
@@ -1399,36 +1413,7 @@ spec:
       volumes:
       - emptyDir: {}
         name: writable-home-dir
----
-# Source: policy-controller/templates/webhook/configmap-clusterimagepolicy.yaml
-# Copyright 2022 The Sigstore Authors.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
----
-# Source: policy-controller/templates/webhook/policy_webhook_configurations.yaml
-# Copyright 2022 The Sigstore Authors.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+
 ---
 # Source: policy-controller/templates/webhook/policy_webhook_configurations.yaml
 apiVersion: admissionregistration.k8s.io/v1
@@ -1446,6 +1431,7 @@ webhooks:
     matchPolicy: Equivalent
     name: defaulting.clusterimagepolicy.sigstore.dev
     sideEffects: None
+
 ---
 # Source: policy-controller/templates/webhook/webhook_mutating.yaml
 apiVersion: admissionregistration.k8s.io/v1
@@ -1514,6 +1500,39 @@ webhooks:
       namespace: default
   failurePolicy: Fail
   sideEffects: None
+
+---
+# Source: policy-controller/templates/webhook/configmap-clusterimagepolicy.yaml
+# Copyright 2022 The Sigstore Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+---
+# Source: policy-controller/templates/webhook/policy_webhook_configurations.yaml
+# Copyright 2022 The Sigstore Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 ---
 # Source: policy-controller/templates/webhook/cleanup-leases.yaml
 apiVersion: v1
@@ -1532,6 +1551,7 @@ metadata:
     "helm.sh/hook": post-delete
     "helm.sh/hook-weight": "2"
     "helm.sh/hook-delete-policy": hook-succeeded
+
 ---
 # Source: policy-controller/templates/webhook/cleanup-leases.yaml
 kind: Role
@@ -1554,6 +1574,7 @@ rules:
   - apiGroups: ["coordination.k8s.io"]
     resources: ["leases"]
     verbs: ["list","delete"]
+
 ---
 # Source: policy-controller/templates/webhook/cleanup-leases.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -1580,6 +1601,7 @@ roleRef:
   kind: Role
   name: policy-controller-0-cleanup
   apiGroup: rbac.authorization.k8s.io
+
 ---
 # Source: policy-controller/templates/webhook/cleanup-leases.yaml
 apiVersion: batch/v1
@@ -1616,4 +1638,5 @@ spec:
           resources:
             limits:
             requests:
-      restartPolicy: OnFailure
+      restartPolicy: OnFailure 
+

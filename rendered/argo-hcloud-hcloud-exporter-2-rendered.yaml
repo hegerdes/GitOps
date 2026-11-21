@@ -5,10 +5,10 @@ kind: ServiceAccount
 metadata:
   name: hcloud-exporter-2
   labels:
-    helm.sh/chart: hcloud-exporter-4.32.0
+    helm.sh/chart: hcloud-exporter-4.32.3
     app.kubernetes.io/name: hcloud-exporter
     app.kubernetes.io/instance: hcloud-exporter-2
-    app.kubernetes.io/version: "3.32.0"
+    app.kubernetes.io/version: "3.32.3"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: hcloud-exporter/templates/secret.yaml
@@ -17,10 +17,10 @@ kind: Secret
 metadata:
   name: hcloud-exporter-2
   labels:
-    helm.sh/chart: hcloud-exporter-4.32.0
+    helm.sh/chart: hcloud-exporter-4.32.3
     app.kubernetes.io/name: hcloud-exporter
     app.kubernetes.io/instance: hcloud-exporter-2
-    app.kubernetes.io/version: "3.32.0"
+    app.kubernetes.io/version: "3.32.3"
     app.kubernetes.io/managed-by: Helm
 type: Opaque
 data:
@@ -32,10 +32,10 @@ kind: Service
 metadata:
   name: hcloud-exporter-2
   labels:
-    helm.sh/chart: hcloud-exporter-4.32.0
+    helm.sh/chart: hcloud-exporter-4.32.3
     app.kubernetes.io/name: hcloud-exporter
     app.kubernetes.io/instance: hcloud-exporter-2
-    app.kubernetes.io/version: "3.32.0"
+    app.kubernetes.io/version: "3.32.3"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -47,6 +47,7 @@ spec:
   selector:
     app.kubernetes.io/name: hcloud-exporter
     app.kubernetes.io/instance: hcloud-exporter-2
+
 ---
 # Source: hcloud-exporter/templates/deployment.yaml
 apiVersion: apps/v1
@@ -54,13 +55,13 @@ kind: Deployment
 metadata:
   name: hcloud-exporter-2
   labels:
-    helm.sh/chart: hcloud-exporter-4.32.0
+    helm.sh/chart: hcloud-exporter-4.32.3
     app.kubernetes.io/name: hcloud-exporter
     app.kubernetes.io/instance: hcloud-exporter-2
-    app.kubernetes.io/version: "3.32.0"
+    app.kubernetes.io/version: "3.32.3"
     app.kubernetes.io/managed-by: Helm
   annotations:
-    checksum/secret: d797e5bc34226bd2f8ff9a3f09df6bf4e26d337496e78de27c539d7701aa703c
+    checksum/secret: 4dc1f8c9c454bcba331a0ec6a231c2ccb87df82a63770dba538b8c38fb866cdb
 spec:
   replicas: 1
   selector:
@@ -72,18 +73,18 @@ spec:
   template:
     metadata:
       labels:
-        helm.sh/chart: hcloud-exporter-4.32.0
+        helm.sh/chart: hcloud-exporter-4.32.3
         app.kubernetes.io/name: hcloud-exporter
         app.kubernetes.io/instance: hcloud-exporter-2
-        app.kubernetes.io/version: "3.32.0"
+        app.kubernetes.io/version: "3.32.3"
         app.kubernetes.io/managed-by: Helm
       annotations:
-        checksum/secret: d797e5bc34226bd2f8ff9a3f09df6bf4e26d337496e78de27c539d7701aa703c
+        checksum/secret: 4dc1f8c9c454bcba331a0ec6a231c2ccb87df82a63770dba538b8c38fb866cdb
     spec:
       serviceAccountName: hcloud-exporter-2
       containers:
         - name: hcloud-exporter
-          image: "quay.io/promhippie/hcloud-exporter:3.32.0"
+          image: "quay.io/promhippie/hcloud-exporter:3.32.3"
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
@@ -144,6 +145,7 @@ spec:
         - name: hcloud-token
           secret:
             secretName: hcloud
+
 ---
 # Source: hcloud-exporter/templates/servicemonitor.yaml
 apiVersion: monitoring.coreos.com/v1
@@ -151,10 +153,10 @@ kind: ServiceMonitor
 metadata:
   name: hcloud-exporter-2
   labels:
-    helm.sh/chart: hcloud-exporter-4.32.0
+    helm.sh/chart: hcloud-exporter-4.32.3
     app.kubernetes.io/name: hcloud-exporter
     app.kubernetes.io/instance: hcloud-exporter-2
-    app.kubernetes.io/version: "3.32.0"
+    app.kubernetes.io/version: "3.32.3"
     app.kubernetes.io/managed-by: Helm
 spec:
   endpoints:
@@ -168,10 +170,10 @@ spec:
     - default
   selector:
     matchLabels:
-      helm.sh/chart: hcloud-exporter-4.32.0
+      helm.sh/chart: hcloud-exporter-4.32.3
       app.kubernetes.io/name: hcloud-exporter
       app.kubernetes.io/instance: hcloud-exporter-2
-      app.kubernetes.io/version: "3.32.0"
+      app.kubernetes.io/version: "3.32.3"
       app.kubernetes.io/managed-by: Helm
 ---
 # Source: hcloud-exporter/templates/tests/test-connection.yaml
@@ -180,10 +182,10 @@ kind: Pod
 metadata:
   name: "hcloud-exporter-2-test-connection"
   labels:
-    helm.sh/chart: hcloud-exporter-4.32.0
+    helm.sh/chart: hcloud-exporter-4.32.3
     app.kubernetes.io/name: hcloud-exporter
     app.kubernetes.io/instance: hcloud-exporter-2
-    app.kubernetes.io/version: "3.32.0"
+    app.kubernetes.io/version: "3.32.3"
     app.kubernetes.io/managed-by: Helm
   annotations:
     "helm.sh/hook": test-success
@@ -197,3 +199,4 @@ spec:
       args:
         - --spider
         - http://hcloud-exporter-2:9501
+

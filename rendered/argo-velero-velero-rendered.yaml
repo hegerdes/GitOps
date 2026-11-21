@@ -9,8 +9,9 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.2.2
+    helm.sh/chart: velero-12.2.5
 automountServiceAccountToken: true
+
 ---
 # Source: velero/templates/secret.yaml
 apiVersion: v1
@@ -22,7 +23,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.2.2
+    helm.sh/chart: velero-12.2.5
 type: Opaque
 data:
 ---
@@ -36,7 +37,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.2.2
+    helm.sh/chart: velero-12.2.5
 data:
   global: |
     {
@@ -53,7 +54,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.2.2
+    helm.sh/chart: velero-12.2.5
 subjects:
   - kind: ServiceAccount
     namespace: default
@@ -62,6 +63,7 @@ roleRef:
   kind: ClusterRole
   name: cluster-admin
   apiGroup: rbac.authorization.k8s.io
+
 ---
 # Source: velero/templates/role.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -74,7 +76,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.2.2
+    helm.sh/chart: velero-12.2.5
 rules:
 - apiGroups:
     - "*"
@@ -82,6 +84,7 @@ rules:
     - "*"
   verbs:
     - "*"
+
 ---
 # Source: velero/templates/rolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -94,7 +97,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.2.2
+    helm.sh/chart: velero-12.2.5
 subjects:
   - kind: ServiceAccount
     namespace: default
@@ -103,6 +106,7 @@ roleRef:
   kind: Role
   name: velero-server
   apiGroup: rbac.authorization.k8s.io
+
 ---
 # Source: velero/templates/service.yaml
 apiVersion: v1
@@ -115,7 +119,7 @@ metadata:
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/version: 1.18.2
-    helm.sh/chart: velero-12.2.2
+    helm.sh/chart: velero-12.2.5
 spec:
   type: ClusterIP
   ports:
@@ -126,6 +130,7 @@ spec:
     name: velero
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
+
 ---
 # Source: velero/templates/deployment.yaml
 apiVersion: apps/v1
@@ -138,7 +143,7 @@ metadata:
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/version: 1.18.2
-    helm.sh/chart: velero-12.2.2
+    helm.sh/chart: velero-12.2.5
     component: velero
 spec:
   replicas: 1
@@ -156,7 +161,7 @@ spec:
         app.kubernetes.io/instance: velero
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/version: 1.18.2
-        helm.sh/chart: velero-12.2.2
+        helm.sh/chart: velero-12.2.5
       annotations:
         prometheus.io/path: /metrics
         prometheus.io/port: "8085"
@@ -217,6 +222,11 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
             - name: LD_LIBRARY_PATH
               value: /plugins
             - name: AWS_SHARED_CREDENTIALS_FILE
@@ -236,6 +246,7 @@ spec:
           emptyDir: {}
         - name: scratch
           emptyDir: {}
+
 ---
 # Source: velero/templates/backupstoragelocation.yaml
 apiVersion: velero.io/v1
@@ -248,13 +259,14 @@ metadata:
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/version: 1.18.2
-    helm.sh/chart: velero-12.2.2
+    helm.sh/chart: velero-12.2.5
 spec:
   credential:
   provider: 
   accessMode: ReadWrite
   objectStorage:
     bucket: ""
+
 ---
 # Source: velero/templates/volumesnapshotlocation.yaml
 apiVersion: velero.io/v1
@@ -267,7 +279,7 @@ metadata:
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/version: 1.18.2
-    helm.sh/chart: velero-12.2.2
+    helm.sh/chart: velero-12.2.5
 spec:
   credential:
   provider:
@@ -286,8 +298,9 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.2.2
+    helm.sh/chart: velero-12.2.5
 automountServiceAccountToken: true
+
 ---
 # Source: velero/templates/upgrade-crds/clusterrole-upgrade.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -303,7 +316,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.2.2
+    helm.sh/chart: velero-12.2.5
 rules:
 - apiGroups: 
     - "apiextensions.k8s.io"
@@ -315,6 +328,7 @@ rules:
     - update
     - get
     - list
+
 ---
 # Source: velero/templates/upgrade-crds/clusterrolebinding-upgrade.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -326,7 +340,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.2.2
+    helm.sh/chart: velero-12.2.5
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade,pre-rollback
     "helm.sh/hook-weight": "-3"
@@ -339,6 +353,8 @@ roleRef:
   kind: ClusterRole
   name: velero-upgrade-crds
   apiGroup: rbac.authorization.k8s.io
+
+
 ---
 # Source: velero/templates/upgrade-crds/upgrade-crds.yaml
 apiVersion: batch/v1
@@ -354,7 +370,7 @@ metadata:
     app.kubernetes.io/name: velero
     app.kubernetes.io/instance: velero
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: velero-12.2.2
+    helm.sh/chart: velero-12.2.5
 spec:
   backoffLimit: 3
   template:
@@ -374,3 +390,4 @@ spec:
             - --crds-only
             - --apply
       restartPolicy: OnFailure
+

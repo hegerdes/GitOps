@@ -151,6 +151,7 @@ spec:
   selector:
     app.kubernetes.io/name: metrics-server
     app.kubernetes.io/instance: metrics-server
+
 ---
 # Source: metrics-server/templates/deployment.yaml
 apiVersion: apps/v1
@@ -229,6 +230,7 @@ spec:
       volumes:
         - name: tmp
           emptyDir: {}
+
 ---
 # Source: metrics-server/templates/apiservice.yaml
 apiVersion: apiregistration.k8s.io/v1

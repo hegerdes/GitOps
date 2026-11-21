@@ -6,12 +6,13 @@ metadata:
   name: external-dns-cloudflare-0
   namespace: default
   labels:
-    helm.sh/chart: external-dns-1.23.0
+    helm.sh/chart: external-dns-1.24.0
     app.kubernetes.io/name: external-dns
     app.kubernetes.io/instance: external-dns-cloudflare-0
-    app.kubernetes.io/version: "0.23.0"
+    app.kubernetes.io/version: "0.24.0"
     app.kubernetes.io/managed-by: Helm
 automountServiceAccountToken: true
+
 ---
 # Source: external-dns/templates/clusterrole.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -19,10 +20,10 @@ kind: ClusterRole
 metadata:
   name: external-dns-cloudflare-0
   labels:
-    helm.sh/chart: external-dns-1.23.0
+    helm.sh/chart: external-dns-1.24.0
     app.kubernetes.io/name: external-dns
     app.kubernetes.io/instance: external-dns-cloudflare-0
-    app.kubernetes.io/version: "0.23.0"
+    app.kubernetes.io/version: "0.24.0"
     app.kubernetes.io/managed-by: Helm
 rules:
   - apiGroups: [""]
@@ -71,6 +72,7 @@ rules:
     - get
     - watch
     - list
+
 ---
 # Source: external-dns/templates/clusterrolebinding.yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -78,10 +80,10 @@ kind: ClusterRoleBinding
 metadata:
   name: external-dns-cloudflare-0-viewer
   labels:
-    helm.sh/chart: external-dns-1.23.0
+    helm.sh/chart: external-dns-1.24.0
     app.kubernetes.io/name: external-dns
     app.kubernetes.io/instance: external-dns-cloudflare-0
-    app.kubernetes.io/version: "0.23.0"
+    app.kubernetes.io/version: "0.24.0"
     app.kubernetes.io/managed-by: Helm
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -91,6 +93,7 @@ subjects:
   - kind: ServiceAccount
     name: external-dns-cloudflare-0
     namespace: default
+
 ---
 # Source: external-dns/templates/service.yaml
 apiVersion: v1
@@ -99,10 +102,10 @@ metadata:
   name: external-dns-cloudflare-0
   namespace: default
   labels:
-    helm.sh/chart: external-dns-1.23.0
+    helm.sh/chart: external-dns-1.24.0
     app.kubernetes.io/name: external-dns
     app.kubernetes.io/instance: external-dns-cloudflare-0
-    app.kubernetes.io/version: "0.23.0"
+    app.kubernetes.io/version: "0.24.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   type: ClusterIP
@@ -114,6 +117,7 @@ spec:
       port: 7979
       targetPort: http
       protocol: TCP
+
 ---
 # Source: external-dns/templates/deployment.yaml
 apiVersion: apps/v1
@@ -122,10 +126,10 @@ metadata:
   name: external-dns-cloudflare-0
   namespace: default
   labels:
-    helm.sh/chart: external-dns-1.23.0
+    helm.sh/chart: external-dns-1.24.0
     app.kubernetes.io/name: external-dns
     app.kubernetes.io/instance: external-dns-cloudflare-0
-    app.kubernetes.io/version: "0.23.0"
+    app.kubernetes.io/version: "0.24.0"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
@@ -160,7 +164,7 @@ spec:
             runAsGroup: 65532
             runAsNonRoot: true
             runAsUser: 65532
-          image: registry.k8s.io/external-dns/external-dns:v0.23.0
+          image: registry.k8s.io/external-dns/external-dns:v0.24.0
           imagePullPolicy: IfNotPresent
           env:
             - name: CF_API_TOKEN
