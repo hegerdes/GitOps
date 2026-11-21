@@ -14,11 +14,12 @@ packer {
 ######################## INPUT ########################
 variable "talos_version" {
   type    = string
-  default = "v1.14.2"
+  default = "v1.14.6"
 }
 variable "talos_extensions" {
   type    = list(string)
-  default = ["siderolabs/crun", "siderolabs/gvisor", "siderolabs/qemu-guest-agent"]
+  # default = []
+  default = ["siderolabs/crun", "siderolabs/gvisor"]
   # "siderolabs/youki", "siderolabs/wasmedge",
 }
 variable "talos_kernel_args" {

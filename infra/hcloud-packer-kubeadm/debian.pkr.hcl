@@ -88,14 +88,4 @@ build {
       "ansible-setup.sh",
     ]
   }
-  # provisioner "shell" {
-  #   env = {
-  #     AWS_ACCESS_KEY_ID     = "xxx"
-  #     AWS_SECRET_ACCESS_KEY = "xxx"
-  #     AWS_SESSION_TOKEN     = "xxx"
-  #   }
-  #   scripts = [
-  #     "aws-export.sh",
-  #   ]
-  # }
 }
